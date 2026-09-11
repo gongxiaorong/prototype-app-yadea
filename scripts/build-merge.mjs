@@ -231,7 +231,7 @@ Ajs = Ajs.split('vehicleNames[currentVehicle.value.id]').join('vehicleNames[curr
 // 查找按 vin 匹配；source 对商户端数据无此字段，回退用 status 兜底
 Ajs = Ajs.split("vehicles.value.findIndex(x=>x.id===v.id)").join("vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id))");
 Ajs = Ajs.split("#0;const i=vehicles.value.findIndex(x=>x.id===v.id);").join("#0;const i=vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id));");
-Ajs = Ajs.split('const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.name})').join('const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.model||v.name,source:vehicleSource.value||(v.source||(v.status==="租用中"?"order":"manual"))})');
+Ajs = Ajs.split('const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.name})').join('const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.model||v.name})');
 // 电池逻辑：openBatteryDetail 查找 id→code
 Ajs = Ajs.split('homeBatteries.value.findIndex(x=>x.id===b.id)').join('homeBatteries.value.findIndex(x=>x.code===b.code)');
 // locSeed：currentVehicle/currentBattery 的 id 标识 → vin/code（对齐商户端契约）
@@ -245,6 +245,20 @@ Ahtml = Ahtml.split(A_UNB).join(A_UNB.replace("vdDevice.source!=='order'", "vdDe
 const A_UNBB = `<div v-if="!scanBindMode&&bdDevice&&bdDevice.source!=='order'" class="py-4 flex items-center justify-center" data-page-node-id="BXGy2Jp3OWtQ9X3iBtSNT2">`;
 assert(Ahtml.includes(A_UNBB), 'A 缺电池解绑入口锚点');
 Ahtml = Ahtml.split(A_UNBB).join(A_UNBB.replace("bdDevice.source!=='order'", "bdDevice.status!=='租用中'"));
+
+// 用户端 source(order/manual) 概念移除 → 全部改用运营状态 status 判断
+// 映射：source==='order'(订单绑定) ⇔ status==='租用中'；source==='manual'(手动绑定) ⇔ status==='占用中'；source!=='order' ⇔ status!=='租用中'
+// Ahtml 模板（currentVehicle 布局/卡片判断）
+Ahtml = Ahtml.split("(currentVehicle && currentVehicle.source === 'order')").join("(currentVehicle && currentVehicle.status === '租用中')");
+Ahtml = Ahtml.split("currentVehicle && currentVehicle.source !== 'order'").join("currentVehicle && currentVehicle.status !== '租用中'");
+Ahtml = Ahtml.split("currentVehicle&& currentVehicle.source==='order'").join("currentVehicle&& currentVehicle.status==='租用中'");
+Ahtml = Ahtml.split("currentVehicle&& currentVehicle.source!=='order'").join("currentVehicle&& currentVehicle.status!=='租用中'");
+Ahtml = Ahtml.split("currentVehicle&& currentVehicle.source==='manual'").join("currentVehicle&& currentVehicle.status==='占用中'");
+Ahtml = Ahtml.split("bdDevice&&bdDevice.source==='order'").join("bdDevice&&bdDevice.status==='租用中'");
+Ahtml = Ahtml.split("vdDevice&& vdDevice.source!=='order'").join("vdDevice&& vdDevice.status!=='租用中'");
+Ahtml = Ahtml.split('vdDevice&&vdDevice.source!==\'order\'').join('vdDevice&&vdDevice.status!==\'租用中\'');
+// Ajs：selectMyVehicle / openMyVehicleFromHome 用 status 填充 vehicleSource（订单=租用中→order 布局，占用中→manual 布局）
+Ajs = Ajs.split("vehicleSource.value=vehicles.value[i].source||'order'").join("vehicleSource.value=vehicles.value[i].status==='租用中'?'order':'manual'");
 
 // ── 6.6 商户端绑定/解绑 → 运营状态 status 联动（订单绑定=租用中，非订单=占用中，解绑=空闲） ──
 // 车辆/电池 status 统一判断：租用中(订单绑定)不可解绑，占用中/空闲可解绑。

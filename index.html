@@ -978,7 +978,7 @@ body.host-single-m #root-user{display:none}
 <div id="sc-mycar" class="flex-1 overflow-y-auto hide-scroll px-4 pt-2 pb-4" style="touch-action:pan-y;-webkit-overflow-scrolling:touch" data-page-node-id="DX3vMOynufr7g0XAhDT0y7">
 
   <!-- 快捷功能区 -->
-  <div class="grid gap-3 mb-3" :class="(currentVehicle && currentVehicle.source === 'order') ? 'grid-cols-2' : 'grid-cols-3'" data-od-id="mv-quick-actions" data-page-node-id="kgwdxzB0DYzvbKW1ICv6CK">
+  <div class="grid gap-3 mb-3" :class="(currentVehicle && currentVehicle.status === '租用中') ? 'grid-cols-2' : 'grid-cols-3'" data-od-id="mv-quick-actions" data-page-node-id="kgwdxzB0DYzvbKW1ICv6CK">
     <div v-show="opLock" class="bg-white rounded-2xl flex flex-col items-center justify-center gap-2 min-h-[90px] cursor-pointer select-none active:bg-[#F6F7F9] transition-all" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :class="lockLoading?'opacity-70 pointer-events-none':''" @click="toggleLock" data-od-id="mv-quick-lock" data-page-node-id="wWsktb7PV1ZSUgyTXglytq">
       <span v-html="luci(lockLoading?'loader':(locked?'lock':'unlock'),'w-6 h-6 transition-all '+(lockLoading?'anim-spin':''))" :style="locked?{color:'#DC2626'}:{color:'#2F6FEB'}" data-page-node-id="JsB52O9r8f6rDS5spEBLbP"></span>
       <span class="text-[12px] font-medium" :style="locked?{color:'#DC2626'}:{color:'#333'}" data-page-node-id="bGjyUW5X6Qge3CpEsusS8h">{{ lockLoading?'指令下发中…':(locked?'开锁':'关锁') }}</span>
@@ -987,7 +987,7 @@ body.host-single-m #root-user{display:none}
       <span v-html="luci(hornLoading?'loader':'volume-2','w-6 h-6 transition-all '+(hornLoading?'anim-spin':''))" :style="hornLoading?{color:'#E67E22'}:{color:'#FF6A00'}" data-page-node-id="wt4Hoj66ndufIHwn1sIFzv"></span>
       <span class="text-[12px] font-medium" :style="hornLoading?{color:'#E67E22'}:{color:'#333'}" data-page-node-id="KZKLbZpQNuF3jmX3oYL0b4">{{ hornLoading?'寻车中...':'鸣笛寻车' }}</span>
     </div>
-    <div v-if="currentVehicle && currentVehicle.source !== 'order'" class="bg-white rounded-2xl py-3.5 flex flex-col items-center gap-2" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-page-node-id="EuNDYc8CbDYwu25E4KygbE">
+    <div v-if="currentVehicle && currentVehicle.status !== '租用中'" class="bg-white rounded-2xl py-3.5 flex flex-col items-center gap-2" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-page-node-id="EuNDYc8CbDYwu25E4KygbE">
       <span v-html="luci('users','w-6 h-6 text-[#FF6A00]')" data-page-node-id="lL5Uw8Ato4B33It3TpsMCz"></span>
       <span class="text-[12px] font-medium text-[#333]" data-page-node-id="LkO8T9utUcCGZgnqLhfE6K">用车人</span>
     </div>
@@ -1010,7 +1010,7 @@ body.host-single-m #root-user{display:none}
   </div>
 
   <!-- 当前租赁订单卡片（仅订单绑定显示） -->
-  <div v-if="currentVehicle&& currentVehicle.source==='order'" @click="openMyCarOrder" class="bg-white rounded-2xl p-4 mb-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="mv-active-order" data-page-node-id="4JV94AQUnvEan5oMxR016w">
+  <div v-if="currentVehicle&& currentVehicle.status==='租用中'" @click="openMyCarOrder" class="bg-white rounded-2xl p-4 mb-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="mv-active-order" data-page-node-id="4JV94AQUnvEan5oMxR016w">
     <div class="flex items-center justify-between mb-2" data-page-node-id="xpH4dsPGP7F7lgXi73ESMu">
       <span class="text-[13px] font-semibold text-[#333] truncate pr-2" data-page-node-id="pnceccH5hl0sSB4HkW2BkG">{{ currentOrder.store }}</span>
       <span class="text-[14px] font-semibold shrink-0" :style="'color:'+(currentOrder.statusColor||'#999')" data-page-node-id="rpJKbwVDk9nki93HjQLPnM">{{ currentOrder.statusText }}</span>
@@ -1026,7 +1026,7 @@ body.host-single-m #root-user{display:none}
   </div>
 
   <!-- 智能服务卡片 -->
-  <div v-if="currentVehicle&& currentVehicle.source!=='order'" class="bg-white rounded-2xl p-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="mv-smart-service" data-page-node-id="foS9odEc9RCucSNGVw8iKq">
+  <div v-if="currentVehicle&& currentVehicle.status!=='租用中'" class="bg-white rounded-2xl p-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="mv-smart-service" data-page-node-id="foS9odEc9RCucSNGVw8iKq">
     <div class="flex items-center justify-between mb-3" data-page-node-id="LbTNGTMTyWBxVDsxZ4VCjZ">
       <span class="text-[15px] font-bold text-[#1A1A1A]" data-page-node-id="MqWnm3VaqSMwPGwiXU80kf">智能服务</span>
       <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full" style="background:rgba(34,208,152,.12);color:#22D098" data-page-node-id="if9Wkxs8DMh2CxNa5pqhn9">已开通</span>
@@ -1044,7 +1044,7 @@ body.host-single-m #root-user{display:none}
 </div>
 
   <!-- 设备统计卡片（自行绑定） -->
-  <div v-if="currentVehicle&& currentVehicle.source==='manual'" class="bg-white rounded-2xl p-4 mb-3 flex items-center gap-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="mv-stats-card" data-page-node-id="67wobsmoDL9nADunTUxhmU">
+  <div v-if="currentVehicle&& currentVehicle.status==='占用中'" class="bg-white rounded-2xl p-4 mb-3 flex items-center gap-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="mv-stats-card" data-page-node-id="67wobsmoDL9nADunTUxhmU">
     <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style="background:#EBF1FD" data-page-node-id="Ml5UqS3PxM2g7eMbSf9Gsy">
       <span v-html="luci('orbit','w-6 h-6 text-[#2F6FEB]')" data-page-node-id="mrTS7c0CD29FhKTqhy0Qz0"></span>
     </div>
@@ -1097,10 +1097,10 @@ body.host-single-m #root-user{display:none}
           <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="K6MpvjCWEzUw4aAf0UFvkH">车架编号</span>
           <span class="flex-1 text-right text-[#1A1A1A] truncate" data-page-node-id="swDSPebIBLiWOqQ7nBxzxM">{{ vdDevice?vdDevice.vin:'-' }}</span>
         </div>
-        <div v-if="!scanBindMode&&vdDevice&&vdDevice.source!=='order'" class="flex items-center gap-2" data-page-node-id="dFEjcALqZOhPyoXJ7KcvlL">
+        <div v-if="!scanBindMode&&vdDevice&&vdDevice.status!=='租用中'" class="flex items-center gap-2" data-page-node-id="dFEjcALqZOhPyoXJ7KcvlL">
           <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="PAxK8Yn0sEV3EqLCQvRCtq">车辆名称</span>
           <span class="flex-1 text-right text-[#1A1A1A] truncate" data-page-node-id="3f8hxKT7P0gAlwVsTE41W8">{{ vdDevice?vdDevice.displayName:'-' }}</span>
-          <span v-if="vdDevice&& vdDevice.source!=='order'" @click="openVNameEdit" class="w-7 h-7 rounded-full flex items-center justify-center active:bg-[#F0F0F0] shrink-0" v-html="luci('pencil','w-4 h-4 text-[#666]')" data-page-node-id="anJRkj41zbYMmLLYbQFOti"></span>
+          <span v-if="vdDevice&& vdDevice.status!=='租用中'" @click="openVNameEdit" class="w-7 h-7 rounded-full flex items-center justify-center active:bg-[#F0F0F0] shrink-0" v-html="luci('pencil','w-4 h-4 text-[#666]')" data-page-node-id="anJRkj41zbYMmLLYbQFOti"></span>
         </div>
       </div>
     </div>
@@ -1241,7 +1241,7 @@ body.host-single-m #root-user{display:none}
     </div>
 
     <!-- 当前租赁订单卡片（订单绑定电池显示） -->
-    <div v-if="!scanBindMode&&bdDevice&&bdDevice.source==='order'" @click="openBatteryOrder" class="bg-white rounded-2xl p-4 mb-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="bd-active-order" data-page-node-id="B1mXAz9oZLxYuvQZgdBUGA">
+    <div v-if="!scanBindMode&&bdDevice&&bdDevice.status==='租用中'" @click="openBatteryOrder" class="bg-white rounded-2xl p-4 mb-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="bd-active-order" data-page-node-id="B1mXAz9oZLxYuvQZgdBUGA">
       <div class="flex items-center justify-between mb-2" data-page-node-id="onmd6VzoxEhybvVFtxuFfg">
         <span class="text-[13px] font-semibold text-[#333] truncate pr-2" data-page-node-id="FJQX1aCmuGp5irktMCvYwt">{{ currentOrder?currentOrder.store:'订单进行中' }}</span>
         <span class="text-[14px] font-semibold shrink-0" :style="'color:'+((currentOrder&& currentOrder.statusColor)||'#999')" data-page-node-id="QstfqLKztWJOsO4owi53Du">{{ currentOrder?currentOrder.statusText:'' }}</span>
@@ -7062,10 +7062,10 @@ function setVehicleCount(n){vehicleCount.value=n}
 function setVehicleSource(s){vehicleSource.value=s}
 const myVehicleIdx=ref(0);
 const showVehiclePicker=ref(false);
-const currentVehicle=computed(()=>{if(!loggedIn.value)return null;const vs=vehicles.value;if(vs.length===0)return null;const i=Math.max(0,Math.min(myVehicleIdx.value,vs.length-1));const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.model||v.name,source:vehicleSource.value||(v.source||(v.status==="租用中"?"order":"manual"))})});
+const currentVehicle=computed(()=>{if(!loggedIn.value)return null;const vs=vehicles.value;if(vs.length===0)return null;const i=Math.max(0,Math.min(myVehicleIdx.value,vs.length-1));const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.model||v.name})});
 function toggleVehiclePicker(){showVehiclePicker.value=!showVehiclePicker.value}
-function selectMyVehicle(v){const i=vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id));if(i>=0){myVehicleIdx.value=i;vehicleSource.value=vehicles.value[i].source||'order';showVehiclePicker.value=false;showRentLoading.value=true;setTimeout(()=>{showRentLoading.value=false},600)}}
-function openMyVehicleFromHome(v){const i=vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id));if(i>=0){myVehicleIdx.value=i;vehicleSource.value=vehicles.value[i].source||'order'}setTab('vehicles')}
+function selectMyVehicle(v){const i=vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id));if(i>=0){myVehicleIdx.value=i;vehicleSource.value=vehicles.value[i].status==='租用中'?'order':'manual';showVehiclePicker.value=false;showRentLoading.value=true;setTimeout(()=>{showRentLoading.value=false},600)}}
+function openMyVehicleFromHome(v){const i=vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id));if(i>=0){myVehicleIdx.value=i;vehicleSource.value=vehicles.value[i].status==='租用中'?'order':'manual'}setTab('vehicles')}
 
 const vehicleNames=reactive({});
 const showVehicleDetail=ref(false);
