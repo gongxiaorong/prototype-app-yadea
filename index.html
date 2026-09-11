@@ -7728,7 +7728,7 @@ function ignoreReasonLabel(reason){return _IGNORE_REASON_MAP[reason]||reason}
 /* ══ HOME ══ */
 const homeOV=ref(null);const homeRefreshing=ref(false);
 const store=computed(()=>({name:'测试门店'}));
-const bizStats=computed(()=>[{label:'今日收款',value:'Rp 3,240',trend:null},{label:'本月收款',value:'Rp 28,500',trend:null},{label:'进行中',value:'18',trend:null},{label:'待归还',value:'8',trend:null}]);
+const bizStats=computed(()=>[{label:'今日收款',value:fmtRp(3240),trend:null},{label:'本月收款',value:fmtRp(28500),trend:null},{label:'进行中',value:'18',trend:null},{label:'待归还',value:'8',trend:null}]);
  const vehStats=computed(()=>[{label:'在线车辆',value:'42',online:true},{label:'离线车辆',value:'8',danger:true,online:false}]);
  function goHomeVehStat(s){navOpen();if(!can('home.stats.vehicle')){deny();return}if(!can('vehicle.list')){deny();return}homeOV.value=null;curAlert.value=null;alertMod.value=null;vehOV.value=null;vehQ.value='';vehPill.value='';vehFsModel.value='';vehFsLost.value=null;vehFsOnline.value=s.online===true?true:s.online===false?false:null;tab.value='vehicles'}
  const ALERTS_SEED=[

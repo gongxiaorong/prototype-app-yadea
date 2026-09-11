@@ -6,4 +6,4 @@
 - [x] 浏览器实测（组件回退后）：双端渲染、Tab 切换、导航、toast、host 三态正常；console 无应用级 error（之前的 SyntaxError 已随组件回退消失）。
 - [x] `user.html`/`merchant.html` 未被修改；`index.html` 仍为唯一产物，可经脚本一键重建。
 - [ ] （拦阻记录，未落地）共享 Vue 组件 `registerSharedComponents` / `YdSwitch`/`YdChip`/`YdStepper` 注册与迁移：**已回退**。经三类标签写法实测，DOM 单文件模板无法运行时解析全局组件（落成空自定义元素），需先改模板编译方式，故该项标记为未完成、留待后续。
-- [ ] 商户首页经营数据（`今日收款/本月收款`）为硬编码静态串未走 `fmtRp`，属可顺手归一项（非回归）。
+- [x] 商户首页经营数据（`今日收款/本月收款`）已改为 `fmtRp`，浏览器实测显示 id-ID 点千分位（`Rp 3.240 / Rp 28.500`）。

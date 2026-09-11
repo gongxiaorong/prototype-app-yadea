@@ -11,7 +11,7 @@
   - [x] 2.1 SHARED CORE 注入共享 `function fmtRp(n, dec?){ ... id-ID 千分位 ... }`。
   - [x] 2.2 替换 A/B 端各自 `function fmtRp(...)`（删除重复定义），两端经共享 fmtRp 渲染。
   - [x] 2.3 商户端金额现走 id-ID（与用户端一致）；浏览器实测两侧一致。
-  - [ ] 2.4 （备注）商户首页 `今日收款 Rp 3,240` 为硬编码静态演示串，未走 fmtRp，属可后续顺手归一（非回归）。
+  - [x] 2.4 商户首页 `今日收款/本月收款` 静态金额改为 `fmtRp(3240)/fmtRp(28500)`，浏览器实测显示 `Rp 3.240 / Rp 28.500`（id-ID）。
 
 - [ ] Task 3: 共享 Vue 组件注册 —— **回退未落地**（拦阻：DOM 模板限制）。
   - [ ] 3.1 SHARED CORE 注入 `registerSharedComponents(app)` 注册 YdSwitch/YdChip/YdStepper —— 已实现但**运行不可用**，已回退。

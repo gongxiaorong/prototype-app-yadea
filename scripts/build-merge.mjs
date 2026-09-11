@@ -145,6 +145,17 @@ assert(Bjs.includes('function fmtRp('), 'B 缺 fmtRp');
 Ajs = removeLine(Ajs, 'function fmtRp(');
 Bjs = removeLine(Bjs, 'function fmtRp(');
 
+// ── 6.2 商户首页经营看板静态金额 → 走共享 fmtRp ──
+const BIZ_STAT = [
+  ["{label:'今日收款',value:'Rp 3,240',trend:null}", "{label:'今日收款',value:fmtRp(3240),trend:null}"],
+  ["{label:'本月收款',value:'Rp 28,500',trend:null}", "{label:'本月收款',value:fmtRp(28500),trend:null}"],
+];
+for (const [from, to] of BIZ_STAT) {
+  const n = Bjs.split(from).length - 1;
+  if (n !== 1) throw new Error('[migrate] bizStats 命中异常: ' + from + ' ×' + n);
+  Bjs = Bjs.split(from).join(to);
+}
+
 // ── 7. SHARED CORE ──
 const SHARED_CORE = `/* ══════ SHARED CORE ══════ */
 ${luciFn}
