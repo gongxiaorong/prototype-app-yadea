@@ -6834,10 +6834,11 @@ function ptrBind(root,containerId,indicatorId,onRefresh){
   c.addEventListener('mousedown',function(e){onStart(e);var mm=function(ev){if(active){onMove(ev)}};var mu=function(ev){onEnd(ev);document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu)};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu)});
 }
 
-/* 页面栈导航（快照式）统一实现：与 C 端原逻辑一致，快照统一为数组。
-   opts: { screens, pageRefList, onResetLoading } */
+/* 页面栈导航（快照式）统一实现：纯导航，不触碰任何 app 状态。
+   两端调用一致：createNav({screens, pageRefList})，无 app 差异参数。
+   opts: { screens, pageRefList } */
 function createNav(o){
-  var screens=o.screens||{}, pageRefList=o.pageRefList||[], reset=o.onResetLoading||function(){};
+  var screens=o.screens||{}, pageRefList=o.pageRefList||[];
   var navStack=[];
   var _pagePushed=false,navSuppress=0,navLastBackAt=0;
   function _navClone(v){return (v&&typeof v==='object')?JSON.parse(JSON.stringify(v)):v}
@@ -6859,7 +6860,6 @@ function createNav(o){
   }
   function navBack(){
     var now=Date.now();if(now-navLastBackAt<250)return;navLastBackAt=now;
-    reset();
     if(!navStack.length){navLog('已到首页，边界兜底，禁止继续返回');return}
     var e=navStack.pop();
     var sc=_navScreen(e.name);
@@ -6869,7 +6869,6 @@ function createNav(o){
     navLog('back',e.name||'');
   }
   function navDrop(name){
-    reset();
     var i=navStack.length-1;
     if(i<0)return;
     if(name&&navStack[i].name!==name)return;
@@ -6894,7 +6893,6 @@ function createNav(o){
     navLog('reset','清空'+n+'层');
   }
   window.addEventListener('popstate',function(){
-    reset();
     if(navSuppress>0){navSuppress--;return}
     if(!navStack.length)return;
     var e=navStack.pop();
@@ -6904,7 +6902,7 @@ function createNav(o){
     navLog('popstate(物理返回)',e.name||'');
   });
   try{history.replaceState({nav:''},'')}catch(e){}
-  return {navOpen,navBack,navDrop,navSwap,navReset,navLog,isPushed:function(){return _pagePushed}};
+  return {navOpen,navBack,navDrop,navSwap,navReset,navLog};
 }
 
 window.addEventListener('error', function (e) {
@@ -7666,7 +7664,7 @@ const pageRefList=[
   _navR(confirmIdInfo),_navR(scanBindDevice),_navR(scanCtx),_navR(orderListCategory),_navR(locRinging),_navRA(rechargeOrder)
 ];
 
-const {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList,onResetLoading:function(){showRentLoading.value=false}});
+const {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList});
 
 onMounted(()=>{initPullToRefresh('sc-home','ptr-home',refreshHome);setInterval(()=>{homeBannerIdx.value=(homeBannerIdx.value+1)%homeBanners.length},4000)});
 return{tab,toasts,toast,copyText,setTab,luci,weatherScene,weatherData,demoActive,demoListEmpty,demoSetListEmpty,mapCtx,showFindPage,showTrackPage,refundRentOpen,refundDepositOpen,refundTotalOpen,refundChannels,locLoading,locRinging,locFocus,locAddressFull,locAddressShort,locDistM,locWalkMin,locVehPt,locUserPt,openFindPage,openFindPageBattery,closeFindPage,locFocusUser,locFocusVehicle,locRingDevice,locOpenNav,trackStartLabel,trackEndLabel,trackLoading,trackPoints,trackPolyline,trackStartPt,trackEndPt,trackPois,trackTimePicker,openTrackPage,openTrackPageBattery,closeTrackPage,openTrackTimePicker,cancelTrackTimePicker,confirmTrackTimePicker,trackDraft,trackDays,trackMonths,trackYears,trackHours,trackMins,p2u,trackWheelDay,trackWheelMonth,trackWheelYear,trackWheelHour,trackWheelMin,onTrackWheelScroll,vehicles,vehicleCount,setVehicleCount,vehicleSource,setVehicleSource,opLock,opHorn,myVehicleIdx,showVehiclePicker,currentVehicle,toggleVehiclePicker,selectMyVehicle,openMyVehicleFromHome,openVehicleDetail,closeVehicleDetail,openVNameEdit,closeVNameEdit,saveVNameEdit,vNameLoading,openUnbindConfirm,closeUnbindConfirm,confirmUnbind,pushNotify,showPushNotify,renewNotifyTemplates,unbindLoading,showVehicleDetail,showUnbindConfirm,showVNameEdit,vNameInput,vNameError,locked,lockLoading,toggleLock,hornLoading,sendHorn,openMyCarOrder,currentOrder,refreshHome,refreshRent,openRent,loggedIn,pendingRoute,appLang,appLangLabel,langOptions,showLogin,loginView,loginMode,loginSub,loginDial,loginPhone,loginEmail,loginAccount,loginPwd,loginCode,loginPwdVisible,loginAgree,loginCd,dialQ,dialFiltered,showDialPicker,activeDialCode,closeDialPicker,canSendCode,canLogin,loginOpenLang,selectLangFromLogin,openDialCode,pickDial,setLoginMode,setLoginSub,sendLoginCode,doLogin,openLogin,profileOV,profileSub,profileMod,profileModLoading,hasPhone,hasEmail,hasPwd,boundPhone,boundEmail,bpArea,bpPhone,bpCode,bpCd,beEmail,beCode,beCd,openBindPhone,openBindEmail,sendBpCode,doBindPhone,sendBeCode,doBindEmail,pwdChannel,pwdCode,pwdCd,npwd,npwd2,npwdVis,npwd2Vis,canConfirmPwd,openPwdFlow,switchPwdChannel,sendPwdCode,nextPwdVerify,doResetPwd,checkVersion,goUpdate,exitApp,relaunchApp,scanning,doScan,scanTorch,manualVin,showManualVin,scanCtx,openManualInput,confirmManualVin,scanBindMode,scanBindDevice,vdDevice,bdDevice,showBindConfirm,bindConfirmLoading,openBindConfirm,closeBindConfirm,confirmBind,homeDevSeg,homeBatteries,bSocColor,batteryAdd,showBatteryDetail,currentBattery,openBatteryDetail,openBatteryOrder,closeBatteryDetail,openBatteryUnbind,closeBatteryUnbind,confirmBatteryUnbind,showBatteryUnbind,batteryUnbindLoading,showVersionCheck,hasNewVersion,latestVersion,updateDesc,updating,appExited,selectLang,doLogout,profileMdT,profileMdD,profileMdDanger,profileMdOk,showRent,rentBannerIdx,rentBanners,showRentLoading,homeBannerIdx,homeBanners,showDatePicker,rentDateIdx,dateOptions,rentDateLabel,selectDate,showPeriodPicker,rentPeriodIdx,periodOptions,rentPeriodLabel,periodUnit,selectPeriod,showStore,storeSearch,storeFiltered,selectStore,openStore,searchStore,selectedStore,confStore,showVehicle,vehicleList,rentNow,showConfirm,selectedVehicle,confRentDays,confTotal,confTotalDays,confDurationLabel,confPeriodDetail,orderPlanDisplay,confTab,confPayType,cancelRules,noticeRules,billingRules,overdueRules,confAddDays,confSubDays,confirmOrder,confTotal,confDeposit,confGrandTotal,confPickupDate,confReturnDate,confPickupISO,confReturnISO,showOrderDetail,showRefundList,openRefundList,navBack,navOpen,refundRecords,confirmDocs,autoRenew,toggleAutoRenew,uploadIdEnabled,showConfirmDocs,showDocSheet,docSheetTab,docText,docImageTypes,docDeleteMod,docDeleteTarget,previewImage,openDocSheet,addDocImage,addDocText,requestDeleteDoc,confirmDeleteDoc,showCancelModal,idInfoList,showIdInfoSheet,idInfoTypes,idInfoCount,openIdInfoSheet,idName,idEditingId,openIdAdd,openIdEditRecord,deleteIdRecord,idCardNo,driverNo,idPhotos,driverPhotos,idDetailRec,openIdDetail,openIdDetailPreview,idNameErr,idCardErr,driverErr,idPhotoErr,driverPhotoErr,idActionTarget,openIdEditRecord,deleteIdRecord,showIdDelete,idDeleteTarget,openIdDelete,confirmIdDelete,idSelectMode,confirmIdInfo,openIdSelect,closeIdSelect,confirmIdSelect,showIdAction,idPickerSource,showIdPreview,idPreviewItem,showIdPicker,idPickerKind,idPickerSH,maskNo,maskNoFull,submitIdInfo,openIdPicker,pickIdSource,commitIdPhoto,openIdMore,idActionReupload,doIdReupload,idActionDelete,openIdPreview,cancelLoading,orderCountdown,orderCountdownText,orderDetailTab,cancelOrder,goToPay,orderInfo,startOrderTimer,stopOrderTimer,showMyOrders,showOrderList,orderListCategory,currentOrderList,openOrderCategory,openMyOrders,openOrderDetailFromList,orderFilter,orderFilterTabs,orderFilterMap,setOrderFilter,relocateRent,payChannel,setPayChannel,cancelBeforePay,setCancelBeforePay,delDocLoading,showWallet,showWalletLedger,showTopup,walletBalanceVisible,walletAccount,walletActive,walletLedgerActive,walletStorePick,pickStoreForWallet,walletStoreSheet,walletOpenedStores,walletSwitchStore,storeInfoOf,ensureWalletOpened,walletLedger,walletLedgerTab,walletLedgerList,walletLedgerMonthOpen,setWalletLedgerTab,toggleWalletLedgerMonth,rechargeLedger,bonusLedger,topupAmount,topupCustom,topupShowCustom,walletTopupAmounts,walletTopupBonus,openWallet,openWalletLedger,openTopup,selectTopupAmount,confirmTopup,onCustomAmountInput,walletLedgerTxn,walletLedgerTxnOpts,showRenewPlan,openRenew,confirmRenew,renewDateIdx,renewPeriodIdx,renewDateLabel,renewPeriodLabel,renewRentFee,showFeeDetail,feeRows,feeCardRow,feeChannelBreakdown,feeSummary,rentOpen,depositOpen,totalOpen,showPayment,confirmPayment,paymentType,paymentBusy,payTarget,openPayRenew,cancelRenew,requestCancelRenew,confirmCancelRenew,payRenewDirect,showCancelRenewModal,cancelRenewTarget,cancelRenewLoading,openPayOrder,markRenewPaid,deductWallet,parseRp,formatNow,pickerMode,renewDays,renewDetail,renewDurationLabel,renewPlanDisplay,renewAddDays,renewSubDays,detailOpen,feeRowChannels,showRechargeOrder,rechargeOrder,rechargeStatusTag,payRechargeOrder,rechargeChannelText,fmtRp,openRechargeOrderFromList,openRechargeList,setRechargeFilter,showRechargeList,rechargeFilterTabs,rechargeFilterMap,rechargeFilter,currentRechargeList,dialRechargePhone,setRechargeRefundState,showCancelRechargeModal,cancelRechargeLoading,requestCancelRecharge,confirmCancelRecharge};
@@ -8395,7 +8393,7 @@ function setTab(t){
   if(t==='home'&&!can('home.view')){deny();return}
   if(t==='vehicles'&&!can('vehicle.list')){deny();return}
   if(t==='orders'&&!can('battery.list')&&!can('order.list')){deny();return}
-  if(!isPushed())navReset();
+  navReset();
   tab.value=t;
   if(t==='orders'&&!ordersOV.value&&!can('battery.list'))ordersDefaultLanding();
   if(t==='home'){
@@ -9833,7 +9831,7 @@ function _navClone(v){return (v&&typeof v==='object')?JSON.parse(JSON.stringify(
 function _navR(r){return{get:function(){return r.value},set:function(v){r.value=v}}}
 const pageRefList=[tab,homeOV,vehOV,vehView,ordersOV,ordersType,ordersEntry,profileOV,profileSub,roOV,uWalletView,curAlert,do_,dv,dSt,dPaySt,dPm,dCanceledPaid,autoRenew,curBatt,du,curRechargeOrder,armed,lost,motorLocked].map(function(r){return _navR(r)});
 
-const {navOpen,navBack,navDrop,navSwap,navReset,navLog,isPushed}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList});
+const {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList});
 
 function profileMdOk(){if(profileMod.value==='toggle'&&tgtAcc){tgtAcc.status=tgtAcc.status==='启用'?'禁用':'启用';toast('账号状态已' + (tgtAcc.status),'success')}if(profileMod.value==='delPos'&&tgtPos){const i=positions.value.findIndex(p=>p.name===tgtPos.name);if(i>=0)positions.value.splice(i,1);toast('职位已删除','success')}if(profileMod.value==='delCs'&&delCsI>=0){csList.value.splice(delCsI,1);toast('已删除','success')}if(profileMod.value==='delRecharge'&&delRechargeI>=0){rechargeList.value.splice(delRechargeI,1);toast('已删除','success')}if(profileMod.value==='logout'){doLogout();return}profileMod.value=null}
 

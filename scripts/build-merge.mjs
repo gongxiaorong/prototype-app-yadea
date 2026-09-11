@@ -101,15 +101,14 @@ if (Bjs.indexOf(PTR_HOOK) < 0) throw new Error('B 缺 createApp 钩子');
 Ajs = Ajs.split(PTR_HOOK).join(PTR_WRAP);
 Bjs = Bjs.split(PTR_HOOK).join(PTR_WRAP);
 
-// ── 5. 页面栈 nav：删内联，改调 createNav ──
+// ── 5. 页面栈 nav：删内联，改调共享 createNav（两端调用逐字一致，纯导航） ──
 const NAV_ENDMARK = "try{history.replaceState({nav:''},'')}catch(e){}";
-const NAV_A_INSERT = '\nconst {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList,onResetLoading:function(){showRentLoading.value=false}});\n';
-const NAV_B_INSERT = '\nconst {navOpen,navBack,navDrop,navSwap,navReset,navLog,isPushed}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList});\n';
-Ajs = cutRange(Ajs, 'function _navSnapshot(', NAV_ENDMARK, NAV_A_INSERT);
-Bjs = cutRange(Bjs, 'function _navSnapshot(', NAV_ENDMARK, NAV_B_INSERT);
-// B 的 setTab 仍引用了原 nav 私有变量 _pagePushed → 改为经 createNav 暴露的 isPushed()
+const NAV_INSERT = '\nconst {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList});\n';
+Ajs = cutRange(Ajs, 'function _navSnapshot(', NAV_ENDMARK, NAV_INSERT);
+Bjs = cutRange(Bjs, 'function _navSnapshot(', NAV_ENDMARK, NAV_INSERT);
+// B 的 setTab 曾引用原 nav 私有变量 _pagePushed → 导航已纯化，改为无条件 navReset()
 assert(Bjs.includes('if(!_pagePushed)navReset();'), 'B 缺 _pagePushed 引用锚点');
-Bjs = Bjs.split('if(!_pagePushed)navReset();').join('if(!isPushed())navReset();');
+Bjs = Bjs.split('if(!_pagePushed)navReset();').join('navReset();');
 
 // ── 6. mount 目标 ──
 Ajs = split1(Ajs, "app.mount('#app');", 'app.mount(root);');
@@ -139,10 +138,11 @@ function ptrBind(root,containerId,indicatorId,onRefresh){
   c.addEventListener('mousedown',function(e){onStart(e);var mm=function(ev){if(active){onMove(ev)}};var mu=function(ev){onEnd(ev);document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu)};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu)});
 }
 
-/* 页面栈导航（快照式）统一实现：与 C 端原逻辑一致，快照统一为数组。
-   opts: { screens, pageRefList, onResetLoading } */
+/* 页面栈导航（快照式）统一实现：纯导航，不触碰任何 app 状态。
+   两端调用一致：createNav({screens, pageRefList})，无 app 差异参数。
+   opts: { screens, pageRefList } */
 function createNav(o){
-  var screens=o.screens||{}, pageRefList=o.pageRefList||[], reset=o.onResetLoading||function(){};
+  var screens=o.screens||{}, pageRefList=o.pageRefList||[];
   var navStack=[];
   var _pagePushed=false,navSuppress=0,navLastBackAt=0;
   function _navClone(v){return (v&&typeof v==='object')?JSON.parse(JSON.stringify(v)):v}
@@ -164,7 +164,6 @@ function createNav(o){
   }
   function navBack(){
     var now=Date.now();if(now-navLastBackAt<250)return;navLastBackAt=now;
-    reset();
     if(!navStack.length){navLog('已到首页，边界兜底，禁止继续返回');return}
     var e=navStack.pop();
     var sc=_navScreen(e.name);
@@ -174,7 +173,6 @@ function createNav(o){
     navLog('back',e.name||'');
   }
   function navDrop(name){
-    reset();
     var i=navStack.length-1;
     if(i<0)return;
     if(name&&navStack[i].name!==name)return;
@@ -199,7 +197,6 @@ function createNav(o){
     navLog('reset','清空'+n+'层');
   }
   window.addEventListener('popstate',function(){
-    reset();
     if(navSuppress>0){navSuppress--;return}
     if(!navStack.length)return;
     var e=navStack.pop();
@@ -209,7 +206,7 @@ function createNav(o){
     navLog('popstate(物理返回)',e.name||'');
   });
   try{history.replaceState({nav:''},'')}catch(e){}
-  return {navOpen,navBack,navDrop,navSwap,navReset,navLog,isPushed:function(){return _pagePushed}};
+  return {navOpen,navBack,navDrop,navSwap,navReset,navLog};
 }
 `;
 
