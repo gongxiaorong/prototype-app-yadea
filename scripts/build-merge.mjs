@@ -184,6 +184,22 @@ for (const [from, to] of BIZ_STAT) {
   Bjs = Bjs.split(from).join(to);
 }
 
+// ── 6.3 跨端数据桥 MERGED：商户发布 + 用户消费 + 首页状态条（契约字段名对齐） ──
+const A_NAV_LINE = 'const {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList});';
+assert(Ajs.includes(A_NAV_LINE), 'A 缺 nav 行锚点');
+const A_mergedConst = '\nconst mergedStats=computed(function(){return{orderCount:MERGED.orderCount,vehicleCount:MERGED.vehicleCount,batteryCount:MERGED.batteryCount,walletBalance:MERGED.walletBalance,lastOrderId:MERGED.lastOrderId,updatedAt:MERGED.updatedAt}});';
+Ajs = Ajs.replace(A_NAV_LINE, A_mergedConst + '\n' + A_NAV_LINE);
+const A_RET_TAIL = 'requestCancelRecharge,confirmCancelRecharge}';
+assert(Ajs.includes(A_RET_TAIL), 'A 缺 return 尾部锚点');
+Ajs = Ajs.replace(A_RET_TAIL, 'requestCancelRecharge,confirmCancelRecharge,mergedStats}');
+const B_MOUNT = 'onMounted(()=>{brandLoading.value=true;';
+assert(Bjs.includes(B_MOUNT), 'B 缺 onMounted 锚点');
+const B_pub = 'function publishMerged(){try{MERGED.orderCount=(( (orders.value||orders)||[]).length)||0;MERGED.vehicleCount=(vehicles?(((vehicles.value||vehicles)||[]).length)||0:0);MERGED.batteryCount=(batteries?(((batteries.value||batteries)||[]).length)||0:0);MERGED.walletBalance=(uWallet&&uWallet.total)?uWallet.total:0;var _o=(((orders.value||orders)||[])[0])||null;MERGED.lastOrderId=_o?(_o.orderId||_o.id||"—"):"—";MERGED.updatedAt=Date.now();}catch(e){}}\nwatch(function(){return[(((orders.value||orders)||[]).length)||0,(vehicles?(((vehicles.value||vehicles)||[]).length)||0:0),(batteries?(((batteries.value||batteries)||[]).length)||0:0),(uWallet&&uWallet.total)||0]},publishMerged,{immediate:true});\n';
+Bjs = Bjs.replace(B_MOUNT, B_pub + B_MOUNT);
+const STRIP = '\n<div class="merged-strip" style="margin:0 16px 10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 12px;border-radius:10px;background:#fff;border:1px solid #E5E5E5;font-size:12px;color:#444">商户端同步 ▶ 订单 <b>{{mergedStats.orderCount}}</b> · 车辆 <b>{{mergedStats.vehicleCount}}</b> · 电池 <b>{{mergedStats.batteryCount}}</b> · 钱包 <b>{{ fmtRp(mergedStats.walletBalance) }}</b> <span style="color:#999">(#{{mergedStats.lastOrderId}}@{{mergedStats.updatedAt}})</span></div>';
+assert(/id="sc-home"[^>]*>/.test(Ahtml), 'Ahtml 缺 #sc-home 锚点');
+Ahtml = Ahtml.replace(/id="sc-home"[^>]*>/, (m) => m + STRIP);
+
 // ── 7. SHARED CORE ──
 const SHARED_CORE = `/* ══════ SHARED CORE ══════ */
 ${luciFn}
@@ -283,6 +299,10 @@ function createNav(o){
 var MONEY=Vue.reactive({cur:'IDR',rates:{IDR:1,CNY:0.000357,HKD:0.00192},symbols:{IDR:'Rp ',CNY:'¥',HKD:'HK$ '}});
 /* 共享金额 formatter：随 MONEY.cur 切换货币（dec 可选，用于小数位） */
 function fmtRp(n,dec){var v=Number(n);if(v==null||isNaN(v))v=0;var c=MONEY.cur,a=v*(MONEY.rates[c]||1);var loc=(c==='IDR'?'id-ID':'en-US');var s=dec==null?a.toLocaleString(loc):a.toLocaleString(loc,{minimumFractionDigits:dec,maximumFractionDigits:dec});return (MONEY.symbols[c]||'Rp ')+s}
+
+/* 跨端数据桥：商户端为准 → 用户端实时同步。字段名为两端统一契约（命名对齐）。
+   契约字段：orderCount/vehicleCount/batteryCount/walletBalance/lastOrderId/updatedAt */
+var MERGED=Vue.reactive({orderCount:0,vehicleCount:0,batteryCount:0,walletBalance:0,lastOrderId:'—',updatedAt:0});
 `;
 
 // ── 8. 组装 JS 块 ──
