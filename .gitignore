@@ -1,0 +1,2 @@
+# 可重建的中间产物（由脚本从 user.html / merchant.html 重新生成）
+.merge-tmp/
