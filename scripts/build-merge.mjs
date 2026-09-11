@@ -63,12 +63,37 @@ const split1 = (src, sep, to) => {
   return src.split(sep).join(to);
 };
 
+// ── Token 归一：CSS 中等价裸 hex → CSS 变量（保护 :root 定义处，避免自我引用） ──
+const TOKEN_MAP = [
+  ['#2B3F5F', 'var(--accent)'],
+  ['#2F6FEB', 'var(--link)'],
+  ['#17A34A', 'var(--success)'],
+  ['#DC2626', 'var(--danger)'],
+  ['#FF6A00', 'var(--accent-2)'],
+];
+function normTokens(css, hasRoot) {
+  const MARK = '__ROOT_KEYS__';
+  let rootStore = null;
+  if (hasRoot) {
+    const rs = css.indexOf(':root{');
+    if (rs >= 0) {
+      const op = css.indexOf('{', rs);
+      const re = blockEnd(css, op);
+      rootStore = css.slice(rs, re);
+      css = css.slice(0, rs) + MARK + css.slice(re);
+    }
+  }
+  for (const [h, v] of TOKEN_MAP) css = css.split(h).join(v);
+  if (rootStore) css = css.split(MARK).join(rootStore);
+  return css;
+}
+
 // ── 1. 读取分段与 CSS 层 ──
 const Ahtml = read('A.html').trim();
 const Bhtml = read('B.html').trim();
-const cssBase = read('layers.base.css');
-const cssUser = read('layers.user.css');
-const cssMerchant = read('layers.merchant.css');
+const cssBase = normTokens(read('layers.base.css'), true);
+const cssUser = normTokens(read('layers.user.css'), false);
+const cssMerchant = normTokens(read('layers.merchant.css'), false);
 let Ajs = read('A.js');
 let Bjs = read('B.js');
 
@@ -113,6 +138,12 @@ Bjs = Bjs.split('if(!_pagePushed)navReset();').join('navReset();');
 // ── 6. mount 目标 ──
 Ajs = split1(Ajs, "app.mount('#app');", 'app.mount(root);');
 Bjs = split1(Bjs, "app.mount('#app');", 'app.mount(root);');
+
+// ── 6.1 金额 formatter 统一 → 共享 fmtRp（id-ID） ──
+assert(Ajs.includes('function fmtRp('), 'A 缺 fmtRp');
+assert(Bjs.includes('function fmtRp('), 'B 缺 fmtRp');
+Ajs = removeLine(Ajs, 'function fmtRp(');
+Bjs = removeLine(Bjs, 'function fmtRp(');
 
 // ── 7. SHARED CORE ──
 const SHARED_CORE = `/* ══════ SHARED CORE ══════ */
@@ -208,6 +239,9 @@ function createNav(o){
   try{history.replaceState({nav:''},'')}catch(e){}
   return {navOpen,navBack,navDrop,navSwap,navReset,navLog};
 }
+
+/* 共享金额 formatter：统一 id-ID 千分位（dec 可选，用于小数位） */
+function fmtRp(n,dec){var v=Number(n);if(v==null||isNaN(v))v=0;if(dec==null)return 'Rp '+v.toLocaleString('id-ID');return 'Rp '+v.toLocaleString('id-ID',{minimumFractionDigits:dec,maximumFractionDigits:dec})}
 `;
 
 // ── 8. 组装 JS 块 ──
@@ -336,6 +370,9 @@ checks.push(`createNav 定义: ${(out.match(/function createNav\(/g) || []).leng
 checks.push(`createNav 调用: ${(out.match(/createNav\(\{/g) || []).length} (预期 2)`);
 checks.push(`app.mount(root): ${(out.match(/app\.mount\(root\);/g) || []).length} (预期 2)`);
 checks.push(`剩余 let tid=0;: ${(out.match(/let tid=0;/g) || []).length} (预期 0)`);
+checks.push(`function fmtRp( 定义: ${(out.match(/function fmtRp\(/g) || []).length} (预期 1)`);
+checks.push(`registerSharedComponents 出现: ${(out.match(/registerSharedComponents/g) || []).length} (预期 0，已回退)`);
+checks.push(`残留 <yd-switch>/<yd-stepper>: ${(out.match(/yd-switch|yd-stepper/g) || []).length} (预期 0，已回退)`);
 checks.push(`layer 块: ${(out.match(/<style id="layer-/g) || []).length} (预期 4)`);
 console.log('构建完成 → ' + join(ROOT, 'index.html'));
 console.log(checks.join('\n'));
