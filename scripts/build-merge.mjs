@@ -385,8 +385,8 @@ const html = `<!DOCTYPE html>
 <header id="host-bar">
   <div class="modes">
     <button data-mode="split" class="active">双端并排</button>
-    <button data-mode="single-u">只看用户端</button>
-    <button data-mode="single-m">只看商户端</button>
+    <button data-mode="single-u">用户端</button>
+    <button data-mode="single-m">商户端</button>
   </div>
   <div class="cur">
     <span class="cur-lbl">货币</span>
