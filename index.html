@@ -3,19 +3,17 @@
 ═══════════════════════════════════════════════════════════════════
   雅迪租车 · 用户端 + 商户端 单文件双 App（合并产物）
 ═══════════════════════════════════════════════════════════════════
-  产物由 scripts/build-merge.mjs 从 user.html + merchant.html 组装，
-  P1 切分、P2 CSS 分层、P3 宿主、P4 双实例隔离均已脚本化完成。
+  产物由 scripts/build-merge.mjs 从 user.html + merchant.html 组装。
+  JS 公共内核（SHARED CORE）已抽取共享：luci / toastPush / ptrBind / createNav，
+  双端 mountUser/mountMerchant 复用同一份实现；下拉刷新走 root 作用域。
 
   区块与同步开发约定（新增功能按区修改）：
-  · 通用样式  → 编辑 <style id="layer-base">
-  · 用户端专属 → <style id="layer-user">（选择器带 #root-user 前缀）
-  · 商户端专属 → <style id="layer-merchant">（选择器带 #root-merchant 前缀）
-  · 宿主外壳   → <style id="layer-host">（工具栏 / 并排布局 / 模式切换 / 居中）
-  · 用户端逻辑 → function mountUser(root){ ... } 闭包内
-  · 商户端逻辑 → function mountMerchant(root){ ... } 闭包内
-  · 双实例常驻 mount；下拉刷新走 root 作用域，勿改回全局 getElementById
-  （否则 sc-home / ptr-home 等两端重复 id 会错位）
-  源快照：user.html（用户端） / merchant.html（商户端），只读参照。
+  · 通用样式   → <style id="layer-base">
+  · 公共 JS    → <script> 内 /* SHARED CORE */
+  · 用户端专属 → <style id="layer-user"> + function mountUser(root){...}
+  · 商户端专属 → <style id="layer-merchant"> + function mountMerchant(root){...}
+  · 宿主外壳   → <style id="layer-host">
+  源快照：user.html（用户端）/ merchant.html（商户端），只读参照。
 ═══════════════════════════════════════════════════════════════════
 -->
 <html lang="zh-CN">
@@ -6814,6 +6812,101 @@ body.host-single-m #root-user{display:none}
 </main>
 <script>
 /* ══════ SHARED CORE ══════ */
+function luci(n,c){if(!window.lucide||!n||!lucide.icons)return'';try{var p=(s)=>s.replace(/(\w)(\w*)(-|\s*)/g,(_,a,b)=>a.toUpperCase()+b.toLowerCase());var d=lucide.icons[p(n)];if(!d||d[0]!=='svg')return'';var a=d[1],cls='lucide lucide-'+n+(c?' '+c:''),sv='<svg';for(var k in a)if(a.hasOwnProperty(k))sv+=' '+k+'="'+String(a[k]).replace(/"/g,'&quot;')+'"';sv+=' class="'+cls+'">';function b(ch){var h='';for(var i=0;i<ch.length;i++){var t=ch[i][0],at=ch[i][1];h+='<'+t;for(var k in at)if(at.hasOwnProperty(k))h+=' '+k+'="'+String(at[k]).replace(/"/g,'&quot;')+'"';if(ch[i][2]&&ch[i][2].length)h+='>'+b(ch[i][2])+'</'+t+'>';else h+='/>'}return h}sv+=b(d[2])+'</svg>';return sv}catch(ex){return''}}
+
+/* toast 共享：list=toasts.value 数组，cnt 计数对象(_tt)，按 2s 自动移除 */
+function toastPush(list,cnt,msg,type){var id=++cnt.n;list.push({id:id,msg:msg,type:type});setTimeout(function(){for(var i=0;i<list.length;i++){if(list[i].id===id){list.splice(i,1);return}}},2000)}
+
+/* 下拉刷新（root 作用域，避免双端重复 id 错位）
+   以 C 端实现为准：touch + 兼容鼠标(document 级监听拖动) */
+function ptrBind(root,containerId,indicatorId,onRefresh){
+  var c=root.querySelector('#'+containerId),i=root.querySelector('#'+indicatorId);
+  if(!c||!i)return;
+  var sy=0,pull=false,active=false;
+  function startY(e){return e.touches&&e.touches[0]?e.touches[0].clientY:e.clientY}
+  function curY(e){return e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientY:e.clientY}
+  function onStart(e){if(c.scrollTop<=0){sy=startY(e);pull=true;active=true}else{pull=false}}
+  function onMove(e){if(!active||!pull)return;if(c.scrollTop>0){pull=false;return}e.preventDefault();var dy=curY(e)-sy;var off=Math.min(dy*0.4,60);if(off<0)off=0;i.style.height=off+'px';i.innerHTML='<span class="ptr-spinner"></span>'+(off>40?'释放刷新':'下拉刷新')}
+  function onEnd(e){if(!active)return;active=false;if(!pull)return;pull=false;var dy=curY(e)-sy;if(dy>60){i.style.height='40px';i.innerHTML='<span class="ptr-spinner"></span>刷新中…';if(onRefresh){onRefresh()}setTimeout(function(){i.style.height='0';i.innerHTML='<span class="ptr-text">下拉刷新</span>'},1200)}else{i.style.height='0'}}
+  c.addEventListener('touchstart',onStart,{passive:true});
+  c.addEventListener('touchmove',onMove,{passive:false});
+  c.addEventListener('touchend',onEnd,{passive:true});
+  c.addEventListener('mousedown',function(e){onStart(e);var mm=function(ev){if(active){onMove(ev)}};var mu=function(ev){onEnd(ev);document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu)};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu)});
+}
+
+/* 页面栈导航（快照式）统一实现：与 C 端原逻辑一致，快照统一为数组。
+   opts: { screens, pageRefList, onResetLoading } */
+function createNav(o){
+  var screens=o.screens||{}, pageRefList=o.pageRefList||[], reset=o.onResetLoading||function(){};
+  var navStack=[];
+  var _pagePushed=false,navSuppress=0,navLastBackAt=0;
+  function _navClone(v){return (v&&typeof v==='object')?JSON.parse(JSON.stringify(v)):v}
+  function _navSnapshot(){return pageRefList.map(function(r){return _navClone(r.get())})}
+  function _navRestore(s){pageRefList.forEach(function(r,i){r.set(_navClone(s[i]))})}
+  function _navScreen(name){return screens[name]||null}
+  function navLog(a,n){console.log('[页面栈]',a+(n?' '+n:''),'→',navStack.map(function(e){return e.name||'(未命名)'}).join(' <- ')||'(首页)','| history.length='+history.length)}
+  function navOpen(name){
+    if(_pagePushed)return;_pagePushed=true;
+    setTimeout(function(){_pagePushed=false},0);
+    if(name&&navStack.some(function(e){return e.name===name})){navLog('重复入栈已忽略',name);return}
+    var snap=_navSnapshot();
+    if(!name&&navStack.length&&JSON.stringify(snap)===JSON.stringify(navStack[navStack.length-1].snap)){navLog('重复入栈已忽略',name||'');return}
+    var sc=_navScreen(name);
+    navStack.push({name:name||'',snap:snap});
+    if(sc&&sc.open)sc.open();
+    try{history.pushState({nav:name||''},'')}catch(e){}
+    navLog('push',name||'');
+  }
+  function navBack(){
+    var now=Date.now();if(now-navLastBackAt<250)return;navLastBackAt=now;
+    reset();
+    if(!navStack.length){navLog('已到首页，边界兜底，禁止继续返回');return}
+    var e=navStack.pop();
+    var sc=_navScreen(e.name);
+    if(sc&&sc.close)sc.close();
+    _navRestore(e.snap);
+    navSuppress++;try{history.back()}catch(_){}
+    navLog('back',e.name||'');
+  }
+  function navDrop(name){
+    reset();
+    var i=navStack.length-1;
+    if(i<0)return;
+    if(name&&navStack[i].name!==name)return;
+    var e=navStack.pop();
+    var sc=_navScreen(e.name);
+    if(sc&&sc.close)sc.close();
+    navSuppress++;try{history.go(-1)}catch(_){}
+    navLog('drop',e.name||'');
+  }
+  function navSwap(name){
+    var s=_navScreen(name);if(!s)return;
+    var top=navStack.length?navStack.pop():null;
+    if(top){var sc=_navScreen(top.name);if(sc&&sc.close)sc.close()}
+    s.open();try{history.replaceState({nav:name||''},'')}catch(_){}
+    navStack.push({name:name||'',snap:top?top.snap:_navSnapshot()});
+    navLog('replace',name);
+  }
+  function navReset(){
+    var n=navStack.length;
+    while(navStack.length){var e=navStack.pop();var sc=_navScreen(e.name);if(sc&&sc.close)sc.close()}
+    if(n>0){navSuppress++;try{history.go(-n)}catch(_){}}
+    navLog('reset','清空'+n+'层');
+  }
+  window.addEventListener('popstate',function(){
+    reset();
+    if(navSuppress>0){navSuppress--;return}
+    if(!navStack.length)return;
+    var e=navStack.pop();
+    var sc=_navScreen(e.name);
+    if(sc&&sc.close)sc.close();
+    _navRestore(e.snap);
+    navLog('popstate(物理返回)',e.name||'');
+  });
+  try{history.replaceState({nav:''},'')}catch(e){}
+  return {navOpen,navBack,navDrop,navSwap,navReset,navLog,isPushed:function(){return _pagePushed}};
+}
+
 window.addEventListener('error', function (e) {
   var st = e.error && e.error.stack ? e.error.stack : '';
   console.log('[MERGED-GLOBALERR]', e.message);
@@ -6825,13 +6918,14 @@ function mountUser(root) {
 
 const{createApp,ref,computed,onMounted,nextTick,reactive}=Vue;
 window.addEventListener('error',function(e){var st=e.error&&e.error.stack?e.error.stack:'';console.log('GLOBALERR='+e.message);console.log('GLOBALSTACK='+st);});
-function luci(n,c){if(!window.lucide||!n||!lucide.icons)return'';try{var p=(s)=>s.replace(/(\w)(\w*)(-|\s*)/g,(_,a,b)=>a.toUpperCase()+b.toLowerCase());var d=lucide.icons[p(n)];if(!d||d[0]!=='svg')return'';var a=d[1],cls='lucide lucide-'+n+(c?' '+c:''),sv='<svg';for(var k in a)if(a.hasOwnProperty(k))sv+=' '+k+'="'+String(a[k]).replace(/"/g,'&quot;')+'"';sv+=' class="'+cls+'">';function b(ch){var h='';for(var i=0;i<ch.length;i++){var t=ch[i][0],at=ch[i][1];h+='<'+t;for(var k in at)if(at.hasOwnProperty(k))h+=' '+k+'="'+String(at[k]).replace(/"/g,'&quot;')+'"';if(ch[i][2]&&ch[i][2].length)h+='>'+b(ch[i][2])+'</'+t+'>';else h+='/>'}return h}sv+=b(d[2])+'</svg>';return sv}catch(ex){return''}}
+
+function initPullToRefresh(cid,iid,cb){return ptrBind(root,cid,iid,cb)}
 const app=createApp({
 setup(){
 const tab=ref('home');
 const toasts=ref([]);
-let tid=0;
-function toast(msg,type='info'){const id=++tid;toasts.value.push({id,msg,type});setTimeout(()=>{const i=toasts.value.findIndex(t=>t.id===id);if(i>=0)toasts.value.splice(i,1)},2000)}
+const _tt={n:0};
+function toast(msg,type='info'){toastPush(toasts.value,_tt,msg,type)}
 const renewNotifyTemplates={
 preview:{title:'续租提醒',body:d=>`订单${d.orderId}将于${d.dueDate}自动续租并扣款${d.amount}，可在订单页关闭。`},
 reminder:{title:'扣款提醒',body:d=>`订单${d.orderId}${d.N}天后自动续租扣款${d.amount}，请保持钱包余额充足。`},
@@ -7571,86 +7665,14 @@ const pageRefList=[
   _navR(rechargeFilter),_navR(myVehicleIdx),_navR(currentBatteryIdx),_navR(selectedVehicle),_navR(selectedStore),_navR(orderInfo),_navR(payTarget),_navR(idDetailRec),_navR(idEditingId),
   _navR(confirmIdInfo),_navR(scanBindDevice),_navR(scanCtx),_navR(orderListCategory),_navR(locRinging),_navRA(rechargeOrder)
 ];
-function _navSnapshot(){return pageRefList.map(function(e){return _navClone(e.get())})}
-function _navRestore(arr){pageRefList.forEach(function(e,i){e.set(_navClone(arr[i]))})}
-const navStack=[];
-var _pagePushed=false,navSuppress=0,navLastBackAt=0;
-function navLog(action,name){console.log('[页面栈]',action+(name?' '+name:''),'→',navStack.map(e=>e.name||'(未命名)').join(' <- ')||'(首页)','| history.length='+history.length)}
-function _navScreen(name){return (typeof NAV_SCREENS!=='undefined'&&NAV_SCREENS[name])||null}
-function navOpen(name){
-  if(_pagePushed)return;_pagePushed=true;
-  setTimeout(function(){_pagePushed=false},0);
-  if(name&&navStack.some(e=>e.name===name)){navLog('重复入栈已忽略',name);return}
-  const snap=_navSnapshot();
-  if(!name&&navStack.length&&JSON.stringify(snap)===JSON.stringify(navStack[navStack.length-1].snap)){navLog('重复入栈已忽略',name||'');return}
-  const sc=_navScreen(name);
-  navStack.push({name:name||'',snap:snap});
-  if(sc&&sc.open)sc.open();
-  try{history.pushState({nav:name||''},'')}catch(e){}
-  navLog('push',name||'');
-}
-function navBack(){
-  const now=Date.now();if(now-navLastBackAt<250)return;navLastBackAt=now;
-  showRentLoading.value=false;
-  if(!navStack.length){navLog('已到首页，边界兜底，禁止继续返回');return}
-  const e=navStack.pop();
-  const sc=_navScreen(e.name);
-  if(sc&&sc.close)sc.close();
-  _navRestore(e.snap);
-  navSuppress++;try{history.back()}catch(_){}
-  navLog('back',e.name||'');
-}
-function navDrop(name,restore){
-  showRentLoading.value=false;
-  const i=navStack.length-1;
-  if(i<0)return;
-  if(name&&navStack[i].name!==name)return;
-  const e=navStack.pop();
-  const sc=_navScreen(e.name);
-  if(sc&&sc.close)sc.close();
-  if(restore)_navRestore(e.snap);
-  navSuppress++;try{history.go(-1)}catch(_){}
-  navLog(restore?'drop*':'drop',e.name||'');
-}
-function navSwap(name){
-  const s=_navScreen(name);if(!s)return;
-  const top=navStack.length?navStack.pop():null;
-  if(top){const sc=_navScreen(top.name);if(sc&&sc.close)sc.close()}
-  s.open();try{history.replaceState({nav:name||''},'')}catch(_){}
-  navStack.push({name:name||'',snap:top?top.snap:_navSnapshot()});
-  navLog('replace',name);
-}
-function navReset(){
-  const n=navStack.length;
-  while(navStack.length){const e=navStack.pop();const sc=_navScreen(e.name);if(sc&&sc.close)sc.close()}
-  if(n>0){navSuppress++;try{history.go(-n)}catch(_){}}
-  navLog('reset','清空'+n+'层');
-}
-window.addEventListener('popstate',function(){
-  showRentLoading.value=false;
-  if(navSuppress>0){navSuppress--;return}
-  if(!navStack.length)return;
-  const e=navStack.pop();
-  const sc=_navScreen(e.name);
-  if(sc&&sc.close)sc.close();
-  _navRestore(e.snap);
-  navLog('popstate(物理返回)',e.name||'');
-});
-try{history.replaceState({nav:''},'')}catch(e){}
+
+const {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList,onResetLoading:function(){showRentLoading.value=false}});
+
 onMounted(()=>{initPullToRefresh('sc-home','ptr-home',refreshHome);setInterval(()=>{homeBannerIdx.value=(homeBannerIdx.value+1)%homeBanners.length},4000)});
 return{tab,toasts,toast,copyText,setTab,luci,weatherScene,weatherData,demoActive,demoListEmpty,demoSetListEmpty,mapCtx,showFindPage,showTrackPage,refundRentOpen,refundDepositOpen,refundTotalOpen,refundChannels,locLoading,locRinging,locFocus,locAddressFull,locAddressShort,locDistM,locWalkMin,locVehPt,locUserPt,openFindPage,openFindPageBattery,closeFindPage,locFocusUser,locFocusVehicle,locRingDevice,locOpenNav,trackStartLabel,trackEndLabel,trackLoading,trackPoints,trackPolyline,trackStartPt,trackEndPt,trackPois,trackTimePicker,openTrackPage,openTrackPageBattery,closeTrackPage,openTrackTimePicker,cancelTrackTimePicker,confirmTrackTimePicker,trackDraft,trackDays,trackMonths,trackYears,trackHours,trackMins,p2u,trackWheelDay,trackWheelMonth,trackWheelYear,trackWheelHour,trackWheelMin,onTrackWheelScroll,vehicles,vehicleCount,setVehicleCount,vehicleSource,setVehicleSource,opLock,opHorn,myVehicleIdx,showVehiclePicker,currentVehicle,toggleVehiclePicker,selectMyVehicle,openMyVehicleFromHome,openVehicleDetail,closeVehicleDetail,openVNameEdit,closeVNameEdit,saveVNameEdit,vNameLoading,openUnbindConfirm,closeUnbindConfirm,confirmUnbind,pushNotify,showPushNotify,renewNotifyTemplates,unbindLoading,showVehicleDetail,showUnbindConfirm,showVNameEdit,vNameInput,vNameError,locked,lockLoading,toggleLock,hornLoading,sendHorn,openMyCarOrder,currentOrder,refreshHome,refreshRent,openRent,loggedIn,pendingRoute,appLang,appLangLabel,langOptions,showLogin,loginView,loginMode,loginSub,loginDial,loginPhone,loginEmail,loginAccount,loginPwd,loginCode,loginPwdVisible,loginAgree,loginCd,dialQ,dialFiltered,showDialPicker,activeDialCode,closeDialPicker,canSendCode,canLogin,loginOpenLang,selectLangFromLogin,openDialCode,pickDial,setLoginMode,setLoginSub,sendLoginCode,doLogin,openLogin,profileOV,profileSub,profileMod,profileModLoading,hasPhone,hasEmail,hasPwd,boundPhone,boundEmail,bpArea,bpPhone,bpCode,bpCd,beEmail,beCode,beCd,openBindPhone,openBindEmail,sendBpCode,doBindPhone,sendBeCode,doBindEmail,pwdChannel,pwdCode,pwdCd,npwd,npwd2,npwdVis,npwd2Vis,canConfirmPwd,openPwdFlow,switchPwdChannel,sendPwdCode,nextPwdVerify,doResetPwd,checkVersion,goUpdate,exitApp,relaunchApp,scanning,doScan,scanTorch,manualVin,showManualVin,scanCtx,openManualInput,confirmManualVin,scanBindMode,scanBindDevice,vdDevice,bdDevice,showBindConfirm,bindConfirmLoading,openBindConfirm,closeBindConfirm,confirmBind,homeDevSeg,homeBatteries,bSocColor,batteryAdd,showBatteryDetail,currentBattery,openBatteryDetail,openBatteryOrder,closeBatteryDetail,openBatteryUnbind,closeBatteryUnbind,confirmBatteryUnbind,showBatteryUnbind,batteryUnbindLoading,showVersionCheck,hasNewVersion,latestVersion,updateDesc,updating,appExited,selectLang,doLogout,profileMdT,profileMdD,profileMdDanger,profileMdOk,showRent,rentBannerIdx,rentBanners,showRentLoading,homeBannerIdx,homeBanners,showDatePicker,rentDateIdx,dateOptions,rentDateLabel,selectDate,showPeriodPicker,rentPeriodIdx,periodOptions,rentPeriodLabel,periodUnit,selectPeriod,showStore,storeSearch,storeFiltered,selectStore,openStore,searchStore,selectedStore,confStore,showVehicle,vehicleList,rentNow,showConfirm,selectedVehicle,confRentDays,confTotal,confTotalDays,confDurationLabel,confPeriodDetail,orderPlanDisplay,confTab,confPayType,cancelRules,noticeRules,billingRules,overdueRules,confAddDays,confSubDays,confirmOrder,confTotal,confDeposit,confGrandTotal,confPickupDate,confReturnDate,confPickupISO,confReturnISO,showOrderDetail,showRefundList,openRefundList,navBack,navOpen,refundRecords,confirmDocs,autoRenew,toggleAutoRenew,uploadIdEnabled,showConfirmDocs,showDocSheet,docSheetTab,docText,docImageTypes,docDeleteMod,docDeleteTarget,previewImage,openDocSheet,addDocImage,addDocText,requestDeleteDoc,confirmDeleteDoc,showCancelModal,idInfoList,showIdInfoSheet,idInfoTypes,idInfoCount,openIdInfoSheet,idName,idEditingId,openIdAdd,openIdEditRecord,deleteIdRecord,idCardNo,driverNo,idPhotos,driverPhotos,idDetailRec,openIdDetail,openIdDetailPreview,idNameErr,idCardErr,driverErr,idPhotoErr,driverPhotoErr,idActionTarget,openIdEditRecord,deleteIdRecord,showIdDelete,idDeleteTarget,openIdDelete,confirmIdDelete,idSelectMode,confirmIdInfo,openIdSelect,closeIdSelect,confirmIdSelect,showIdAction,idPickerSource,showIdPreview,idPreviewItem,showIdPicker,idPickerKind,idPickerSH,maskNo,maskNoFull,submitIdInfo,openIdPicker,pickIdSource,commitIdPhoto,openIdMore,idActionReupload,doIdReupload,idActionDelete,openIdPreview,cancelLoading,orderCountdown,orderCountdownText,orderDetailTab,cancelOrder,goToPay,orderInfo,startOrderTimer,stopOrderTimer,showMyOrders,showOrderList,orderListCategory,currentOrderList,openOrderCategory,openMyOrders,openOrderDetailFromList,orderFilter,orderFilterTabs,orderFilterMap,setOrderFilter,relocateRent,payChannel,setPayChannel,cancelBeforePay,setCancelBeforePay,delDocLoading,showWallet,showWalletLedger,showTopup,walletBalanceVisible,walletAccount,walletActive,walletLedgerActive,walletStorePick,pickStoreForWallet,walletStoreSheet,walletOpenedStores,walletSwitchStore,storeInfoOf,ensureWalletOpened,walletLedger,walletLedgerTab,walletLedgerList,walletLedgerMonthOpen,setWalletLedgerTab,toggleWalletLedgerMonth,rechargeLedger,bonusLedger,topupAmount,topupCustom,topupShowCustom,walletTopupAmounts,walletTopupBonus,openWallet,openWalletLedger,openTopup,selectTopupAmount,confirmTopup,onCustomAmountInput,walletLedgerTxn,walletLedgerTxnOpts,showRenewPlan,openRenew,confirmRenew,renewDateIdx,renewPeriodIdx,renewDateLabel,renewPeriodLabel,renewRentFee,showFeeDetail,feeRows,feeCardRow,feeChannelBreakdown,feeSummary,rentOpen,depositOpen,totalOpen,showPayment,confirmPayment,paymentType,paymentBusy,payTarget,openPayRenew,cancelRenew,requestCancelRenew,confirmCancelRenew,payRenewDirect,showCancelRenewModal,cancelRenewTarget,cancelRenewLoading,openPayOrder,markRenewPaid,deductWallet,parseRp,formatNow,pickerMode,renewDays,renewDetail,renewDurationLabel,renewPlanDisplay,renewAddDays,renewSubDays,detailOpen,feeRowChannels,showRechargeOrder,rechargeOrder,rechargeStatusTag,payRechargeOrder,rechargeChannelText,fmtRp,openRechargeOrderFromList,openRechargeList,setRechargeFilter,showRechargeList,rechargeFilterTabs,rechargeFilterMap,rechargeFilter,currentRechargeList,dialRechargePhone,setRechargeRefundState,showCancelRechargeModal,cancelRechargeLoading,requestCancelRecharge,confirmCancelRecharge};
 }
 });
-function initPullToRefresh(containerId,indicatorId,onRefresh){var c=root.querySelector('#'+containerId),i=root.querySelector('#'+indicatorId);if(!c||!i)return;var sy=0,pull=false,active=false;
-function startY(e){return e.touches&&e.touches[0]?e.touches[0].clientY:e.clientY}
-function curY(e){return e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientY:e.clientY}
-function onStart(e){if(c.scrollTop<=0){sy=startY(e);pull=true;active=true}else{pull=false}}
-function onMove(e){if(!active||!pull)return;if(c.scrollTop>0){pull=false;return}e.preventDefault();var dy=curY(e)-sy;var off=Math.min(dy*0.4,60);if(off<0)off=0;i.style.height=off+'px';i.innerHTML='<span class="ptr-spinner"></span>'+(off>40?'释放刷新':'下拉刷新')}
-function onEnd(e){if(!active)return;active=false;if(!pull)return;pull=false;var dy=curY(e)-sy;if(dy>60){i.style.height='40px';i.innerHTML='<span class="ptr-spinner"></span>刷新中…';if(onRefresh){onRefresh()}setTimeout(function(){i.style.height='0';i.innerHTML='<span class="ptr-text">下拉刷新</span>'},1200)}else{i.style.height='0'}}
-c.addEventListener('touchstart',onStart,{passive:true});
-c.addEventListener('touchmove',onMove,{passive:false});
-c.addEventListener('touchend',onEnd,{passive:true});
-c.addEventListener('mousedown',function(e){onStart(e);var mm=function(ev){if(active){onMove(ev)}};var mu=function(ev){onEnd(ev);document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu)};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu)})}
+
 app.directive('swipe-close',{mounted(el,b){var sx=0,sy=0;el.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});el.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(sx<40&&dx>60&&Math.abs(dy)<Math.abs(dx)*0.5)b.value()},{passive:true})}});
 app.directive('long-pan',{mounted(el){var panning=false,sx=0,sy=0,sl=0,move=0,moved=false,pressT=null;
 var start=function(x,y){panning=true;sx=x;sy=y;sl=el.scrollLeft;moved=false;el.style.cursor='grabbing';el.style.scrollSnapType='none'};
@@ -7672,15 +7694,16 @@ function mountMerchant(root) {
 
 /* ══════ GLOBAL: app shell · state · toast · luci · 校验 ══════ */
 const{createApp,ref,reactive,computed,onMounted,onUpdated,nextTick,watch}=Vue;
+
+function initPullToRefresh(cid,iid,cb){return ptrBind(root,cid,iid,cb)}
 const app=createApp({
 setup(){
 const tab=ref('home');
 const appLang=ref('zh-CN');
 
-function luci(n,c){if(!window.lucide||!n||!lucide.icons)return'';try{var p=(s)=>s.replace(/(\w)(\w*)(-|\s*)/g,(_,a,b)=>a.toUpperCase()+b.toLowerCase());var d=lucide.icons[p(n)];if(!d||d[0]!=='svg')return'';var a=d[1],cls='lucide lucide-'+n+(c?' '+c:''),sv='<svg';for(var k in a)if(a.hasOwnProperty(k))sv+=' '+k+'="'+String(a[k]).replace(/"/g,'&quot;')+'"';sv+=' class="'+cls+'">';function b(ch){var h='';for(var i=0;i<ch.length;i++){var t=ch[i][0],at=ch[i][1];h+='<'+t;for(var k in at)if(at.hasOwnProperty(k))h+=' '+k+'="'+String(at[k]).replace(/"/g,'&quot;')+'"';if(ch[i][2]&&ch[i][2].length)h+='>'+b(ch[i][2])+'</'+t+'>';else h+='/>'}return h}sv+=b(d[2])+'</svg>';return sv}catch(ex){return''}}
 
-const toasts=ref([]);let tid=0;
-function toast(msg,type='info'){const id=++tid;toasts.value.push({id,msg,type});setTimeout(()=>{const i=toasts.value.findIndex(t=>t.id===id);if(i>=0)toasts.value.splice(i,1)},2000)}
+const toasts=ref([]);const _tt={n:0};
+function toast(msg,type='info'){toastPush(toasts.value,_tt,msg,type)}
 /* ══ 自定义 Tooltip（桌面 hover / 移动端点击触发） ══ */
 const stage=ref(null);
 const tip=ref({open:false,text:'',x:0,y:0,dir:'down'});let tipAnchor=null;
@@ -8372,7 +8395,7 @@ function setTab(t){
   if(t==='home'&&!can('home.view')){deny();return}
   if(t==='vehicles'&&!can('vehicle.list')){deny();return}
   if(t==='orders'&&!can('battery.list')&&!can('order.list')){deny();return}
-  if(!_pagePushed)navReset();
+  if(!isPushed())navReset();
   tab.value=t;
   if(t==='orders'&&!ordersOV.value&&!can('battery.list'))ordersDefaultLanding();
   if(t==='home'){
@@ -9809,68 +9832,9 @@ const NAV_SCREENS={};
 function _navClone(v){return (v&&typeof v==='object')?JSON.parse(JSON.stringify(v)):v}
 function _navR(r){return{get:function(){return r.value},set:function(v){r.value=v}}}
 const pageRefList=[tab,homeOV,vehOV,vehView,ordersOV,ordersType,ordersEntry,profileOV,profileSub,roOV,uWalletView,curAlert,do_,dv,dSt,dPaySt,dPm,dCanceledPaid,autoRenew,curBatt,du,curRechargeOrder,armed,lost,motorLocked].map(function(r){return _navR(r)});
-function _navSnapshot(){const s={};pageRefList.forEach(function(r,i){s[i]=_navClone(r.get())});return s}
-function _navRestore(s){if(!s)return;pageRefList.forEach(function(r,i){if(i in s)r.set(s[i])})}
-const navStack=[];
-var _pagePushed=false,navSuppress=0,navLastBackAt=0;
-function navLog(action,name){console.log('[页面栈]',action+(name?' '+name:''),'→',navStack.map(e=>e.name||'(未命名)').join(' <- ')||'(首页)','| history.length='+history.length)}
-function _navScreen(name){return (typeof NAV_SCREENS!=='undefined'&&NAV_SCREENS[name])||null}
-function navOpen(name){
-  if(_pagePushed)return;_pagePushed=true;
-  setTimeout(function(){_pagePushed=false},0);
-  if(name&&navStack.some(e=>e.name===name)){navLog('重复入栈已忽略',name);return}
-  const snap=_navSnapshot();
-  if(!name&&navStack.length&&JSON.stringify(snap)===JSON.stringify(navStack[navStack.length-1].snap)){navLog('重复入栈已忽略',name||'');return}
-  const sc=_navScreen(name);
-  navStack.push({name:name||'',snap:snap});
-  if(sc&&sc.open)sc.open();
-  try{history.pushState({nav:name||''},'')}catch(e){}
-  navLog('push',name||'');
-}
-function navBack(){
-  const now=Date.now();if(now-navLastBackAt<250)return;navLastBackAt=now;
-  if(!navStack.length){navLog('已到首页，边界兜底，禁止继续返回');return}
-  const e=navStack.pop();
-  const sc=_navScreen(e.name);
-  if(sc&&sc.close)sc.close();
-  _navRestore(e.snap);
-  navSuppress++;try{history.back()}catch(_){}
-  navLog('back',e.name||'');
-}
-function navDrop(name){
-  const i=navStack.length-1;
-  if(i<0)return;
-  if(name&&navStack[i].name!==name)return;
-  const e=navStack.pop();
-  const sc=_navScreen(e.name);
-  if(sc&&sc.close)sc.close();
-  navSuppress++;try{history.go(-1)}catch(_){}
-  navLog('drop',e.name||'');
-}
-function navSwap(name){
-  const s=_navScreen(name);if(!s)return;
-  const top=navStack.length?navStack.pop():null;
-  if(top){const sc=_navScreen(top.name);if(sc&&sc.close)sc.close()}
-  s.open();try{history.replaceState({nav:name||''},'')}catch(_){}
-  navStack.push({name:name||'',snap:top?top.snap:_navSnapshot()});
-  navLog('replace',name);
-}
-function navReset(){
-  const n=navStack.length;
-  while(navStack.length){const e=navStack.pop();const sc=_navScreen(e.name);if(sc&&sc.close)sc.close()}
-  if(n>0){navSuppress++;try{history.go(-n)}catch(_){}}
-  navLog('reset','清空'+n+'层');
-}
-window.addEventListener('popstate',function(){
-  if(navSuppress>0){navSuppress--;return}
-  if(!navStack.length)return;
-  const e=navStack.pop();
-  const sc=_navScreen(e.name);
-  if(sc&&sc.close)sc.close();
-  _navRestore(e.snap);
-  navLog('popstate(物理返回)',e.name||'');
-});
-try{history.replaceState({nav:''},'')}catch(e){}
+
+const {navOpen,navBack,navDrop,navSwap,navReset,navLog,isPushed}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList});
+
 function profileMdOk(){if(profileMod.value==='toggle'&&tgtAcc){tgtAcc.status=tgtAcc.status==='启用'?'禁用':'启用';toast('账号状态已' + (tgtAcc.status),'success')}if(profileMod.value==='delPos'&&tgtPos){const i=positions.value.findIndex(p=>p.name===tgtPos.name);if(i>=0)positions.value.splice(i,1);toast('职位已删除','success')}if(profileMod.value==='delCs'&&delCsI>=0){csList.value.splice(delCsI,1);toast('已删除','success')}if(profileMod.value==='delRecharge'&&delRechargeI>=0){rechargeList.value.splice(delRechargeI,1);toast('已删除','success')}if(profileMod.value==='logout'){doLogout();return}profileMod.value=null}
 
 /* ══════ GLOBAL: shared utils · paint · init · return · mount ══════ */
@@ -9880,7 +9844,7 @@ function now(){const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+
 
 /* ══ Paint & Init ══ */
 function initPillDrag(){document.querySelectorAll('.filter-tabs').forEach(function(t){var d=false,sx,sl;t.addEventListener('mousedown',function(e){d=true;t.style.cursor='grabbing';sx=e.pageX-t.offsetLeft;sl=t.scrollLeft});t.addEventListener('mouseleave',function(){d=false;t.style.cursor='grab'});t.addEventListener('mouseup',function(){d=false;t.style.cursor='grab'});t.addEventListener('mousemove',function(e){if(!d)return;e.preventDefault();t.scrollLeft=sl-(e.pageX-t.offsetLeft-sx)});t.addEventListener('touchstart',function(e){sx=e.touches[0].pageX-t.offsetLeft;sl=t.scrollLeft});t.addEventListener('touchmove',function(e){t.scrollLeft=sl-(e.touches[0].pageX-t.offsetLeft-sx)})})}
-function initPullToRefresh(containerId,indicatorId,onRefresh){var c=root.querySelector('#'+containerId),i=root.querySelector('#'+indicatorId);if(!c||!i)return;var sy=0,pull=false,active=false;function stY(e){return e.touches&&e.touches[0]?e.touches[0].clientY:e.clientY}function cuY(e){return e.changedTouches&&e.changedTouches[0]?e.changedTouches[0].clientY:e.clientY}c.addEventListener('touchstart',function(e){if(c.scrollTop<=0){sy=stY(e);pull=true;active=true}else{pull=false}},{passive:true});c.addEventListener('touchmove',function(e){if(!active||!pull)return;if(c.scrollTop>0){pull=false;return}e.preventDefault();var dy=cuY(e)-sy;var off=Math.min(dy*0.4,60);if(off<0)off=0;i.style.height=off+'px';i.innerHTML='<span class="ptr-spinner"></span>'+(off>40?'释放刷新':'下拉刷新')},{passive:false});c.addEventListener('touchend',function(e){if(!active)return;active=false;if(!pull)return;pull=false;var dy=cuY(e)-sy;if(dy>60){i.style.height='40px';i.innerHTML='<span class="ptr-spinner"></span>'+'刷新中…';if(onRefresh)onRefresh();setTimeout(function(){i.style.height='0';i.innerHTML='<span class="ptr-text">'+'下拉刷新'+'</span>'},1200)}else{i.style.height='0'}},{passive:true});c.addEventListener('mousedown',function(e){if(c.scrollTop<=0){sy=e.clientY;pull=true;active=true}else{pull=false}});c.addEventListener('mousemove',function(e){if(!active||!pull)return;if(c.scrollTop>0){pull=false;return}e.preventDefault();var dy=e.clientY-sy;var off=Math.min(dy*0.4,60);if(off<0)off=0;i.style.height=off+'px';i.innerHTML='<span class="ptr-spinner"></span>'+(off>40?'释放刷新':'下拉刷新')});c.addEventListener('mouseup',function(e){if(!active)return;active=false;if(!pull)return;pull=false;var dy=e.clientY-sy;if(dy>60){i.style.height='40px';i.innerHTML='<span class="ptr-spinner"></span>'+'刷新中…';if(onRefresh)onRefresh();setTimeout(function(){i.style.height='0';i.innerHTML='<span class="ptr-text">'+'下拉刷新'+'</span>'},1200)}else{i.style.height='0'}});c.addEventListener('mouseleave',function(){if(active){active=false;pull=false;i.style.height='0'}})}
+
 function refreshHome(){setTimeout(()=>{},800)}
 function refreshVeh(){setTimeout(()=>{},800)}
 function refreshOrd(){setTimeout(()=>{},800)}
