@@ -187,18 +187,56 @@ for (const [from, to] of BIZ_STAT) {
 // ── 6.3 跨端数据桥 MERGED：商户发布 + 用户消费 + 首页状态条（契约字段名对齐） ──
 const A_NAV_LINE = 'const {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList});';
 assert(Ajs.includes(A_NAV_LINE), 'A 缺 nav 行锚点');
-const A_mergedConst = '\nconst mergedStats=computed(function(){return{orderCount:MERGED.orderCount,vehicleCount:MERGED.vehicleCount,batteryCount:MERGED.batteryCount,walletBalance:MERGED.walletBalance,lastOrderId:MERGED.lastOrderId,updatedAt:MERGED.updatedAt}});';
-Ajs = Ajs.replace(A_NAV_LINE, A_mergedConst + '\n' + A_NAV_LINE);
-const A_RET_TAIL = 'requestCancelRecharge,confirmCancelRecharge}';
-assert(Ajs.includes(A_RET_TAIL), 'A 缺 return 尾部锚点');
-Ajs = Ajs.replace(A_RET_TAIL, 'requestCancelRecharge,confirmCancelRecharge,mergedStats}');
+// 注：跨端用户端不再注入 mergedStats / 状态条，避免在原型上暴露演示调试信息。
 const B_MOUNT = 'onMounted(()=>{brandLoading.value=true;';
 assert(Bjs.includes(B_MOUNT), 'B 缺 onMounted 锚点');
-const B_pub = 'function publishMerged(){try{MERGED.orderCount=(( (orders.value||orders)||[]).length)||0;MERGED.vehicleCount=(vehicles?(((vehicles.value||vehicles)||[]).length)||0:0);MERGED.batteryCount=(batteries?(((batteries.value||batteries)||[]).length)||0:0);MERGED.walletBalance=(uWallet&&uWallet.total)?uWallet.total:0;var _o=(((orders.value||orders)||[])[0])||null;MERGED.lastOrderId=_o?(_o.orderId||_o.id||"—"):"—";MERGED.updatedAt=Date.now();}catch(e){}}\nwatch(function(){return[(((orders.value||orders)||[]).length)||0,(vehicles?(((vehicles.value||vehicles)||[]).length)||0:0),(batteries?(((batteries.value||batteries)||[]).length)||0:0),(uWallet&&uWallet.total)||0]},publishMerged,{immediate:true});\n';
+const B_pub = 'function publishMerged(){try{MERGED.orderCount=(( (orders.value||orders)||[]).length)||0;MERGED.vehicleCount=(vehicles?(((vehicles.value||vehicles)||[]).length)||0:0);MERGED.batteryCount=(batteries?(((batteries.value||batteries)||[]).length)||0:0);MERGED.walletBalance=(uWallet&&uWallet.total)?uWallet.total:0;var _o=(((orders.value||orders)||[])[0])||null;MERGED.lastOrderId=_o?(_o.orderId||_o.id||"—"):"—";MERGED.updatedAt=Date.now();MERGED.myVehicles=(uVehicles&&uVehicles.value)||[];MERGED.myBatteries=(uBatteries&&uBatteries.value)||[];}catch(e){}}\n(function(){if(!(uVehicles&&uVehicles.value&&uVehicles.value.length)){uVehicles.value=vehicles.value.filter(function(v){return v.account==="user001"&&v.vin}).map(function(v){return{vin:v.vin,model:v.model,status:v.online?"在线":"离线",batteryMain:v.batteryMain,batterySub:v.batterySub}})}if(!(uBatteries&&uBatteries.value&&uBatteries.value.length)){uBatteries.value=batteries.value.filter(function(b){return b.account==="user001"&&b.battNo}).map(function(b){return{code:b.battNo,model:b.model,soc:b.level}})}})();\nwatch(function(){return[(((orders.value||orders)||[]).length)||0,(vehicles?(((vehicles.value||vehicles)||[]).length)||0:0),(batteries?(((batteries.value||batteries)||[]).length)||0:0),(uWallet&&uWallet.total)||0]},publishMerged,{immediate:true});\n';
 Bjs = Bjs.replace(B_MOUNT, B_pub + B_MOUNT);
-const STRIP = '\n<div class="merged-strip" style="margin:0 16px 10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 12px;border-radius:10px;background:#fff;border:1px solid #E5E5E5;font-size:12px;color:#444">商户端同步 ▶ 订单 <b>{{mergedStats.orderCount}}</b> · 车辆 <b>{{mergedStats.vehicleCount}}</b> · 电池 <b>{{mergedStats.batteryCount}}</b> · 钱包 <b>{{ fmtRp(mergedStats.walletBalance) }}</b> <span style="color:#999">(#{{mergedStats.lastOrderId}}@{{mergedStats.updatedAt}})</span></div>';
-assert(/id="sc-home"[^>]*>/.test(Ahtml), 'Ahtml 缺 #sc-home 锚点');
-Ahtml = Ahtml.replace(/id="sc-home"[^>]*>/, (m) => m + STRIP);
+
+// openUserDetail 末尾发布"我的车辆/电池"到 MERGED，供用户端消费（复用商户端过滤映射，丢弃 plate）
+const B_UDETAIL_TAIL = "profileSub.value='userDetail';";
+assert(Bjs.includes(B_UDETAIL_TAIL), 'B 缺 openUserDetail 尾部锚点');
+Bjs = Bjs.split(B_UDETAIL_TAIL).join("profileSub.value='userDetail'; if(typeof publishMerged==='function')publishMerged();");
+
+// ── 6.4 用户端车辆/电池数据源 → 商户端权威源（MERGED.myVehicles/myBatteries） ──
+// 用户端不再持有自己的硬编码演示数据，改为直接消费商户端按账号过滤映射后的"我的车辆/电池"，
+// 统一标识用 vin（车辆）/code(原battNo)（电池），彻底移除 MV+id+0086 兜底编号。
+// 1) allVehicles 硬编码 → 空数组（数据从 MERGED 来）
+Ajs = cutRange(Ajs, 'const allVehicles=[', 'const vehicleCount=ref(2);', '\nconst allVehicles=[];\nconst vehicleCount=ref(2);');
+// 2) vehicles computed → 读取商户端权威源（末尾仍保留 scanBoundVehicles 补充绑定的语义，合并去重）
+const A_VEHCMP = "const vehicles=computed(()=>{\n  if(!loggedIn.value)return[];\n  if(vehicleCount.value===0)return[];\n  let res;\n  if(vehicleCount.value===1)res=[allVehicles[0]];\n  else res=[...allVehicles];\n  scanBoundVehicles.value.forEach(v=>{if(res.findIndex(x=>x.id===v.id)<0)res.push(v)});\n  return res;\n});";
+assert(Ajs.includes(A_VEHCMP), 'A 缺 vehicles computed 锚点');
+const A_VEHCMP_NEW = "const vehicles=computed(()=>{\n  if(!loggedIn.value)return[];\n  let res=(MERGED.myVehicles||[]).slice();\n  scanBoundVehicles.value.forEach(v=>{if(res.findIndex(x=>(x.vin||'')===(v.vin||v.id))<0)res.push(v)});\n  return res;\n});";
+Ajs = Ajs.split(A_VEHCMP).join(A_VEHCMP_NEW);
+// 3) homeBatteries 硬编码 → 读取商户端权威源
+Ajs = cutRange(Ajs, 'const homeBatteries=ref([', 'function bSocColor(', '\nconst homeBatteries=computed(()=>MERGED.myBatteries||[]);\nfunction bSocColor(');
+
+// ── 6.5 用户端车辆/电池标识与字段 → 对齐商户端契约（vin / code，去 id 去 MV 兜底） ──
+// Ahtml 模板
+assert(/v\.vin \|\| \('MV'\+v\.id\+'0086'\)/.test(Ahtml), 'A 缺 MV 兜底锚点');
+Ahtml = Ahtml.split("{{ v.vin || ('MV'+v.id+'0086') }}").join('{{ v.vin }}');
+// 车辆详情/绑定页 vdDevice 同样去 MV 兜底
+Ahtml = Ahtml.split("{{ vdDevice?(vdDevice.vin||('MV'+vdDevice.id+'0086')):'-' }}").join("{{ vdDevice?vdDevice.vin:'-' }}");
+// 车辆列表 key/od-id：id → vin
+Ahtml = Ahtml.split('v-for="v in vehicles" :key="v.id"').join('v-for="v in vehicles" :key="v.vin"');
+Ahtml = Ahtml.split("'vehicle-item-'+v.id").join("'vehicle-item-'+v.vin");
+Ahtml = Ahtml.split('v-for="v in vehicles" :key="v.id" @click="selectMyVehicle(v)"').join('v-for="v in vehicles" :key="v.vin" @click="selectMyVehicle(v)"');
+Ahtml = Ahtml.split('currentVehicle.id===v.id').join('currentVehicle.vin===v.vin');
+// 电池列表 key/od-id：id → code
+Ahtml = Ahtml.split('v-for="b in homeBatteries" :key="b.id"').join('v-for="b in homeBatteries" :key="b.code"');
+Ahtml = Ahtml.split("'home-battery-item-'+b.id").join("'home-battery-item-'+b.code");
+// Ajs 逻辑
+Ajs = Ajs.split('vehicleNames[v.id]').join('vehicleNames[v.vin]');
+Ajs = Ajs.split('vehicleNames[currentVehicle.value.id]').join('vehicleNames[currentVehicle.value.vin]');
+// 查找按 vin 匹配；source 对商户端数据无此字段，回退用 status 兜底
+Ajs = Ajs.split("vehicles.value.findIndex(x=>x.id===v.id)").join("vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id))");
+Ajs = Ajs.split("#0;const i=vehicles.value.findIndex(x=>x.id===v.id);").join("#0;const i=vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id));");
+Ajs = Ajs.split('const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.name})').join('const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.model||v.name,source:vehicleSource.value||(v.source||(v.status==="在线"?"order":"manual"))})');
+// 电池逻辑：openBatteryDetail 查找 id→code
+Ajs = Ajs.split('homeBatteries.value.findIndex(x=>x.id===b.id)').join('homeBatteries.value.findIndex(x=>x.code===b.code)');
+// locSeed：currentVehicle/currentBattery 的 id 标识 → vin/code（对齐商户端契约）
+Ajs = Ajs.split('(currentBattery.value?currentBattery.value.id:\'\')').join('(currentBattery.value?currentBattery.value.code:\'\')');
+Ajs = Ajs.split('(currentVehicle.value?currentVehicle.value.id:\'\')').join('(currentVehicle.value?currentVehicle.value.vin:\'\')');
 
 // ── 7. SHARED CORE ──
 const SHARED_CORE = `/* ══════ SHARED CORE ══════ */
@@ -301,8 +339,9 @@ var MONEY=Vue.reactive({cur:'IDR',rates:{IDR:1,CNY:0.000357,HKD:0.00192},symbols
 function fmtRp(n,dec){var v=Number(n);if(v==null||isNaN(v))v=0;var c=MONEY.cur,a=v*(MONEY.rates[c]||1);var loc=(c==='IDR'?'id-ID':'en-US');var s=dec==null?a.toLocaleString(loc):a.toLocaleString(loc,{minimumFractionDigits:dec,maximumFractionDigits:dec});return (MONEY.symbols[c]||'Rp ')+s}
 
 /* 跨端数据桥：商户端为准 → 用户端实时同步。字段名为两端统一契约（命名对齐）。
-   契约字段：orderCount/vehicleCount/batteryCount/walletBalance/lastOrderId/updatedAt */
-var MERGED=Vue.reactive({orderCount:0,vehicleCount:0,batteryCount:0,walletBalance:0,lastOrderId:'—',updatedAt:0});
+   契约字段：orderCount/vehicleCount/batteryCount/walletBalance/lastOrderId/updatedAt
+   myVehicles/myBatteries：商户端按账号过滤并映射后的"我的车辆/电池"（用户端直接消费）。 */
+var MERGED=Vue.reactive({orderCount:0,vehicleCount:0,batteryCount:0,walletBalance:0,lastOrderId:'—',updatedAt:0,myVehicles:[],myBatteries:[]});
 `;
 
 // ── 8. 组装 JS 块 ──
