@@ -206,7 +206,7 @@ Ajs = cutRange(Ajs, 'const allVehicles=[', 'const vehicleCount=ref(2);', '\ncons
 // 2) vehicles computed → 读取商户端权威源（末尾仍保留 scanBoundVehicles 补充绑定的语义，合并去重）
 const A_VEHCMP = "const vehicles=computed(()=>{\n  if(!loggedIn.value)return[];\n  if(vehicleCount.value===0)return[];\n  let res;\n  if(vehicleCount.value===1)res=[allVehicles[0]];\n  else res=[...allVehicles];\n  scanBoundVehicles.value.forEach(v=>{if(res.findIndex(x=>x.id===v.id)<0)res.push(v)});\n  return res;\n});";
 assert(Ajs.includes(A_VEHCMP), 'A 缺 vehicles computed 锚点');
-const A_VEHCMP_NEW = "const vehicles=computed(()=>{\n  if(!loggedIn.value)return[];\n  let res=(MERGED.myVehicles||[]).slice();\n  scanBoundVehicles.value.forEach(v=>{if(res.findIndex(x=>(x.vin||'')===(v.vin||v.id))<0)res.push(v)});\n  return res;\n});";
+const A_VEHCMP_NEW = "const vehicles=computed(()=>{\n  if(!loggedIn.value)return[];\n  let res=(MERGED.myVehicles||[]).map(function(v){return Object.assign({},v,{name:vehicleNames[v.vin]||v.model||v.name||'未命名车辆'})});\n  scanBoundVehicles.value.forEach(v=>{if(res.findIndex(x=>(x.vin||'')===(v.vin||v.id))<0)res.push(Object.assign({},v,{name:v.name||v.model||'未命名车辆'}))});\n  return res;\n});";
 Ajs = Ajs.split(A_VEHCMP).join(A_VEHCMP_NEW);
 // 3) homeBatteries 硬编码 → 读取商户端权威源
 Ajs = cutRange(Ajs, 'const homeBatteries=ref([', 'function bSocColor(', '\nconst homeBatteries=computed(()=>MERGED.myBatteries||[]);\nfunction bSocColor(');
@@ -231,12 +231,77 @@ Ajs = Ajs.split('vehicleNames[currentVehicle.value.id]').join('vehicleNames[curr
 // 查找按 vin 匹配；source 对商户端数据无此字段，回退用 status 兜底
 Ajs = Ajs.split("vehicles.value.findIndex(x=>x.id===v.id)").join("vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id))");
 Ajs = Ajs.split("#0;const i=vehicles.value.findIndex(x=>x.id===v.id);").join("#0;const i=vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id));");
-Ajs = Ajs.split('const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.name})').join('const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.model||v.name,source:vehicleSource.value||(v.source||(v.status==="在线"?"order":"manual"))})');
+Ajs = Ajs.split('const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.name})').join('const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.model||v.name,source:vehicleSource.value||(v.source||(v.status==="租用中"?"order":"manual"))})');
 // 电池逻辑：openBatteryDetail 查找 id→code
 Ajs = Ajs.split('homeBatteries.value.findIndex(x=>x.id===b.id)').join('homeBatteries.value.findIndex(x=>x.code===b.code)');
 // locSeed：currentVehicle/currentBattery 的 id 标识 → vin/code（对齐商户端契约）
 Ajs = Ajs.split('(currentBattery.value?currentBattery.value.id:\'\')').join('(currentBattery.value?currentBattery.value.code:\'\')');
 Ajs = Ajs.split('(currentVehicle.value?currentVehicle.value.id:\'\')').join('(currentVehicle.value?currentVehicle.value.vin:\'\')');
+
+// 用户端解绑入口：source==='order' → status==='租用中'（订单绑定车不显示解绑）
+const A_UNB = `<div v-if="!scanBindMode&&vdDevice&&vdDevice.source!=='order'" class="py-4 flex items-center justify-center" data-page-node-id="iRSwRf53A4wksMLIFGYDGu">`;
+assert(Ahtml.includes(A_UNB), 'A 缺车辆解绑入口锚点');
+Ahtml = Ahtml.split(A_UNB).join(A_UNB.replace("vdDevice.source!=='order'", "vdDevice.status!=='租用中'"));
+const A_UNBB = `<div v-if="!scanBindMode&&bdDevice&&bdDevice.source!=='order'" class="py-4 flex items-center justify-center" data-page-node-id="BXGy2Jp3OWtQ9X3iBtSNT2">`;
+assert(Ahtml.includes(A_UNBB), 'A 缺电池解绑入口锚点');
+Ahtml = Ahtml.split(A_UNBB).join(A_UNBB.replace("bdDevice.source!=='order'", "bdDevice.status!=='租用中'"));
+
+// ── 6.6 商户端绑定/解绑 → 运营状态 status 联动（订单绑定=租用中，非订单=占用中，解绑=空闲） ──
+// 车辆/电池 status 统一判断：租用中(订单绑定)不可解绑，占用中/空闲可解绑。
+// 1) 订单详情绑定 confirmOrderPick → 车辆/电池 status=租用中
+const F_OFPICK = "if(o.type==='battery'&&sel.title)o.item=sel.title}ordersMod.value=null;orderPickSel.value=null;var t={assignVehicle:'车辆已绑定'";
+assert(Bjs.includes(F_OFPICK), 'B 缺 confirmOrderPick 锚点');
+Bjs = Bjs.split(F_OFPICK).join("if(o.type==='battery'&&sel.title)o.item=sel.title}if(o.vin){var _bv=vehicles.value.find(function(v){return v.vin===o.vin});if(_bv)_bv.status='租用中'}if(o.battNo){var _bb=batteries.value.find(function(b){return b.battNo===o.battNo});if(_bb)_bb.status='租用中'}ordersMod.value=null;orderPickSel.value=null;var t={assignVehicle:'车辆已绑定'");
+// 2) 设备详情绑定 confirmUserPick 车辆分支 → status=占用中
+const F_UPICKV = "if(dv.value){dv.value.account=u.account;dv.value.phone=u.phone;dv.value.email=u.email}var mv=vehicles.value.find(function(x){return x.vin===dv.value.vin});if(mv){mv.account=u.account;mv.phone=u.phone;mv.email=u.email}}else if(userPickActive.value==='battery')";
+assert(Bjs.includes(F_UPICKV), 'B 缺 confirmUserPick 车辆锚点');
+Bjs = Bjs.split(F_UPICKV).join(F_UPICKV
+  .replace("dv.value.email=u.email}", "dv.value.email=u.email;dv.value.status='占用中'}")
+  .replace("mv.email=u.email}}", "mv.email=u.email;mv.status='占用中'}}"));
+// 3) 设备详情绑定 confirmUserPick 电池分支 → status=占用中
+const F_UPICKB = "else if(userPickActive.value==='battery'){if(curBatt.value){curBatt.value.account=u.account;curBatt.value.phone=u.phone;curBatt.value.email=u.email}}";
+assert(Bjs.includes(F_UPICKB), 'B 缺 confirmUserPick 电池锚点');
+Bjs = Bjs.split(F_UPICKB).join("else if(userPickActive.value==='battery'){if(curBatt.value){curBatt.value.account=u.account;curBatt.value.phone=u.phone;curBatt.value.email=u.email;curBatt.value.status='占用中';var mb=batteries.value.find(function(b){return b.battNo===curBatt.value.battNo});if(mb){mb.account=u.account;mb.phone=u.phone;mb.email=u.email;mb.status='占用中'}}}");
+// 4) 用户详情绑定 confirmUBind 电池 → status=占用中
+const F_UBINDB = "uBatteries.value=[...uBatteries.value,{code:sel.no,model:sel.title,soc:parseFloat(sel.meta)||0,_manual:true}];";
+assert(Bjs.includes(F_UBINDB), 'B 缺 confirmUBind 电池锚点');
+Bjs = Bjs.split(F_UBINDB).join("uBatteries.value=[...uBatteries.value,{code:sel.no,model:sel.title,soc:parseFloat(sel.meta)||0,status:'占用中',_manual:true}];var _mb2=batteries.value.find(function(b){return b.battNo===sel.no});if(_mb2){_mb2.status='占用中'}");
+// 5) 用户详情绑定 confirmUBind 车辆 → status=占用中
+const F_UBINDV = "uVehicles.value=[...uVehicles.value,{vin:sel.no,model:sel.title,status:sel.online?'在线':'离线',batteryMain:parseFloat(pct[0])||0,batterySub:pct[1]!=null?(parseFloat(pct[1])||0):0,_manual:true}];";
+assert(Bjs.includes(F_UBINDV), 'B 缺 confirmUBind 车辆锚点');
+Bjs = Bjs.split(F_UBINDV).join("uVehicles.value=[...uVehicles.value,{vin:sel.no,model:sel.title,status:'占用中',batteryMain:parseFloat(pct[0])||0,batterySub:pct[1]!=null?(parseFloat(pct[1])||0):0,_manual:true}];var _mv2=vehicles.value.find(function(v){return v.vin===sel.no});if(_mv2){_mv2.status='占用中'}");
+// 6) 设备详情解绑 vehConfirmMod unbind → dv 与主数组 status=空闲
+const F_VEHUNB = "if(vehMod.value==='unbind'){if(dv.value){dv.value.account='';dv.value.phone='';dv.value.email='';var _mv=vehicles.value.find(function(v){return v.vin===dv.value.vin});if(_mv){_mv.account='';_mv.phone='';_mv.email=''}}toast('解绑成功','success')}";
+assert(Bjs.includes(F_VEHUNB), 'B 缺 vehConfirmMod unbind 锚点');
+Bjs = Bjs.split(F_VEHUNB).join("if(vehMod.value==='unbind'){if(dv.value){dv.value.account='';dv.value.phone='';dv.value.email='';dv.value.status='空闲';var _mv=vehicles.value.find(function(v){return v.vin===dv.value.vin});if(_mv){_mv.account='';_mv.phone='';_mv.email='';_mv.status='空闲'}}toast('解绑成功','success')}");
+// 7) 设备详情解绑 battConfirmMod unbind → curBatt 与主数组 status=空闲
+const F_BATTUNB = "if(battMod.value==='unbind'){b.account='';b.phone='';b.email='';toast('解绑成功','success')}";
+assert(Bjs.includes(F_BATTUNB), 'B 缺 battConfirmMod unbind 锚点');
+Bjs = Bjs.split(F_BATTUNB).join("if(battMod.value==='unbind'){b.account='';b.phone='';b.email='';b.status='空闲';var _mb3=batteries.value.find(function(x){return x.battNo===b.battNo});if(_mb3){_mb3.account='';_mb3.phone='';_mb3.email='';_mb3.status='空闲'}}toast('解绑成功','success')");
+// 8) 用户详情解绑 confirmUUnbind → 主数组对应设备 status=空闲
+const F_UUNB = "if(t==='vehicle'){uVehicles.value=uVehicles.value.filter(function(v){return v.vin!==x.vin})}else{uBatteries.value=uBatteries.value.filter(function(b){return b.code!==x.code})}";
+assert(Bjs.includes(F_UUNB), 'B 缺 confirmUUnbind 锚点');
+Bjs = Bjs.split(F_UUNB).join("if(t==='vehicle'){uVehicles.value=uVehicles.value.filter(function(v){return v.vin!==x.vin});var _uv=vehicles.value.find(function(v){return v.vin===x.vin});if(_uv){_uv.status='空闲'}}else{uBatteries.value=uBatteries.value.filter(function(b){return b.code!==x.code});var _ub=batteries.value.find(function(b){return b.battNo===x.code});if(_ub){_ub.status='空闲'}}");
+// 9) openUserDetail uVehicles → 透传运营状态 status + online
+const F_UDEVV = "{vin:v.vin,model:v.model,status:v.online?'在线':'离线',batteryMain:v.batteryMain,batterySub:v.batterySub}";
+assert(Bjs.includes(F_UDEVV), 'B 缺 openUserDetail uVehicles 锚点');
+Bjs = Bjs.split(F_UDEVV).join("{vin:v.vin,model:v.model,status:v.status,online:v.online,batteryMain:v.batteryMain,batterySub:v.batterySub}");
+// 10) openUserDetail uBatteries + B_pub 种子 → 补 status（全局 2 处）
+const F_UDEVB = "{code:b.battNo,model:b.model,soc:b.level}";
+assert(Bjs.split(F_UDEVB).length - 1 === 2, 'B uBatteries 映射应恰好 2 处(openUserDetail+B_pub种子)');
+Bjs = Bjs.split(F_UDEVB).join("{code:b.battNo,model:b.model,soc:b.level,status:b.status}");
+// 11) B_pub 种子 uVehicles → 透传运营状态 status + online（双引号版）
+const F_BSEEDV = 'status:v.online?"在线":"离线",batteryMain:v.batteryMain';
+assert(Bjs.split(F_BSEEDV).length - 1 === 1, 'B B_pub 种子车辆双引号版应恰好 1 处');
+Bjs = Bjs.split(F_BSEEDV).join('status:v.status,online:v.online,batteryMain:v.batteryMain');
+// 12) 商户端车辆解绑入口 → 加 status!=='租用中'
+const F_BVEHUNB = `<span v-if="dv.account&&can('vehicle.bind')" @click.stop="vehMod='unbind'" class="text-[14px] font-medium cursor-pointer select-none text-[#DC2626] active:opacity-70 shrink-0">解绑</span>`;
+assert(Bhtml.includes(F_BVEHUNB), 'B 缺车辆解绑入口锚点');
+Bhtml = Bhtml.split(F_BVEHUNB).join(F_BVEHUNB.replace("dv.account&&can('vehicle.bind')", "dv.account&&dv.status!=='租用中'&&can('vehicle.bind')"));
+// 13) 商户端电池解绑入口 → 加 status!=='租用中'
+const F_BBATTUNB = `<span v-if="curBatt.account&&can('battery.bind')" @click.stop="battMod='unbind'" class="text-[14px] font-medium cursor-pointer select-none text-[#DC2626] active:opacity-70 shrink-0">解绑</span>`;
+assert(Bhtml.includes(F_BBATTUNB), 'B 缺电池解绑入口锚点');
+Bhtml = Bhtml.split(F_BBATTUNB).join(F_BBATTUNB.replace("curBatt.account&&can('battery.bind')", "curBatt.account&&curBatt.status!=='租用中'&&can('battery.bind')"));
 
 // ── 7. SHARED CORE ──
 const SHARED_CORE = `/* ══════ SHARED CORE ══════ */

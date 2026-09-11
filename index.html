@@ -1104,7 +1104,7 @@ body.host-single-m #root-user{display:none}
         </div>
       </div>
     </div>
-    <div v-if="!scanBindMode&&vdDevice&&vdDevice.source!=='order'" class="py-4 flex items-center justify-center" data-page-node-id="iRSwRf53A4wksMLIFGYDGu">
+    <div v-if="!scanBindMode&&vdDevice&&vdDevice.status!=='租用中'" class="py-4 flex items-center justify-center" data-page-node-id="iRSwRf53A4wksMLIFGYDGu">
       <span @click="openUnbindConfirm" class="text-[14px] font-medium cursor-pointer select-none active:opacity-70" style="color:#DC2626" data-od-id="vd-unbind" data-page-node-id="dsbbq6V5VcsUegm60R87Y1">解除绑定</span>
     </div>
   </div>
@@ -1255,7 +1255,7 @@ body.host-single-m #root-user{display:none}
         </div>
       </div>
     </div>
-    <div v-if="!scanBindMode&&bdDevice&&bdDevice.source!=='order'" class="py-4 flex items-center justify-center" data-page-node-id="BXGy2Jp3OWtQ9X3iBtSNT2">
+    <div v-if="!scanBindMode&&bdDevice&&bdDevice.status!=='租用中'" class="py-4 flex items-center justify-center" data-page-node-id="BXGy2Jp3OWtQ9X3iBtSNT2">
       <span @click="openBatteryUnbind" class="text-[14px] font-medium cursor-pointer select-none active:opacity-70" style="color:#DC2626" data-od-id="bd-unbind" data-page-node-id="DeFCgectoImhtX5fsKZZA9">解除绑定</span>
     </div>
   </div>
@@ -3759,7 +3759,7 @@ body.host-single-m #root-user{display:none}
 <div class="bg-white rounded-xl p-4 mb-3 flex items-center cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" @click="goUserDetail(dv.account)" data-od-id="veh-detail-user-card">
 <div class="w-10 h-10 rounded-full bg-[#EBF1FD] flex items-center justify-center mr-3 shrink-0"><span v-html="luci('user','w-5 h-5 text-[var(--accent)]')"></span></div>
 <div class="flex-1 min-w-0"><div class="text-[15px] font-semibold mb-0.5">{{ dv.account || '未绑定用户' }}</div><div v-if="dv.phone||dv.email" class="text-[13px] text-[#666]">{{ dv.phone || dv.email }}</div></div>
-<span v-if="dv.account&&can('vehicle.bind')" @click.stop="vehMod='unbind'" class="text-[14px] font-medium cursor-pointer select-none text-[#DC2626] active:opacity-70 shrink-0">解绑</span><span v-else-if="can('vehicle.bind')" @click.stop="openUserPick('vehicle')" class="text-[14px] font-medium cursor-pointer select-none text-[var(--link)] active:opacity-70 shrink-0">绑定</span>
+<span v-if="dv.account&&dv.status!=='租用中'&&can('vehicle.bind')" @click.stop="vehMod='unbind'" class="text-[14px] font-medium cursor-pointer select-none text-[#DC2626] active:opacity-70 shrink-0">解绑</span><span v-else-if="can('vehicle.bind')" @click.stop="openUserPick('vehicle')" class="text-[14px] font-medium cursor-pointer select-none text-[var(--link)] active:opacity-70 shrink-0">绑定</span>
 </div>
 <div class="bg-white rounded-xl p-4" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
 <div class="flex items-center py-2.5" style="border-bottom:1px dashed #E5E5E5"><div class="flex-1"><div class="text-[12px] text-[#8A8A8A] mb-1">车架号</div><div class="text-[16px] font-bold">{{ dv.vin }}</div></div><div class="flex items-center gap-2"><span class="text-[11px] font-semibold px-2.5 py-0.5 rounded" :style="dv.online?{background:'#ECFDF3',color:'#17A34A',border:'1px solid #17A34A'}:{background:'#FFFBEB',color:'#D97706',border:'1px solid #D97706'}">{{ dv.online?'在线':'离线' }}</span></div></div>
@@ -4294,7 +4294,7 @@ body.host-single-m #root-user{display:none}
 <div class="bg-white rounded-xl p-4 mb-3 flex items-center cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" @click="goUserDetail(curBatt.account)" data-od-id="batt-detail-user-card">
 <div class="w-10 h-10 rounded-full bg-[#EBF1FD] flex items-center justify-center mr-3 shrink-0"><span v-html="luci('user','w-5 h-5 text-[var(--accent)]')"></span></div>
 <div class="flex-1 min-w-0"><div class="text-[15px] font-semibold mb-0.5">{{ curBatt.account || '未绑定用户' }}</div><div v-if="curBatt.phone||curBatt.email" class="text-[13px] text-[#666]">{{ curBatt.phone || curBatt.email }}</div></div>
-<span v-if="curBatt.account&&can('battery.bind')" @click.stop="battMod='unbind'" class="text-[14px] font-medium cursor-pointer select-none text-[#DC2626] active:opacity-70 shrink-0">解绑</span><span v-else-if="can('battery.bind')" @click.stop="openUserPick('battery')" class="text-[14px] font-medium cursor-pointer select-none text-[var(--link)] active:opacity-70 shrink-0">绑定</span>
+<span v-if="curBatt.account&&curBatt.status!=='租用中'&&can('battery.bind')" @click.stop="battMod='unbind'" class="text-[14px] font-medium cursor-pointer select-none text-[#DC2626] active:opacity-70 shrink-0">解绑</span><span v-else-if="can('battery.bind')" @click.stop="openUserPick('battery')" class="text-[14px] font-medium cursor-pointer select-none text-[var(--link)] active:opacity-70 shrink-0">绑定</span>
 </div>
 <div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="batt-detail-info-card">
 <div class="flex items-center py-2.5" style="border-bottom:1px dashed #E5E5E5">
@@ -7054,15 +7054,15 @@ let trackWheelTimers={};
 function onTrackWheelScroll(kind,e){clearTimeout(trackWheelTimers[kind]);trackWheelTimers[kind]=setTimeout(()=>{const el=e.target;const idx=Math.round(el.scrollTop/36);el.scrollTop=idx*36;const d={...trackDraft.value};if(kind==='day'){const days=trackDays.value;d.day=days[Math.min(Math.max(idx,0),days.length-1)]}if(kind==='month'){d.month=trackMonths[Math.min(Math.max(idx,0),11)];const maxD=new Date(d.year,d.month,0).getDate();if(d.day>maxD)d.day=maxD}if(kind==='year'){d.year=trackYears[Math.min(Math.max(idx,0),trackYears.length-1)];const maxD=new Date(d.year,d.month,0).getDate();if(d.day>maxD)d.day=maxD}if(kind==='hour')d.hour=trackHours[Math.min(Math.max(idx,0),23)];if(kind==='min')d.min=trackMins[Math.min(Math.max(idx,0),59)];trackDraft.value=d},80)}
 const vehicles=computed(()=>{
   if(!loggedIn.value)return[];
-  let res=(MERGED.myVehicles||[]).slice();
-  scanBoundVehicles.value.forEach(v=>{if(res.findIndex(x=>(x.vin||'')===(v.vin||v.id))<0)res.push(v)});
+  let res=(MERGED.myVehicles||[]).map(function(v){return Object.assign({},v,{name:vehicleNames[v.vin]||v.model||v.name||'未命名车辆'})});
+  scanBoundVehicles.value.forEach(v=>{if(res.findIndex(x=>(x.vin||'')===(v.vin||v.id))<0)res.push(Object.assign({},v,{name:v.name||v.model||'未命名车辆'}))});
   return res;
 });
 function setVehicleCount(n){vehicleCount.value=n}
 function setVehicleSource(s){vehicleSource.value=s}
 const myVehicleIdx=ref(0);
 const showVehiclePicker=ref(false);
-const currentVehicle=computed(()=>{if(!loggedIn.value)return null;const vs=vehicles.value;if(vs.length===0)return null;const i=Math.max(0,Math.min(myVehicleIdx.value,vs.length-1));const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.model||v.name,source:vehicleSource.value||(v.source||(v.status==="在线"?"order":"manual"))})});
+const currentVehicle=computed(()=>{if(!loggedIn.value)return null;const vs=vehicles.value;if(vs.length===0)return null;const i=Math.max(0,Math.min(myVehicleIdx.value,vs.length-1));const v=vs[i];return Object.assign({},v,{displayName:vehicleNames[v.vin]||v.model||v.name,source:vehicleSource.value||(v.source||(v.status==="租用中"?"order":"manual"))})});
 function toggleVehiclePicker(){showVehiclePicker.value=!showVehiclePicker.value}
 function selectMyVehicle(v){const i=vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id));if(i>=0){myVehicleIdx.value=i;vehicleSource.value=vehicles.value[i].source||'order';showVehiclePicker.value=false;showRentLoading.value=true;setTimeout(()=>{showRentLoading.value=false},600)}}
 function openMyVehicleFromHome(v){const i=vehicles.value.findIndex(x=>(x.vin||'')===(v.vin||v.id));if(i>=0){myVehicleIdx.value=i;vehicleSource.value=vehicles.value[i].source||'order'}setTab('vehicles')}
@@ -8176,7 +8176,7 @@ function vehOpenLost(){if(!can('vehicle.command.motor_lock')){deny();return}vehM
 const vehModTitle=computed(()=>{if(vehMod.value==='arm')return armed.value?'解除设防':'车辆设防';if(vehMod.value==='motorLock')return motorLocked.value?'解锁电机':'锁电机';if(vehMod.value==='lost')return lost.value?'解除报失':'车辆报失';if(vehMod.value==='unbind')return '解绑用户';return''});
 const vehModDesc=computed(()=>{if(vehMod.value==='arm')return armed.value?'确定对车辆解除设防？':'确定对车辆设防？';if(vehMod.value==='motorLock')return motorLocked.value?'电机解锁后车辆将恢复骑行':'电机锁定后车辆将无法骑行';if(vehMod.value==='lost')return lost.value?'解除报失后车辆电机将被解锁，恢复骑行':'报失后车辆电机将被锁定，无法正常骑行';if(vehMod.value==='unbind')return '确认将该车辆与用户解绑？解绑后将变为空闲车辆，可重新绑定用户';return''});
 const vehModDanger=computed(()=>(vehMod.value==='arm'&&armed.value)||(vehMod.value==='motorLock'&&!motorLocked.value)||(vehMod.value==='lost'&&!lost.value));
-function vehConfirmMod(){if(vehMod.value==='arm'){armed.value=!armed.value;toast(armed.value?'设防成功':'解除设防成功','success')}if(vehMod.value==='motorLock'){motorLocked.value=!motorLocked.value;toast(motorLocked.value?'锁电机成功':'解锁电机成功','success')}if(vehMod.value==='lost'){lost.value=!lost.value;if(dv.value)dv.value.lost=lost.value;toast(lost.value?'报失成功':'解除报失成功','success')}if(vehMod.value==='unbind'){if(dv.value){dv.value.account='';dv.value.phone='';dv.value.email='';var _mv=vehicles.value.find(function(v){return v.vin===dv.value.vin});if(_mv){_mv.account='';_mv.phone='';_mv.email=''}}toast('解绑成功','success')}vehMod.value=null}
+function vehConfirmMod(){if(vehMod.value==='arm'){armed.value=!armed.value;toast(armed.value?'设防成功':'解除设防成功','success')}if(vehMod.value==='motorLock'){motorLocked.value=!motorLocked.value;toast(motorLocked.value?'锁电机成功':'解锁电机成功','success')}if(vehMod.value==='lost'){lost.value=!lost.value;if(dv.value)dv.value.lost=lost.value;toast(lost.value?'报失成功':'解除报失成功','success')}if(vehMod.value==='unbind'){if(dv.value){dv.value.account='';dv.value.phone='';dv.value.email='';dv.value.status='空闲';var _mv=vehicles.value.find(function(v){return v.vin===dv.value.vin});if(_mv){_mv.account='';_mv.phone='';_mv.email='';_mv.status='空闲'}}toast('解绑成功','success')}vehMod.value=null}
 const addModel=ref(''),addVin=ref(''),addCtrl=ref(''),modelQ=ref('');
 const selectedModel=computed(()=>vehModels.find(m=>m.name===addModel.value)||null);
 const selectedProtocol=computed(()=>selectedModel.value?selectedModel.value.protocolType:'HTTP');
@@ -8196,7 +8196,7 @@ const uUnbindDesc=computed(()=>uUnbindMod.value==='vehicle'?'确认将该车辆�
 function openUUnbind(t,x){if(!can('user.bind')){deny();return}uUnbindMod.value=t;uUnbindTarget.value=x}
 function confirmUUnbind(){
   var t=uUnbindMod.value,x=uUnbindTarget.value;
-  if(t==='vehicle'){uVehicles.value=uVehicles.value.filter(function(v){return v.vin!==x.vin})}else{uBatteries.value=uBatteries.value.filter(function(b){return b.code!==x.code})}
+  if(t==='vehicle'){uVehicles.value=uVehicles.value.filter(function(v){return v.vin!==x.vin});var _uv=vehicles.value.find(function(v){return v.vin===x.vin});if(_uv){_uv.status='空闲'}}else{uBatteries.value=uBatteries.value.filter(function(b){return b.code!==x.code});var _ub=batteries.value.find(function(b){return b.battNo===x.code});if(_ub){_ub.status='空闲'}}
   toast(t==='vehicle'?'车辆已解绑':'电池已解绑','success');
   uUnbindMod.value=null;uUnbindTarget.value=null;
 }
@@ -8463,7 +8463,7 @@ const battModTitle=computed(()=>{if(battMod.value==='unbind')return '解绑用�
 const battModDesc=computed(()=>{if(battMod.value==='unbind')return '确认将该电池与用户解绑？解绑后将变为空闲电池，可重新绑定用户';return battMod.value==='lost'?(curBatt.value&&curBatt.value.lost?'解除报失后电池将被解锁，恢复放电':'报失后电池将被锁定，无法正常放电'):(battDischarge.value?'禁止后设备将无法放电':'允许后设备可正常放电')});
 function battOpenDischarge(){if(!can('battery.discharge')){deny();return}battMod.value='discharge'}
 function battOpenReportLost(){if(!can('battery.discharge')){deny();return}battMod.value='lost'}
-function battConfirmMod(){const b=curBatt.value;if(!b)return;if(battMod.value==='unbind'){b.account='';b.phone='';b.email='';toast('解绑成功','success')}else if(battMod.value==='lost'){b.lost=!b.lost;if(b.lost)b.discharge=false;toast(b.lost?'报失成功':'解除报失成功','success')}else{b.discharge=!b.discharge;toast(b.discharge?'已允许放电':'已禁止放电','success')}battMod.value=null}
+function battConfirmMod(){const b=curBatt.value;if(!b)return;if(battMod.value==='unbind'){b.account='';b.phone='';b.email='';b.status='空闲';var _mb3=batteries.value.find(function(x){return x.battNo===b.battNo});if(_mb3){_mb3.account='';_mb3.phone='';_mb3.email='';_mb3.status='空闲'}}toast('解绑成功','success')else if(battMod.value==='lost'){b.lost=!b.lost;if(b.lost)b.discharge=false;toast(b.lost?'报失成功':'解除报失成功','success')}else{b.discharge=!b.discharge;toast(b.discharge?'已允许放电':'已禁止放电','success')}battMod.value=null}
 const battEditModel=ref('');
 function openBattEdit(){navOpen();if(!can('battery.edit')){deny();return}battEditModel.value=curBatt.value?curBatt.value.model:'';ordersOV.value='battEdit'}
 function saveBattEdit(){const b=curBatt.value;if(!b)return;b.model=battEditModel.value;const idx=batteries.value.findIndex(x=>x.battNo===b.battNo);if(idx>=0)batteries.value[idx].model=battEditModel.value;navDrop();ordersOV.value='battDetail';toast('电池信息已保存','success')}
@@ -8754,7 +8754,7 @@ var orderPickList=computed(function(){var idle=function(o){return o.status==='�
 var orderPickEmpty=computed(()=>orderPickList.value.length===0);
 function openOrderPick(m){var suf={assignVehicle:'operate.assign_vehicle',changeVehicle:'operate.change_vehicle',assignBattery:'operate.assign_battery',changeBattery:'operate.change_battery'}[m];if(suf&&!orderPerm(suf)){deny();return}orderPickSel.value=null;orderPickQ.value='';ordersMod.value=m}
 function closeOrderPick(){ordersMod.value=null;orderPickSel.value=null;orderPickQ.value=''}
-function confirmOrderPick(){var m=ordersMod.value,sel=orderPickSel.value;if(!sel){toast('请先选择'+(orderPickIsBatt.value?'电池':'车辆'),'warn');return}var o=do_.value;if(m==='assignVehicle'||m==='changeVehicle'){o.vin=sel.no;if(o.type==='vehicle'&&sel.title)o.item=sel.title}if(m==='assignBattery'||m==='changeBattery'){o.battNo=sel.no;if(o.type==='battery'&&sel.title)o.item=sel.title}ordersMod.value=null;orderPickSel.value=null;var t={assignVehicle:'车辆已绑定',assignBattery:'电池已绑定',changeVehicle:'车辆已更换',changeBattery:'电池已更换'};toast(t[m],'success')}
+function confirmOrderPick(){var m=ordersMod.value,sel=orderPickSel.value;if(!sel){toast('请先选择'+(orderPickIsBatt.value?'电池':'车辆'),'warn');return}var o=do_.value;if(m==='assignVehicle'||m==='changeVehicle'){o.vin=sel.no;if(o.type==='vehicle'&&sel.title)o.item=sel.title}if(m==='assignBattery'||m==='changeBattery'){o.battNo=sel.no;if(o.type==='battery'&&sel.title)o.item=sel.title}if(o.vin){var _bv=vehicles.value.find(function(v){return v.vin===o.vin});if(_bv)_bv.status='租用中'}if(o.battNo){var _bb=batteries.value.find(function(b){return b.battNo===o.battNo});if(_bb)_bb.status='租用中'}ordersMod.value=null;orderPickSel.value=null;var t={assignVehicle:'车辆已绑定',assignBattery:'电池已绑定',changeVehicle:'车辆已更换',changeBattery:'电池已更换'};toast(t[m],'success')}
 /* ══ 绑定/解绑用户（设备详情） ══ */
 const users=computed(()=>{const m={};orders.value.forEach(function(o){var acc=(o.account||'').trim();if(acc&&!m[acc])m[acc]={account:acc,name:o.customer||acc,phone:o.phone||'',email:o.email||''}});userList.value.forEach(function(u){if(!m[u.account])m[u.account]={account:u.account,name:u.nickname||u.account,phone:u.phone||'',email:u.email||''}});return Object.values(m)});
 const userPickActive=ref('');
@@ -8764,7 +8764,7 @@ const userPickList=computed(()=>{var q=(userPickQ.value||'').trim().toLowerCase(
 const userPickEmpty=computed(()=>userPickList.value.length===0);
 function openUserPick(type){var code=type==='battery'?'battery.bind':'vehicle.bind';if(!can(code)){deny();return}userPickSel.value=null;userPickQ.value='';userPickActive.value=type}
 function closeUserPick(){userPickActive.value='';userPickSel.value=null;userPickQ.value=''}
-function confirmUserPick(){var u=userPickSel.value;if(!u){toast('请先选择用户','warn');return}if(userPickActive.value==='vehicle'){if(dv.value){dv.value.account=u.account;dv.value.phone=u.phone;dv.value.email=u.email}var mv=vehicles.value.find(function(x){return x.vin===dv.value.vin});if(mv){mv.account=u.account;mv.phone=u.phone;mv.email=u.email}}else if(userPickActive.value==='battery'){if(curBatt.value){curBatt.value.account=u.account;curBatt.value.phone=u.phone;curBatt.value.email=u.email}}toast('绑定成功','success');userPickActive.value='';userPickSel.value=null;userPickQ.value=''}
+function confirmUserPick(){var u=userPickSel.value;if(!u){toast('请先选择用户','warn');return}if(userPickActive.value==='vehicle'){if(dv.value){dv.value.account=u.account;dv.value.phone=u.phone;dv.value.email=u.email;dv.value.status='占用中'}var mv=vehicles.value.find(function(x){return x.vin===dv.value.vin});if(mv){mv.account=u.account;mv.phone=u.phone;mv.email=u.email;mv.status='占用中'}}else if(userPickActive.value==='battery'){if(curBatt.value){curBatt.value.account=u.account;curBatt.value.phone=u.phone;curBatt.value.email=u.email;curBatt.value.status='占用中';var mb=batteries.value.find(function(b){return b.battNo===curBatt.value.battNo});if(mb){mb.account=u.account;mb.phone=u.phone;mb.email=u.email;mb.status='占用中'}}}toast('绑定成功','success');userPickActive.value='';userPickSel.value=null;userPickQ.value=''}
 var refundMode=ref('return'),rTab=ref('rent'),rReason=ref('');
 var rRent2c2p=ref(0),rRentWallet=ref(0),rRentOffline=ref(0),rDep2c2p=ref(0),rDepWallet=ref(0),rDepOffline=ref(0),rActiveChannel=ref('2C2P');
 function refundDefSplit(amount,pm){var m=pm==='offline'?'OFFLINE':'2C2P';return Number(amount)>0?[{method:m,amount:Number(amount)}]:[];}
@@ -9582,8 +9582,8 @@ function openUserDetail(u){
   navOpen();
   du.value={...u};
   uWallet.value=walletFor(u.account);
-  uVehicles.value=vehicles.value.filter(function(v){return v.account===u.account&&v.vin}).map(function(v){return{vin:v.vin,model:v.model,status:v.online?'在线':'离线',batteryMain:v.batteryMain,batterySub:v.batterySub}});
-  uBatteries.value=batteries.value.filter(function(b){return b.account===u.account&&b.battNo}).map(function(b){return{code:b.battNo,model:b.model,soc:b.level}});
+  uVehicles.value=vehicles.value.filter(function(v){return v.account===u.account&&v.vin}).map(function(v){return{vin:v.vin,model:v.model,status:v.status,online:v.online,batteryMain:v.batteryMain,batterySub:v.batterySub}});
+  uBatteries.value=batteries.value.filter(function(b){return b.account===u.account&&b.battNo}).map(function(b){return{code:b.battNo,model:b.model,soc:b.level,status:b.status}});
   profileSub.value='userDetail'; if(typeof publishMerged==='function')publishMerged();
 }
 /* ══ 用户钱包：流水 / 调账 ══ */
@@ -9656,10 +9656,10 @@ function confirmUBind(){
   var sel=uBindSel.value;
   if(!sel){toast('请先选择'+(uBindIsBatt.value?'电池':'车辆'),'warn');return}
   if(uBindIsBatt.value){
-    uBatteries.value=[...uBatteries.value,{code:sel.no,model:sel.title,soc:parseFloat(sel.meta)||0,_manual:true}];
+    uBatteries.value=[...uBatteries.value,{code:sel.no,model:sel.title,soc:parseFloat(sel.meta)||0,status:'占用中',_manual:true}];var _mb2=batteries.value.find(function(b){return b.battNo===sel.no});if(_mb2){_mb2.status='占用中'}
   }else{
     var pct=(sel.meta||'/').split('/');
-    uVehicles.value=[...uVehicles.value,{vin:sel.no,model:sel.title,status:sel.online?'在线':'离线',batteryMain:parseFloat(pct[0])||0,batterySub:pct[1]!=null?(parseFloat(pct[1])||0):0,_manual:true}];
+    uVehicles.value=[...uVehicles.value,{vin:sel.no,model:sel.title,status:'占用中',batteryMain:parseFloat(pct[0])||0,batterySub:pct[1]!=null?(parseFloat(pct[1])||0):0,_manual:true}];var _mv2=vehicles.value.find(function(v){return v.vin===sel.no});if(_mv2){_mv2.status='占用中'}
   }
   toast((uBindIsBatt.value?'电池':'车辆')+'已绑定','success');
   uBindMod.value=null;uBindSel.value=null;uBindQ.value='';
@@ -9970,7 +9970,7 @@ function initI18nData(){
 }
 watch(protoForceUpdate,(newVal)=>{if(newVal!=='none'&&!showVersionCheck.value){setTimeout(()=>checkVersion(),100)}});
 function publishMerged(){try{MERGED.orderCount=(( (orders.value||orders)||[]).length)||0;MERGED.vehicleCount=(vehicles?(((vehicles.value||vehicles)||[]).length)||0:0);MERGED.batteryCount=(batteries?(((batteries.value||batteries)||[]).length)||0:0);MERGED.walletBalance=(uWallet&&uWallet.total)?uWallet.total:0;var _o=(((orders.value||orders)||[])[0])||null;MERGED.lastOrderId=_o?(_o.orderId||_o.id||"—"):"—";MERGED.updatedAt=Date.now();MERGED.myVehicles=(uVehicles&&uVehicles.value)||[];MERGED.myBatteries=(uBatteries&&uBatteries.value)||[];}catch(e){}}
-(function(){if(!(uVehicles&&uVehicles.value&&uVehicles.value.length)){uVehicles.value=vehicles.value.filter(function(v){return v.account==="user001"&&v.vin}).map(function(v){return{vin:v.vin,model:v.model,status:v.online?"在线":"离线",batteryMain:v.batteryMain,batterySub:v.batterySub}})}if(!(uBatteries&&uBatteries.value&&uBatteries.value.length)){uBatteries.value=batteries.value.filter(function(b){return b.account==="user001"&&b.battNo}).map(function(b){return{code:b.battNo,model:b.model,soc:b.level}})}})();
+(function(){if(!(uVehicles&&uVehicles.value&&uVehicles.value.length)){uVehicles.value=vehicles.value.filter(function(v){return v.account==="user001"&&v.vin}).map(function(v){return{vin:v.vin,model:v.model,status:v.status,online:v.online,batteryMain:v.batteryMain,batterySub:v.batterySub}})}if(!(uBatteries&&uBatteries.value&&uBatteries.value.length)){uBatteries.value=batteries.value.filter(function(b){return b.account==="user001"&&b.battNo}).map(function(b){return{code:b.battNo,model:b.model,soc:b.level,status:b.status}})}})();
 watch(function(){return[(((orders.value||orders)||[]).length)||0,(vehicles?(((vehicles.value||vehicles)||[]).length)||0:0),(batteries?(((batteries.value||batteries)||[]).length)||0:0),(uWallet&&uWallet.total)||0]},publishMerged,{immediate:true});
 onMounted(()=>{brandLoading.value=true;initI18nData();setTimeout(()=>{brandLoading.value=false;paint();if(protoForceUpdate.value!=='none'&&!showVersionCheck.value)checkVersion()},800)});
 watch([tab,homeOV,vehOV,ordersOV,profileOV,profileSub,vehMod,ordersMod,orderPickSel,profileMod,showRefund,vehShowModelSheet,vehShowFS,ordersShowFS,showDocSheet,docDeleteMod,previewImage,alertMod,trackTimePicker,hmPicker,showVersionCheck,appExited,pkgPicker,uBindMod,uBindSel],paint);
