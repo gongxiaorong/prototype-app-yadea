@@ -273,15 +273,15 @@ Bjs = Bjs.split(F_UBINDV).join("uVehicles.value=[...uVehicles.value,{vin:sel.no,
 // 6) 设备详情解绑 vehConfirmMod unbind → dv 与主数组 status=空闲
 const F_VEHUNB = "if(vehMod.value==='unbind'){if(dv.value){dv.value.account='';dv.value.phone='';dv.value.email='';var _mv=vehicles.value.find(function(v){return v.vin===dv.value.vin});if(_mv){_mv.account='';_mv.phone='';_mv.email=''}}toast('解绑成功','success')}";
 assert(Bjs.includes(F_VEHUNB), 'B 缺 vehConfirmMod unbind 锚点');
-Bjs = Bjs.split(F_VEHUNB).join("if(vehMod.value==='unbind'){if(dv.value){dv.value.account='';dv.value.phone='';dv.value.email='';dv.value.status='空闲';var _mv=vehicles.value.find(function(v){return v.vin===dv.value.vin});if(_mv){_mv.account='';_mv.phone='';_mv.email='';_mv.status='空闲'}}toast('解绑成功','success')}");
+Bjs = Bjs.split(F_VEHUNB).join("if(vehMod.value==='unbind'){if(dv.value){dv.value.account='';dv.value.phone='';dv.value.email='';dv.value.status='占用中';var _mv=vehicles.value.find(function(v){return v.vin===dv.value.vin});if(_mv){_mv.account='';_mv.phone='';_mv.email='';_mv.status='占用中'}}toast('解绑成功','success')}");
 // 7) 设备详情解绑 battConfirmMod unbind → curBatt 与主数组 status=空闲
 const F_BATTUNB = "if(battMod.value==='unbind'){b.account='';b.phone='';b.email='';toast('解绑成功','success')}";
 assert(Bjs.includes(F_BATTUNB), 'B 缺 battConfirmMod unbind 锚点');
-Bjs = Bjs.split(F_BATTUNB).join("if(battMod.value==='unbind'){b.account='';b.phone='';b.email='';b.status='空闲';var _mb3=batteries.value.find(function(x){return x.battNo===b.battNo});if(_mb3){_mb3.account='';_mb3.phone='';_mb3.email='';_mb3.status='空闲'}}toast('解绑成功','success')");
+Bjs = Bjs.split(F_BATTUNB).join("if(battMod.value==='unbind'){b.account='';b.phone='';b.email='';b.status='占用中';var _mb3=batteries.value.find(function(x){return x.battNo===b.battNo});if(_mb3){_mb3.account='';_mb3.phone='';_mb3.email='';_mb3.status='占用中'}}toast('解绑成功','success')");
 // 8) 用户详情解绑 confirmUUnbind → 主数组对应设备 status=空闲
 const F_UUNB = "if(t==='vehicle'){uVehicles.value=uVehicles.value.filter(function(v){return v.vin!==x.vin})}else{uBatteries.value=uBatteries.value.filter(function(b){return b.code!==x.code})}";
 assert(Bjs.includes(F_UUNB), 'B 缺 confirmUUnbind 锚点');
-Bjs = Bjs.split(F_UUNB).join("if(t==='vehicle'){uVehicles.value=uVehicles.value.filter(function(v){return v.vin!==x.vin});var _uv=vehicles.value.find(function(v){return v.vin===x.vin});if(_uv){_uv.status='空闲'}}else{uBatteries.value=uBatteries.value.filter(function(b){return b.code!==x.code});var _ub=batteries.value.find(function(b){return b.battNo===x.code});if(_ub){_ub.status='空闲'}}");
+Bjs = Bjs.split(F_UUNB).join("if(t==='vehicle'){uVehicles.value=uVehicles.value.filter(function(v){return v.vin!==x.vin});var _uv=vehicles.value.find(function(v){return v.vin===x.vin});if(_uv){_uv.status='占用中'}}else{uBatteries.value=uBatteries.value.filter(function(b){return b.code!==x.code});var _ub=batteries.value.find(function(b){return b.battNo===x.code});if(_ub){_ub.status='占用中'}}");
 // 9) openUserDetail uVehicles → 透传运营状态 status + online
 const F_UDEVV = "{vin:v.vin,model:v.model,status:v.online?'在线':'离线',batteryMain:v.batteryMain,batterySub:v.batterySub}";
 assert(Bjs.includes(F_UDEVV), 'B 缺 openUserDetail uVehicles 锚点');
