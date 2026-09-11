@@ -254,10 +254,13 @@
 </style>
 <style id="layer-host">/* ===== HOST: 宿主外壳 ===== */
 body{margin:0;background:#E8EAED;color:#111;-webkit-font-smoothing:antialiased}
-#host-bar{position:sticky;top:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:10px 16px;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);box-sizing:border-box;border-bottom:1px solid #E2E4E8}
+#host-bar{position:sticky;top:0;z-index:9000;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 18px;padding:10px 16px;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);box-sizing:border-box;border-bottom:1px solid #E2E4E8}
 #host-bar .modes{display:flex;gap:6px}
-#host-bar .modes button{border:1px solid #D3D6DB;background:#fff;color:#555;padding:5px 14px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .15s}
-#host-bar .modes button.active{background:#2B3F5F;border-color:#2B3F5F;color:#fff;font-weight:600}
+#host-bar .modes button,#host-bar .cur button{border:1px solid #D3D6DB;background:#fff;color:#555;padding:5px 14px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .15s}
+#host-bar .modes button.active,#host-bar .cur button.active{background:#2B3F5F;border-color:#2B3F5F;color:#fff;font-weight:600}
+#host-bar .cur{display:flex;align-items:center;gap:6px}
+#host-bar .cur .cur-lbl{font-size:12px;color:#8B8B95;margin-right:2px}
+#host-bar .cur button{padding:3px 12px}
 #host-main{display:flex;align-items:stretch;overflow-x:auto;padding:24px;box-sizing:border-box;min-height:calc(100vh - 60px)}
 .host-stage{display:flex;align-items:stretch;gap:16px;margin-inline:auto;max-width:100%}
 #root-user,#root-merchant{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box}
@@ -271,6 +274,12 @@ body.host-single-m #root-user{display:none}
     <button data-mode="split" class="active">双端并排</button>
     <button data-mode="single-u">只看用户端</button>
     <button data-mode="single-m">只看商户端</button>
+  </div>
+  <div class="cur">
+    <span class="cur-lbl">货币</span>
+    <button data-currency="CNY">人民币</button>
+    <button data-currency="IDR" class="active">印尼盾</button>
+    <button data-currency="HKD">港币</button>
   </div>
 </header>
 <main id="host-main">
@@ -718,7 +727,7 @@ body.host-single-m #root-user{display:none}
 <div class="bg-white rounded-2xl p-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-page-node-id="TccGeJrNiRcAJzPRRSkiGZ">
 <div class="flex items-center justify-between mb-3" data-page-node-id="N10R22ESnZcyAEzs1Hm9L3">
 <span class="text-[14px] font-semibold text-[#111]" data-page-node-id="MMR2VWLqC2oD0rk48A8n84">租赁方案</span>
-<span class="text-[14px] font-semibold" style="color:#FF6A00" data-page-node-id="92GBvrPkJV8KwamkuxJPJ8">小计 Rp {{ confTotal.toLocaleString('id-ID') }}</span>
+<span class="text-[14px] font-semibold" style="color:#FF6A00" data-page-node-id="92GBvrPkJV8KwamkuxJPJ8">小计 {{ fmtRp(confTotal) }}</span>
 </div>
 <div class="conf-pay-row mb-3" v-long-pan data-page-node-id="rME6qyDzo46TJYX4i7h58t">
 <div class="conf-pay" :class="rentPeriodIdx===0?'is-selected':''" @click="rentPeriodIdx=0" data-idx="0" data-page-node-id="XHnceJXPatj8Fj4Gt8UqtD">时租</div>
@@ -727,7 +736,7 @@ body.host-single-m #root-user{display:none}
 <div class="conf-pay" :class="rentPeriodIdx===3?'is-selected':''" @click="rentPeriodIdx=3" data-idx="3" data-page-node-id="2u3vOo8SYPf9Yua2bQ1IGM">月租</div>
 </div>
 <div class="conf-detail" :key="rentPeriodIdx" data-page-node-id="BQ1PdcM5ED2zYKG34IKfLe">
-<span class="conf-detail-amt" data-page-node-id="7fuVJOcBQ1PAzchUKs48uh">Rp {{ confPeriodDetail.amt.toLocaleString('id-ID') }}<span class="conf-detail-unit" data-page-node-id="Cz2BqUv0rgX4LBYLqQqHTI"> / {{ confPeriodDetail.unit }}</span></span>
+<span class="conf-detail-amt" data-page-node-id="7fuVJOcBQ1PAzchUKs48uh">{{ fmtRp(confPeriodDetail.amt) }}<span class="conf-detail-unit" data-page-node-id="Cz2BqUv0rgX4LBYLqQqHTI"> / {{ confPeriodDetail.unit }}</span></span>
 <span class="conf-detail-unit" data-page-node-id="SmzEs4ug8L8ZaYzgpTO7vn">{{ confPeriodDetail.label }} · {{ confPeriodDetail.daysWord }}</span>
 </div>
       <div class="flex items-center justify-between mt-3" data-page-node-id="i6k0NLuzeKLtjK083rYff4">
@@ -742,7 +751,7 @@ body.host-single-m #root-user{display:none}
 <div class="bg-white rounded-2xl p-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-page-node-id="tjR2y5MEXvOlhT6oggHMea">
 <div class="flex items-center justify-between" data-page-node-id="n7xfAqNX6h9D4zLHHn5Fhj">
 <span class="text-[14px] font-semibold text-[#111]" data-page-node-id="2zarq3Y4somPr0ZJlpKFd7">押金</span>
-<span class="text-[16px] font-bold" style="color:#FF6A00" data-page-node-id="DNVZKWj4sC44SYKJXjPmlv">Rp 200.45</span>
+<span class="text-[16px] font-bold" style="color:#FF6A00" data-page-node-id="DNVZKWj4sC44SYKJXjPmlv">{{ fmtRp(confDeposit,2) }}</span>
 </div>
 </div>
 <div @click="openIdSelect" class="bg-white rounded-2xl p-4 mb-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="confirm-id-entry" data-page-node-id="6qMUuDk1iawM82obgnBP0e">
@@ -767,7 +776,7 @@ body.host-single-m #root-user{display:none}
 <div class="conf-pay" :class="confPayType==='offline'?'is-selected':''" @click="confPayType='offline'" data-page-node-id="z7saGAULp2rzBvHdcsQAul">线下支付</div>
 <div class="conf-pay" :class="confPayType==='balance'?'is-selected':''" @click="confPayType='balance'" data-page-node-id="5h6UNFBzFYa5oz6CfnW9NO">
 <span class="text-[11px]" data-page-node-id="s1ujyDjQjXuB9NpyAOuxsC">钱包</span>
-<span class="text-[10px] text-[#999]" data-page-node-id="pya2yyjf9Lyd000tmTAbh7">Rp {{ (walletActive?walletActive.totalBalance.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—') }}</span>
+<span class="text-[10px] text-[#999]" data-page-node-id="pya2yyjf9Lyd000tmTAbh7">{{ (walletActive?fmtRp(walletActive.totalBalance,2):'—') }}</span>
 </div>
 </div>
 </div>
@@ -840,7 +849,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex items-center justify-between" data-page-node-id="HU5HD8I5BJYqhKC7KztAvZ">
 <div class="flex items-baseline gap-1" data-page-node-id="LcaYCHArdsxBSbGQzr6Vnu">
 <span class="text-[14px] text-[#666]" data-page-node-id="343znNKaGRj0sUxv5SzibF">合计</span>
-<span class="text-[20px] font-bold" style="color:#FF6A00" data-page-node-id="b5FSGhV5HQiZ6bXX9G4bGE">Rp {{ confGrandTotal.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
+<span class="text-[20px] font-bold" style="color:#FF6A00" data-page-node-id="b5FSGhV5HQiZ6bXX9G4bGE">{{ fmtRp(confGrandTotal,2) }}</span>
 </div>
 <div class="px-8 py-3 rounded-xl text-white text-[16px] font-semibold cursor-pointer active:opacity-90 transition-opacity" :style="uploadIdEnabled&&!confirmIdInfo?{background:'#C9CFD8',cursor:'not-allowed'}:{background:'#2B3F5F'}" :class="(uploadIdEnabled&&!confirmIdInfo)?'pointer-events-none':''" @click="confirmOrder()" data-page-node-id="x5GDpZNuPtDQnwrNyzxCLQ">确认订单</div>
 </div>
@@ -1684,8 +1693,8 @@ body.host-single-m #root-user{display:none}
 <span class="text-[13px] font-semibold shrink-0" :style="{color:r.statusColor}" data-page-node-id="5nqk85yOh6xu59HkRGO4cK">{{ r.statusText }}</span>
 </div>
 <div class="text-[13px] flex flex-col gap-2.5" data-page-node-id="Wmy6FucGCNFZgMelMdi8JF">
-<div class="flex items-center justify-between gap-2" data-page-node-id="FQF2hwhm48zL1l6vke03XW"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="J5C43g768CrXOqPs5sTw5Y">租金</span><span class="flex-1 text-right text-[#333]" data-page-node-id="pM0lz0WDhDWybIit3s45Df">Rp {{ r.rent.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span></div>
-<div class="flex items-center justify-between gap-2" data-page-node-id="FMK0dcKwotWA26vnLXMOfp"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="A7Bde83mYE12WLDk2GxWSS">押金</span><span class="flex-1 text-right text-[#333]" data-page-node-id="P5JBhDuqhIPV7uWijAC7Yd">Rp {{ r.deposit.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span></div>
+<div class="flex items-center justify-between gap-2" data-page-node-id="FQF2hwhm48zL1l6vke03XW"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="J5C43g768CrXOqPs5sTw5Y">租金</span><span class="flex-1 text-right text-[#333]" data-page-node-id="pM0lz0WDhDWybIit3s45Df">{{ fmtRp(r.rent,2) }}</span></div>
+<div class="flex items-center justify-between gap-2" data-page-node-id="FMK0dcKwotWA26vnLXMOfp"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="A7Bde83mYE12WLDk2GxWSS">押金</span><span class="flex-1 text-right text-[#333]" data-page-node-id="P5JBhDuqhIPV7uWijAC7Yd">{{ fmtRp(r.deposit,2) }}</span></div>
 <div class="flex items-start justify-between gap-2" data-page-node-id="QGbm1fH18HPuyNeA0iEIXO"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="p2BNYNK9VSnCdSEmkmlFrV">退款原因</span><span class="flex-1 text-right font-medium text-[#333]" data-page-node-id="oSwZGju9cz3ez11YaA2ZFX">{{ r.reason||'—' }}</span></div>
 <div v-if="r.status==='SUCCESS'||r.status==='FAILED'" class="flex items-center justify-between gap-2" data-page-node-id="hpZW3TqVqBPxuMekpkj2Jr"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="ZttwVzvcDqnpfkwC5lm81S">完成时间</span><span class="flex-1 text-right font-medium text-[#333]" data-page-node-id="GdqZBTAJK9qk9kMWG5AAHt">{{ r.finishTime||'-' }}</span></div>
 </div>
@@ -1836,24 +1845,24 @@ body.host-single-m #root-user{display:none}
 <div v-if="feeCardRow" class="text-[13px] flex flex-col gap-2.5" data-page-node-id="ZU46vxZTAUEf4JgwXCYgn6">
 <div class="flex items-center justify-between gap-2 cursor-pointer active:opacity-60" @click.stop="rentOpen=!rentOpen" data-page-node-id="Kmp0xorAFT5RCCpODyCVEQ">
 <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="iApWvxIGuBcyzc1MviNDBu">租金</span>
-<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="PGlymgOFCSUJhOOX1UYsgj"><span class="text-[#333]" data-page-node-id="z25aIacOKGbXWqiHR3jCQ5">Rp {{ feeCardRow.rent.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(rentOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="Gey5bC5X454Ff2HCHtPMEn"></span></div>
+<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="PGlymgOFCSUJhOOX1UYsgj"><span class="text-[#333]" data-page-node-id="z25aIacOKGbXWqiHR3jCQ5">{{ fmtRp(feeCardRow.rent,2) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(rentOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="Gey5bC5X454Ff2HCHtPMEn"></span></div>
 </div>
 <div v-if="rentOpen" class="space-y-1 pb-1 pl-1" data-page-node-id="8PY3f8Y9mfTC7rO192Mm76">
-<div v-for="c in feeRowChannels(feeCardRow).rent" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="2Z1CFGnfOfBMuTC5RfwQF0"><span class="text-[#999]" data-page-node-id="dOF4Lb3F8zbkXWqyciV4OA">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="NqT1yvrbwHcpCdK6C8WQ3X">Rp {{ c.amount.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span></div>
+<div v-for="c in feeRowChannels(feeCardRow).rent" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="2Z1CFGnfOfBMuTC5RfwQF0"><span class="text-[#999]" data-page-node-id="dOF4Lb3F8zbkXWqyciV4OA">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="NqT1yvrbwHcpCdK6C8WQ3X">{{ fmtRp(c.amount,2) }}</span></div>
 </div>
 <div class="flex items-center justify-between gap-2 cursor-pointer active:opacity-60" @click.stop="depositOpen=!depositOpen" data-page-node-id="LZ9Qx0GzxwTsnYSR0utw5F">
 <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="JWbtm7qvdM7FdZvECVd6AX">押金</span>
-<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="TbN5YeDcQiidCOpEN4yxSZ"><span class="text-[#333]" data-page-node-id="LWCtql5QCBh5mmtiUTgOB4">Rp {{ feeCardRow.deposit.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(depositOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="ngevvYFnCg30PfapCzFtCG"></span></div>
+<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="TbN5YeDcQiidCOpEN4yxSZ"><span class="text-[#333]" data-page-node-id="LWCtql5QCBh5mmtiUTgOB4">{{ fmtRp(feeCardRow.deposit,2) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(depositOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="ngevvYFnCg30PfapCzFtCG"></span></div>
 </div>
 <div v-if="depositOpen" class="space-y-1 pb-1 pl-1" data-page-node-id="K3w3Nz4qUUgc7EKp9BCviC">
-<div v-for="c in feeRowChannels(feeCardRow).deposit" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="pupTRaimJKzrf8bgHBvKiF"><span class="text-[#999]" data-page-node-id="cHMR7lprY8NVOkwwoWLAJa">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="gQPtwCLseElaO52g7ncYxR">Rp {{ c.amount.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span></div>
+<div v-for="c in feeRowChannels(feeCardRow).deposit" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="pupTRaimJKzrf8bgHBvKiF"><span class="text-[#999]" data-page-node-id="cHMR7lprY8NVOkwwoWLAJa">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="gQPtwCLseElaO52g7ncYxR">{{ fmtRp(c.amount,2) }}</span></div>
 </div>
 <div class="flex items-center justify-between gap-2 cursor-pointer active:opacity-60" @click.stop="totalOpen=!totalOpen" data-page-node-id="bQDcZPXutpnNT6SMhfMiDb">
 <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="Va55nA3pb5XdOdAktWGod8">合计</span>
-<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="Vk4MazwYZzIpEweW0bCQw7"><span style="color:var(--accent)" data-page-node-id="aqV5e0AlZj0uG1hr6tWAZu">Rp {{ feeCardRow.total.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(totalOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="cNMM8jhhrrUQ61h1TDEhAF"></span></div>
+<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="Vk4MazwYZzIpEweW0bCQw7"><span style="color:var(--accent)" data-page-node-id="aqV5e0AlZj0uG1hr6tWAZu">{{ fmtRp(feeCardRow.total,2) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(totalOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="cNMM8jhhrrUQ61h1TDEhAF"></span></div>
 </div>
 <div v-if="totalOpen" class="space-y-1 pb-1 pl-1" data-page-node-id="kJUVIvjNkIpSKhJuRyD6DT">
-<div v-for="c in feeRowChannels(feeCardRow).total" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="VHaoEsgnXNyI1yRVFu9WFg"><span class="text-[#999]" data-page-node-id="D5dSL8Hb3FW42BokZbklew">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="tsyuDLTCmjNM65hvFCWFw2">Rp {{ c.amount.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span></div>
+<div v-for="c in feeRowChannels(feeCardRow).total" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="VHaoEsgnXNyI1yRVFu9WFg"><span class="text-[#999]" data-page-node-id="D5dSL8Hb3FW42BokZbklew">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="tsyuDLTCmjNM65hvFCWFw2">{{ fmtRp(c.amount,2) }}</span></div>
 </div>
 <div v-if="['手动续租','自动续租'].includes(feeCardRow.kind)&&feeCardRow.payStatus!=='已支付'" class="mt-2 flex gap-2" data-page-node-id="4yMHtvIBBnun0TfAB81gQH"><div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-center cursor-pointer active:opacity-90" style="border:1px solid var(--accent);color:var(--accent)" @click="requestCancelRenew(feeCardRow.no)" data-page-node-id="0AhwhMjBh3CiD37M7RTtHj">取消续租</div><div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-white text-center cursor-pointer active:opacity-90" style="background:var(--accent)" @click="payRenewDirect(feeCardRow.no)" data-page-node-id="UiyIXGTTQqNFum2CvTiPKk">立即支付</div></div>
 </div>
@@ -1867,24 +1876,24 @@ body.host-single-m #root-user{display:none}
 <div class="text-[13px] flex flex-col gap-2.5" data-page-node-id="xwS7Z3Ak5efNe1THM1eXWx">
 <div class="flex items-center justify-between gap-2 cursor-pointer active:opacity-60" @click.stop="refundRentOpen=!refundRentOpen" data-page-node-id="N37rrCB7xlp3JBpxQSilbZ">
 <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="564jFXYdNHJkK5XwC865DI">租金</span>
-<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="rnND53nMgKpatcGGs2lM5c"><span class="text-[#333]" data-page-node-id="5V5HYqTzZWesYAvbBCoD3f">Rp {{ feeSummary.rent.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(refundRentOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="wnsAZouQ250QmiwPwKyV6o"></span></div>
+<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="rnND53nMgKpatcGGs2lM5c"><span class="text-[#333]" data-page-node-id="5V5HYqTzZWesYAvbBCoD3f">{{ fmtRp(feeSummary.rent,2) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(refundRentOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="wnsAZouQ250QmiwPwKyV6o"></span></div>
 </div>
 <div v-if="refundRentOpen" class="space-y-1 pb-1 pl-1" data-page-node-id="U6ePeC8koNTjz57RhAOVw0">
-<div v-for="c in refundChannels.rent" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="dY63ypN0UKZ2z0W4QVz4G8"><span class="text-[#999]" data-page-node-id="Nvy8vdGxZwz76ggvaU9IP7">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="QQryu6yqnR56PEC51PDbHN">Rp {{ c.amount.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span></div>
+<div v-for="c in refundChannels.rent" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="dY63ypN0UKZ2z0W4QVz4G8"><span class="text-[#999]" data-page-node-id="Nvy8vdGxZwz76ggvaU9IP7">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="QQryu6yqnR56PEC51PDbHN">{{ fmtRp(c.amount,2) }}</span></div>
 </div>
 <div class="flex items-center justify-between gap-2 cursor-pointer active:opacity-60" @click.stop="refundDepositOpen=!refundDepositOpen" data-page-node-id="gF41kLrvodIrOmLMJeMpaD">
 <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="I2igBWzYu1m48AlqyHLMg1">押金</span>
-<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="3A7AauHhRpBRTZ9rcAErTT"><span class="text-[#333]" data-page-node-id="2wRpKwPkjuz3nMnhXLVO7C">Rp {{ feeSummary.deposit.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(refundDepositOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="75zR7amUkgc1leSA3F9MBE"></span></div>
+<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="3A7AauHhRpBRTZ9rcAErTT"><span class="text-[#333]" data-page-node-id="2wRpKwPkjuz3nMnhXLVO7C">{{ fmtRp(feeSummary.deposit,2) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(refundDepositOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="75zR7amUkgc1leSA3F9MBE"></span></div>
 </div>
 <div v-if="refundDepositOpen" class="space-y-1 pb-1 pl-1" data-page-node-id="p0USoDpvvx4tEceXRCsG3b">
-<div v-for="c in refundChannels.deposit" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="AJHtlWKfVD4nHkZVwBZVvi"><span class="text-[#999]" data-page-node-id="mIZFDst5keMSONLKX7lX1N">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="likpFSMdGZB7LRuO60t6Aj">Rp {{ c.amount.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span></div>
+<div v-for="c in refundChannels.deposit" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="AJHtlWKfVD4nHkZVwBZVvi"><span class="text-[#999]" data-page-node-id="mIZFDst5keMSONLKX7lX1N">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="likpFSMdGZB7LRuO60t6Aj">{{ fmtRp(c.amount,2) }}</span></div>
 </div>
 <div class="flex items-center justify-between gap-2 cursor-pointer active:opacity-60" @click.stop="refundTotalOpen=!refundTotalOpen" data-page-node-id="XFBhguRvsVOZke1rjrCCUB">
 <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="W8fcQdc5lq64RRuYyFHkdd">合计</span>
-<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="1AP79Zm9INWMdvBzqjJvCE"><span class="text-[#333]" data-page-node-id="MPvgDn2kBXTq9MntkdoOt6">Rp {{ feeSummary.total.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(refundTotalOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="9WEDJGS7MMqb2DsmhKo1Hq"></span></div>
+<div class="flex items-center gap-1.5 justify-end flex-1" data-page-node-id="1AP79Zm9INWMdvBzqjJvCE"><span class="text-[#333]" data-page-node-id="MPvgDn2kBXTq9MntkdoOt6">{{ fmtRp(feeSummary.total,2) }}</span><span v-html="luci('chevron-down','w-4 h-4 text-[#999] '+(refundTotalOpen?'rotate-180 transition-transform':'transition-transform'))" data-page-node-id="9WEDJGS7MMqb2DsmhKo1Hq"></span></div>
 </div>
 <div v-if="refundTotalOpen" class="space-y-1 pb-1 pl-1" data-page-node-id="srxXMTpBpYG1zfCDaeZJ2r">
-<div v-for="c in refundChannels.total" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="eQBWAHLcdAvz1j2DItIMaL"><span class="text-[#999]" data-page-node-id="Q9CCn2EZZFvhclwcnX1S8k">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="B3rmob7cYemtALF20kVKmQ">Rp {{ c.amount.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span></div>
+<div v-for="c in refundChannels.total" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="eQBWAHLcdAvz1j2DItIMaL"><span class="text-[#999]" data-page-node-id="Q9CCn2EZZFvhclwcnX1S8k">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="B3rmob7cYemtALF20kVKmQ">{{ fmtRp(c.amount,2) }}</span></div>
 </div>
 </div>
 </div>
@@ -2017,7 +2026,7 @@ body.host-single-m #root-user{display:none}
 <div class="bg-white rounded-2xl p-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-page-node-id="A8LKOHDHIcGVyr5JvToqv6">
 <div class="flex items-center justify-between mb-3" data-page-node-id="JsREpNSKv3w6jAbfiKepfZ">
 <span class="text-[14px] font-semibold text-[#111]" data-page-node-id="IYg4ToDiZ3iNzS76FjILA7">租赁方案</span>
-<span class="text-[14px] font-semibold" style="color:#FF6A00" data-page-node-id="uwrfUTdfiy8BRStR3w4JZJ">小计 Rp {{ renewRentFee.toLocaleString('id-ID') }}</span>
+<span class="text-[14px] font-semibold" style="color:#FF6A00" data-page-node-id="uwrfUTdfiy8BRStR3w4JZJ">小计 {{ fmtRp(renewRentFee) }}</span>
 </div>
 <div class="conf-pay-row mb-3" v-long-pan data-page-node-id="LxUFSQZbaTRTha2hvnz8QX">
 <div class="conf-pay" :class="renewPeriodIdx===0?'is-selected':''" @click="renewPeriodIdx=0" data-idx="0" data-page-node-id="4W1MFLatGCebh7Vyg2oC8E">时租</div>
@@ -2026,7 +2035,7 @@ body.host-single-m #root-user{display:none}
 <div class="conf-pay" :class="renewPeriodIdx===3?'is-selected':''" @click="renewPeriodIdx=3" data-idx="3" data-page-node-id="VEi3Is8pjOD6NB5bQ4fk98">月租</div>
 </div>
 <div class="conf-detail" :key="renewPeriodIdx" data-page-node-id="g2WUSBuQP7Ype19NJ2SDX2">
-<span class="conf-detail-amt" data-page-node-id="rrerA7BG6iBV4MqBt7CFPM">Rp {{ renewDetail.amt.toLocaleString('id-ID') }}<span class="conf-detail-unit" data-page-node-id="FuEdtDE46Zio3aokVFfK7h"> / {{ renewDetail.unit }}</span></span>
+<span class="conf-detail-amt" data-page-node-id="rrerA7BG6iBV4MqBt7CFPM">{{ fmtRp(renewDetail.amt) }}<span class="conf-detail-unit" data-page-node-id="FuEdtDE46Zio3aokVFfK7h"> / {{ renewDetail.unit }}</span></span>
 <span class="conf-detail-unit" data-page-node-id="vt3yMPHv64rDzZiS9RvGBE">{{ renewDetail.label }} · {{ renewDetail.daysWord }}</span>
 </div>
 <div class="flex items-center justify-between mt-3" data-page-node-id="mdANp8plL99nqLhLNtAHLQ">
@@ -2062,17 +2071,17 @@ body.host-single-m #root-user{display:none}
 <div class="flex items-start gap-2" data-page-node-id="BPbg8BHTKygGjM7sj6pDcz"><span class="text-[#999] w-16 flex-shrink-0 leading-[1.5]" data-page-node-id="lPuAsCW3JJhk2hsJDVsiUK">租赁时间</span><span class="flex-1 min-w-0 text-right text-[#333] leading-[1.5]" data-page-node-id="JDmiELuQOvT1R24V1PBavf">{{ r.periodStart }}<br data-page-node-id="V1O2Wyz03hZ6zCXQHftExf">{{ r.periodEnd }}</span></div>
 <div class="flex items-center justify-between gap-2" data-page-node-id="UBtXnNQBYLWzrMVfGjHQZ">
 <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="d133bSpyMfHZH3Afn6Qfzw">租金</span>
-<span class="flex-1 text-right text-[#333]" data-page-node-id="HFOE8otRsZ1UzkQnV1uy77">Rp {{ r.rent.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span>
+<span class="flex-1 text-right text-[#333]" data-page-node-id="HFOE8otRsZ1UzkQnV1uy77">{{ fmtRp(r.rent,2) }}</span>
 </div>
 
 <div class="flex items-center justify-between gap-2" data-page-node-id="f5Ha1VgGFMWItWdEskRbgK">
 <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="oDhpmVmHKmZwZhV3E6tnG2">押金</span>
-<span class="flex-1 text-right text-[#333]" data-page-node-id="wXZE2RbkGvJ2HMLLHOMzEo">Rp {{ r.deposit.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span>
+<span class="flex-1 text-right text-[#333]" data-page-node-id="wXZE2RbkGvJ2HMLLHOMzEo">{{ fmtRp(r.deposit,2) }}</span>
 </div>
 
 <div class="flex items-center justify-between gap-2" data-page-node-id="dCOfvXiOpIuBlZczyfBejl">
 <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="Cn9Ka2Jdz15NFWVbFeQqRo">合计</span>
-<span class="flex-1 text-right font-semibold" style="color:var(--accent)" data-page-node-id="CsAjAx1uxFsM1eiH8RdL0E">Rp {{ r.total.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span>
+<span class="flex-1 text-right font-semibold" style="color:var(--accent)" data-page-node-id="CsAjAx1uxFsM1eiH8RdL0E">{{ fmtRp(r.total,2) }}</span>
 </div>
 
 <div class="flex items-center gap-2" data-page-node-id="odFeeChannel"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="odFeeChannelL">支付渠道</span><span class="flex-1 text-right text-[#333]" data-page-node-id="odFeeChannelV">{{ r.payMethod }}</span></div>
@@ -2093,13 +2102,13 @@ body.host-single-m #root-user{display:none}
 <div class="text-center text-[17px] font-semibold py-3 px-5" data-page-node-id="eI834yijcIl0CD49F78HoR">支付</div>
 <div class="absolute top-1/2 right-4 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F6F7F9]" @click="showPayment=false" data-page-node-id="9WlQRl8GRmJG1MtvujxYp2"><span v-html="luci('x','w-5 h-5 text-[#999]')" data-page-node-id="Sn3k6pAUdoOTuHhxuSGRmI"></span></div>
 </div>
-<div class="px-5" data-page-node-id="mq3I183In4DgBtYd8mEJ3k"><div class="text-[12px] mb-1 text-[#999]" data-page-node-id="6f18KbTVnYowJv1WgmI7IB">应付金额</div><div class="text-[24px] font-bold mb-3" style="color:#FF6A00" data-page-node-id="iMaW5FGDqd0j18zNbJfntB">Rp {{ (payTarget?payTarget.amount:0).toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</div></div>
+<div class="px-5" data-page-node-id="mq3I183In4DgBtYd8mEJ3k"><div class="text-[12px] mb-1 text-[#999]" data-page-node-id="6f18KbTVnYowJv1WgmI7IB">应付金额</div><div class="text-[24px] font-bold mb-3" style="color:#FF6A00" data-page-node-id="iMaW5FGDqd0j18zNbJfntB">{{ fmtRp((payTarget?payTarget.amount:0),2) }}</div></div>
 <div class="bg-white rounded-2xl p-4 mx-5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-page-node-id="uLmjbwATAxkRVIlwMNAV2v">
 <div class="text-[14px] font-semibold text-[#111] mb-3" data-page-node-id="Q85BDODhyStYEpXBRKItmT">支付方式</div>
 <div class="conf-pay-grid" data-page-node-id="bndWUb3CE11n9cSU5xTT2P">
 <div class="conf-pay" :class="paymentType==='2c2p'?'is-selected':''" @click="paymentType='2c2p'" data-page-node-id="E8uMMiEO6pa1FBkHHkOhiB">2C2P</div>
 <div class="conf-pay" :class="paymentType==='offline'?'is-selected':''" @click="paymentType='offline'" data-page-node-id="wgIaibQx2jWoBRsoqhVusX">线下支付</div>
-<div class="conf-pay" :class="paymentType==='balance'?'is-selected':''" @click="paymentType='balance'" data-page-node-id="2QJUxXdzIUzZ7ZHWMuzw0p"><span class="text-[11px]" data-page-node-id="hQ94HnoiCg6HxerZsdCLOH">钱包</span><span class="text-[10px] text-[#999]" data-page-node-id="WDWFVwhDxeRsfAUQNHcU0j">Rp {{ walletActive?walletActive.totalBalance.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—' }}</span></div>
+<div class="conf-pay" :class="paymentType==='balance'?'is-selected':''" @click="paymentType='balance'" data-page-node-id="2QJUxXdzIUzZ7ZHWMuzw0p"><span class="text-[11px]" data-page-node-id="hQ94HnoiCg6HxerZsdCLOH">钱包</span><span class="text-[10px] text-[#999]" data-page-node-id="WDWFVwhDxeRsfAUQNHcU0j">{{ walletActive?fmtRp(walletActive.totalBalance,2):'—' }}</span></div>
 </div>
 <div v-if="paymentType==='balance'&&walletActive&&walletActive.totalBalance<(payTarget?payTarget.amount:0)" class="text-[12px] mt-2" style="color:#DC2626" data-page-node-id="IMP8R2G889WX7I6E1C2cDu">余额不足，请选择其他支付方式或去充值</div>
 </div>
@@ -2673,16 +2682,16 @@ body.host-single-m #root-user{display:none}
 <span class="text-[13px] text-[#666]" data-page-node-id="v8wCHEIi9cUAu9exruURjW">可用余额</span>
 <span @click="walletBalanceVisible=!walletBalanceVisible" class="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F6F7F9]" v-html="luci(walletBalanceVisible?'eye':'eye-off','w-[18px] h-[18px] text-[#999]')" data-page-node-id="kzxWu8S0nA8Qf8kGVdNFem"></span>
 </div>
-<div class="text-[32px] font-bold text-[#111] tracking-tight mb-4" data-page-node-id="6oa8nMYr4SF7Y4nfju8dbU">Rp {{ walletBalanceVisible?(walletActive?walletActive.totalBalance.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—'):'•••••••' }}</div>
+<div class="text-[32px] font-bold text-[#111] tracking-tight mb-4" data-page-node-id="6oa8nMYr4SF7Y4nfju8dbU">{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.totalBalance,2):'—'):'•••••••' }}</div>
 <div class="flex items-center justify-between py-3" style="border-top:1px solid #F0F0F0" data-page-node-id="HZbqEoDGRxx5LPShczngzW">
 <span class="text-[14px] text-[#333]" data-page-node-id="Xk2X0lrOJuAkDzaNpDRaXY">充值余额</span>
-<span class="text-[16px] font-semibold text-[#111]" data-page-node-id="Ly0SvOFGVGjBhLFb3Fp1cz">Rp {{ walletBalanceVisible?(walletActive?walletActive.rechargeBalance.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—'):'•••••••' }}</span>
+<span class="text-[16px] font-semibold text-[#111]" data-page-node-id="Ly0SvOFGVGjBhLFb3Fp1cz">{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.rechargeBalance,2):'—'):'•••••••' }}</span>
 </div>
 <div class="flex items-center justify-between py-3" style="border-top:1px solid #F0F0F0" data-page-node-id="8msFDIzk6liH3nVt1EvmIW">
 <div class="flex items-center gap-2" data-page-node-id="Aea3UJML3nUZXtwd6lvFS3">
 <span class="text-[14px] text-[#333]" data-page-node-id="6pM3exzV2hDGMibL28svtR">赠送余额</span>
 </div>
-<span class="text-[16px] font-semibold text-[#FF6A00]" data-page-node-id="udUGDjtcPXyqqYNPAECBfw">Rp {{ walletBalanceVisible?(walletActive?walletActive.bonusBalance.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—'):'•••••••' }}</span>
+<span class="text-[16px] font-semibold text-[#FF6A00]" data-page-node-id="udUGDjtcPXyqqYNPAECBfw">{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.bonusBalance,2):'—'):'•••••••' }}</span>
 </div>
 <div class="flex items-center gap-3 mt-4" data-page-node-id="bXZB3nBbfIMjOCtPQSRyxz">
 <button @click="openTopup" class="flex-1 h-11 rounded-xl text-[15px] font-semibold text-white active:opacity-90 transition-opacity flex items-center justify-center" style="background:var(--accent)" data-page-node-id="UkXKPTACK6a6uyxZmhYXce">充值</button>
@@ -2702,11 +2711,11 @@ body.host-single-m #root-user{display:none}
 <div v-for="(r,i) in walletLedgerActive.slice(0,5)" :key="i" class="px-4 py-3.5" :style="i<walletLedgerActive.slice(0,5).length-1?'border-bottom:1px solid #F5F5F5':''" :data-od-id="'wallet-ledger-row-'+r.type" data-page-node-id="gXzbFZDTqS4j4jTN5Jy8L3">
 <div class="flex items-center justify-between mb-2" data-page-node-id="dCTsTFUafV40Q4auqRbqxJ">
 <span class="text-[14px] font-semibold text-[#1A1A1A]" data-page-node-id="aMha3nXaojFXHieuBSsKFu">{{ r.type==='recharge'?'充值':r.type==='rechargeRefund'?'充值退款':r.type==='orderConsume'?'订单消费':r.type==='orderRefund'?'订单退款':r.type==='gift'?'赠送':r.type==='deduct'?'扣减':r.type }}</span>
-<span class="text-[16px] font-bold" :style="r.amount>=0?{color:'#17A34A'}:{color:'#DC2626'}">{{ r.amount<0?'-':(r.amount>0?'+':'') }}Rp {{ Math.abs(r.amount).toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span>
+<span class="text-[16px] font-bold" :style="r.amount>=0?{color:'#17A34A'}:{color:'#DC2626'}">{{ r.amount<0?'-':(r.amount>0?'+':'') }}{{ fmtRp(Math.abs(r.amount),2) }}</span>
 </div>
 <div class="flex items-center justify-between" data-page-node-id="cGpLbDuWpOaVDeVdrIEpCe">
 <span class="text-[13px] text-[#999]" data-page-node-id="T8Synh249SYQvLCCUtAWNV">{{ new Date(r.createdAt).toLocaleString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).replace(/\//g,'-') }}</span>
-<span class="text-[12px] text-[#999]" data-page-node-id="gaFEfC7m4CWCiJyQAcrli5">余额 <span class="text-[#666] font-medium" data-page-node-id="cLtzMYqVPBiyxGE0uyaXco">Rp {{ r.balanceAfter!=null?r.balanceAfter.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—' }}</span></span>
+<span class="text-[12px] text-[#999]" data-page-node-id="gaFEfC7m4CWCiJyQAcrli5">余额 <span class="text-[#666] font-medium" data-page-node-id="cLtzMYqVPBiyxGE0uyaXco">{{ r.balanceAfter!=null?fmtRp(r.balanceAfter,2):'—' }}</span></span>
 </div>
 </div>
 </div>
@@ -2729,7 +2738,7 @@ body.host-single-m #root-user{display:none}
 <div v-for="s in walletOpenedStores" :key="s" @click="walletSwitchStore(s)" class="py-3.5" style="border-bottom:1px solid #F5F5F5" data-page-node-id="2mPJqCWHms4YkcZFc0bZqR">
 <div class="flex items-center justify-between mb-0.5" data-page-node-id="ItSjkJrrhbyeXeavVQIfKn">
 <span class="text-[15px]" :class="walletAccount.activeStoreId===s?'text-[#1677FF] font-semibold':'text-[#111]'" data-page-node-id="cSRAWECC8BH9QbC3eI3x1a">{{ s }}</span>
-<span class="text-[13px] text-[#999] shrink-0 ml-2" data-page-node-id="ttezCefYWsIYPFVjwjeFdX">Rp {{ walletAccount.wallets[s].totalBalance.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span>
+<span class="text-[13px] text-[#999] shrink-0 ml-2" data-page-node-id="ttezCefYWsIYPFVjwjeFdX">{{ fmtRp(walletAccount.wallets[s].totalBalance,2) }}</span>
 </div>
 <div class="flex items-center gap-1 text-[12px] text-[#6B6B6B]" data-page-node-id="FeB7ubUmaxu1FzPwuBGlch">
 <span v-html="luci('map-pin','w-3 h-3 text-[#999]')" data-page-node-id="3vvwyx9zSNFgGiXRah6xSY"></span>
@@ -2763,11 +2772,11 @@ body.host-single-m #root-user{display:none}
 <div v-for="r in walletLedgerList" :key="r.id" class="bg-white rounded-2xl px-4 py-3.5 mb-2.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-page-node-id="4rYxyeYRzMiqZLG0EQTUpA">
 <div class="flex items-center justify-between mb-2" data-page-node-id="Hw4hkiacAhRQHaRXPZHTRv">
 <span class="text-[14px] font-semibold text-[#1A1A1A]" data-page-node-id="SUkJB8xGEk6yUbPj0Yhpju">{{ r.type==='recharge'?'充值':r.type==='rechargeRefund'?'充值退款':r.type==='orderConsume'?'订单消费':r.type==='orderRefund'?'订单退款':r.type==='gift'?'赠送':r.type==='deduct'?'扣减':r.type }}</span>
-<span class="text-[16px] font-bold" :style="r.amount>=0?{color:'#17A34A'}:{color:'#DC2626'}">{{ r.amount<0?'-':(r.amount>0?'+':'') }}Rp {{ Math.abs(r.amount).toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span>
+<span class="text-[16px] font-bold" :style="r.amount>=0?{color:'#17A34A'}:{color:'#DC2626'}">{{ r.amount<0?'-':(r.amount>0?'+':'') }}{{ fmtRp(Math.abs(r.amount),2) }}</span>
 </div>
 <div class="flex items-center justify-between" data-page-node-id="EFPC7HLCC0Epf5sItsWnlk">
 <span class="text-[13px] text-[#999]" data-page-node-id="77gQmHmdnZcWlzCY9oehNZ">{{ new Date(r.createdAt).toLocaleString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).replace(/\//g,'-') }}</span>
-<span class="text-[12px] text-[#999]" data-page-node-id="B62AZof2ekyGxwosb8Ax4l">余额 <span class="text-[#666] font-medium" data-page-node-id="3Vsr4C6mHq4mY3VzHekJbY">Rp {{ r.balanceAfter!=null?r.balanceAfter.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—' }}</span></span>
+<span class="text-[12px] text-[#999]" data-page-node-id="B62AZof2ekyGxwosb8Ax4l">余额 <span class="text-[#666] font-medium" data-page-node-id="3Vsr4C6mHq4mY3VzHekJbY">{{ r.balanceAfter!=null?fmtRp(r.balanceAfter,2):'—' }}</span></span>
 </div>
 </div>
 </template>
@@ -2786,8 +2795,8 @@ body.host-single-m #root-user{display:none}
 <div class="text-[14px] font-semibold text-[#111] mb-3" data-page-node-id="cRdAxDniaJBluNwB2ZMZG7">充值金额</div>
 <div class="grid grid-cols-2 gap-3" data-page-node-id="QlHSZEyFQMS5kvmooTePuC">
 <div v-for="(amt,i) in walletTopupAmounts" :key="i" @click="selectTopupAmount(amt)" class="py-3 rounded-xl text-center cursor-pointer" :style="topupAmount===amt?{background:'#EBF1FD',color:'#2B3F5F',border:'1.5px solid #2B3F5F'}:{background:'#F7F8FA',color:'#333',border:'1px solid #EBEDF0'}" data-page-node-id="7SP9AmIHXECyJ81Cx5Ehz2">
-<div class="text-[15px] font-semibold" data-page-node-id="vOAA4aPObcGtJPwjyje9BV">Rp {{ amt.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</div>
-<div v-if="walletTopupBonus[amt]" class="text-[10px] mt-0.5 font-medium" style="color:#FF6A00" data-page-node-id="XXHHyGP8dgqI1614NN0tmu">赠送 Rp {{ walletTopupBonus[amt].toLocaleString('id-ID') }}</div>
+<div class="text-[15px] font-semibold" data-page-node-id="vOAA4aPObcGtJPwjyje9BV">{{ fmtRp(amt,2) }}</div>
+<div v-if="walletTopupBonus[amt]" class="text-[10px] mt-0.5 font-medium" style="color:#FF6A00" data-page-node-id="XXHHyGP8dgqI1614NN0tmu">赠送 {{ fmtRp(walletTopupBonus[amt]) }}</div>
 </div>
 </div>
 <div class="mt-3" data-page-node-id="ehSGm00RqEgnlH4G2aCL3K">
@@ -6587,11 +6596,11 @@ body.host-single-m #root-user{display:none}
 <div v-for="r in uFlowList" :key="r.ledgerNo" class="bg-white rounded-2xl px-4 py-3.5 mb-2.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
 <div class="flex items-center justify-between mb-2">
 <span class="text-[14px] font-semibold text-[#1A1A1A]">{{ r.txnType }}</span>
-<span class="text-[16px] font-bold tabular-nums" :style="uFlowAmt(r).neg?{color:'#DC2626'}:{color:'#17A34A'}">{{ uFlowAmt(r).neg?'-':(uFlowAmt(r).val>0?'+':'') }}Rp {{ Number(uFlowAmt(r).val).toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span>
+<span class="text-[16px] font-bold tabular-nums" :style="uFlowAmt(r).neg?{color:'#DC2626'}:{color:'#17A34A'}">{{ uFlowAmt(r).neg?'-':(uFlowAmt(r).val>0?'+':'') }}{{ fmtRp(Number(uFlowAmt(r).val),2) }}</span>
 </div>
 <div class="flex items-center justify-between">
 <span class="text-[13px] text-[#999]">{{ r.createTime }}</span>
-<span class="text-[12px] text-[#999]">余额 <span class="text-[#666] font-medium">Rp {{ Number(r.balanceAfter).toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}</span></span>
+<span class="text-[12px] text-[#999]">余额 <span class="text-[#666] font-medium">{{ fmtRp(Number(r.balanceAfter),2) }}</span></span>
 </div>
 </div>
 </template>
@@ -6905,8 +6914,10 @@ function createNav(o){
   return {navOpen,navBack,navDrop,navSwap,navReset,navLog};
 }
 
-/* 共享金额 formatter：统一 id-ID 千分位（dec 可选，用于小数位） */
-function fmtRp(n,dec){var v=Number(n);if(v==null||isNaN(v))v=0;if(dec==null)return 'Rp '+v.toLocaleString('id-ID');return 'Rp '+v.toLocaleString('id-ID',{minimumFractionDigits:dec,maximumFractionDigits:dec})}
+/* 货币状态：reactive，双端金额经 fmtRp 联动切换（默认印尼盾；rate 为对 1 IDR 的折算，演示用近似值） */
+var MONEY=Vue.reactive({cur:'IDR',rates:{IDR:1,CNY:0.000357,HKD:0.00192},symbols:{IDR:'Rp ',CNY:'¥',HKD:'HK$ '}});
+/* 共享金额 formatter：随 MONEY.cur 切换货币（dec 可选，用于小数位） */
+function fmtRp(n,dec){var v=Number(n);if(v==null||isNaN(v))v=0;var c=MONEY.cur,a=v*(MONEY.rates[c]||1);var loc=(c==='IDR'?'id-ID':'en-US');var s=dec==null?a.toLocaleString(loc):a.toLocaleString(loc,{minimumFractionDigits:dec,maximumFractionDigits:dec});return (MONEY.symbols[c]||'Rp ')+s}
 
 window.addEventListener('error', function (e) {
   var st = e.error && e.error.stack ? e.error.stack : '';
@@ -10018,7 +10029,7 @@ app.directive('swipe-close',{mounted(el,b){var sx=0,sy=0;el.addEventListener('to
 app.mount(root);
 }
 
-/* ---------- 宿主：模式切换 ---------- */
+/* ---------- 宿主：模式切换 + 货币切换 ---------- */
 function hostSetMode(mode) {
   var body = document.body;
   body.className = 'host-' + mode;
@@ -10026,15 +10037,24 @@ function hostSetMode(mode) {
     b.classList.toggle('active', b.getAttribute('data-mode') === mode);
   });
 }
+function hostSetCurrency(c) {
+  MONEY.cur = c;
+  document.querySelectorAll('#host-bar .cur button').forEach(function (b) {
+    b.classList.toggle('active', b.getAttribute('data-currency') === c);
+  });
+}
 document.getElementById('host-bar').addEventListener('click', function (e) {
-  var b = e.target.closest && e.target.closest('button[data-mode]');
-  if (b) hostSetMode(b.getAttribute('data-mode'));
+  var bm = e.target.closest && e.target.closest('button[data-mode]');
+  if (bm) { hostSetMode(bm.getAttribute('data-mode')); return; }
+  var bc = e.target.closest && e.target.closest('button[data-currency]');
+  if (bc) hostSetCurrency(bc.getAttribute('data-currency'));
 });
 
 /* ---------- 双实例常驻挂载 ---------- */
 mountUser(document.getElementById('mount-user'));
 mountMerchant(document.getElementById('mount-merchant'));
 hostSetMode('split');
+hostSetCurrency(MONEY.cur);
 
 </script>
 </body>

@@ -89,13 +89,41 @@ function normTokens(css, hasRoot) {
 }
 
 // ── 1. 读取分段与 CSS 层 ──
-const Ahtml = read('A.html').trim();
-const Bhtml = read('B.html').trim();
+let Ahtml = read('A.html').trim();
+let Bhtml = read('B.html').trim();
 const cssBase = normTokens(read('layers.base.css'), true);
 const cssUser = normTokens(read('layers.user.css'), false);
 const cssMerchant = normTokens(read('layers.merchant.css'), false);
 let Ajs = read('A.js');
 let Bjs = read('B.js');
+
+// ── 1.1 模板金额收口：Rp {{ X.toLocaleString('id-ID'{opts}) }} → {{ fmtRp(X{,dec}) }}，随货币联动 ──
+function rewriteRpAmounts(html, side) {
+  const EXACT = [
+    ["Rp {{ (walletActive?walletActive.totalBalance.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—') }}", "{{ (walletActive?fmtRp(walletActive.totalBalance,2):'—') }}"],
+    ["Rp {{ walletActive?walletActive.totalBalance.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—' }}", "{{ walletActive?fmtRp(walletActive.totalBalance,2):'—' }}"],
+    ["Rp {{ walletBalanceVisible?(walletActive?walletActive.totalBalance.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—'):'•••••••' }}", "{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.totalBalance,2):'—'):'•••••••' }}"],
+    ["Rp {{ walletBalanceVisible?(walletActive?walletActive.rechargeBalance.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—'):'•••••••' }}", "{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.rechargeBalance,2):'—'):'•••••••' }}"],
+    ["Rp {{ walletBalanceVisible?(walletActive?walletActive.bonusBalance.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—'):'•••••••' }}", "{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.bonusBalance,2):'—'):'•••••••' }}"],
+    ["Rp {{ (payTarget?payTarget.amount:0).toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}", "{{ fmtRp((payTarget?payTarget.amount:0),2) }}"],
+    ["Rp {{ r.balanceAfter!=null?r.balanceAfter.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}):'—' }}", "{{ r.balanceAfter!=null?fmtRp(r.balanceAfter,2):'—' }}"],
+    ["Rp {{ confGrandTotal.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}", "{{ fmtRp(confGrandTotal,2) }}"],
+    ["Rp {{ Math.abs(r.amount).toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}", "{{ fmtRp(Math.abs(r.amount),2) }}"],
+    ["Rp {{ Number(uFlowAmt(r).val).toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}", "{{ fmtRp(Number(uFlowAmt(r).val),2) }}"],
+    ["Rp {{ Number(r.balanceAfter).toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}) }}", "{{ fmtRp(Number(r.balanceAfter),2) }}"],
+    ["Rp 200.45", "{{ fmtRp(confDeposit,2) }}"],
+  ];
+  for (const [f, t] of EXACT) {
+    const n0 = html.split(f).length - 1;
+    html = html.split(f).join(t);
+    if (n0 > 0) console.log('  [rewrite] ' + side + ' 精确替换 ×' + n0 + ': ' + f.slice(6, 40) + '…');
+  }
+  html = html.replace(/Rp \{\{ ([\w$.\[\]]+)\.toLocaleString\('id-ID',\{minimumFractionDigits:(\d+),maximumFractionDigits:\d+\}\) \}\}/g, (m, e, d) => '{{ fmtRp(' + e + ',' + d + ') }}');
+  html = html.replace(/Rp \{\{ ([\w$.\[\]]+)\.toLocaleString\('id-ID'\) \}\}/g, (m, e) => '{{ fmtRp(' + e + ') }}');
+  return html;
+}
+Ahtml = rewriteRpAmounts(Ahtml, 'A');
+Bhtml = rewriteRpAmounts(Bhtml, 'B');
 
 // ── 2. 抽 luci（取 A 那份，双端删） ──
 const luciStart = Ajs.indexOf('function luci(');
@@ -251,8 +279,10 @@ function createNav(o){
   return {navOpen,navBack,navDrop,navSwap,navReset,navLog};
 }
 
-/* 共享金额 formatter：统一 id-ID 千分位（dec 可选，用于小数位） */
-function fmtRp(n,dec){var v=Number(n);if(v==null||isNaN(v))v=0;if(dec==null)return 'Rp '+v.toLocaleString('id-ID');return 'Rp '+v.toLocaleString('id-ID',{minimumFractionDigits:dec,maximumFractionDigits:dec})}
+/* 货币状态：reactive，双端金额经 fmtRp 联动切换（默认印尼盾；rate 为对 1 IDR 的折算，演示用近似值） */
+var MONEY=Vue.reactive({cur:'IDR',rates:{IDR:1,CNY:0.000357,HKD:0.00192},symbols:{IDR:'Rp ',CNY:'¥',HKD:'HK$ '}});
+/* 共享金额 formatter：随 MONEY.cur 切换货币（dec 可选，用于小数位） */
+function fmtRp(n,dec){var v=Number(n);if(v==null||isNaN(v))v=0;var c=MONEY.cur,a=v*(MONEY.rates[c]||1);var loc=(c==='IDR'?'id-ID':'en-US');var s=dec==null?a.toLocaleString(loc):a.toLocaleString(loc,{minimumFractionDigits:dec,maximumFractionDigits:dec});return (MONEY.symbols[c]||'Rp ')+s}
 `;
 
 // ── 8. 组装 JS 块 ──
@@ -273,7 +303,7 @@ function mountMerchant(root) {
 ${Bjs.trimEnd()}
 }
 
-/* ---------- 宿主：模式切换 ---------- */
+/* ---------- 宿主：模式切换 + 货币切换 ---------- */
 function hostSetMode(mode) {
   var body = document.body;
   body.className = 'host-' + mode;
@@ -281,24 +311,36 @@ function hostSetMode(mode) {
     b.classList.toggle('active', b.getAttribute('data-mode') === mode);
   });
 }
+function hostSetCurrency(c) {
+  MONEY.cur = c;
+  document.querySelectorAll('#host-bar .cur button').forEach(function (b) {
+    b.classList.toggle('active', b.getAttribute('data-currency') === c);
+  });
+}
 document.getElementById('host-bar').addEventListener('click', function (e) {
-  var b = e.target.closest && e.target.closest('button[data-mode]');
-  if (b) hostSetMode(b.getAttribute('data-mode'));
+  var bm = e.target.closest && e.target.closest('button[data-mode]');
+  if (bm) { hostSetMode(bm.getAttribute('data-mode')); return; }
+  var bc = e.target.closest && e.target.closest('button[data-currency]');
+  if (bc) hostSetCurrency(bc.getAttribute('data-currency'));
 });
 
 /* ---------- 双实例常驻挂载 ---------- */
 mountUser(document.getElementById('mount-user'));
 mountMerchant(document.getElementById('mount-merchant'));
 hostSetMode('split');
+hostSetCurrency(MONEY.cur);
 `;
 
 // ── 宿主 CSS ──
 const hostCss = `/* ===== HOST: 宿主外壳 ===== */
 body{margin:0;background:#E8EAED;color:#111;-webkit-font-smoothing:antialiased}
-#host-bar{position:sticky;top:0;z-index:9000;display:flex;align-items:center;justify-content:center;padding:10px 16px;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);box-sizing:border-box;border-bottom:1px solid #E2E4E8}
+#host-bar{position:sticky;top:0;z-index:9000;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 18px;padding:10px 16px;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);box-sizing:border-box;border-bottom:1px solid #E2E4E8}
 #host-bar .modes{display:flex;gap:6px}
-#host-bar .modes button{border:1px solid #D3D6DB;background:#fff;color:#555;padding:5px 14px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .15s}
-#host-bar .modes button.active{background:#2B3F5F;border-color:#2B3F5F;color:#fff;font-weight:600}
+#host-bar .modes button,#host-bar .cur button{border:1px solid #D3D6DB;background:#fff;color:#555;padding:5px 14px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .15s}
+#host-bar .modes button.active,#host-bar .cur button.active{background:#2B3F5F;border-color:#2B3F5F;color:#fff;font-weight:600}
+#host-bar .cur{display:flex;align-items:center;gap:6px}
+#host-bar .cur .cur-lbl{font-size:12px;color:#8B8B95;margin-right:2px}
+#host-bar .cur button{padding:3px 12px}
 #host-main{display:flex;align-items:stretch;overflow-x:auto;padding:24px;box-sizing:border-box;min-height:calc(100vh - 60px)}
 .host-stage{display:flex;align-items:stretch;gap:16px;margin-inline:auto;max-width:100%}
 #root-user,#root-merchant{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box}
@@ -345,6 +387,12 @@ const html = `<!DOCTYPE html>
     <button data-mode="split" class="active">双端并排</button>
     <button data-mode="single-u">只看用户端</button>
     <button data-mode="single-m">只看商户端</button>
+  </div>
+  <div class="cur">
+    <span class="cur-lbl">货币</span>
+    <button data-currency="CNY">人民币</button>
+    <button data-currency="IDR" class="active">印尼盾</button>
+    <button data-currency="HKD">港币</button>
   </div>
 </header>
 <main id="host-main">
