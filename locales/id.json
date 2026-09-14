@@ -11,7 +11,7 @@
     "startTime": "Waktu Mulai",
     "dialcode": {
       "australia": "Australia",
-      "china": "Tiongkok",
+      "china": "China",
       "france": "Prancis",
       "germany": "Jerman",
       "indonesia": "Indonesia",
@@ -56,7 +56,7 @@
     "orders": {
       "cancelOrder": "Batalkan Pesanan",
       "cancelTime": "Waktu Pembatalan",
-      "confirmCancelDesc": "Yakin batalkan pesanan ini?",
+      "confirmCancelDesc": "Yakin batalkan pesanan ini? Tindakan ini tidak dapat dibatalkan.",
       "createdTime": "Waktu Dibuat",
       "deposit": "Deposit",
       "detail": "Detail Pesanan",
@@ -96,7 +96,7 @@
       "bindEmail": "Hubungkan Email",
       "bindPhone": "Hubungkan Ponsel",
       "changePassword": "Ubah Kata Sandi",
-      "confirmLogoutDesc": "Anda perlu masuk kembali setelah keluar.",
+      "confirmLogoutDesc": "Yakin keluar dari akun saat ini? Anda perlu masuk kembali setelah keluar.",
       "emailAddress": "Alamat Email",
       "emailBoundSuccess": "Email berhasil dihubungkan",
       "emailFormatError": "Format email tidak benar",
@@ -200,7 +200,7 @@
       "datePickerYear": "Tahun",
       "datePickerMonth": "Bulan",
       "datePickerDay": "Hari",
-      "second": "dtk"
+      "second": "Detik"
     },
     "label": {
       "account": "Akun",

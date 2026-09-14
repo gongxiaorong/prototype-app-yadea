@@ -16,7 +16,7 @@
       "germany": "Germany",
       "indonesia": "Indonesia",
       "japan": "Japan",
-      "korea": "South Korea",
+      "korea": "Korea",
       "macau": "Macau, China",
       "malaysia": "Malaysia",
       "searchPlaceholder": "Search country/region or code",
@@ -56,7 +56,7 @@
     "orders": {
       "cancelOrder": "Cancel Order",
       "cancelTime": "Cancellation Time",
-      "confirmCancelDesc": "Are you sure you want to cancel this order?",
+      "confirmCancelDesc": "Are you sure you want to cancel this order? This cannot be undone.",
       "createdTime": "Created Time",
       "deposit": "Deposit",
       "detail": "Order Details",
@@ -96,7 +96,7 @@
       "bindEmail": "Bind Email",
       "bindPhone": "Bind Phone",
       "changePassword": "Change Password",
-      "confirmLogoutDesc": "You will need to log in again after logging out.",
+      "confirmLogoutDesc": "Are you sure you want to log out of the current account? You will need to log in again after logging out.",
       "emailAddress": "Email Address",
       "emailBoundSuccess": "Email bound successfully",
       "emailFormatError": "Invalid email format",
@@ -193,14 +193,14 @@
         "thu": "Thu",
         "mon": "Mon",
         "fri": "Fri",
-        "sun": "Sunday"
+        "sun": "Sun"
       },
       "hour": "Hour",
       "minute": "Minute",
       "datePickerYear": "Year",
       "datePickerMonth": "Month",
       "datePickerDay": "Day",
-      "second": "sec"
+      "second": "Second"
     },
     "label": {
       "account": "Account",
