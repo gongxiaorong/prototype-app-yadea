@@ -265,6 +265,7 @@ body{margin:0;background:#E8EAED;color:#111;-webkit-font-smoothing:antialiased}
 #host-bar .cur{display:flex;align-items:center;gap:6px}
 #host-bar .cur .cur-lbl{font-size:12px;color:#8B8B95;margin-right:2px}
 #host-bar .cur button{padding:3px 12px}
+#host-bar .cur button.sysnav{background:#2B3F5F;border-color:#2B3F5F;color:#fff;font-weight:600}
 #host-main{display:flex;align-items:stretch;overflow-x:auto;padding:24px;box-sizing:border-box;min-height:calc(100vh - 60px)}
 .host-stage{display:flex;align-items:stretch;gap:16px;margin-inline:auto;max-width:100%}
 #root-user,#root-merchant{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box}
@@ -285,7 +286,7 @@ body.host-single-m #root-user{display:none}
     <button data-currency="IDR" class="active">印尼盾</button>
     <button data-currency="HKD">港币</button>
   </div>
-</header>
+  </header>
 <main id="host-main">
   <div class="host-stage">
     <section id="root-user"><div class="od-stage" id="mount-user"><div class="w-[393px] h-[852px] bg-black rounded-[55px] p-3 relative shrink-0" style="box-shadow:0 0 0 2px #333,0 30px 60px rgba(0,0,0,.35)" data-page-node-id="3GqPRUfNPfZCDDqJ59HjqN">
@@ -2303,6 +2304,10 @@ body.host-single-m #root-user{display:none}
 <span class="flex-1 text-[15px] font-medium" data-page-node-id="6XASv3lpOTUQABsMFJIHWT">切换语言</span>
 <div class="flex items-center gap-1" data-page-node-id="WiTXyVm3HwuybSx4n5xJ3Y"><span class="text-[13px] text-[#666] mr-1" data-page-node-id="5Sgk1eYBj6xPdzlnHXRUMZ">{{ appLangLabel }}</span><span v-html="luci('chevron-right','w-3 h-3 text-[#999]')" data-page-node-id="MD4mjwo5HUAnPGCm06WfBK"></span></div>
 </div>
+<div data-cp @click="switchSource='settings';navOpen('subSwitchSystem')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-sys-row">
+<span class="flex-1 text-[15px] font-medium">切换系统</span>
+<div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ curSystemName }}</span><span v-html="luci('chevron-right','w-3 h-3 text-[#999]')"></span></div>
+</div>
 <div data-cp @click="checkVersion" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" data-od-id="settings-version-row" data-page-node-id="4pIREs1BFxMyfgwI6wkCXL">
 <span class="flex-1 text-[15px] font-medium" data-page-node-id="IlOnrV6x0DU8oSNnCOqd7W">当前版本</span>
 <div class="flex items-center gap-1" data-page-node-id="ANDeV37Dlk9XdL4vm13njl"><span class="text-[13px] text-[#666] font-mono" data-page-node-id="j8J1bkBMiUl7Hd7XDKeBLH">V1.30.0</span><span v-html="luci('chevron-right','w-3 h-3 text-[#999]')" data-page-node-id="QdnYv2HR99oTLMNO0hQoly"></span></div>
@@ -2570,6 +2575,33 @@ body.host-single-m #root-user{display:none}
   <div v-if="idPreviewItem" class="text-white text-[18px] font-bold" data-page-node-id="LDr59QFYEDpR8p1GmOVOUp">{{ idPreviewItem.kind==='driver'?'驾驶证照片':'身份证照片' }}</div>
   <div v-if="idPreviewItem" class="text-white/40 text-[13px] -mt-3" data-page-node-id="FSN8qqBPt4YkFMWKykygtD">{{ idPreviewItem.time }}</div>
   <div class="text-white/30 text-[13px] mt-2" data-page-node-id="M9pIqtUL3a4m9EPoBCk1Gy">点击空白处关闭</div>
+</div></transition>
+
+<transition name="sl"><div v-if="profileSub==='subSwitchSystem'" v-swipe-close="navBack" class="absolute inset-0 bg-[#F6F7F9] z-[512] flex flex-col" data-od-id="switch-system-page">
+<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
+  <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="switchBack()"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
+  <div class="flex-1 text-center text-[17px] font-semibold mr-8" style="color:#111">选择系统</div>
+</div>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-4">
+  <div v-if="switchSource==='first'" data-cp @click="backToRental" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
+    <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#EEF4FF;color:#2F6FEB"><span v-html="luci('bike','w-6 h-6')"></span></div>
+    <div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">租车系统</div></div>
+    <div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex" v-html="luci('chevron-right','w-4 h-4')"></span></div>
+  </div>
+  <div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
+    <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#FFF3E0;color:#FF8A00"><span v-html="luci('plug-zap','w-6 h-6')"></span></div>
+    <div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">充电系统</div></div>
+    <div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex" v-html="luci('chevron-right','w-4 h-4')"></span></div>
+  </div>
+  <div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
+    <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#E8F7EE;color:#17A34A"><span v-html="luci('battery-charging','w-6 h-6')"></span></div>
+    <div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">换电系统</div></div>
+    <div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex" v-html="luci('chevron-right','w-4 h-4')"></span></div>
+  </div>
+</div>
+<div class="px-5 pb-8 shrink-0" v-if="switchSource==='first'">
+  <button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button>
+</div>
 </div></transition>
 
 <transition name="sl" data-page-node-id="KY5BYKblUJ96SwnLyLUpJJ"><div v-if="profileSub==='lang'" v-swipe-close="navBack" class="absolute inset-0 bg-[#F6F7F9] z-[510] flex flex-col" data-od-id="settings-lang-page">
@@ -2926,15 +2958,21 @@ body.host-single-m #root-user{display:none}
 <aside class="demo-ops is-active" data-page-node-id="mQEBtJhdQe5jBXNfswBXxr">
 <div class="demo-ops-title" data-page-node-id="4zsIJzUqTiTJnOVorZ6HS5">原型操作</div>
 <div class="demo-ops-group-hd" data-page-node-id="nnAUA4bdOGD5d4rDqXCO1q">功能控制</div>
+<div class="demo-ops-section" data-od-id="demo-login-state">
+<div class="demo-ops-label">登录状态</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" :class="loggedIn?'is-on':''" data-cp @click="setLoggedIn(true)">已登录</div>
+<div class="demo-ops-chip" :class="!loggedIn?'is-on':''" data-cp @click="setLoggedIn(false)">未登录</div>
+</div>
+</div>
+<div class="demo-ops-section" data-od-id="demo-first-login">
+<div class="demo-ops-label">首次登录</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" :class="firstLogin?'is-on':''" data-cp @click="firstLogin=true">是</div>
+<div class="demo-ops-chip" :class="!firstLogin?'is-on':''" data-cp @click="firstLogin=false">否</div>
+</div>
+</div>
 <template v-if="tab==='home'&&!showLogin&&!showRent&&!showStore&&!showVehicle&&!showConfirm&&!showOrderDetail&&!showMyOrders&&!showOrderList&&!profileOV&&!profileSub&&!profileMod&&!showVehicleDetail&&!showBatteryDetail&&!scanning&&!showManualVin&&!showFindPage&&!showTrackPage&&!showWallet&&!showTopup" data-page-node-id="l4VeP1IIzXZ3MtCcBNgjSf">
-
-<div class="demo-ops-section" data-page-node-id="6apaNyLuA7WY29kHOaF9L8">
-<div class="demo-ops-label" data-page-node-id="aVBfIq8DyJT9M0gplGsrbo">登录状态</div>
-<div class="demo-ops-chips" data-page-node-id="Ew6YsPGCORwVwqOoYTbZm3">
-<div class="demo-ops-chip" :class="loggedIn?'is-on':''" data-cp @click="loggedIn=true" data-page-node-id="tUt6xgcGYDJEmeYoy0MGYK">已登录</div>
-<div class="demo-ops-chip" :class="!loggedIn?'is-on':''" data-cp @click="loggedIn=false" data-page-node-id="nZBSKS8jz7aIm8KcB3cEsO">未登录</div>
-</div>
-</div>
 
 <div class="demo-ops-section" data-page-node-id="pAzs9SGG784BH5GDfKWRMR">
 <div class="demo-ops-label" data-page-node-id="heNEUzoFaMVzQ4PQFpmEhR">车辆数据</div>
@@ -5215,7 +5253,7 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="showMoreActions=false" class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center cursor-pointer active:opacity-60 text-[#999]"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-[18px] h-[18px]"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg></div>
 </div>
 <div class="pb-7 pt-1">
-<div v-if="ordersOV!=='feedetail'" data-cp @click="showMoreActions=false;ordersOV='feedetail'" class="flex items-center justify-center px-5 py-3 cursor-pointer active:bg-[#F6F7F9]" ><span class="text-[15px] font-medium">费用明细</span></div>
+<div v-if="ordersOV!=='feedetail'" data-cp @click="showMoreActions=false;navOpen();ordersOV='feedetail'" class="flex items-center justify-center px-5 py-3 cursor-pointer active:bg-[#F6F7F9]" ><span class="text-[15px] font-medium">费用明细</span></div>
 <div v-if="(canPriceOperate||(feeMoreRow&&feeMoreRow.payStatus==='待支付'))&&orderPerm('operate.price_change')" data-cp @click="showMoreActions=false;openPaySplit(feeMoreRow||null)" class="flex items-center justify-center px-5 py-3 cursor-pointer active:bg-[#F6F7F9]" style="border-top:1px solid #EDEDED"><span class="text-[15px] font-medium">改价</span></div>
 <div v-if="orderPerm('operate.price_change_record')" data-cp @click="showMoreActions=false;navOpen();ordersOV='oprecords'" class="flex items-center justify-center px-5 py-3 cursor-pointer active:bg-[#F6F7F9]" style="border-top:1px solid #EDEDED"><span class="text-[15px] font-medium">改价记录</span></div>
 <div v-if="(['已支付','部分退款'].indexOf(feeMoreRow&&feeMoreRow.payStatus)!==-1)&&orderPerm('refund.create')" data-cp @click="showMoreActions=false;openRefund('refund',feeMoreRow)" class="flex items-center justify-center px-5 py-3 cursor-pointer active:bg-[#F6F7F9]"><span class="text-[15px] font-medium">退款</span></div>
@@ -5360,11 +5398,11 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 overflow-y-auto px-5 pb-24 hid" style="touch-action:pan-y;-webkit-overflow-scrolling:touch;padding-top:0">
   <div class="mb-6 flex items-center gap-3">
 <div class="w-14 h-14 rounded-full flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,var(--accent) 0%,#22324A 100%);box-shadow:0 4px 12px rgba(43,63,95,.25)"><span v-html="luci('user','w-7 h-7 text-white')"></span></div>
-<div data-cp @click="profileOV='info'" class="flex-1 min-w-0 flex items-center gap-1.5 cursor-pointer active:opacity-70">
+<div data-cp @click="navOpen();profileOV='info'" class="flex-1 min-w-0 flex items-center gap-1.5 cursor-pointer active:opacity-70">
 <div class="min-w-0"><div class="text-[18px] font-bold truncate">Manager Wang</div><div class="text-[13px] text-[#666]">+86 13571893628</div></div>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
 </div>
-<div data-cp @click="profileOV='settings'" class="w-9 h-9 flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] rounded-full shrink-0" data-od-id="profile-settings"><span v-html="luci('settings','w-5 h-5 text-[#666]')"></span></div>
+<div data-cp @click="navOpen();profileOV='settings'" class="w-9 h-9 flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] rounded-full shrink-0" data-od-id="profile-settings"><span v-html="luci('settings','w-5 h-5 text-[#666]')"></span></div>
   </div>
 <div v-for="g in menuGroups" :key="g.name" class="mb-3">
 <div class="text-[13px] font-semibold text-[#999] px-1 mb-1.5">{{ g.name }}</div>
@@ -6359,9 +6397,13 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hid">
 <div class="text-[13px] font-medium text-[#999] mb-2 px-1">通用设置</div>
 <div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5">
-<div data-cp @click="profileSub='lang'" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-lang-row">
+<div data-cp @click="navOpen();profileSub='lang'" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-lang-row">
 <span class="flex-1 text-[15px] font-medium">切换语言</span>
 <div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ appLangLabel }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
+</div>
+<div data-cp @click="switchSource='settings';navOpen();profileSub='subSwitchSystem'" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-sys-row">
+<span class="flex-1 text-[15px] font-medium">切换系统</span>
+<div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ curSystemName }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
 </div>
 <div data-cp @click="checkVersion" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" data-od-id="settings-version-row">
 <span class="flex-1 text-[15px] font-medium">当前版本</span>
@@ -6371,6 +6413,33 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="absolute bottom-7 left-5 right-5" data-od-id="settings-logout-btn">
 <button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90 transition-colors" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button>
+</div>
+</div></transition>
+
+<transition name="sl"><div v-if="profileSub==='subSwitchSystem'" v-swipe-close="()=>goBack()" class="absolute inset-0 bg-[#F6F7F9] z-[512] flex flex-col" data-od-id="switch-system-page">
+<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
+  <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="switchBack()"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
+  <div class="flex-1 text-center text-[17px] font-semibold mr-8" style="color:#111">选择系统</div>
+</div>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-4">
+  <div v-if="switchSource==='first'" data-cp @click="goBack()" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
+    <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#EEF4FF;color:#2F6FEB"><span v-html="luci('bike','w-6 h-6')"></span></div>
+    <div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">租车系统</div></div>
+    <div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex" v-html="luci('chevron-right','w-4 h-4')"></span></div>
+  </div>
+  <div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
+    <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#FFF3E0;color:#FF8A00"><span v-html="luci('plug-zap','w-6 h-6')"></span></div>
+    <div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">充电系统</div></div>
+    <div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex" v-html="luci('chevron-right','w-4 h-4')"></span></div>
+  </div>
+  <div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
+    <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#E8F7EE;color:#17A34A"><span v-html="luci('battery-charging','w-6 h-6')"></span></div>
+    <div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">换电系统</div></div>
+    <div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex" v-html="luci('chevron-right','w-4 h-4')"></span></div>
+  </div>
+</div>
+<div class="px-5 pb-8 shrink-0" v-if="switchSource==='first'">
+  <button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button>
 </div>
 </div></transition>
 
@@ -6708,16 +6777,21 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-stack">
 <aside class="demo-ops is-active" data-od-id="demo-ops" :aria-hidden="!demoOpsActive">
   <div class="demo-ops-title">原型操作</div>
-  <template v-if="showLogin">
-    <div class="demo-ops-group-hd">功能控制</div>
-    <div class="demo-ops-section" data-od-id="demo-login-state">
-      <div class="demo-ops-label">登录状态</div>
-      <div class="demo-ops-chips">
-        <div class="demo-ops-chip" :class="!showLogin?'is-on':''" data-cp @click="demoLogin">已登录</div>
-        <div class="demo-ops-chip" :class="showLogin?'is-on':''" data-cp @click="demoLogout">未登录</div>
-      </div>
+  <div class="demo-ops-group-hd">功能控制</div>
+  <div class="demo-ops-section" data-od-id="demo-login-state">
+    <div class="demo-ops-label">登录状态</div>
+    <div class="demo-ops-chips">
+      <div class="demo-ops-chip" :class="!showLogin?'is-on':''" data-cp @click="demoLogin">已登录</div>
+      <div class="demo-ops-chip" :class="showLogin?'is-on':''" data-cp @click="demoLogout">未登录</div>
     </div>
-  </template>
+  </div>
+  <div class="demo-ops-section" data-od-id="demo-first-login">
+    <div class="demo-ops-label">首次登录</div>
+    <div class="demo-ops-chips">
+      <div class="demo-ops-chip" :class="firstLogin?'is-on':''" data-cp @click="firstLogin=true">是</div>
+      <div class="demo-ops-chip" :class="!firstLogin?'is-on':''" data-cp @click="firstLogin=false">否</div>
+    </div>
+  </div>
   <template v-if="demoOpsActive">
     <div class="demo-ops-group-hd">权限控制</div>
     <div v-if="demoIsTopTab" class="demo-ops-section" data-od-id="demo-tab-perms">
@@ -6847,7 +6921,7 @@ function ptrBind(root,containerId,indicatorId,onRefresh){
    两端调用一致：createNav({screens, pageRefList})，无 app 差异参数。
    opts: { screens, pageRefList } */
 function createNav(o){
-  var screens=o.screens||{}, pageRefList=o.pageRefList||[];
+  var screens=o.screens||{}, pageRefList=o.pageRefList||[], nameOf=o.nameOf||function(){return ''};
   var navStack=[];
   var _pagePushed=false,navSuppress=0,navLastBackAt=0;
   var _rootSnap=_navSnapshot();
@@ -6859,6 +6933,7 @@ function createNav(o){
   function navOpen(name){
     if(_pagePushed)return;_pagePushed=true;
     setTimeout(function(){_pagePushed=false},0);
+    if(!name){var auto=nameOf();name=auto||''}
     if(name&&navStack.some(function(e){return e.name===name})){navLog('重复入栈已忽略',name);return}
     var snap=_navSnapshot();
     if(!name&&navStack.length&&JSON.stringify(snap)===JSON.stringify(navStack[navStack.length-1].snap)){navLog('重复入栈已忽略',name||'');return}
@@ -7022,6 +7097,9 @@ function showPushNotify(type){const t=renewNotifyTemplates[type];if(!t)return;co
 var myCarPtrInit=false;function setTab(t){if(!loggedIn.value&&(t==='vehicles'||t==='profile')){openLogin(t);return}tab.value=t;if(t==='vehicles'&&!myCarPtrInit){nextTick(()=>{if(document.getElementById('sc-mycar')){initPullToRefresh('sc-mycar','ptr-mycar',refreshMyCar);myCarPtrInit=true}})}}
 
 
+const firstLogin=ref(true);
+const switchSource=ref('settings');
+const curSystemName=ref('租车系统');
 const weatherScene=ref('sunny');
 const weatherData=computed(()=>{
   if(weatherScene.value==='cloudy')return{temp:28,icon:'cloud-sun',color:'#F59E0B',location:'深圳市南山区',humidity:'70%',wind:'东北风 2级'};
@@ -7242,7 +7320,7 @@ function doLogin(){
     else if(!/^[A-Za-z0-9!-~]{1,64}$/.test(loginPwd.value))err=MSG.pwdChars;
   }
   if(err){toast(err,'warn');return}
-  showRentLoading.value=true;setTimeout(function(){showRentLoading.value=false;resetLoginForm();loggedIn.value=true;const r=pendingRoute.value;pendingRoute.value=null;if(r==='rent'){navSwap('rent');toast('登录成功','success');return}navDrop('login');if(r==='vehicles'||r==='profile'){tab.value=r;toast('登录成功','success');return}tab.value='home';toast('登录成功','success')},600)}
+  showRentLoading.value=true;setTimeout(function(){showRentLoading.value=false;resetLoginForm();loggedIn.value=true;if(firstLogin.value){firstLogin.value=false;switchSource.value='first';navSwap('subSwitchSystem');toast('请选择系统','info');return}const r=pendingRoute.value;pendingRoute.value=null;if(r==='rent'){navSwap('rent');toast('登录成功','success');return}navDrop('login');if(r==='vehicles'||r==='profile'){tab.value=r;toast('登录成功','success');return}tab.value='home';toast('登录成功','success')},600)}
 function openLogin(route){if(route)pendingRoute.value=route;navOpen('login')}
 
 const showRent=ref(false);
@@ -7718,7 +7796,8 @@ subBindPhone:{open:()=>{profileSub.value='bindPhone'},close:()=>{if(profileSub.v
 subBindEmail:{open:()=>{profileSub.value='bindEmail'},close:()=>{if(profileSub.value==='bindEmail')profileSub.value=null}},
 subPwdVerify:{open:()=>{profileSub.value='pwdVerify'},close:()=>{if(profileSub.value==='pwdVerify')profileSub.value=null}},
 subPwdReset:{open:()=>{profileSub.value='pwdReset'},close:()=>{if(profileSub.value==='pwdReset')profileSub.value=null}},
-subLang:{open:()=>{profileSub.value='lang'},close:()=>{if(profileSub.value==='lang')profileSub.value=null}}
+subLang:{open:()=>{profileSub.value='lang'},close:()=>{if(profileSub.value==='lang')profileSub.value=null}},
+subSwitchSystem:{open:()=>{profileSub.value='subSwitchSystem'},close:()=>{if(profileSub.value==='subSwitchSystem')profileSub.value=null}}
 };
 function _navClone(v){return (v&&typeof v==='object')?JSON.parse(JSON.stringify(v)):v}
 function _navR(r){return{get:function(){return r.value},set:function(v){r.value=v}}}
@@ -7732,10 +7811,33 @@ const pageRefList=[
   _navR(confirmIdInfo),_navR(scanBindDevice),_navR(scanCtx),_navR(orderListCategory),_navR(locRinging),_navRA(rechargeOrder)
 ];
 
-const {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList});
+const {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList,nameOf:function(){
+  if(profileSub.value)return profileSub.value;
+  if(profileOV.value)return profileOV.value;
+  if(showLogin.value)return 'login';
+  if(showWalletLedger.value)return 'walletLedger';
+  if(showTopup.value)return 'topup';
+  if(showWallet.value)return 'wallet';
+  if(showOrderDetail.value)return 'orderDetail';
+  if(showOrderList.value)return 'orderList';
+  if(showMyOrders.value)return 'myOrders';
+  if(showRent.value)return 'rent';
+  if(showVehicle.value)return 'vehicle';
+  if(showStore.value)return 'store';
+  if(showConfirm.value)return 'confirm';
+  if(showVehicleDetail.value)return 'vehicleDetail';
+  if(showBatteryDetail.value)return 'batteryDetail';
+  if(showFindPage.value)return 'findPage';
+  if(showTrackPage.value)return 'trackPage';
+  return '';
+}});
 
 onMounted(()=>{initPullToRefresh('sc-home','ptr-home',refreshHome);setInterval(()=>{homeBannerIdx.value=(homeBannerIdx.value+1)%homeBanners.length},4000)});
-return{tab,toasts,toast,copyText,setTab,luci,weatherScene,weatherData,demoActive,demoListEmpty,demoSetListEmpty,mapCtx,showFindPage,showTrackPage,refundRentOpen,refundDepositOpen,refundTotalOpen,refundChannels,locLoading,locRinging,locFocus,locAddressFull,locAddressShort,locDistM,locWalkMin,locVehPt,locUserPt,openFindPage,openFindPageBattery,closeFindPage,locFocusUser,locFocusVehicle,locRingDevice,locOpenNav,trackStartLabel,trackEndLabel,trackLoading,trackPoints,trackPolyline,trackStartPt,trackEndPt,trackPois,trackTimePicker,openTrackPage,openTrackPageBattery,closeTrackPage,openTrackTimePicker,cancelTrackTimePicker,confirmTrackTimePicker,trackDraft,trackDays,trackMonths,trackYears,trackHours,trackMins,p2u,trackWheelDay,trackWheelMonth,trackWheelYear,trackWheelHour,trackWheelMin,onTrackWheelScroll,vehicles,vehicleCount,setVehicleCount,vehicleSource,setVehicleSource,opLock,opHorn,myVehicleIdx,showVehiclePicker,currentVehicle,toggleVehiclePicker,selectMyVehicle,openMyVehicleFromHome,openVehicleDetail,closeVehicleDetail,openVNameEdit,closeVNameEdit,saveVNameEdit,vNameLoading,openUnbindConfirm,closeUnbindConfirm,confirmUnbind,pushNotify,showPushNotify,renewNotifyTemplates,unbindLoading,showVehicleDetail,showUnbindConfirm,showVNameEdit,vNameInput,vNameError,locked,lockLoading,toggleLock,hornLoading,sendHorn,openMyCarOrder,currentOrder,refreshHome,refreshRent,openRent,loggedIn,pendingRoute,appLang,appLangLabel,langOptions,showLogin,loginView,loginMode,loginSub,loginDial,loginPhone,loginEmail,loginAccount,loginPwd,loginCode,loginPwdVisible,loginAgree,loginCd,dialQ,dialFiltered,showDialPicker,activeDialCode,closeDialPicker,canSendCode,canLogin,loginOpenLang,selectLangFromLogin,openDialCode,pickDial,setLoginMode,setLoginSub,sendLoginCode,doLogin,openLogin,profileOV,profileSub,profileMod,profileModLoading,hasPhone,hasEmail,hasPwd,boundPhone,boundEmail,bpArea,bpPhone,bpCode,bpCd,beEmail,beCode,beCd,openBindPhone,openBindEmail,sendBpCode,doBindPhone,sendBeCode,doBindEmail,pwdChannel,pwdCode,pwdCd,npwd,npwd2,npwdVis,npwd2Vis,canConfirmPwd,openPwdFlow,switchPwdChannel,sendPwdCode,nextPwdVerify,doResetPwd,checkVersion,goUpdate,exitApp,relaunchApp,scanning,doScan,scanTorch,manualVin,showManualVin,scanCtx,openManualInput,confirmManualVin,scanBindMode,scanBindDevice,vdDevice,bdDevice,showBindConfirm,bindConfirmLoading,openBindConfirm,closeBindConfirm,confirmBind,homeDevSeg,homeBatteries,bSocColor,batteryAdd,showBatteryDetail,currentBattery,openBatteryDetail,openBatteryOrder,closeBatteryDetail,openBatteryUnbind,closeBatteryUnbind,confirmBatteryUnbind,showBatteryUnbind,batteryUnbindLoading,showVersionCheck,hasNewVersion,latestVersion,updateDesc,updating,appExited,selectLang,doLogout,profileMdT,profileMdD,profileMdDanger,profileMdOk,showRent,rentBannerIdx,rentBanners,showRentLoading,homeBannerIdx,homeBanners,showDatePicker,rentDateIdx,dateOptions,rentDateLabel,selectDate,showPeriodPicker,rentPeriodIdx,periodOptions,rentPeriodLabel,periodUnit,selectPeriod,showStore,storeSearch,storeFiltered,selectStore,openStore,searchStore,selectedStore,confStore,showVehicle,vehicleList,rentNow,showConfirm,selectedVehicle,confRentDays,confTotal,confTotalDays,confDurationLabel,confPeriodDetail,orderPlanDisplay,confTab,confPayType,cancelRules,noticeRules,billingRules,overdueRules,confAddDays,confSubDays,confirmOrder,confTotal,confDeposit,confGrandTotal,confPickupDate,confReturnDate,confPickupISO,confReturnISO,showOrderDetail,showRefundList,openRefundList,navBack,navOpen,refundRecords,confirmDocs,autoRenew,toggleAutoRenew,uploadIdEnabled,showConfirmDocs,showDocSheet,docSheetTab,docText,docImageTypes,docDeleteMod,docDeleteTarget,previewImage,openDocSheet,addDocImage,addDocText,requestDeleteDoc,confirmDeleteDoc,showCancelModal,idInfoList,showIdInfoSheet,idInfoTypes,idInfoCount,openIdInfoSheet,idName,idEditingId,openIdAdd,openIdEditRecord,deleteIdRecord,idCardNo,driverNo,idPhotos,driverPhotos,idDetailRec,openIdDetail,openIdDetailPreview,idNameErr,idCardErr,driverErr,idPhotoErr,driverPhotoErr,idActionTarget,openIdEditRecord,deleteIdRecord,showIdDelete,idDeleteTarget,openIdDelete,confirmIdDelete,idSelectMode,confirmIdInfo,openIdSelect,closeIdSelect,confirmIdSelect,showIdAction,idPickerSource,showIdPreview,idPreviewItem,showIdPicker,idPickerKind,idPickerSH,maskNo,maskNoFull,submitIdInfo,openIdPicker,pickIdSource,commitIdPhoto,openIdMore,idActionReupload,doIdReupload,idActionDelete,openIdPreview,cancelLoading,orderCountdown,orderCountdownText,orderDetailTab,cancelOrder,goToPay,orderInfo,startOrderTimer,stopOrderTimer,showMyOrders,showOrderList,orderListCategory,currentOrderList,openOrderCategory,openMyOrders,openOrderDetailFromList,orderFilter,orderFilterTabs,orderFilterMap,setOrderFilter,relocateRent,payChannel,setPayChannel,cancelBeforePay,setCancelBeforePay,delDocLoading,showWallet,showWalletLedger,showTopup,walletBalanceVisible,walletAccount,walletActive,walletLedgerActive,walletStorePick,pickStoreForWallet,walletStoreSheet,walletOpenedStores,walletSwitchStore,storeInfoOf,ensureWalletOpened,walletLedger,walletLedgerTab,walletLedgerList,walletLedgerMonthOpen,setWalletLedgerTab,toggleWalletLedgerMonth,rechargeLedger,bonusLedger,topupAmount,topupCustom,topupShowCustom,walletTopupAmounts,walletTopupBonus,openWallet,openWalletLedger,openTopup,selectTopupAmount,confirmTopup,onCustomAmountInput,walletLedgerTxn,walletLedgerTxnOpts,showRenewPlan,openRenew,confirmRenew,renewDateIdx,renewPeriodIdx,renewDateLabel,renewPeriodLabel,renewRentFee,showFeeDetail,feeRows,feeCardRow,feeChannelBreakdown,feeSummary,rentOpen,depositOpen,totalOpen,showPayment,confirmPayment,paymentType,paymentBusy,payTarget,openPayRenew,cancelRenew,requestCancelRenew,confirmCancelRenew,payRenewDirect,showCancelRenewModal,cancelRenewTarget,cancelRenewLoading,openPayOrder,markRenewPaid,deductWallet,parseRp,formatNow,pickerMode,renewDays,renewDetail,renewDurationLabel,renewPlanDisplay,renewAddDays,renewSubDays,detailOpen,feeRowChannels,showRechargeOrder,rechargeOrder,rechargeStatusTag,payRechargeOrder,rechargeChannelText,fmtRp,openRechargeOrderFromList,openRechargeList,setRechargeFilter,showRechargeList,rechargeFilterTabs,rechargeFilterMap,rechargeFilter,currentRechargeList,dialRechargePhone,setRechargeRefundState,showCancelRechargeModal,cancelRechargeLoading,requestCancelRecharge,confirmCancelRecharge,rechargeCustomFlag,rechargeEnabledFlag,csReceptionFlag,autoRenewEntryVisible,renewEntryVisible,rechargeTiers,csSheet,csPhones,batteryCount,setBatteryCount};
+function goSwap(){location.href='swap.html'}
+function backToRental(){navBack()}
+function setLoggedIn(v){if(v&&firstLogin.value){firstLogin.value=false;switchSource.value='first';loggedIn.value=true;navSwap('subSwitchSystem');toast('请选择系统','info');return}loggedIn.value=v}
+function switchBack(){if(switchSource.value==='first'){switchSource.value='settings';doLogout();return}navBack()}
+return{tab,toasts,toast,copyText,setTab,luci,weatherScene,weatherData,demoActive,demoListEmpty,demoSetListEmpty,mapCtx,showFindPage,showTrackPage,refundRentOpen,refundDepositOpen,refundTotalOpen,refundChannels,locLoading,locRinging,locFocus,locAddressFull,locAddressShort,locDistM,locWalkMin,locVehPt,locUserPt,openFindPage,openFindPageBattery,closeFindPage,locFocusUser,locFocusVehicle,locRingDevice,locOpenNav,trackStartLabel,trackEndLabel,trackLoading,trackPoints,trackPolyline,trackStartPt,trackEndPt,trackPois,trackTimePicker,openTrackPage,openTrackPageBattery,closeTrackPage,openTrackTimePicker,cancelTrackTimePicker,confirmTrackTimePicker,trackDraft,trackDays,trackMonths,trackYears,trackHours,trackMins,p2u,trackWheelDay,trackWheelMonth,trackWheelYear,trackWheelHour,trackWheelMin,onTrackWheelScroll,vehicles,vehicleCount,setVehicleCount,vehicleSource,setVehicleSource,opLock,opHorn,myVehicleIdx,showVehiclePicker,currentVehicle,toggleVehiclePicker,selectMyVehicle,openMyVehicleFromHome,openVehicleDetail,closeVehicleDetail,openVNameEdit,closeVNameEdit,saveVNameEdit,vNameLoading,openUnbindConfirm,closeUnbindConfirm,confirmUnbind,pushNotify,showPushNotify,renewNotifyTemplates,unbindLoading,showVehicleDetail,showUnbindConfirm,showVNameEdit,vNameInput,vNameError,locked,lockLoading,toggleLock,hornLoading,sendHorn,openMyCarOrder,currentOrder,refreshHome,refreshRent,openRent,loggedIn,pendingRoute,appLang,appLangLabel,langOptions,showLogin,loginView,loginMode,loginSub,loginDial,loginPhone,loginEmail,loginAccount,loginPwd,loginCode,loginPwdVisible,loginAgree,loginCd,dialQ,dialFiltered,showDialPicker,activeDialCode,closeDialPicker,canSendCode,canLogin,loginOpenLang,selectLangFromLogin,openDialCode,pickDial,setLoginMode,setLoginSub,sendLoginCode,doLogin,openLogin,profileOV,profileSub,profileMod,profileModLoading,hasPhone,hasEmail,hasPwd,boundPhone,boundEmail,bpArea,bpPhone,bpCode,bpCd,beEmail,beCode,beCd,openBindPhone,openBindEmail,sendBpCode,doBindPhone,sendBeCode,doBindEmail,pwdChannel,pwdCode,pwdCd,npwd,npwd2,npwdVis,npwd2Vis,canConfirmPwd,openPwdFlow,switchPwdChannel,sendPwdCode,nextPwdVerify,doResetPwd,checkVersion,goUpdate,exitApp,relaunchApp,scanning,doScan,scanTorch,manualVin,showManualVin,scanCtx,openManualInput,confirmManualVin,scanBindMode,scanBindDevice,vdDevice,bdDevice,showBindConfirm,bindConfirmLoading,openBindConfirm,closeBindConfirm,confirmBind,homeDevSeg,homeBatteries,bSocColor,batteryAdd,showBatteryDetail,currentBattery,openBatteryDetail,openBatteryOrder,closeBatteryDetail,openBatteryUnbind,closeBatteryUnbind,confirmBatteryUnbind,showBatteryUnbind,batteryUnbindLoading,showVersionCheck,hasNewVersion,latestVersion,updateDesc,updating,appExited,selectLang,doLogout,profileMdT,profileMdD,profileMdDanger,profileMdOk,showRent,rentBannerIdx,rentBanners,showRentLoading,homeBannerIdx,homeBanners,showDatePicker,rentDateIdx,dateOptions,rentDateLabel,selectDate,showPeriodPicker,rentPeriodIdx,periodOptions,rentPeriodLabel,periodUnit,selectPeriod,showStore,storeSearch,storeFiltered,selectStore,openStore,searchStore,selectedStore,confStore,showVehicle,vehicleList,rentNow,showConfirm,selectedVehicle,confRentDays,confTotal,confTotalDays,confDurationLabel,confPeriodDetail,orderPlanDisplay,confTab,confPayType,cancelRules,noticeRules,billingRules,overdueRules,confAddDays,confSubDays,confirmOrder,confTotal,confDeposit,confGrandTotal,confPickupDate,confReturnDate,confPickupISO,confReturnISO,showOrderDetail,showRefundList,openRefundList,navBack,navOpen,refundRecords,confirmDocs,autoRenew,toggleAutoRenew,uploadIdEnabled,showConfirmDocs,showDocSheet,docSheetTab,docText,docImageTypes,docDeleteMod,docDeleteTarget,previewImage,openDocSheet,addDocImage,addDocText,requestDeleteDoc,confirmDeleteDoc,showCancelModal,idInfoList,showIdInfoSheet,idInfoTypes,idInfoCount,openIdInfoSheet,idName,idEditingId,openIdAdd,openIdEditRecord,deleteIdRecord,idCardNo,driverNo,idPhotos,driverPhotos,idDetailRec,openIdDetail,openIdDetailPreview,idNameErr,idCardErr,driverErr,idPhotoErr,driverPhotoErr,idActionTarget,openIdEditRecord,deleteIdRecord,showIdDelete,idDeleteTarget,openIdDelete,confirmIdDelete,idSelectMode,confirmIdInfo,openIdSelect,closeIdSelect,confirmIdSelect,showIdAction,idPickerSource,showIdPreview,idPreviewItem,showIdPicker,idPickerKind,idPickerSH,maskNo,maskNoFull,submitIdInfo,openIdPicker,pickIdSource,commitIdPhoto,openIdMore,idActionReupload,doIdReupload,idActionDelete,openIdPreview,cancelLoading,orderCountdown,orderCountdownText,orderDetailTab,cancelOrder,goToPay,orderInfo,startOrderTimer,stopOrderTimer,showMyOrders,showOrderList,orderListCategory,currentOrderList,openOrderCategory,openMyOrders,openOrderDetailFromList,orderFilter,orderFilterTabs,orderFilterMap,setOrderFilter,relocateRent,payChannel,setPayChannel,cancelBeforePay,setCancelBeforePay,delDocLoading,showWallet,showWalletLedger,showTopup,walletBalanceVisible,walletAccount,walletActive,walletLedgerActive,walletStorePick,pickStoreForWallet,walletStoreSheet,walletOpenedStores,walletSwitchStore,storeInfoOf,ensureWalletOpened,walletLedger,walletLedgerTab,walletLedgerList,walletLedgerMonthOpen,setWalletLedgerTab,toggleWalletLedgerMonth,rechargeLedger,bonusLedger,topupAmount,topupCustom,topupShowCustom,walletTopupAmounts,walletTopupBonus,openWallet,openWalletLedger,openTopup,selectTopupAmount,confirmTopup,onCustomAmountInput,walletLedgerTxn,walletLedgerTxnOpts,showRenewPlan,openRenew,confirmRenew,renewDateIdx,renewPeriodIdx,renewDateLabel,renewPeriodLabel,renewRentFee,showFeeDetail,feeRows,feeCardRow,feeChannelBreakdown,feeSummary,rentOpen,depositOpen,totalOpen,showPayment,confirmPayment,paymentType,paymentBusy,payTarget,openPayRenew,cancelRenew,requestCancelRenew,confirmCancelRenew,payRenewDirect,showCancelRenewModal,cancelRenewTarget,cancelRenewLoading,openPayOrder,markRenewPaid,deductWallet,parseRp,formatNow,pickerMode,renewDays,renewDetail,renewDurationLabel,renewPlanDisplay,renewAddDays,renewSubDays,detailOpen,feeRowChannels,showRechargeOrder,rechargeOrder,rechargeStatusTag,payRechargeOrder,rechargeChannelText,fmtRp,openRechargeOrderFromList,openRechargeList,setRechargeFilter,showRechargeList,rechargeFilterTabs,rechargeFilterMap,rechargeFilter,currentRechargeList,dialRechargePhone,setRechargeRefundState,showCancelRechargeModal,cancelRechargeLoading,requestCancelRecharge,confirmCancelRecharge,rechargeCustomFlag,rechargeEnabledFlag,csReceptionFlag,autoRenewEntryVisible,renewEntryVisible,rechargeTiers,csSheet,csPhones,batteryCount,setBatteryCount,goSwap,backToRental,firstLogin,switchSource,setLoggedIn,switchBack,curSystemName};
 }
 });
 
@@ -9429,6 +9531,7 @@ function doResetPwd(){
 }
 
 function goBack(){navBack()}
+function switchBack(){if(switchSource.value==='first'){switchSource.value='settings';doLogout();return}goBack()}
 const hdrTitle=computed(()=>{const m={info:'个人信息',store:'门店列表',model:'车型管理',battModel:'电池型号管理',package:'套餐管理',account:'账号管理',pos:'职位管理',cs:'客服信息',config:'订单配置',recharge:'充值配置',user:'用户管理',settings:'系统设置'};const s={mEdit:'编辑车型',bmEdit:'编辑电池型号',pkgEdit:'编辑套餐',pkgAdd:'新增套餐',aDetail:'账号详情',aAdd:'新增账号',aEdit:'编辑账号',pDetail:'职位详情',pAdd:'新增职位',pEdit:'编辑职位',csEdit:csIdx.value===-1?'新增客服':'编辑客服',lang:'切换语言',bindPhone:'绑定手机号',bindEmail:'绑定邮箱',pwdVerify:'修改密码',pwdReset:'重置密码',userDetail:'用户详情'};return profileSub.value?(s[profileSub.value]||''):(m[profileOV.value]||'')});
 const hdrAction=computed(()=>{if(profileOV.value==='account'&&can('account.add'))return{label:'新增',fn:()=>openAccAdd()};if(profileOV.value==='cs'&&can('cs_info.add'))return{label:'新增',fn:()=>openCsEdit(-1)};if(profileOV.value==='recharge'&&can('recharge.add'))return{label:'新增',fn:()=>openRechargeEdit(-1)};if(profileSub.value==='pDetail'&&can('position.add'))return{label:'新增下级职位',fn:()=>openPosAdd(dp.value.name)};if(profileOV.value==='config'&&can('order_config.edit'))return{label:'保存',fn:saveCfg};return null});
 const curStore=ref('');
@@ -9452,6 +9555,9 @@ function openMenu(id){if(id==='user'&&!can('user.list')){deny();return}if(id==='
 const langOptions=[{id:'zh-CN',label:'简体中文'},{id:'zh-HK',label:'繁體中文（中國香港）'},{id:'en',label:'English'},{id:'id',label:'Bahasa Indonesia'}];
 const appLangLabel=computed(()=>'简体中文');
 function selectLang(id){navDrop();profileSub.value=null}
+const firstLogin=ref(true);
+const switchSource=ref('settings');
+const curSystemName=ref('租车系统');
 const showLogin=ref(false);
 const loginView=ref('main');
 const loginMode=ref('phone');
@@ -9493,7 +9599,7 @@ const canSendCode=computed(()=>{if(loginCd.value>0||!loginAgree.value)return fal
 const canLogin=computed(()=>{if(!loginAgree.value)return false;if(loginMode.value==='phone'){if(!(loginPhone.value||'').trim())return false;return loginSub.value==='password'?!!(loginPwd.value||'').trim():!!(loginCode.value||'').trim()}if(loginMode.value==='email'){if(!(loginEmail.value||'').trim())return false;return loginSub.value==='password'?!!(loginPwd.value||'').trim():!!(loginCode.value||'').trim()}return!!(loginAccount.value||'').trim()&&!!(loginPwd.value||'').trim()});
 function resetLoginForm(){loginView.value='main';loginMode.value='phone';loginSub.value='password';loginPhone.value='';loginEmail.value='';loginAccount.value='';loginPwd.value='';loginCode.value='';loginPwdVisible.value=false;loginAgree.value=false;dialQ.value='';dialPickerSource.value=null;if(loginCdTimer){clearInterval(loginCdTimer);loginCdTimer=null}loginCd.value=0}
 function doLogout(){profileMod.value=null;navReset();profileOV.value=null;navDrop();profileSub.value=null;dialPickerSource.value=null;resetLoginForm();showLogin.value=true;toast('已退出登录','info')}
-function demoLogin(){navReset();showLogin.value=false;resetLoginForm();loginErr.value={};tab.value=can('home.view')?'home':'profile';enforceTabPerms();toast('登录成功','success')}
+function demoLogin(){navReset();showLogin.value=false;resetLoginForm();loginErr.value={};if(firstLogin.value){firstLogin.value=false;switchSource.value='first';profileSub.value='subSwitchSystem';toast('请选择系统','info');return}tab.value=can('home.view')?'home':'profile';enforceTabPerms();toast('登录成功','success')}
 function demoLogout(){navReset();resetLoginForm();showLogin.value=true}
 function closeLogin(){if(dialPickerSource.value==='login'){closeDialPicker();return}if(loginView.value!=='main'){loginView.value='main'}}
 function loginOpenLang(){loginView.value='lang'}
@@ -9506,7 +9612,7 @@ function setLoginSub(s){loginSub.value=s;loginPwd.value='';loginCode.value='';if
 function sendLoginCode(){if(!canSendCode.value)return;if(loginCdTimer)clearInterval(loginCdTimer);loginCd.value=60;loginCdTimer=setInterval(function(){loginCd.value--;if(loginCd.value<=0){clearInterval(loginCdTimer);loginCdTimer=null}},1000)}
 const loginErr=ref({});
 function loginValid(){var m=loginMode.value,s=loginSub.value;if(m==='phone'){var p=(loginPhone.value||'').trim();if(!p)return{field:'phone',msg:'请输入手机号'};if(!/^\d+$/.test(p))return{field:'phone',msg:'手机号仅支持数字'};if(!simulatePhoneValid(loginDial.value,p))return{field:'phone',msg:'手机号格式不正确，请检查号码与区号是否匹配'}}else if(m==='email'){var em=(loginEmail.value||'').trim();if(!em)return{field:'email',msg:'请输入邮箱'};if(em.length>255)return{field:'email',msg:'邮箱地址不能超过 255 位'};if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em))return{field:'email',msg:'邮箱格式不正确'}}else{var ac=(loginAccount.value||'').trim();if(!ac)return{field:'account',msg:'请输入账号'};if(!/^[a-zA-Z0-9_]{1,20}$/.test(ac))return{field:'account',msg:'账号仅支持字母、数字、下划线'}}if(s==='password'){var pw=(loginPwd.value||'').trim();if(!pw)return{field:'pwd',msg:'请输入密码'};if(!/^[A-Za-z0-9!-~]{1,64}$/.test(pw))return{field:'pwd',msg:'密码仅支持大小写字母、数字、键盘符号'}}else{var cd=(loginCode.value||'').trim();if(!cd)return{field:'code',msg:'请输入验证码'};if(!/^\d{6}$/.test(cd))return{field:'code',msg:'验证码格式不正确'}}return null}
-function doLogin(){if(!loginAgree.value){toast('请先阅读并同意隐私政策','warn');return}var err=loginValid();loginErr.value={};if(err){loginErr.value[err.field]=err.msg;return}brandLoading.value=true;setTimeout(function(){brandLoading.value=false;showLogin.value=false;resetLoginForm();loginErr.value={};tab.value=can('home.view')?'home':'profile';enforceTabPerms();toast('登录成功','success')},600)}
+function doLogin(){if(!loginAgree.value){toast('请先阅读并同意隐私政策','warn');return}var err=loginValid();loginErr.value={};if(err){loginErr.value[err.field]=err.msg;return}brandLoading.value=true;setTimeout(function(){brandLoading.value=false;showLogin.value=false;resetLoginForm();loginErr.value={};if(firstLogin.value){firstLogin.value=false;switchSource.value='first';profileSub.value='subSwitchSystem';toast('请选择系统','info');return}tab.value=can('home.view')?'home':'profile';enforceTabPerms();toast('登录成功','success')},600)}
 watch([loginPhone,loginPwd,loginCode,loginEmail,loginAccount],()=>{if(Object.keys(loginErr.value).length)loginErr.value={}});
 
 function doSwitch(n){if(n===curStore.value){navDrop();profileOV.value=null;return}curStore.value=n;navDrop();profileOV.value=null}
@@ -9878,7 +9984,15 @@ function _navClone(v){return (v&&typeof v==='object')?JSON.parse(JSON.stringify(
 function _navR(r){return{get:function(){return r.value},set:function(v){r.value=v}}}
 const pageRefList=[tab,homeOV,vehOV,vehView,ordersOV,ordersType,ordersEntry,profileOV,profileSub,roOV,uWalletView,curAlert,do_,dv,dSt,dPaySt,dPm,dCanceledPaid,autoRenew,curBatt,du,curRechargeOrder,armed,lost,motorLocked].map(function(r){return _navR(r)});
 
-const {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList});
+const {navOpen,navBack,navDrop,navSwap,navReset,navLog}=createNav({screens:NAV_SCREENS,pageRefList:pageRefList,nameOf:function(){
+  if(profileSub.value)return profileSub.value;
+  if(profileOV.value)return profileOV.value;
+  if(homeOV.value)return 'home:'+homeOV.value;
+  if(vehOV.value)return 'veh:'+vehOV.value;
+  if(ordersOV.value)return 'orders:'+ordersOV.value;
+  if(roOV.value)return 'ro:'+roOV.value;
+  return '';
+}});
 
 function profileMdOk(){if(profileMod.value==='toggle'&&tgtAcc){tgtAcc.status=tgtAcc.status==='启用'?'禁用':'启用';toast('账号状态已' + (tgtAcc.status),'success')}if(profileMod.value==='delPos'&&tgtPos){const i=positions.value.findIndex(p=>p.name===tgtPos.name);if(i>=0)positions.value.splice(i,1);toast('职位已删除','success')}if(profileMod.value==='delCs'&&delCsI>=0){csList.value.splice(delCsI,1);toast('已删除','success')}if(profileMod.value==='delRecharge'&&delRechargeI>=0){rechargeList.value.splice(delRechargeI,1);toast('已删除','success')}if(profileMod.value==='logout'){doLogout();return}profileMod.value=null}
 
@@ -10016,7 +10130,10 @@ watch([tab,homeOV,vehOV,ordersOV,profileOV,profileSub,vehMod,ordersMod,orderPick
 watch(dSt,(v)=>{if(v==='created')dPaySt.value='pending';if(v==='pickup'||v==='progress'||v==='return'||v==='complete')dPaySt.value='paid'});
 onUpdated(paint);
 
-return{luci,alertTypeLabel,vehStatusLabel,ignoreReasonLabel,initPullToRefresh,refreshHome,refreshVeh,refreshOrd,refreshBatt,refreshAlert,tab,setTab,toasts,toast,can,deny,perms,permGroups,togglePerm,setPermGroup,setAllPerms,
+function goSwap(){location.href='swap.html'}
+function backToRental(){navBack()}
+
+return{luci,alertTypeLabel,vehStatusLabel,ignoreReasonLabel,initPullToRefresh,refreshHome,refreshVeh,refreshOrd,refreshBatt,refreshAlert,tab,setTab,toasts,toast,can,deny,perms,permGroups,togglePerm,setPermGroup,setAllPerms,backToRental,goSwap,firstLogin,switchSource,switchBack,curSystemName,
  TAB_PERM_CODES,tabPermItems,demoPagePermGroups,demoPagePermTitle,demoPagePermCodes,demoIsTopTab,pageRoute,copyPermCode,
  homeOV,homeRefreshing,store,bizStats,vehStats,goHomeVehStat,recent,allAlerts,pendingAlertCount,alertStatus,alertType,alertStatusTabs,alertTypeTabs,alertStatusCnt,filteredAlerts,alertEmptyTitle,alertEmptySub,demoHasAlerts,demoSetHasAlerts,demoListEmpty,demoSetListEmpty,curAlert,alertMod,ignoreReasonPick,ignoreReasons,lvBg,stBg,stLabel,closeSourceLabel,lvLabel,timelineLabel,timelineDotClass,curAlertTimeline,curAlertTimelineHasMore,alertTimelineExpanded,homeOpen,homeClose,openAlertDetail,closeAlertDetail,startProcessAlert,resolveAlert,confirmIgnoreAlert,reopenAlert,demoOpsActive,demoSetAlertCloseSource,goAlertVehicle,doFindFromAlert,
 vehOV,vehMod,vehShowModelSheet,vehShowFS,vehRefreshing,locked,pressProgress,lockJustDone,
@@ -10088,6 +10205,8 @@ document.getElementById('host-bar').addEventListener('click', function (e) {
   if (bm) { hostSetMode(bm.getAttribute('data-mode')); return; }
   var bc = e.target.closest && e.target.closest('button[data-currency]');
   if (bc) hostSetCurrency(bc.getAttribute('data-currency'));
+  var bn = e.target.closest && e.target.closest('button[data-navhost]');
+  if (bn) location.href = bn.getAttribute('data-navhost');
 });
 
 /* ---------- 双实例常驻挂载 ---------- */
