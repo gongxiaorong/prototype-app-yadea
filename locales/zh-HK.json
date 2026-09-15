@@ -89,7 +89,12 @@
       "refundSourceUser": "用戶端",
       "refundSuccess": "退款成功",
       "rent": "租金",
-      "status": "訂單狀態"
+      "status": "訂單狀態",
+      "refundReasonEarlyReturn": "提前還車，租金差額退還",
+      "refundReasonUserCancel": "用戶取消訂單",
+      "refundReasonPriceAdjust": "客戶要求調高租金並調整渠道",
+      "refundReasonCustomerRequest": "客戶要求退款",
+      "refundReasonMerchantDiscount": "商戶優惠減免補償"
     },
     "profile": {
       "avatar": "頭像",
@@ -156,7 +161,13 @@
       "orderEndedRefunding": "訂單已結束，押金退款中",
       "walletInsufficient": "錢包餘額不足，請充值",
       "topupNotOpen": "充值功能未開放",
-      "balanceInsufficientChoosePay": "餘額不足，請選擇其他支付方式或去充值"
+      "balanceInsufficientChoosePay": "餘額不足，請選擇其他支付方式或去充值",
+      "dialing": "撥號中…",
+      "accountDeactivated": "帳號已註銷",
+      "accountStatusUpdated": "帳號狀態已更新",
+      "autoRenewedWallet": "已自動續租（錢包扣款 Rp {amount}）",
+      "confirmPaySuccess": "確認支付成功",
+      "noHomePermission": "當前帳號沒有首頁任何功能權限，請聯繫管理員開通"
     },
     "vehicles": {
       "addVinPlaceholder": "請輸入車架號",
@@ -237,7 +248,29 @@
       "deductReminder": "扣款提醒",
       "hasAlert": "有告警",
       "loggedIn": "已登入",
-      "regulator": "監管機構"
+      "regulator": "監管機構",
+      "rentHourly": "時租×{n}小時",
+      "rentDaily": "日租×{n}天",
+      "rentWeekly": "週租×{n}週",
+      "rentMonthly": "月租×{n}月",
+      "durationMinutes": "{n}分鐘",
+      "durationHoursMinutes": "{h}小時{m}分",
+      "businessHours": "營業時間 {time}",
+      "validUntil": "有效期至 {date}",
+      "nearestStoreDistance": "距最近門店 {distance}",
+      "batteryModel": "電池型號",
+      "frameNo": "車架編號",
+      "orderNo": "訂單編號",
+      "officialHotline": "官方客服與區域熱線",
+      "noPhone": "無手機號",
+      "emptyFeeDetail": "暫無費用明細",
+      "permEmptyNode": "當前頁無功能權限節點",
+      "assistantName": "小迪",
+      "langZhHK": "繁體中文（中國香港）",
+      "sceneRestaurant": "餐飲門店",
+      "sceneOfficeBuilding": "商業樓宇",
+      "sceneOffice": "寫字樓",
+      "sceneParking": "停車場"
     },
     "action": {
       "cancel": "取消",
@@ -254,7 +287,18 @@
       "back": "返回",
       "album": "相冊",
       "bind": "綁定",
-      "close": "關閉"
+      "close": "關閉",
+      "viewFeeDetail": "查看費用明細",
+      "deactivateAccount": "註銷帳號"
+    },
+    "unit": {
+      "vehicle": "輛",
+      "battery": "塊"
+    },
+    "promo": {
+      "slogan": "花小錢 騎雅迪",
+      "safety": "您的安全是我們最關心的事！",
+      "features": "定位 · 遠端鎖定 · 鳴笛"
     }
   },
   "merchant": {
@@ -1142,6 +1186,48 @@
     },
     "scan": {
       "qrHint": "請將二維碼對準取景框"
+    }
+  },
+  "demo": {
+    "model": {
+      "lediSAA": "乐迪SAA",
+      "lediSAABatt": "乐迪SAA+天能72V20Ah",
+      "tianneng72V20": "天能锂电72V20Ah",
+      "chaowei72V32": "超威黑金72V32Ah",
+      "tianneng72V20Short": "天能72V20Ah",
+      "yadeaGuanneng3S9Max": "雅迪冠能3 S9 MAX",
+      "chaowei72V32Space": "超威黑金 72V32Ah",
+      "tiannengLithium72V20Space": "天能锂电 72V20Ah",
+      "tiannengLithium48V20": "天能锂电 48V20Ah",
+      "xinghengLithium48V24": "星恒锂电 48V24Ah",
+      "yadeaEBikePro": "雅迪 E-Bike Pro",
+      "yadeaGuannengQ7": "雅迪冠能Q7",
+      "yadeaLePao": "雅迪乐跑版",
+      "yadeaXiaoGangPao": "雅迪小钢炮"
+    },
+    "customer": {
+      "zs": "张三",
+      "ls": "李四",
+      "ww": "王五",
+      "zl": "赵六",
+      "sq": "孙七",
+      "zb": "周八",
+      "wj": "吴九",
+      "zs10": "郑十"
+    },
+    "address": {
+      "shenzhenNanshan": "深圳市南山区",
+      "bjChaoyangGongti": "北京市朝阳区工体北路",
+      "bjChaoyangSanlitun": "北京市朝阳区三里屯",
+      "bjXichengXidan": "北京市西城区西单",
+      "bjChaoyangWangjing": "北京市朝阳区望京街道",
+      "bjChaoyangWangjingNear": "北京市朝阳区望京街道附近",
+      "shPudongZhangjiang": "上海市浦东新区张江路",
+      "cdWuhouTianfu": "成都市武侯区天府大道中段",
+      "gzTianheTiyuxi": "广州市天河区体育西路",
+      "hzXihuWensanlu": "杭州市西湖区文三路",
+      "njGulouZhongshanbei": "南京市鼓楼区中山北路",
+      "shenzhenNanshanScience": "深圳市南山区科技园"
     }
   }
 }

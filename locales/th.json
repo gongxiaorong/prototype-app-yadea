@@ -89,7 +89,12 @@
       "refundSourceUser": "แอปผู้ใช้",
       "refundSuccess": "คืนเงินสำเร็จ",
       "rent": "ค่าเช่า",
-      "status": "สถานะคำสั่งซื้อ"
+      "status": "สถานะคำสั่งซื้อ",
+      "refundReasonEarlyReturn": "คืนรถก่อนกำหนด คืนส่วนต่างค่าเช่า",
+      "refundReasonUserCancel": "ผู้ใช้ยกเลิกคำสั่งซื้อ",
+      "refundReasonPriceAdjust": "ลูกค้าขอปรับค่าเช่าสูงขึ้นและเปลี่ยนช่องทาง",
+      "refundReasonCustomerRequest": "ลูกค้าขอคืนเงิน",
+      "refundReasonMerchantDiscount": "ค่าชดเชยส่วนลดร้านค้า"
     },
     "profile": {
       "avatar": "รูปโปรไฟล์",
@@ -156,7 +161,13 @@
       "orderEndedRefunding": "คำสั่งซื้อสิ้นสุด กำลังคืนเงินมัดจำ",
       "walletInsufficient": "ยอดคงเหลือในกระเป๋าไม่เพียงพอ กรุณาเติมเงิน",
       "topupNotOpen": "ฟีเจอร์เติมเงินยังไม่เปิดใช้งาน",
-      "balanceInsufficientChoosePay": "ยอดคงเหลือไม่เพียงพอ กรุณาเลือกวิธีชำระเงินอื่นหรือเติมเงิน"
+      "balanceInsufficientChoosePay": "ยอดคงเหลือไม่เพียงพอ กรุณาเลือกวิธีชำระเงินอื่นหรือเติมเงิน",
+      "dialing": "กำลังโทร…",
+      "accountDeactivated": "ปิดใช้งานบัญชีแล้ว",
+      "accountStatusUpdated": "อัปเดตสถานะบัญชีแล้ว",
+      "autoRenewedWallet": "ต่ออายุอัตโนมัติ (หักกระเป๋าเงิน Rp {amount})",
+      "confirmPaySuccess": "ยืนยันการชำระเงินสำเร็จ",
+      "noHomePermission": "บัญชีนี้ไม่มีสิทธิ์หน้าแรก กรุณาติดต่อผู้ดูแล"
     },
     "vehicles": {
       "addVinPlaceholder": "กรุณากรอกหมายเลขตัวถัง",
@@ -237,7 +248,29 @@
       "deductReminder": "การแจ้งเตือนการหักเงิน",
       "hasAlert": "มีการแจ้งเตือน",
       "loggedIn": "เข้าสู่ระบบแล้ว",
-      "regulator": "หน่วยงานกำกับดูแล"
+      "regulator": "หน่วยงานกำกับดูแล",
+      "rentHourly": "เช่ารายชั่วโมง × {n} ชม.",
+      "rentDaily": "เช่ารายวัน × {n} วัน",
+      "rentWeekly": "เช่ารายสัปดาห์ × {n} สัปดาห์",
+      "rentMonthly": "เช่ารายเดือน × {n} เดือน",
+      "durationMinutes": "{n} นาที",
+      "durationHoursMinutes": "{h} ชม. {m} นาที",
+      "businessHours": "เวลาทำการ {time}",
+      "validUntil": "ใช้ได้ถึง {date}",
+      "nearestStoreDistance": "ห่างจากร้านที่ใกล้ที่สุด {distance}",
+      "batteryModel": "รุ่นแบตเตอรี่",
+      "frameNo": "หมายเลขตัวถัง",
+      "orderNo": "หมายเลขคำสั่งซื้อ",
+      "officialHotline": "สายด่วนทางการและสายภูมิภาค",
+      "noPhone": "ไม่มีหมายเลขโทรศัพท์",
+      "emptyFeeDetail": "ยังไม่มีรายละเอียดค่าใช้จ่าย",
+      "permEmptyNode": "หน้านี้ไม่มีโหนดสิทธิ์การใช้งาน",
+      "assistantName": "เสี่ยวตี๋",
+      "langZhHK": "จีนตัวเต็ม (ฮ่องกง)",
+      "sceneRestaurant": "ร้านอาหาร",
+      "sceneOfficeBuilding": "อาคารสำนักงาน",
+      "sceneOffice": "ออฟฟิศ",
+      "sceneParking": "ที่จอดรถ"
     },
     "action": {
       "cancel": "ยกเลิก",
@@ -254,7 +287,18 @@
       "back": "ย้อนกลับ",
       "album": "อัลบั้ม",
       "bind": "ผูก",
-      "close": "ปิด"
+      "close": "ปิด",
+      "viewFeeDetail": "ดูรายละเอียดค่าใช้จ่าย",
+      "deactivateAccount": "ปิดใช้งานบัญชี"
+    },
+    "unit": {
+      "vehicle": "คัน",
+      "battery": "ก้อน"
+    },
+    "promo": {
+      "slogan": "ขี่ Yadea ในราคาประหยัด",
+      "safety": "ความปลอดภัยของคุณคือสิ่งสำคัญที่สุดของเรา!",
+      "features": "ระบุตำแหน่ง · ล็อกระยะไกล · บีบแตร"
     }
   },
   "merchant": {
@@ -1142,6 +1186,48 @@
     },
     "scan": {
       "qrHint": "จัดแนวรหัส QR กับกรอบ"
+    }
+  },
+  "demo": {
+    "model": {
+      "lediSAA": "乐迪SAA",
+      "lediSAABatt": "乐迪SAA+天能72V20Ah",
+      "tianneng72V20": "天能锂电72V20Ah",
+      "chaowei72V32": "超威黑金72V32Ah",
+      "tianneng72V20Short": "天能72V20Ah",
+      "yadeaGuanneng3S9Max": "雅迪冠能3 S9 MAX",
+      "chaowei72V32Space": "超威黑金 72V32Ah",
+      "tiannengLithium72V20Space": "天能锂电 72V20Ah",
+      "tiannengLithium48V20": "天能锂电 48V20Ah",
+      "xinghengLithium48V24": "星恒锂电 48V24Ah",
+      "yadeaEBikePro": "雅迪 E-Bike Pro",
+      "yadeaGuannengQ7": "雅迪冠能Q7",
+      "yadeaLePao": "雅迪乐跑版",
+      "yadeaXiaoGangPao": "雅迪小钢炮"
+    },
+    "customer": {
+      "zs": "张三",
+      "ls": "李四",
+      "ww": "王五",
+      "zl": "赵六",
+      "sq": "孙七",
+      "zb": "周八",
+      "wj": "吴九",
+      "zs10": "郑十"
+    },
+    "address": {
+      "shenzhenNanshan": "深圳市南山区",
+      "bjChaoyangGongti": "北京市朝阳区工体北路",
+      "bjChaoyangSanlitun": "北京市朝阳区三里屯",
+      "bjXichengXidan": "北京市西城区西单",
+      "bjChaoyangWangjing": "北京市朝阳区望京街道",
+      "bjChaoyangWangjingNear": "北京市朝阳区望京街道附近",
+      "shPudongZhangjiang": "上海市浦东新区张江路",
+      "cdWuhouTianfu": "成都市武侯区天府大道中段",
+      "gzTianheTiyuxi": "广州市天河区体育西路",
+      "hzXihuWensanlu": "杭州市西湖区文三路",
+      "njGulouZhongshanbei": "南京市鼓楼区中山北路",
+      "shenzhenNanshanScience": "深圳市南山区科技园"
     }
   }
 }
