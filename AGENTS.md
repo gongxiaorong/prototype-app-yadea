@@ -12,14 +12,14 @@
 | 命名规范 | `<language-code>.json`，小写 BCP-47 代码 |
 | 文件清单 | `zh-CN.json`（源）、`zh-HK.json`、`en.json`、`id.json`、`th.json` |
 
-- 禁止在 `locales/` 外的位置（如 `index.html` 内联）新增语言文件或硬编码文案。
+- 禁止在 `locales/` 外的位置（如 `index.html` / `swap.html` 内联）新增语言文件或硬编码文案。
 - 新增语言时：在 `locales/` 下新建 `<lang>.json`，并同步登记到第 3 节的「目标语言列表」。
 - 所有 JSON 文件统一使用 **UTF-8（无 BOM）** 编码，结尾保留一个换行符，缩进为 2 个空格。
 
 ## 2. 数据结构约定
 
-- 各语言文件为**嵌套 JSON 对象**，按命名空间（如 `common`、`user`、`merchant`）分层。
-- 逻辑 key 为**点路径（dot-path）**，例如 `common.reset`、`user.tab.vehicles`。
+- 各语言文件为**嵌套 JSON 对象**，按命名空间（如 `common`、`rental`、`swap`）分层。
+- 逻辑 key 为**点路径（dot-path）**，例如 `common.reset`、`rental.user.tab.vehicles`。
 - 同一语义的 key 在五种语言文件中**必须位于相同的嵌套路径**下，key 名称（英文）保持一致，仅最末级值为各自语言译文。
 - 禁止为 key 追加数字后缀（如 `menu.home0`）作为"复制粘贴残留"，这是历史 bug，出现即修。
 - 译文值中若含占位符，必须使用 vue-i18n 标准插值 `{name}`，且各语言占位符名称与数量必须一致。
@@ -86,17 +86,19 @@
 - [ ] 无 `…0`/`…1` 等数字后缀残留 key。
 - [ ] 五个 JSON 文件均为 UTF-8、2 空格缩进、结尾换行。
 
-## 7. 多项目命名空间划分（index / swap）
+## 7. 多项目命名空间划分（rental / swap）
 
-本仓库同一套 `locales/*.json` 服务两个并行前端项目：
+本仓库同一套 `locales/*.json` 服务两个并行前端项目，**按项目前缀划分命名空间**：
 
-| 项目 | 入口 | 命名空间 |
+| 层 | 命名空间 | 归属 |
 | --- | --- | --- |
-| **index（权威源）** | `index.html`（租车系统 · 用户端+商户端合并产物） | `common.*` / `user.*` / `merchant.*` / `demo.*` |
-| **swap** | `swap.html`（换电系统 · 用户端+商户端脚手架） | 复用 `common.*`，换电专属串置于 `swap.*` |
+| **共享层** | `common.*` | 两项目共用（货币 / 操作 / 状态 / 单位 / 语种等） |
+| **rental（权威源）** | `rental.user.*` / `rental.merchant.*` / `rental.demo.*` | `index.html`（租车系统 · 用户端 + 商户端合并产物） |
+| **swap** | `swap.*` | `swap.html`（换电系统 · 用户端 + 商户端脚手架） |
 
 规则：
-- 两项目**共用**的术语（货币 / 操作 / 状态 / 单位 / 语种等）一律放在 `common.*`，不在 `swap.*` 重复定义。
-- 仅 swap 专属的壳层 / 导航串（系统切换、双端并排、换电用户端 / 商户端等）放在 `swap.*`（现有：`swap.title` / `swap.userSide` / `swap.merchantSide` / `swap.splitView` / `swap.gotoRental`）。
-- 两项目字符串**共用同一组 5 个语言文件**，键集合必须完全一致（含 `swap.*`）；校验脚本按项目分组输出（见 `scripts/i18n_check.mjs`）。
-- 若未来 swap 需要**不同的目标语言集**（例如暂不做 `zh-HK`），应改为按项目分目录（`locales/index/` 与 `locales/swap/`）方案，并同步调整本规范与校验脚本。
+- 两项目**共用**的术语（货币 / 操作 / 状态 / 单位 / 语种等）一律放在 `common.*`，不在项目前缀下重复定义。
+- 项目**专属**串一律带项目前缀：租车 → `rental.user.*` / `rental.merchant.*` / `rental.demo.*`；换电 → `swap.*`（壳层 / 导航现有：`swap.title` / `swap.userSide` / `swap.merchantSide` / `swap.splitView` / `swap.gotoRental`）。
+- swap 未来若长出业务页，置于 `swap.user.*` / `swap.merchant.*`，与租车的 `rental.user.*` / `rental.merchant.*` 平行，互不冲突。
+- 两项目字符串**共用同一组 5 个语言文件**，键集合必须完全一致（`common.*` / `rental.*` / `swap.*` 全部计入）；校验脚本按 `shared / rental / swap` 分组输出（见 `scripts/i18n_check.mjs`）。
+- 若未来两项目需要**不同的目标语言集**（例如 swap 暂不做 `zh-HK`），应改为按项目分目录（`locales/rental/` 与 `locales/swap/`）方案，并同步调整本规范与校验脚本。

@@ -7,7 +7,8 @@ const allKeys = Object.keys(F["zh-CN"]).sort();
 const ph = s => ((String(s).match(/\{[^}]+\}|%[sd]/g)) || []).sort().join("|");
 const nums = s => ((String(s).match(/\d+/g)) || []).sort().join(",");
 const groups = {
-  "index (common/user/merchant/demo)": allKeys.filter(k => !k.startsWith("swap.")),
+  "shared (common)": allKeys.filter(k => k.startsWith("common.")),
+  "rental (user/merchant/demo)": allKeys.filter(k => k.startsWith("rental.")),
   "swap": allKeys.filter(k => k.startsWith("swap."))
 };
 console.log("全局键数=" + allKeys.length + "\n");
@@ -23,9 +24,10 @@ for (const [g, keys] of Object.entries(groups)) {
     console.log(line);
   }
 }
-console.log("== 全局孤立键 (目标语言有、zh-CN 无) ==");
-for (const l of L) {
-  if (l === "zh-CN") { continue; }
-  const orphan = Object.keys(F[l]).filter(k => !(k in F["zh-CN"]));
-  console.log("  " + l + ": 孤立=" + (orphan.length ? orphan.join(",") : 0));
-}
+const uncov = allKeys.filter(k => !k.startsWith("common.") && !k.startsWith("rental.") && !k.startsWith("swap."));
+console.log("== 未归入任何项目前缀的键: " + uncov.length + " ==");
+if (uncov.length) { console.log("  " + uncov.slice(0, 20).join(",")); }
+const orphanAll = {};
+for (const l of L) { if (l !== "zh-CN") { orphanAll[l] = Object.keys(F[l]).filter(k => !(k in F["zh-CN"])); } }
+console.log("== 全局孤立键 ==");
+for (const l in orphanAll) { console.log("  " + l + ": " + orphanAll[l].length); }
