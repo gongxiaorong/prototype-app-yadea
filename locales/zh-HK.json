@@ -145,7 +145,18 @@
       "phoneFormat": "手機號格式不正確，請檢查號碼與區號是否匹配",
       "pwdChars": "密碼僅支援大小寫字母、數字、鍵盤符號",
       "noPermission": "無權限",
-      "required": "必填項"
+      "required": "必填項",
+      "paySuccess": "支付成功",
+      "waitStoreConfirm": "請等待門店確認",
+      "refundSubmitted": "退款申請已提交",
+      "inputRefundAmount": "請輸入退款金額",
+      "fillRefundAmount": "請填寫退款金額",
+      "renewCancelled": "已取消續租",
+      "hornSent": "鳴笛尋車指令已發送",
+      "orderEndedRefunding": "訂單已結束，押金退款中",
+      "walletInsufficient": "錢包餘額不足，請充值",
+      "topupNotOpen": "充值功能未開放",
+      "balanceInsufficientChoosePay": "餘額不足，請選擇其他支付方式或去充值"
     },
     "vehicles": {
       "addVinPlaceholder": "請輸入車架號",
@@ -210,7 +221,23 @@
       "status": "狀態",
       "amount": "金額",
       "type": "類型",
-      "time": "時間"
+      "time": "時間",
+      "currency": "貨幣",
+      "currencyCNY": "人民幣",
+      "currencyHKD": "港幣",
+      "currencyIDR": "印尼盾",
+      "registrationTime": "註冊時間",
+      "refundSource": "退款來源",
+      "preCancelStatus": "取消前狀態",
+      "amountDue": "應付金額",
+      "vehicleOps": "車輛操作",
+      "vehicleStartStop": "車輛啟停",
+      "messagePush": "消息推送",
+      "renewReminder": "續租提醒",
+      "deductReminder": "扣款提醒",
+      "hasAlert": "有告警",
+      "loggedIn": "已登入",
+      "regulator": "監管機構"
     },
     "action": {
       "cancel": "取消",
@@ -226,7 +253,8 @@
       "change": "更改",
       "back": "返回",
       "album": "相冊",
-      "bind": "綁定"
+      "bind": "綁定",
+      "close": "關閉"
     }
   },
   "merchant": {
@@ -624,7 +652,17 @@
       "withdrawAmount": "提現金額",
       "withdrawMerchant": "商戶提現",
       "withdrawSuccess": "提現成功",
-      "selectType": "請選擇類型"
+      "selectType": "請選擇類型",
+      "openWallet": "開通門店錢包",
+      "openWalletHint": "開通門店錢包後可查看餘額",
+      "selectWallet": "選擇門店錢包",
+      "noWallet": "暫無已開通門店錢包",
+      "noFlowStore": "無流水門店",
+      "selected": "已選門店",
+      "unselected": "未選門店",
+      "selectFirst": "請先選擇門店",
+      "selectedToast": "已選擇門店",
+      "splitHint": "各門店錢包獨立結算，充值 / 餘額僅對應所選門店"
     },
     "orders": {
       "vehicleBound": "車輛已綁定",
@@ -770,7 +808,8 @@
       "dischargeAllowed": "已允許放電",
       "replace": "更換電池",
       "dischargeForbidden": "已禁止放電",
-      "replaced": "電池已更換"
+      "replaced": "電池已更換",
+      "cabinet": "換電櫃"
     },
     "order": {
       "refund": {
@@ -920,7 +959,9 @@
       "searchBattNo": "電池編號",
       "unitDay": "天",
       "billDaily": "按天計費",
-      "timePickup": "取車"
+      "timePickup": "取車",
+      "pickupStartHint": "領取車輛/電池後開始計算訂單時長",
+      "selectPlanAndPay": "選擇租賃方案並支付"
     },
     "toast": {
       "deviceBound": "設備綁定成功",
@@ -955,7 +996,8 @@
       "feedback": "意見反饋",
       "emailAddressPlaceholder": "請輸入郵箱地址",
       "switchLang": "切換語言",
-      "aboutUs": "關於我們"
+      "aboutUs": "關於我們",
+      "privacyPolicy": "《用戶隱私政策》"
     },
     "common": {
       "modelNo": "型號",
@@ -1031,7 +1073,26 @@
       "selectRealName": "選擇實名資訊",
       "addRealName": "新增實名資訊",
       "title": "證件資訊",
-      "materialUploaded": "資料已上傳"
+      "materialUploaded": "資料已上傳",
+      "reupload": "重新上傳",
+      "deletePhoto": "刪除照片",
+      "addImage": "新增圖片",
+      "idPhotoRequired": "請至少上傳1張身份證照片",
+      "licensePhotoRequired": "請至少上傳1張駕駛證照片",
+      "photoHint": "請上傳清晰證件照，避免反光（最多2張）",
+      "noRealName": "暫無實名信息",
+      "deleteRealName": "刪除實名信息",
+      "confirmDeleteRealName": "確定要刪除該實名信息嗎？",
+      "realNameRequired": "請先選擇實名信息",
+      "realNameSelected": "已選擇實名信息",
+      "realNameUpdated": "實名信息已更新",
+      "realNameDeleted": "實名信息已刪除",
+      "photoDeleted": "照片已刪除",
+      "saveSuccess": "證件信息保存成功",
+      "photoLimitExceeded": "圖片數量超出上限",
+      "photoMaxTwo": "最多上傳2張",
+      "licenseShort": "駕照",
+      "detail": "實名詳情"
     },
     "plan": {
       "selectPlan": "選擇方案",

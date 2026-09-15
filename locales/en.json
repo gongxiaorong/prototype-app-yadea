@@ -145,7 +145,18 @@
       "phoneFormat": "Invalid phone number, please check the number and area code",
       "pwdChars": "Password can only contain letters, numbers and keyboard symbols",
       "noPermission": "No permission",
-      "required": "Required field"
+      "required": "Required field",
+      "paySuccess": "Payment successful",
+      "waitStoreConfirm": "Please wait for store confirmation",
+      "refundSubmitted": "Refund request submitted",
+      "inputRefundAmount": "Please enter the refund amount",
+      "fillRefundAmount": "Please fill in the refund amount",
+      "renewCancelled": "Renewal cancelled",
+      "hornSent": "Horn command sent",
+      "orderEndedRefunding": "Order ended, deposit refund in progress",
+      "walletInsufficient": "Insufficient wallet balance, please top up",
+      "topupNotOpen": "Top-up is not available",
+      "balanceInsufficientChoosePay": "Insufficient balance, choose another payment method or top up"
     },
     "vehicles": {
       "addVinPlaceholder": "Please enter VIN",
@@ -210,7 +221,23 @@
       "status": "Status",
       "amount": "Amount",
       "type": "Type",
-      "time": "Time"
+      "time": "Time",
+      "currency": "Currency",
+      "currencyCNY": "Chinese Yuan",
+      "currencyHKD": "Hong Kong Dollar",
+      "currencyIDR": "Indonesian Rupiah",
+      "registrationTime": "Registration Time",
+      "refundSource": "Refund Source",
+      "preCancelStatus": "Status Before Cancellation",
+      "amountDue": "Amount Due",
+      "vehicleOps": "Vehicle Operations",
+      "vehicleStartStop": "Vehicle Start/Stop",
+      "messagePush": "Push Notifications",
+      "renewReminder": "Renewal Reminder",
+      "deductReminder": "Deduction Reminder",
+      "hasAlert": "Has Alerts",
+      "loggedIn": "Logged In",
+      "regulator": "Regulator"
     },
     "action": {
       "cancel": "Cancel",
@@ -226,7 +253,8 @@
       "change": "Change",
       "back": "Back",
       "album": "Album",
-      "bind": "Bind"
+      "bind": "Bind",
+      "close": "Close"
     }
   },
   "merchant": {
@@ -624,7 +652,17 @@
       "withdrawAmount": "Withdrawal Amount",
       "withdrawMerchant": "Merchant Withdrawal",
       "withdrawSuccess": "Withdrawal successful",
-      "selectType": "Please select a type"
+      "selectType": "Please select a type",
+      "openWallet": "Open Store Wallet",
+      "openWalletHint": "Open the store wallet to view the balance",
+      "selectWallet": "Select Store Wallet",
+      "noWallet": "No store wallet opened",
+      "noFlowStore": "No transaction stores",
+      "selected": "Store selected",
+      "unselected": "No store selected",
+      "selectFirst": "Please select a store first",
+      "selectedToast": "Store selected",
+      "splitHint": "Each store wallet settles independently; top-up and balance apply only to the selected store"
     },
     "orders": {
       "vehicleBound": "Vehicle bound",
@@ -770,7 +808,8 @@
       "dischargeAllowed": "Discharge allowed",
       "replace": "Replace Battery",
       "dischargeForbidden": "Discharge forbidden",
-      "replaced": "Battery changed"
+      "replaced": "Battery changed",
+      "cabinet": "Swap Cabinet"
     },
     "order": {
       "refund": {
@@ -920,7 +959,9 @@
       "searchBattNo": "Battery No.",
       "unitDay": "Days",
       "billDaily": "Billed Daily",
-      "timePickup": "Pickup"
+      "timePickup": "Pickup",
+      "pickupStartHint": "Order duration starts after the vehicle/battery is picked up",
+      "selectPlanAndPay": "Select a rental plan and pay"
     },
     "toast": {
       "deviceBound": "Device bound successfully",
@@ -955,7 +996,8 @@
       "feedback": "Feedback",
       "emailAddressPlaceholder": "Please enter your email address",
       "switchLang": "Language",
-      "aboutUs": "About Us"
+      "aboutUs": "About Us",
+      "privacyPolicy": "User Privacy Policy"
     },
     "common": {
       "modelNo": "Model",
@@ -1031,7 +1073,26 @@
       "selectRealName": "Select Real-Name Info",
       "addRealName": "Add Real-Name Info",
       "title": "Document Info",
-      "materialUploaded": "Materials uploaded"
+      "materialUploaded": "Materials uploaded",
+      "reupload": "Re-upload",
+      "deletePhoto": "Delete Photo",
+      "addImage": "Add Image",
+      "idPhotoRequired": "Please upload at least 1 ID photo",
+      "licensePhotoRequired": "Please upload at least 1 driving license photo",
+      "photoHint": "Please upload clear document photos, avoid glare (up to 2)",
+      "noRealName": "No KYC info",
+      "deleteRealName": "Delete KYC Info",
+      "confirmDeleteRealName": "Are you sure you want to delete this KYC info?",
+      "realNameRequired": "Please select KYC info first",
+      "realNameSelected": "KYC info selected",
+      "realNameUpdated": "KYC info updated",
+      "realNameDeleted": "KYC info deleted",
+      "photoDeleted": "Photo deleted",
+      "saveSuccess": "Document info saved",
+      "photoLimitExceeded": "Photo count exceeds the limit",
+      "photoMaxTwo": "Up to 2 photos",
+      "licenseShort": "License",
+      "detail": "KYC Details"
     },
     "plan": {
       "selectPlan": "Select Plan",

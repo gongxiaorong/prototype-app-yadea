@@ -145,7 +145,18 @@
       "phoneFormat": "หมายเลขโทรศัพท์ไม่ถูกต้อง กรุณาตรวจสอบหมายเลขและรหัสพื้นที่",
       "pwdChars": "รหัสผ่านสามารถมีได้เฉพาะตัวอักษร ตัวเลข และสัญลักษณ์บนแป้นพิมพ์",
       "noPermission": "ไม่มีสิทธิ์",
-      "required": "ช่องที่จำเป็น"
+      "required": "ช่องที่จำเป็น",
+      "paySuccess": "ชำระเงินสำเร็จ",
+      "waitStoreConfirm": "กรุณารอการยืนยันจากร้านค้า",
+      "refundSubmitted": "ส่งคำขอคืนเงินแล้ว",
+      "inputRefundAmount": "กรุณากรอกจำนวนเงินคืน",
+      "fillRefundAmount": "กรุณากรอกจำนวนเงินคืนให้ครบถ้วน",
+      "renewCancelled": "ยกเลิกการต่ออายุแล้ว",
+      "hornSent": "ส่งคำสั่งบีบแตรแล้ว",
+      "orderEndedRefunding": "คำสั่งซื้อสิ้นสุด กำลังคืนเงินมัดจำ",
+      "walletInsufficient": "ยอดคงเหลือในกระเป๋าไม่เพียงพอ กรุณาเติมเงิน",
+      "topupNotOpen": "ฟีเจอร์เติมเงินยังไม่เปิดใช้งาน",
+      "balanceInsufficientChoosePay": "ยอดคงเหลือไม่เพียงพอ กรุณาเลือกวิธีชำระเงินอื่นหรือเติมเงิน"
     },
     "vehicles": {
       "addVinPlaceholder": "กรุณากรอกหมายเลขตัวถัง",
@@ -210,7 +221,23 @@
       "status": "สถานะ",
       "amount": "จำนวนเงิน",
       "type": "ประเภท",
-      "time": "เวลา"
+      "time": "เวลา",
+      "currency": "สกุลเงิน",
+      "currencyCNY": "หยวนจีน",
+      "currencyHKD": "ดอลลาร์ฮ่องกง",
+      "currencyIDR": "รูเปียห์อินโดนีเซีย",
+      "registrationTime": "เวลาลงทะเบียน",
+      "refundSource": "แหล่งเงินคืน",
+      "preCancelStatus": "สถานะก่อนยกเลิก",
+      "amountDue": "ยอดที่ต้องชำระ",
+      "vehicleOps": "การจัดการยานพาหนะ",
+      "vehicleStartStop": "เปิด/ปิดยานพาหนะ",
+      "messagePush": "การแจ้งเตือนแบบพุช",
+      "renewReminder": "การแจ้งเตือนต่ออายุ",
+      "deductReminder": "การแจ้งเตือนการหักเงิน",
+      "hasAlert": "มีการแจ้งเตือน",
+      "loggedIn": "เข้าสู่ระบบแล้ว",
+      "regulator": "หน่วยงานกำกับดูแล"
     },
     "action": {
       "cancel": "ยกเลิก",
@@ -226,7 +253,8 @@
       "change": "เปลี่ยน",
       "back": "ย้อนกลับ",
       "album": "อัลบั้ม",
-      "bind": "ผูก"
+      "bind": "ผูก",
+      "close": "ปิด"
     }
   },
   "merchant": {
@@ -624,7 +652,17 @@
       "withdrawAmount": "จำนวนเงินถอน",
       "withdrawMerchant": "การถอนของร้านค้า",
       "withdrawSuccess": "ถอนสำเร็จ",
-      "selectType": "กรุณาเลือกประเภท"
+      "selectType": "กรุณาเลือกประเภท",
+      "openWallet": "เปิดกระเป๋าเงินร้านค้า",
+      "openWalletHint": "เปิดกระเป๋าเงินร้านค้าเพื่อดูยอดคงเหลือ",
+      "selectWallet": "เลือกกระเป๋าเงินร้านค้า",
+      "noWallet": "ยังไม่มีกระเป๋าเงินร้านค้าที่เปิดใช้งาน",
+      "noFlowStore": "ไม่มีร้านค้าที่มีรายการเดินบัญชี",
+      "selected": "เลือกร้านค้าแล้ว",
+      "unselected": "ยังไม่ได้เลือกร้านค้า",
+      "selectFirst": "กรุณาเลือกร้านค้าก่อน",
+      "selectedToast": "เลือกร้านค้าแล้ว",
+      "splitHint": "กระเป๋าเงินแต่ละร้านค้าคิดแยกกัน การเติมเงินและยอดคงเหลือใช้เฉพาะร้านค้าที่เลือก"
     },
     "orders": {
       "vehicleBound": "ผูกยานพาหนะแล้ว",
@@ -770,7 +808,8 @@
       "dischargeAllowed": "อนุญาตการปล่อยประจุ",
       "replace": "เปลี่ยนแบตเตอรี่",
       "dischargeForbidden": "ห้ามการปล่อยประจุ",
-      "replaced": "เปลี่ยนแบตเตอรี่แล้ว"
+      "replaced": "เปลี่ยนแบตเตอรี่แล้ว",
+      "cabinet": "ตู้สลับแบตเตอรี่"
     },
     "order": {
       "refund": {
@@ -920,7 +959,9 @@
       "searchBattNo": "หมายเลขแบตเตอรี่",
       "unitDay": "วัน",
       "billDaily": "คิดค่าใช้จ่ายรายวัน",
-      "timePickup": "รับ"
+      "timePickup": "รับ",
+      "pickupStartHint": "เริ่มนับระยะเวลาคำสั่งซื้อหลังจากรับยานพาหนะ/แบตเตอรี่",
+      "selectPlanAndPay": "เลือกแพ็กเกจเช่าและชำระเงิน"
     },
     "toast": {
       "deviceBound": "ผูกอุปกรณ์สำเร็จ",
@@ -955,7 +996,8 @@
       "feedback": "ข้อเสนอแนะ",
       "emailAddressPlaceholder": "กรุณากรอกที่อยู่อีเมลของคุณ",
       "switchLang": "ภาษา",
-      "aboutUs": "เกี่ยวกับเรา"
+      "aboutUs": "เกี่ยวกับเรา",
+      "privacyPolicy": "นโยบายความเป็นส่วนตัวของผู้ใช้"
     },
     "common": {
       "modelNo": "รุ่น",
@@ -1031,7 +1073,26 @@
       "selectRealName": "เลือกข้อมูลยืนยันตัวตน",
       "addRealName": "เพิ่มข้อมูลยืนยันตัวตน",
       "title": "ข้อมูลเอกสาร",
-      "materialUploaded": "อัปโหลดวัสดุแล้ว"
+      "materialUploaded": "อัปโหลดวัสดุแล้ว",
+      "reupload": "อัปโหลดใหม่",
+      "deletePhoto": "ลบรูป",
+      "addImage": "เพิ่มรูปภาพ",
+      "idPhotoRequired": "กรุณาอัปโหลดรูปบัตรประชาชนอย่างน้อย 1 รูป",
+      "licensePhotoRequired": "กรุณาอัปโหลดรูปใบขับขี่อย่างน้อย 1 รูป",
+      "photoHint": "กรุณาอัปโหลดรูปเอกสารให้ชัดเจน หลีกเลี่ยงแสงสะท้อน (สูงสุด 2 รูป)",
+      "noRealName": "ยังไม่มีข้อมูล KYC",
+      "deleteRealName": "ลบข้อมูล KYC",
+      "confirmDeleteRealName": "ยืนยันลบข้อมูล KYC นี้หรือไม่",
+      "realNameRequired": "กรุณาเลือกข้อมูล KYC ก่อน",
+      "realNameSelected": "เลือกข้อมูล KYC แล้ว",
+      "realNameUpdated": "อัปเดตข้อมูล KYC แล้ว",
+      "realNameDeleted": "ลบข้อมูล KYC แล้ว",
+      "photoDeleted": "ลบรูปแล้ว",
+      "saveSuccess": "บันทึกข้อมูลเอกสารสำเร็จ",
+      "photoLimitExceeded": "จำนวนรูปเกินขีดจำกัด",
+      "photoMaxTwo": "อัปโหลดได้สูงสุด 2 รูป",
+      "licenseShort": "ใบขับขี่",
+      "detail": "รายละเอียด KYC"
     },
     "plan": {
       "selectPlan": "เลือกแผน",

@@ -145,7 +145,18 @@
       "phoneFormat": "手机号格式不正确，请检查号码与区号是否匹配",
       "pwdChars": "密码仅支持大小写字母、数字、键盘符号",
       "noPermission": "无权限",
-      "required": "必填项"
+      "required": "必填项",
+      "paySuccess": "支付成功",
+      "waitStoreConfirm": "请等待门店确认",
+      "refundSubmitted": "退款申请已提交",
+      "inputRefundAmount": "请输入退款金额",
+      "fillRefundAmount": "请填写退款金额",
+      "renewCancelled": "已取消续租",
+      "hornSent": "鸣笛寻车指令已发送",
+      "orderEndedRefunding": "订单已结束，押金退款中",
+      "walletInsufficient": "钱包余额不足，请充值",
+      "topupNotOpen": "充值功能未开放",
+      "balanceInsufficientChoosePay": "余额不足，请选择其他支付方式或去充值"
     },
     "vehicles": {
       "addVinPlaceholder": "请输入车架号",
@@ -210,7 +221,23 @@
       "status": "状态",
       "amount": "金额",
       "type": "类型",
-      "time": "时间"
+      "time": "时间",
+      "currency": "货币",
+      "currencyCNY": "人民币",
+      "currencyHKD": "港币",
+      "currencyIDR": "印尼盾",
+      "registrationTime": "注册时间",
+      "refundSource": "退款来源",
+      "preCancelStatus": "取消前状态",
+      "amountDue": "应付金额",
+      "vehicleOps": "车辆操作",
+      "vehicleStartStop": "车辆启停",
+      "messagePush": "消息推送",
+      "renewReminder": "续租提醒",
+      "deductReminder": "扣款提醒",
+      "hasAlert": "有告警",
+      "loggedIn": "已登录",
+      "regulator": "监管机构"
     },
     "action": {
       "cancel": "取消",
@@ -226,7 +253,8 @@
       "change": "更改",
       "back": "返回",
       "album": "相册",
-      "bind": "绑定"
+      "bind": "绑定",
+      "close": "关闭"
     }
   },
   "merchant": {
@@ -624,7 +652,17 @@
       "withdrawAmount": "提现金额",
       "withdrawMerchant": "商户提现",
       "withdrawSuccess": "提现成功",
-      "selectType": "请选择类型"
+      "selectType": "请选择类型",
+      "openWallet": "开通门店钱包",
+      "openWalletHint": "开通门店钱包后可查看余额",
+      "selectWallet": "选择门店钱包",
+      "noWallet": "暂无已开通门店钱包",
+      "noFlowStore": "无流水门店",
+      "selected": "已选门店",
+      "unselected": "未选门店",
+      "selectFirst": "请先选择门店",
+      "selectedToast": "已选择门店",
+      "splitHint": "各门店钱包独立结算，充值 / 余额仅对应所选门店"
     },
     "orders": {
       "vehicleBound": "车辆已绑定",
@@ -770,7 +808,8 @@
       "dischargeAllowed": "已允许放电",
       "replace": "更换电池",
       "dischargeForbidden": "已禁止放电",
-      "replaced": "电池已更换"
+      "replaced": "电池已更换",
+      "cabinet": "换电柜"
     },
     "order": {
       "refund": {
@@ -853,10 +892,10 @@
     "orders": {
       "noticeRules": {
         "1": "领取前请检查车辆/电池状态，确认物品状况及性能完好",
-        "5": "库存以门店实际现货为准，建议提前联系门店确认咨询",
-        "4": "请遵守当地交通法规，安全骑行",
+        "2": "仅限下单本人领取，不支持代领",
         "3": "车辆/电池损坏需按实际维修费用赔偿",
-        "2": "仅限下单本人领取，不支持代领"
+        "4": "请遵守当地交通法规，安全骑行",
+        "5": "库存以门店实际现货为准，建议提前联系门店确认咨询"
       },
       "renter": "用车人",
       "autoRenew": "自动续租",
@@ -874,22 +913,22 @@
       "pickupTimeLabel": "取用时间",
       "billHourly": "按小时计费",
       "billingRules": {
-        "3": "租赁时长不足1个周期的，按1个周期计费",
         "1": "计费起始时间以用户领取车辆/电池时间为准，计费终止时间以车辆/电池完成归还时间为准",
-        "2": "周期租金根据订单选定租赁方案进行核算"
+        "2": "周期租金根据订单选定租赁方案进行核算",
+        "3": "租赁时长不足1个周期的，按1个周期计费"
       },
       "returnTimeLabel": "归还时间",
       "overdueRules": {
-        "4": "逾期超过约定天数未归还，商家有权对车辆进行远程锁定",
         "1": "请在订单约定归还时间内完成车辆/电池归还",
+        "2": "若发生逾期归还，商家可选择从押金抵扣逾期产生的相关费用",
         "3": "押金抵扣不足的，商家有权向用户追偿差额",
-        "2": "若发生逾期归还，商家可选择从押金抵扣逾期产生的相关费用"
+        "4": "逾期超过约定天数未归还，商家有权对车辆进行远程锁定"
       },
       "cancelRules": {
-        "3": "领取车辆/电池后，需与商家协商处理，具体退费以双方协商结果为准",
         "1": "订单尚未支付，用户可自行操作取消订单",
-        "4": "租金、押金将在订单取消后于 7 个工作日内按原支付路径退还",
-        "2": "订单已支付但未领取车辆/电池，用户可自行操作取消订单"
+        "2": "订单已支付但未领取车辆/电池，用户可自行操作取消订单",
+        "3": "领取车辆/电池后，需与商家协商处理，具体退费以双方协商结果为准",
+        "4": "租金、押金将在订单取消后于 7 个工作日内按原支付路径退还"
       },
       "rentDuration": "租赁时长",
       "takeReturnInfo": "取还信息",
@@ -920,7 +959,9 @@
       "searchBattNo": "电池编号",
       "unitDay": "天",
       "billDaily": "按天计费",
-      "timePickup": "取用"
+      "timePickup": "取用",
+      "pickupStartHint": "领取车辆/电池后开始计算订单时长",
+      "selectPlanAndPay": "选择租赁方案并支付"
     },
     "toast": {
       "deviceBound": "设备绑定成功",
@@ -955,7 +996,8 @@
       "feedback": "意见反馈",
       "emailAddressPlaceholder": "请输入邮箱地址",
       "switchLang": "切换语言",
-      "aboutUs": "关于我们"
+      "aboutUs": "关于我们",
+      "privacyPolicy": "《用户隐私政策》"
     },
     "common": {
       "modelNo": "型号",
@@ -1031,7 +1073,26 @@
       "selectRealName": "选择实名信息",
       "addRealName": "新增实名信息",
       "title": "证件信息",
-      "materialUploaded": "资料已上传"
+      "materialUploaded": "资料已上传",
+      "reupload": "重新上传",
+      "deletePhoto": "删除照片",
+      "addImage": "添加图片",
+      "idPhotoRequired": "请至少上传1张身份证照片",
+      "licensePhotoRequired": "请至少上传1张驾驶证照片",
+      "photoHint": "请上传清晰证件照，避免反光（最多2张）",
+      "noRealName": "暂无实名信息",
+      "deleteRealName": "删除实名信息",
+      "confirmDeleteRealName": "确定要删除该实名信息吗？",
+      "realNameRequired": "请先选择实名信息",
+      "realNameSelected": "已选择实名信息",
+      "realNameUpdated": "实名信息已更新",
+      "realNameDeleted": "实名信息已删除",
+      "photoDeleted": "照片已删除",
+      "saveSuccess": "证件信息保存成功",
+      "photoLimitExceeded": "图片数量超出上限",
+      "photoMaxTwo": "最多上传2张",
+      "licenseShort": "驾照",
+      "detail": "实名详情"
     },
     "plan": {
       "selectPlan": "选择方案",

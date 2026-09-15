@@ -145,7 +145,18 @@
       "phoneFormat": "Nomor ponsel tidak valid, periksa nomor dan kode area",
       "pwdChars": "Kata sandi hanya boleh berisi huruf, angka, dan simbol keyboard",
       "noPermission": "Tidak ada izin",
-      "required": "Wajib diisi"
+      "required": "Wajib diisi",
+      "paySuccess": "Pembayaran berhasil",
+      "waitStoreConfirm": "Harap tunggu konfirmasi toko",
+      "refundSubmitted": "Permintaan pengembalian dana diajukan",
+      "inputRefundAmount": "Masukkan jumlah pengembalian dana",
+      "fillRefundAmount": "Isi jumlah pengembalian dana",
+      "renewCancelled": "Perpanjangan dibatalkan",
+      "hornSent": "Perintah klakson terkirim",
+      "orderEndedRefunding": "Pesanan berakhir, pengembalian deposit sedang diproses",
+      "walletInsufficient": "Saldo dompet tidak cukup, silakan isi ulang",
+      "topupNotOpen": "Fitur isi ulang belum tersedia",
+      "balanceInsufficientChoosePay": "Saldo tidak cukup, pilih metode pembayaran lain atau isi ulang"
     },
     "vehicles": {
       "addVinPlaceholder": "Masukkan nomor rangka",
@@ -210,7 +221,23 @@
       "status": "Status",
       "amount": "Jumlah",
       "type": "Tipe",
-      "time": "Waktu"
+      "time": "Waktu",
+      "currency": "Mata Uang",
+      "currencyCNY": "Yuan Tiongkok",
+      "currencyHKD": "Dolar Hong Kong",
+      "currencyIDR": "Rupiah Indonesia",
+      "registrationTime": "Waktu Registrasi",
+      "refundSource": "Sumber Pengembalian Dana",
+      "preCancelStatus": "Status Sebelum Pembatalan",
+      "amountDue": "Jumlah yang Harus Dibayar",
+      "vehicleOps": "Operasi Kendaraan",
+      "vehicleStartStop": "Nyalakan/Matikan Kendaraan",
+      "messagePush": "Notifikasi Push",
+      "renewReminder": "Pengingat Perpanjangan",
+      "deductReminder": "Pengingat Pemotongan",
+      "hasAlert": "Ada Peringatan",
+      "loggedIn": "Sudah Masuk",
+      "regulator": "Regulator"
     },
     "action": {
       "cancel": "Batal",
@@ -226,7 +253,8 @@
       "change": "Ubah",
       "back": "Kembali",
       "album": "Album",
-      "bind": "Hubungkan"
+      "bind": "Hubungkan",
+      "close": "Tutup"
     }
   },
   "merchant": {
@@ -624,7 +652,17 @@
       "withdrawAmount": "Jumlah Penarikan",
       "withdrawMerchant": "Penarikan Merchant",
       "withdrawSuccess": "Penarikan berhasil",
-      "selectType": "Silakan pilih jenis"
+      "selectType": "Silakan pilih jenis",
+      "openWallet": "Aktifkan Dompet Toko",
+      "openWalletHint": "Aktifkan dompet toko untuk melihat saldo",
+      "selectWallet": "Pilih Dompet Toko",
+      "noWallet": "Belum ada dompet toko yang diaktifkan",
+      "noFlowStore": "Tidak ada toko dengan transaksi",
+      "selected": "Toko dipilih",
+      "unselected": "Belum ada toko dipilih",
+      "selectFirst": "Pilih toko terlebih dahulu",
+      "selectedToast": "Toko dipilih",
+      "splitHint": "Setiap dompet toko diselesaikan secara terpisah; isi ulang dan saldo hanya untuk toko yang dipilih"
     },
     "orders": {
       "vehicleBound": "Kendaraan terikat",
@@ -770,7 +808,8 @@
       "dischargeAllowed": "Pengosongan diizinkan",
       "replace": "Ganti Baterai",
       "dischargeForbidden": "Pengosongan dilarang",
-      "replaced": "Baterai diganti"
+      "replaced": "Baterai diganti",
+      "cabinet": "Kabinet Tukar Baterai"
     },
     "order": {
       "refund": {
@@ -920,7 +959,9 @@
       "searchBattNo": "Nomor Baterai",
       "unitDay": "Hari",
       "billDaily": "Dibebankan per Hari",
-      "timePickup": "Diambil"
+      "timePickup": "Diambil",
+      "pickupStartHint": "Durasi pesanan dihitung setelah kendaraan/baterai diambil",
+      "selectPlanAndPay": "Pilih paket sewa dan bayar"
     },
     "toast": {
       "deviceBound": "Perangkat berhasil diikat",
@@ -955,7 +996,8 @@
       "feedback": "Saran",
       "emailAddressPlaceholder": "Masukkan alamat email",
       "switchLang": "Bahasa",
-      "aboutUs": "Tentang Kami"
+      "aboutUs": "Tentang Kami",
+      "privacyPolicy": "Kebijakan Privasi Pengguna"
     },
     "common": {
       "modelNo": "Model",
@@ -1031,7 +1073,26 @@
       "selectRealName": "Pilih Info Verifikasi",
       "addRealName": "Tambah Info Verifikasi",
       "title": "Info Dokumen",
-      "materialUploaded": "Materi diunggah"
+      "materialUploaded": "Materi diunggah",
+      "reupload": "Unggah Ulang",
+      "deletePhoto": "Hapus Foto",
+      "addImage": "Tambah Gambar",
+      "idPhotoRequired": "Unggah setidaknya 1 foto KTP",
+      "licensePhotoRequired": "Unggah setidaknya 1 foto SIM",
+      "photoHint": "Unggah foto dokumen yang jelas, hindari pantulan (maksimal 2)",
+      "noRealName": "Belum ada info KYC",
+      "deleteRealName": "Hapus Info KYC",
+      "confirmDeleteRealName": "Yakin ingin menghapus info KYC ini?",
+      "realNameRequired": "Pilih info KYC terlebih dahulu",
+      "realNameSelected": "Info KYC dipilih",
+      "realNameUpdated": "Info KYC diperbarui",
+      "realNameDeleted": "Info KYC dihapus",
+      "photoDeleted": "Foto dihapus",
+      "saveSuccess": "Info dokumen disimpan",
+      "photoLimitExceeded": "Jumlah foto melebihi batas",
+      "photoMaxTwo": "Maksimal 2 foto",
+      "licenseShort": "SIM",
+      "detail": "Detail KYC"
     },
     "plan": {
       "selectPlan": "Pilih Paket",
