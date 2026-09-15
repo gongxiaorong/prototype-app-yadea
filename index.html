@@ -1464,7 +1464,10 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('bike','w-6 h-6 text-white')" data-page-node-id="lYaa6pgksmwOAag2qVrIkd"></span>
 </div>
 <div data-cp @click="navOpen('ovInfo')" class="flex-1 min-w-0 flex items-center gap-1.5 cursor-pointer active:opacity-70" data-page-node-id="IRx4Zq05bDpHqCXFyVJfL9">
-<span class="text-[16px] font-bold truncate" data-page-node-id="XQZV5hYRpLiBCP0eyPtE9V">User001</span>
+<div class="min-w-0">
+<div class="text-[16px] font-bold truncate" data-page-node-id="XQZV5hYRpLiBCP0eyPtE9V">User001</div>
+<div class="text-[13px] text-[#666] truncate">{{ hasPhone?boundPhone:(hasEmail?boundEmail:'') }}</div>
+</div>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-page-node-id="71UzRVKUzbMqOZDWxPy1Q7"></span>
 </div>
 <div data-cp @click="navOpen('ovSettings')" class="w-9 h-9 flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] rounded-full shrink-0" data-od-id="profile-settings" data-page-node-id="13yCysryZVCDr10uWVH7Gm">
