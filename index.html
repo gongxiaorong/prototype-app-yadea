@@ -31,6 +31,7 @@
   --font-display:-apple-system,BlinkMacSystemFont,'SF Pro Display','PingFang SC',system-ui,sans-serif;
   --font-body:-apple-system,BlinkMacSystemFont,'SF Pro Text','PingFang SC',system-ui,sans-serif;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-body)}
 .od-stage{display:flex;align-items:stretch;justify-content:center;gap:32px;max-width:100%}
 .hide-scroll::-webkit-scrollbar{display:none}
 .hide-scroll{scrollbar-width:none}
@@ -117,6 +118,7 @@
 .track-wheel-item{height:36px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:16px;color:#999;flex-shrink:0}
 .track-wheel-item.is-on{color:#111;font-weight:600;font-size:17px}
 .track-wheel-mask{position:absolute;left:0;right:0;top:50%;height:36px;margin-top:-18px;pointer-events:none;border-top:1px solid #E5E5E5;border-bottom:1px solid #E5E5E5;background:rgba(43,63,95,.04)}
+:where(span):where(:has(> svg.lucide)){display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
 </style>
 <style id="layer-user">#root-user .filter-tabs{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain;user-select:none;width:100%;flex-wrap:nowrap;white-space:nowrap}
 #root-user .filter-pill{padding:6px 16px;border-radius:20px;font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:background .15s,color .15s,border-color .15s}
@@ -1523,39 +1525,39 @@ body.host-single-m #root-user{display:none}
   <div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hid" data-page-node-id="2q2ionmtVMNohvM3PYdKB7">
   <div class="bg-white rounded-xl overflow-hidden mb-6" style="border:1px solid #E5E5E5" data-page-node-id="0rFyfWyDatndkgw4cTmbOd">
       <div class="flex items-center px-4 py-4" style="border-bottom:1px solid #EDEDED" data-page-node-id="tP3jScmv7xFqtuqGdjeBT6">
-        <span class="flex-1 text-[15px] text-[#666]" data-page-node-id="FGX1JAfxa9NkaqP5oPb55l">头像</span>
+        <span class="flex-1 text-[15px] font-medium" data-page-node-id="FGX1JAfxa9NkaqP5oPb55l">头像</span>
         <div class="w-10 h-10 rounded-full bg-[#E8F0FE] flex items-center justify-center shrink-0" data-page-node-id="lm5AcsFgnHsk0znFd98gKj"><span v-html="luci('user','w-5 h-5 text-[#4A7CF7]')" data-page-node-id="PpyAb3vKqBHFXosk5HuuW0"></span></div>
       </div>
       <div class="flex items-center px-4 py-4" style="border-bottom:1px solid #EDEDED" data-page-node-id="tb4GJh8HgMFZidAibpwev2">
-        <span class="flex-1 text-[15px] text-[#666]" data-page-node-id="CmAXhcna0MahWKRDZ09KKy">账号</span>
-        <span class="text-[15px] font-medium text-[#222]" data-page-node-id="OH2dpkIBXCmwuSLEOsjwet">User001</span>
+        <span class="flex-1 text-[15px] font-medium" data-page-node-id="CmAXhcna0MahWKRDZ09KKy">账号</span>
+        <span class="text-[13px] text-[#666]" data-page-node-id="OH2dpkIBXCmwuSLEOsjwet">User001</span>
       </div>
       <div class="flex items-center px-4 py-4" data-page-node-id="w4dWNzVCyNk8cQdjsdIJxK">
-        <span class="flex-1 text-[15px] text-[#666]" data-page-node-id="kXmMTjVsC0ieTBU5BQn0sD">昵称</span>
-        <span class="text-[15px] font-medium text-[#222]" data-page-node-id="6wcf0Lx0jBp7AqaXhHHrMU">小迪</span>
+        <span class="flex-1 text-[15px] font-medium" data-page-node-id="kXmMTjVsC0ieTBU5BQn0sD">昵称</span>
+        <span class="text-[13px] text-[#666]" data-page-node-id="6wcf0Lx0jBp7AqaXhHHrMU">小迪</span>
       </div>
   </div>
   <div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5" data-od-id="profile-info-contact" data-page-node-id="fCgdTb0FQj5xrl0jzcvI7p">
     <div class="flex items-center px-4 py-4 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-cp @click="openBindPhone" data-page-node-id="rSJbCUB2pGKBEeUZVDERkG">
-      <span class="flex-1 text-[15px] text-[#666]" data-page-node-id="7aWX1V3Dx5rm9suw8t09XL">手机号</span>
-      <span class="text-[15px] font-medium mr-1" :class="hasPhone?'text-[#222]':'text-[#999]'" data-page-node-id="aSXAFpPNJLhMPWWoJ3kmv0">{{ hasPhone?boundPhone:'未绑定' }}</span>
+      <span class="flex-1 text-[15px] font-medium" data-page-node-id="7aWX1V3Dx5rm9suw8t09XL">手机号</span>
+      <span class="text-[13px] text-[#666] mr-1" data-page-node-id="aSXAFpPNJLhMPWWoJ3kmv0">{{ hasPhone?boundPhone:'未绑定' }}</span>
       <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-page-node-id="5p1ebuRL5ueKgG1BYdZzaZ"></span>
     </div>
     <div class="flex items-center px-4 py-4 cursor-pointer active:bg-[#F6F7F9]" :style="(hasPhone||hasEmail)?{borderBottom:'1px solid #EDEDED'}:{}" data-cp @click="openBindEmail" data-page-node-id="4qrHgjikgYp5GPdJQudt2O">
-      <span class="flex-1 text-[15px] text-[#666]" data-page-node-id="N2ufSIouLbR2so6P4WUOXu">邮箱地址</span>
-      <span class="text-[15px] font-medium mr-1" :class="hasEmail?'text-[#222]':'text-[#999]'" data-page-node-id="f2F2LkQEmg2OENesYC5AsJ">{{ hasEmail?boundEmail:'未绑定' }}</span>
+      <span class="flex-1 text-[15px] font-medium" data-page-node-id="N2ufSIouLbR2so6P4WUOXu">邮箱地址</span>
+      <span class="text-[13px] text-[#666] mr-1" data-page-node-id="f2F2LkQEmg2OENesYC5AsJ">{{ hasEmail?boundEmail:'未绑定' }}</span>
       <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-page-node-id="1vNHEP4bLogNHVaKFhwXVR"></span>
     </div>
     <div v-if="hasPhone||hasEmail" class="flex items-center px-4 py-4 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openPwdFlow" data-od-id="profile-pwd-entry" data-page-node-id="opTp0xKOzJiD2uPpwkolfN">
-      <span class="flex-1 text-[15px] text-[#666]" data-page-node-id="ooPtYtGSbBU25suyPeZxU0">密码管理</span>
-      <span class="text-[15px] font-medium text-[#222] mr-1" data-page-node-id="5MuJHqCQGdLxd2G80Zk9yS">{{ hasPwd?'修改密码':'设置密码' }}</span>
+      <span class="flex-1 text-[15px] font-medium" data-page-node-id="ooPtYtGSbBU25suyPeZxU0">密码管理</span>
+      <span class="text-[13px] text-[#666] mr-1" data-page-node-id="5MuJHqCQGdLxd2G80Zk9yS">{{ hasPwd?'修改密码':'设置密码' }}</span>
       <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-page-node-id="5fhJ77aQMYZxx2Q26rCNwf"></span>
     </div>
   </div>
   <div class="bg-white rounded-xl overflow-hidden mt-3" style="border:1px solid #E5E5E5" data-od-id="profile-id-entry" data-page-node-id="GDETHCsvvmjrQhaUyWLeHw">
     <div class="flex items-center px-4 py-4 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="navOpen('subIdInfo')" data-page-node-id="RH2afvpFVSajeld1GM32VY">
-      <span class="flex-1 text-[15px] text-[#666]" data-page-node-id="RFERu5QW9MdyAMUcF54BEY">实名信息</span>
-      <span class="text-[15px] font-medium mr-1" :class="(confirmIdInfo||idInfoCount)?'text-[#222]':'text-[#999]'" data-page-node-id="3WtXhlS6HHGl6TcLEf7ONZ">{{ confirmIdInfo?confirmIdInfo.name:(idInfoCount?idInfoCount+'份':'未上传') }}</span>
+      <span class="flex-1 text-[15px] font-medium" data-page-node-id="RFERu5QW9MdyAMUcF54BEY">实名信息</span>
+      <span class="text-[13px] text-[#666] mr-1" data-page-node-id="3WtXhlS6HHGl6TcLEf7ONZ">{{ confirmIdInfo?confirmIdInfo.name:(idInfoCount?idInfoCount+'份':'未上传') }}</span>
       <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-page-node-id="ynd4B4sLm0JWIVojmu3C91"></span>
     </div>
   </div>
@@ -2305,15 +2307,15 @@ body.host-single-m #root-user{display:none}
 <div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5" data-page-node-id="q9FVD4uuHrrR0gCnJGnVd4">
 <div data-cp @click="navOpen('subLang')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-lang-row" data-page-node-id="4rusVz0lp1YmDrned8LSS0">
 <span class="flex-1 text-[15px] font-medium" data-page-node-id="6XASv3lpOTUQABsMFJIHWT">切换语言</span>
-<div class="flex items-center gap-1" data-page-node-id="WiTXyVm3HwuybSx4n5xJ3Y"><span class="text-[13px] text-[#666] mr-1" data-page-node-id="5Sgk1eYBj6xPdzlnHXRUMZ">{{ appLangLabel }}</span><span v-html="luci('chevron-right','w-3 h-3 text-[#999]')" data-page-node-id="MD4mjwo5HUAnPGCm06WfBK"></span></div>
+<div class="flex items-center gap-1" data-page-node-id="WiTXyVm3HwuybSx4n5xJ3Y"><span class="text-[13px] text-[#666] mr-1" data-page-node-id="5Sgk1eYBj6xPdzlnHXRUMZ">{{ appLangLabel }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-page-node-id="MD4mjwo5HUAnPGCm06WfBK"></span></div>
 </div>
 <div data-cp @click="switchSource='settings';navOpen('subSwitchSystem')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-sys-row">
 <span class="flex-1 text-[15px] font-medium">切换系统</span>
-<div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ curSystemName }}</span><span v-html="luci('chevron-right','w-3 h-3 text-[#999]')"></span></div>
+<div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ curSystemName }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
 </div>
 <div data-cp @click="checkVersion" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" data-od-id="settings-version-row" data-page-node-id="4pIREs1BFxMyfgwI6wkCXL">
 <span class="flex-1 text-[15px] font-medium" data-page-node-id="IlOnrV6x0DU8oSNnCOqd7W">当前版本</span>
-<div class="flex items-center gap-1" data-page-node-id="ANDeV37Dlk9XdL4vm13njl"><span class="text-[13px] text-[#666] font-mono" data-page-node-id="j8J1bkBMiUl7Hd7XDKeBLH">V1.30.0</span><span v-html="luci('chevron-right','w-3 h-3 text-[#999]')" data-page-node-id="QdnYv2HR99oTLMNO0hQoly"></span></div>
+<div class="flex items-center gap-1" data-page-node-id="ANDeV37Dlk9XdL4vm13njl"><span class="text-[13px] text-[#666] font-mono" data-page-node-id="j8J1bkBMiUl7Hd7XDKeBLH">V1.30.0</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-page-node-id="QdnYv2HR99oTLMNO0hQoly"></span></div>
 </div>
 </div>
 </div>
@@ -5436,32 +5438,32 @@ body.host-single-m #root-user{display:none}
   <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
   <div class="bg-white rounded-xl overflow-hidden mb-6" style="border:1px solid #E5E5E5">
       <div class="flex items-center px-4 py-4" style="border-bottom:1px solid #EDEDED">
-        <span class="flex-1 text-[15px] text-[#666]">头像</span>
+        <span class="flex-1 text-[15px] font-medium">头像</span>
         <div class="w-10 h-10 rounded-full bg-[#E8F0FE] flex items-center justify-center shrink-0"><span v-html="luci('user','w-5 h-5 text-[#4A7CF7]')"></span></div>
       </div>
       <div class="flex items-center px-4 py-4" style="border-bottom:1px solid #EDEDED">
-        <span class="flex-1 text-[15px] text-[#666]">账号</span>
-        <span class="text-[15px] font-medium text-[#222]">User001</span>
+        <span class="flex-1 text-[15px] font-medium">账号</span>
+        <span class="text-[13px] text-[#666]">User001</span>
       </div>
       <div class="flex items-center px-4 py-4">
-        <span class="flex-1 text-[15px] text-[#666]">姓名</span>
-        <span class="text-[15px] font-medium text-[#222]">Xiao Di</span>
+        <span class="flex-1 text-[15px] font-medium">姓名</span>
+        <span class="text-[13px] text-[#666]">Xiao Di</span>
       </div>
   </div>
   <div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5" data-od-id="profile-info-contact">
     <div class="flex items-center px-4 py-4 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-cp @click="openBindPhone">
-      <span class="flex-1 text-[15px] text-[#666]">手机号</span>
-      <span class="text-[15px] font-medium mr-1" :class="hasPhone?'text-[#222]':'text-[#999]'">{{ hasPhone?boundPhone:'未绑定' }}</span>
+      <span class="flex-1 text-[15px] font-medium">手机号</span>
+      <span class="text-[13px] text-[#666] mr-1">{{ hasPhone?boundPhone:'未绑定' }}</span>
       <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
     </div>
     <div class="flex items-center px-4 py-4 cursor-pointer active:bg-[#F6F7F9]" :style="(hasPhone||hasEmail)?{borderBottom:'1px solid #EDEDED'}:{}" data-cp @click="openBindEmail">
-      <span class="flex-1 text-[15px] text-[#666]">邮箱地址</span>
-      <span class="text-[15px] font-medium mr-1" :class="hasEmail?'text-[#222]':'text-[#999]'">{{ hasEmail?boundEmail:'未绑定' }}</span>
+      <span class="flex-1 text-[15px] font-medium">邮箱地址</span>
+      <span class="text-[13px] text-[#666] mr-1">{{ hasEmail?boundEmail:'未绑定' }}</span>
       <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
     </div>
     <div v-if="hasPhone||hasEmail" class="flex items-center px-4 py-4 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openPwdFlow" data-od-id="profile-pwd-entry">
-      <span class="flex-1 text-[15px] text-[#666]">密码管理</span>
-      <span class="text-[15px] font-medium text-[#222] mr-1">{{ hasPwd?'修改密码':'设置密码' }}</span>
+      <span class="flex-1 text-[15px] font-medium">密码管理</span>
+      <span class="text-[13px] text-[#666] mr-1">{{ hasPwd?'修改密码':'设置密码' }}</span>
       <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
     </div>
   </div>
