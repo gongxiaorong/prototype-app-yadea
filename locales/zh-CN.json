@@ -1229,5 +1229,12 @@
       "njGulouZhongshanbei": "南京市鼓楼区中山北路",
       "shenzhenNanshanScience": "深圳市南山区科技园"
     }
+  },
+  "swap": {
+    "title": "雅迪换电系统 · 用户端 + 商户端（外框架脚手架）",
+    "userSide": "换电用户端",
+    "merchantSide": "换电商户端",
+    "splitView": "双端并排",
+    "gotoRental": "租车系统 ›"
   }
 }

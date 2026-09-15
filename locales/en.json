@@ -1229,5 +1229,12 @@
       "njGulouZhongshanbei": "南京市鼓楼区中山北路",
       "shenzhenNanshanScience": "深圳市南山区科技园"
     }
+  },
+  "swap": {
+    "title": "Yadea Battery-Swap System · User + Merchant (Scaffold)",
+    "userSide": "Battery-Swap User",
+    "merchantSide": "Battery-Swap Merchant",
+    "splitView": "Side by Side",
+    "gotoRental": "Rental System ›"
   }
 }

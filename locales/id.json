@@ -1229,5 +1229,12 @@
       "njGulouZhongshanbei": "南京市鼓楼区中山北路",
       "shenzhenNanshanScience": "深圳市南山区科技园"
     }
+  },
+  "swap": {
+    "title": "Sistem Tukar Baterai Yadea · Pengguna + Merchant (Cetakan Dasar)",
+    "userSide": "Pengguna Tukar Baterai",
+    "merchantSide": "Merchant Tukar Baterai",
+    "splitView": "Bersebelahan",
+    "gotoRental": "Sistem Rental ›"
   }
 }

@@ -1229,5 +1229,12 @@
       "njGulouZhongshanbei": "南京市鼓楼区中山北路",
       "shenzhenNanshanScience": "深圳市南山区科技园"
     }
+  },
+  "swap": {
+    "title": "ระบบสลับแบตเตอรี่ Yadea · ผู้ใช้ + ผู้ค้า (โครงร่าง)",
+    "userSide": "ผู้ใช้สลับแบตเตอรี่",
+    "merchantSide": "ผู้ค้าสลับแบตเตอรี่",
+    "splitView": "เรียงเคียงข้างกัน",
+    "gotoRental": "ระบบเช่า ›"
   }
 }
