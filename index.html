@@ -1,21 +1,4 @@
 <!DOCTYPE html>
-<!--
-═══════════════════════════════════════════════════════════════════
-  雅迪租车 · 用户端 + 商户端 单文件双 App（合并产物）
-═══════════════════════════════════════════════════════════════════
-  产物由 scripts/build-merge.mjs 从 user.html + merchant.html 组装。
-  JS 公共内核（SHARED CORE）已抽取共享：luci / toastPush / ptrBind / createNav，
-  双端 mountUser/mountMerchant 复用同一份实现；下拉刷新走 root 作用域。
-
-  区块与同步开发约定（新增功能按区修改）：
-  · 通用样式   → <style id="layer-base">
-  · 公共 JS    → <script> 内 /* SHARED CORE */
-  · 用户端专属 → <style id="layer-user"> + function mountUser(root){...}
-  · 商户端专属 → <style id="layer-merchant"> + function mountMerchant(root){...}
-  · 宿主外壳   → <style id="layer-host">
-  源快照：user.html（用户端）/ merchant.html（商户端），只读参照。
-═══════════════════════════════════════════════════════════════════
--->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -41,6 +24,9 @@ body{font-family:var(--font-body)}
 .sh-enter-from,.sh-leave-to{transform:translateY(100%)}
 .item-enter-active{transition:all .35s cubic-bezier(.32,.72,0,1)}
 .item-enter-from{opacity:0;transform:translateY(12px)}
+/* 底部弹窗触发器（统一规范 v1） */
+.sheet-trigger{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:10px 14px;border-radius:12px;background:#F7F8FA}
+.sheet-trigger:active{opacity:.8}
 .filter-tabs::-webkit-scrollbar{display:none}
 .toast-wrap{position:absolute;top:50px;left:16px;right:16px;z-index:99999;display:flex;flex-direction:column;align-items:center;pointer-events:none}
 .toast-item{padding:10px 20px;border-radius:12px;font-size:14px;font-weight:500;color:#fff;pointer-events:auto;backdrop-filter:blur(10px);text-align:center;max-width:80%;line-height:1.4}
@@ -141,13 +127,7 @@ body{font-family:var(--font-body)}
 #root-user .carousel-dots{display:flex;gap:6px;justify-content:center;align-items:center}
 #root-user .carousel-dot{width:6px;height:6px;border-radius:9999px;background:rgba(255,255,255,.4);transition:all .2s}
 #root-user .carousel-dot.is-active{width:18px;background:#fff}
-#root-user .date-picker-mask{position:absolute;inset:0;z-index:2030;background:rgba(0,0,0,.4);display:flex;align-items:flex-end}
-#root-user .date-picker-sheet{width:100%;background:#fff;border-radius:16px 16px 0 0;max-height:60%;display:flex;flex-direction:column}
-#root-user .date-picker-sheet-header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid #E5E5E5}
-#root-user .date-picker-sheet-body{overflow-y:auto;padding:8px 0;-webkit-overflow-scrolling:touch}
-#root-user .date-picker-row{padding:14px 20px;font-size:16px;font-weight:500;color:#111;cursor:pointer;display:flex;align-items:center;gap:8px}
-#root-user .date-picker-row:active{background:#F6F7F9}
-#root-user .date-picker-row.is-selected{color:#333;font-weight:700}
+/* 租赁类型/租赁方案 底部弹窗已改为统一结构（layer-base 工具类），原 .date-picker-* 专用类已移除 */
 #root-user .store-search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #E5E5E5;border-radius:12px;padding:10px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 #root-user .store-search-box input{flex:1;border:none;outline:none;background:transparent;font-size:14px;color:#111}
 #root-user .store-search-box input::placeholder{color:#999}
@@ -550,16 +530,16 @@ body.host-single-m #root-user{display:none}
 <div class="flex gap-3 px-5 pt-1 pb-4" data-page-node-id="MNVBbN1PZDVobaz4mtVaow">
 <div class="flex-1" data-page-node-id="P69LlQJUd11QOh9KhQoXsn">
 <div class="text-[12px] font-semibold text-[#6B6B6B] mb-2" data-page-node-id="owckM5I4kqMnT6IP7qAG5i">租赁类型</div>
-<div data-cp @click="showDatePicker=true" class="flex items-center justify-between cursor-pointer active:bg-[#F6F7F9] py-2.5 px-3.5 rounded-xl bg-[#F7F8FA]" data-od-id="rent-date-trigger" data-page-node-id="RrflcvtW8GapOlhy9ycPor">
+<div data-cp @click="showDatePicker=true" class="sheet-trigger" data-od-id="rent-date-trigger" data-page-node-id="RrflcvtW8GapOlhy9ycPor">
 <span class="text-[15px] font-semibold text-[#111]" data-page-node-id="VcEhKfkDkbKl7c8Ckgi6DN">{{ rentDateLabel }}</span>
-<span v-html="luci('chevron-down','w-5 h-5 text-[#999]')" data-page-node-id="dsWn8xiIbwCMfKZvcMDqpD"></span>
+<span v-html="luci('chevron-down','w-4 h-4 text-[#999]')" data-page-node-id="dsWn8xiIbwCMfKZvcMDqpD"></span>
 </div>
 </div>
 <div class="flex-1" data-page-node-id="NFAx9wQYLmcjd7Fh84NLCD">
 <div class="text-[12px] font-semibold text-[#6B6B6B] mb-2" data-page-node-id="iEOuwItLUWP9fBTtDQNmEH">租赁方案</div>
-<div data-cp @click="showPeriodPicker=true" class="flex items-center justify-between cursor-pointer active:bg-[#F6F7F9] py-2.5 px-3.5 rounded-xl bg-[#F7F8FA]" data-od-id="rent-period-trigger" data-page-node-id="EeSGBHtn6wa4GTRL0qTE30">
+<div data-cp @click="showPeriodPicker=true" class="sheet-trigger" data-od-id="rent-period-trigger" data-page-node-id="EeSGBHtn6wa4GTRL0qTE30">
 <span class="text-[15px] font-semibold text-[#111]" data-page-node-id="mXIAGmrRTSXFIEPjpAApn9">{{ rentPeriodLabel }}</span>
-<span v-html="luci('chevron-down','w-5 h-5 text-[#999]')" data-page-node-id="MuFA9iYYFG46FTk2cPf6p4"></span>
+<span v-html="luci('chevron-down','w-4 h-4 text-[#999]')" data-page-node-id="MuFA9iYYFG46FTk2cPf6p4"></span>
 </div>
 </div>
 </div>
@@ -659,7 +639,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 <div class="flex gap-2.5 px-4 pb-4" data-page-node-id="bW6jupHstScrplKCcXZGcX">
-      <button class="flex-1 py-2.5 rounded-xl text-[13px] font-medium border text-[var(--link)] bg-[#EBF1FD]" style="border-color:var(--link)" data-page-node-id="ZGehNZ0m6HpaefAVMd3Ni7" v-if="csReceptionFlag">联系门店</button>
+      <button class="flex-1 py-2.5 rounded-xl text-[13px] font-medium border text-[var(--link)] bg-[#EBF1FD]" style="border-color:var(--link)" data-cp @click="openStorePhone()" data-page-node-id="ZGehNZ0m6HpaefAVMd3Ni7" v-if="csReceptionFlag">联系门店</button>
       <button class="flex-1 py-2.5 rounded-xl text-[13px] font-medium border text-[var(--link)] bg-[#EBF1FD]" style="border-color:var(--link)" data-page-node-id="uEXwEChEbqAGC0lVZgrrzE">导航到店</button>
 </div>
 </div>
@@ -667,16 +647,16 @@ body.host-single-m #root-user{display:none}
 <div class="bg-white rounded-2xl p-4 mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-page-node-id="1L300ci6lArh1OXsTYhbjy">
 <div class="flex gap-3" data-page-node-id="U6wtHkfcKFfxMLJkGQPEB9">
 <div class="flex-1" data-page-node-id="I00ZcKyFY0WS6o6a4R6Srh">
-<div class="text-[11px] text-[#999] mb-1.5" data-page-node-id="AdEDIGtkuz4ByAvzuBbDdX">租赁类型</div>
-<div class="flex items-center justify-between py-2 px-3 rounded-lg bg-[#F6F7F9] cursor-pointer active:opacity-80" data-cp @click="showDatePicker=true" data-page-node-id="ov59FDmmlT7k8GuxH4Ar6A">
-<span class="text-[14px] font-medium text-[#111]" data-page-node-id="5h1dbOl9M6Bj3shQTg42oM">{{ rentDateLabel }}</span>
+<div class="text-[12px] font-semibold text-[#6B6B6B] mb-2" data-page-node-id="AdEDIGtkuz4ByAvzuBbDdX">租赁类型</div>
+<div data-cp @click="showDatePicker=true" class="sheet-trigger" data-od-id="rent-date-trigger-detail" data-page-node-id="ov59FDmmlT7k8GuxH4Ar6A">
+<span class="text-[15px] font-semibold text-[#111]" data-page-node-id="5h1dbOl9M6Bj3shQTg42oM">{{ rentDateLabel }}</span>
 <span v-html="luci('chevron-down','w-4 h-4 text-[#999]')" data-page-node-id="Y1fNXpJyhDsDjEmFgnh4bc"></span>
 </div>
 </div>
 <div class="flex-1" data-page-node-id="i5oGONAGEGNozyvw6ceGtW">
-<div class="text-[11px] text-[#999] mb-1.5" data-page-node-id="qXIbxcJH1O4rKu8anz8FqQ">租赁方案</div>
-<div class="flex items-center justify-between py-2 px-3 rounded-lg bg-[#F6F7F9] cursor-pointer active:opacity-80" data-cp @click="showPeriodPicker=true" data-page-node-id="kdGVmla9Du73vglHJvKsg3">
-<span class="text-[14px] font-medium text-[#111]" data-page-node-id="Sp6ve3GQrnyc1XdGBJM52I">{{ rentPeriodLabel }}</span>
+<div class="text-[12px] font-semibold text-[#6B6B6B] mb-2" data-page-node-id="qXIbxcJH1O4rKu8anz8FqQ">租赁方案</div>
+<div data-cp @click="showPeriodPicker=true" class="sheet-trigger" data-od-id="rent-period-trigger-detail" data-page-node-id="kdGVmla9Du73vglHJvKsg3">
+<span class="text-[15px] font-semibold text-[#111]" data-page-node-id="Sp6ve3GQrnyc1XdGBJM52I">{{ rentPeriodLabel }}</span>
 <span v-html="luci('chevron-down','w-4 h-4 text-[#999]')" data-page-node-id="jiJe7Clg7EUsK5VPktyc60"></span>
 </div>
 </div>
@@ -1843,7 +1823,7 @@ body.host-single-m #root-user{display:none}
 <div v-if="orderInfo.status==='cancelled' && orderInfo.cancelTime" class="flex items-center gap-2" data-page-node-id="DFmxnfmKydTTMxHarzLVEO"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="j420u8tZ3Cj5Sa5LmEtv1Z">取消时间</span><span class="flex-1 text-right text-[#333]" data-page-node-id="hiuHxpYpAp6bClrYstwGw2">{{ orderInfo.cancelTime }}</span></div>
 </div>
 <div class="flex gap-2 pt-2.5" data-page-node-id="uk3Mmp7etYxhNRoHuxKqAN">
-<button class="flex-1 py-2.5 rounded-xl text-[14px] text-[#1A1A1A] bg-transparent border border-[#E5E5E5]" data-page-node-id="AVjKWkmJlP3iJaEgfM0IXu" v-if="csReceptionFlag">联系门店</button>
+<button class="flex-1 py-2.5 rounded-xl text-[14px] text-[#1A1A1A] bg-transparent border border-[#E5E5E5]" data-page-node-id="AVjKWkmJlP3iJaEgfM0IXu" v-if="csReceptionFlag" data-cp @click="openStorePhone()">联系门店</button>
 <button class="flex-1 py-2.5 rounded-xl text-[14px] text-[#1A1A1A] bg-transparent border border-[#E5E5E5]" data-page-node-id="iQQavabWTmO0M4KRyRvhWS">导航到店</button>
 </div>
 </div>
@@ -2661,45 +2641,45 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="absolute bottom-[8px] left-1/2 -translate-x-1/2 w-[135px] h-[5px] bg-black/30 rounded-full z-[2001]" data-page-node-id="c6SZMPOBu6tTqh4JnTAMYt"></div>
 
-<transition name="fd" data-page-node-id="t7AIMcv4h1ASIPcoLB5doz">
-<div v-if="showDatePicker" class="date-picker-mask" data-cp @click.self="showDatePicker=false;pickerMode='order'" data-od-id="rent-date-picker" data-page-node-id="vbNlXqJqwfewLtlQg73ddk">
-<transition name="sh" data-page-node-id="x8mBnq6VyCVtGDv3deVfJr">
-<div class="date-picker-sheet" data-page-node-id="xxfncHggWcTR8zmDg4zGD0">
-<div class="date-picker-sheet-header" data-page-node-id="veDmwUtN1e1wzM3YlKs3sf">
-<span class="text-[15px] font-bold" data-page-node-id="i5rvB1rTGRGAxjmbp5jZq6">租赁类型</span>
-<div data-cp @click="showDatePicker=false" class="w-8 h-8 flex items-center justify-center cursor-pointer active:bg-[#F6F7F9] rounded-full" data-page-node-id="4ADkJElqIGqmg8VAUhkOQU"><span v-html="luci('x','w-5 h-5 text-[#999]')" data-page-node-id="aaSb4Ya4ZUzhOMzgvKHOhY"></span></div>
+<!-- 租赁类型（统一底部弹窗结构：遮罩与面板为兄弟节点，20px 圆角，居中标题 + 右上角关闭） -->
+<transition name="fd" data-page-node-id="t7AIMcv4h1ASIPcoLB5doz"><div v-if="showDatePicker" class="absolute inset-0 z-[2030]" style="background:rgba(0,0,0,.4)" data-cp @click.self="closeDatePicker()" data-od-id="rent-date-mask" data-page-node-id="vbNlXqJqwfewLtlQg73ddk"></div></transition>
+<transition name="sh" data-page-node-id="x8mBnq6VyCVtGDv3deVfJr"><div v-if="showDatePicker" class="absolute bottom-0 left-0 right-0 bg-white z-[2031] rounded-t-[20px] flex flex-col" style="max-height:60%;padding-bottom:max(24px,env(safe-area-inset-bottom))" data-od-id="rent-date-picker" data-page-node-id="xxfncHggWcTR8zmDg4zGD0">
+<div class="relative shrink-0 text-center text-[17px] font-semibold pt-6 pb-5" data-page-node-id="veDmwUtN1e1wzM3YlKs3sf">
+{{ datePickerTitle }}
+<div data-cp @click="closeDatePicker()" class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer select-none active:bg-[#F6F7F9]" data-od-id="rent-date-close" data-page-node-id="4ADkJElqIGqmg8VAUhkOQU"><span v-html="luci('x','w-5 h-5 text-[#999]')" data-page-node-id="aaSb4Ya4ZUzhOMzgvKHOhY"></span></div>
 </div>
-<div class="date-picker-sheet-body hide-scroll" data-page-node-id="BDyKB1uCbYmqWJCckXWcMB">
-<div v-for="(d,i) in dateOptions" :key="i" data-cp @click="selectDate(i)" class="date-picker-row" :class="(pickerMode==='renew'?renewDateIdx:rentDateIdx)===i?'is-selected':''" data-page-node-id="0FBXxDjhyVo8lO0Jxmf6YI">
-<span v-if="(pickerMode==='renew'?renewDateIdx:rentDateIdx)===i" v-html="luci('check','w-4 h-4 text-[#2B3F5F]')" data-page-node-id="5lzToNSk7AQTuC1Cc3zpxi"></span>
-<span v-else class="w-4" data-page-node-id="KzzSZtjQVMMZ0PXSjnzLao"></span>
-<span data-page-node-id="xQvxH5NhKeD2ugpqA2CBz2">{{ d }}</span>
+<div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pb-1 flex flex-col gap-[10px]" data-page-node-id="BDyKB1uCbYmqWJCckXWcMB">
+<div v-for="(d,i) in dateOptions" :key="i" data-cp @click="selectDate(i)" class="w-full py-3.5 rounded-xl text-center text-[15px] cursor-pointer transition-colors active:opacity-80" :class="rentDateSel(i)?'font-semibold text-white':'text-[#111]'" :style="{background:rentDateSel(i)?'var(--accent)':'#F6F7F9'}" data-page-node-id="0FBXxDjhyVo8lO0Jxmf6YI">
+{{ d }}
 </div>
 </div>
-</div>
-</transition>
-</div>
-</transition>
+</div></transition>
 
-<transition name="fd" data-page-node-id="4fuJaBnJVx75kuR9C0j0TP">
-<div v-if="showPeriodPicker" class="date-picker-mask" data-cp @click.self="showPeriodPicker=false;pickerMode='order'" data-od-id="rent-period-picker" data-page-node-id="iOrMDjqbQtKjbEBm7cMhF1">
-<transition name="sh" data-page-node-id="SHDYsX8gyAqJL3yyVg3iaI">
-<div class="date-picker-sheet" data-page-node-id="oJ3gR2pGWplZVH0Cta0xlU">
-<div class="date-picker-sheet-header" data-page-node-id="DHfvSZBFPLywDIXflbI2zP">
-<span class="text-[15px] font-bold" data-page-node-id="MVBkutD1SrT4M7UT7cDVYE">租赁方案</span>
-<div data-cp @click="showPeriodPicker=false" class="w-8 h-8 flex items-center justify-center cursor-pointer active:bg-[#F6F7F9] rounded-full" data-page-node-id="FkHPE4m5E6QagVHJjV1B7O"><span v-html="luci('x','w-5 h-5 text-[#999]')" data-page-node-id="igL30s54uXw08C4R1BkDFZ"></span></div>
+<!-- 租赁方案（与租赁类型同一套统一结构） -->
+<transition name="fd" data-page-node-id="4fuJaBnJVx75kuR9C0j0TP"><div v-if="showPeriodPicker" class="absolute inset-0 z-[2030]" style="background:rgba(0,0,0,.4)" data-cp @click.self="closePeriodPicker()" data-od-id="rent-period-mask" data-page-node-id="iOrMDjqbQtKjbEBm7cMhF1"></div></transition>
+<transition name="sh" data-page-node-id="SHDYsX8gyAqJL3yyVg3iaI"><div v-if="showPeriodPicker" class="absolute bottom-0 left-0 right-0 bg-white z-[2031] rounded-t-[20px] flex flex-col" style="max-height:60%;padding-bottom:max(24px,env(safe-area-inset-bottom))" data-od-id="rent-period-picker" data-page-node-id="oJ3gR2pGWplZVH0Cta0xlU">
+<div class="relative shrink-0 text-center text-[17px] font-semibold pt-6 pb-5" data-page-node-id="DHfvSZBFPLywDIXflbI2zP">
+{{ periodPickerTitle }}
+<div data-cp @click="closePeriodPicker()" class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer select-none active:bg-[#F6F7F9]" data-od-id="rent-period-close" data-page-node-id="FkHPE4m5E6QagVHJjV1B7O"><span v-html="luci('x','w-5 h-5 text-[#999]')" data-page-node-id="igL30s54uXw08C4R1BkDFZ"></span></div>
 </div>
-<div class="date-picker-sheet-body hide-scroll" data-page-node-id="FVtuys4ArVKMlU4GwvfuEQ">
-<div v-for="(p,i) in periodOptions" :key="i" data-cp @click="selectPeriod(i)" class="date-picker-row" :class="(pickerMode==='renew'?renewPeriodIdx:rentPeriodIdx)===i?'is-selected':''" data-page-node-id="et5GEJMwA3VZWx3xFW04ht">
-<span v-if="(pickerMode==='renew'?renewPeriodIdx:rentPeriodIdx)===i" v-html="luci('check','w-4 h-4 text-[#2B3F5F]')" data-page-node-id="xGnUIHKs6TmXk4fkJGHiHm"></span>
-<span v-else class="w-4" data-page-node-id="4fyQ3BXzfuppTDzJRCdz90"></span>
-<span data-page-node-id="EKNNOWcGnAOGbGvuPHRVmP">{{ p }}</span>
+<div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pb-1 flex flex-col gap-[10px]" data-page-node-id="FVtuys4ArVKMlU4GwvfuEQ">
+<div v-for="(p,i) in periodOptions" :key="i" data-cp @click="selectPeriod(i)" class="w-full py-3.5 rounded-xl text-center text-[15px] cursor-pointer transition-colors active:opacity-80" :class="rentPeriodSel(i)?'font-semibold text-white':'text-[#111]'" :style="{background:rentPeriodSel(i)?'var(--accent)':'#F6F7F9'}" data-page-node-id="et5GEJMwA3VZWx3xFW04ht">
+{{ p }}
 </div>
 </div>
+</div></transition>
+<!-- 联系门店：底部拉起弹窗（号码列表） -->
+<transition name="fd" data-page-node-id="storePhoneMask"><div v-if="storePhoneSheet" class="absolute inset-0 z-[2590]" style="background:rgba(0,0,0,.4)" data-cp @click="closeStorePhone()" data-od-id="store-phone-mask" data-page-node-id="storePhoneMaskBg"></div></transition>
+<transition name="sh" data-page-node-id="storePhoneSheetWrap"><div v-if="storePhoneSheet" class="absolute bottom-0 left-0 right-0 bg-white z-[2591] rounded-t-[20px] flex flex-col" style="max-height:60%;padding-bottom:max(24px,env(safe-area-inset-bottom))" data-od-id="store-phone-sheet" data-page-node-id="storePhoneSheet">
+<div class="relative shrink-0 text-center text-[17px] font-semibold pt-6 pb-5" data-page-node-id="storePhoneTitle">
+联系门店
+<div data-cp @click="closeStorePhone()" class="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer select-none active:bg-[#F6F7F9]" data-od-id="store-phone-close" data-page-node-id="storePhoneClose"><span v-html="luci('x','w-5 h-5 text-[#999]')" data-page-node-id="storePhoneCloseIcon"></span></div>
 </div>
-</transition>
+<div class="px-4 pb-1 flex flex-col gap-[10px]" data-page-node-id="storePhoneBody">
+<div v-for="(c,i) in storePhoneList" :key="i" data-cp @click="dialStorePhone(c)" class="w-full py-3.5 rounded-xl text-center text-[15px] text-[#111] cursor-pointer active:opacity-80" style="background:#F6F7F9" data-od-id="store-phone-item" data-page-node-id="storePhoneItem">{{ c.phone }}</div>
 </div>
-</transition>
+</div></transition>
+
 <transition name="sl" data-page-node-id="0pepSwjdCBDusZepYstKcX"><div v-if="showWallet" class="absolute inset-0 z-[1889] bg-[#F6F7F9] flex flex-col overflow-hidden" data-od-id="wallet-page" data-page-node-id="9KPUcen23fY8nJlTB79lTN">
 <div class="pt-14 px-4 pb-3 flex items-center justify-between bg-white shrink-0" style="border-bottom:1px solid #F0F0F0" data-page-node-id="I4bMCCFOL5gDYsHCxRrgsA">
 <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack()" data-page-node-id="AWqyIsR10PtIZHgDqzdZR4"><span v-html="luci('chevron-left','w-5 h-5')" data-page-node-id="NTzooXq19gtP4SAEHW7Tyy"></span></div>
@@ -7346,12 +7326,21 @@ const showDatePicker=ref(false);
 const rentDateIdx=ref(0);
 const dateOptions=['车辆租赁','电池租赁','车电套餐'];
 const rentDateLabel=computed(()=>dateOptions[rentDateIdx.value]||dateOptions[0]);
-function selectDate(i){if(pickerMode.value==='renew'){renewDateIdx.value=i}else{rentDateIdx.value=i}showDatePicker.value=false;pickerMode.value='order';if(showVehicle.value){showRentLoading.value=true;setTimeout(()=>{showRentLoading.value=false},600)}}
+const datePickerTitle=computed(()=>pickerMode.value==='renew'?'续租类型':'租赁类型');
+/* 选中判定唯一出口：模板里不重复书写三元表达式 */
+function rentDateSel(i){return (pickerMode.value==='renew'?renewDateIdx.value:rentDateIdx.value)===i}
+/* 统一关闭出口：遮罩 / 右上角 X / 选中 都走同一函数，保证 pickerMode 复位一致 */
+function closeDatePicker(){showDatePicker.value=false;pickerMode.value='order'}
+function selectDate(i){if(pickerMode.value==='renew'){renewDateIdx.value=i}else{rentDateIdx.value=i}closeDatePicker();if(showVehicle.value){showRentLoading.value=true;setTimeout(()=>{showRentLoading.value=false},600)}}
 const showPeriodPicker=ref(false);
 const rentPeriodIdx=ref(3);
 const periodOptions=['时租','日租','周租','月租'];
 const rentPeriodLabel=computed(()=>periodOptions[rentPeriodIdx.value]||periodOptions[3]);
-function selectPeriod(i){if(pickerMode.value==='renew'){renewPeriodIdx.value=i}else{rentPeriodIdx.value=i}showPeriodPicker.value=false;pickerMode.value='order';if(showVehicle.value){showRentLoading.value=true;setTimeout(()=>{showRentLoading.value=false},600)}}
+const periodPickerTitle=computed(()=>pickerMode.value==='renew'?'续租方案':'租赁方案');
+/* 选中判定唯一出口：模板里不重复书写三元表达式 */
+function rentPeriodSel(i){return (pickerMode.value==='renew'?renewPeriodIdx.value:rentPeriodIdx.value)===i}
+function closePeriodPicker(){showPeriodPicker.value=false;pickerMode.value='order'}
+function selectPeriod(i){if(pickerMode.value==='renew'){renewPeriodIdx.value=i}else{rentPeriodIdx.value=i}closePeriodPicker();if(showVehicle.value){showRentLoading.value=true;setTimeout(()=>{showRentLoading.value=false},600)}}
 const periodUnitMap={'时租':'小时','日租':'天','周租':'周','月租':'月'};
 const periodUnit=computed(()=>periodUnitMap[periodOptions[rentPeriodIdx.value]]||periodOptions[rentPeriodIdx.value]);
 
@@ -7359,7 +7348,7 @@ const showStore=ref(false);
 const storeSearch=ref('');
 const storeQuery=ref('');
 const demoListEmpty=ref(false);function demoSetListEmpty(v){demoListEmpty.value=!!v}
-const storeList=computed(()=>(stores&&stores.value||[]).map(function(s){return {name:s.name,addr:s.addr||'',dist:''}}));
+const storeList=computed(()=>(stores&&stores.value||[]).map(function(s){return {name:s.name,addr:s.addr||'',phone:s.phone||'',dist:''}}));
 const storeFiltered=computed(()=>{if(demoListEmpty.value)return[];const q=storeQuery.value.trim().toLowerCase();if(!q)return storeList.value;return storeList.value.filter(s=>s.name.toLowerCase().includes(q)||s.addr.toLowerCase().includes(q))});
 const selectedStore=ref(null);
 var storePtrInit=false;function openStore(){navOpen('store')}function searchStore(){const q=storeSearch.value.trim();if(q===storeQuery.value.trim())return;storeQuery.value=storeSearch.value;if(showRentLoading.value)return;showRentLoading.value=true;setTimeout(()=>{showRentLoading.value=false},600)}
@@ -7596,7 +7585,13 @@ function pickStoreForWallet(){walletStorePick.value=true;openStore()}
 const walletStoreSheet=ref(false);
 const walletOpenedStores=computed(()=>Object.keys(walletAccount.value.wallets).filter(k=>walletAccount.value.wallets[k]&&walletAccount.value.wallets[k].opened));
 function walletSwitchStore(n){walletAccount.value.activeStoreId=n;walletStoreSheet.value=false}
-function storeInfoOf(name){return storeList.find(x=>x.name===name)||{addr:''}}
+function storeInfoOf(name){return storeList.value.find(x=>x.name===name)||{addr:'',phone:''}}
+/*══ 联系门店：底部拉起弹窗，数据同商户端「客服信息」（csList），点击号码直接拨打 ══*/
+const storePhoneSheet=ref(false);
+const storePhoneList=computed(()=>(csPhones.value||[]).map(function(c){return {phone:(c&&c.phone)||'',code:(c&&c.code)||'',remark:(c&&c.remark)||''}}).filter(function(c){return !!c.phone}));
+function openStorePhone(){storePhoneSheet.value=true}
+function closeStorePhone(){storePhoneSheet.value=false}
+function dialStorePhone(c){var n=String((c&&c.code)||'')+String((c&&c.phone)||'').replace(/[^0-9]/g,'');if(!n)return;toast('拨号中…','info');try{window.location.href='tel:'+n}catch(e){}}
 function ensureWalletOpened(name){if(walletAccount.value.wallets[name]){walletAccount.value.wallets[name].opened=true}else{walletAccount.value.wallets[name]={rechargeBalance:0,bonusBalance:0,rechargeFrozen:0,bonusFrozen:0,totalBalance:0,totalFrozen:0,lastUpdated:new Date().toISOString(),opened:true}}}
 const rechargeLedger=ref([{id:'RC20250601001',type:'recharge',amount:100000,balanceAfter:250000,relatedOrder:null,operator:'当前账号',remark:'用户充值',createdAt:'2025-06-01T10:00:00Z'},{id:'RC20250601002',type:'orderConsume',amount:-50000,balanceAfter:150000,relatedOrder:'YZ20250601001',operator:'系统',remark:'租金支付',createdAt:'2025-06-01T14:00:00Z'},{id:'RC20250528001',type:'orderRefund',amount:50000,balanceAfter:200000,relatedOrder:'YZ20250528001',operator:'系统',remark:'订单退款',createdAt:'2025-05-28T16:00:00Z'},{id:'RC20250520001',type:'recharge',amount:200000,balanceAfter:150000,relatedOrder:null,operator:'当前账号',remark:'用户充值',createdAt:'2025-05-20T09:00:00Z'}]);
 const bonusLedger=ref([{id:'BN20250615001',type:'gift',amount:50000,balanceAfter:50000,relatedOrder:null,operator:'运营',remark:'新用户注册赠送',createdAt:'2025-06-15T08:00:00Z'},{id:'BN20250610001',type:'orderConsume',amount:-10000,balanceAfter:0,relatedOrder:'YZ20250610001',operator:'系统',remark:'租金抵扣',createdAt:'2025-06-10T12:00:00Z'},{id:'BN20250605001',type:'orderRefund',amount:5000,balanceAfter:45000,relatedOrder:'YZ20250605001',operator:'系统',remark:'赠送余额退款',createdAt:'2025-06-05T14:00:00Z'},{id:'BN20250601001',type:'deduct',amount:-8000,balanceAfter:40000,relatedOrder:null,operator:'系统',remark:'赠送扣减',createdAt:'2025-06-01T10:00:00Z'}]);const walletLedger=ref([{id:'WL260828001',type:'recharge',amount:30000,balanceAfter:250000,relatedOrder:null,operator:'当前账号',remark:'用户充值',createdAt:'2026-08-28T14:20:00'},{id:'WL260824001',type:'rechargeRefund',amount:50000,balanceAfter:220000,relatedOrder:'CZ20260824001',operator:'系统',remark:'充值退款',createdAt:'2026-08-24T10:15:00'},{id:'WL260815001',type:'orderRefund',amount:20000,balanceAfter:230000,relatedOrder:'YZ20260815001',operator:'系统',remark:'订单退款',createdAt:'2026-08-15T15:00:00'},{id:'WL260813001',type:'gift',amount:10000,balanceAfter:50000,relatedOrder:null,operator:'运营',remark:'活动赠送',createdAt:'2026-08-13T09:00:00'},{id:'WL260807001',type:'orderRefund',amount:5000,balanceAfter:45000,relatedOrder:'YZ20260807001',operator:'系统',remark:'赠送余额退款',createdAt:'2026-08-07T14:00:00'},{id:'WL260802001',type:'deduct',amount:-8000,balanceAfter:40000,relatedOrder:null,operator:'系统',remark:'赠送扣减',createdAt:'2026-08-02T10:00:00'},{id:'WL260806001',type:'orderConsume',amount:-10000,balanceAfter:200000,relatedOrder:'YZ20260806001',operator:'系统',remark:'租金支付',createdAt:'2026-08-06T15:30:00'},{id:'WL260801001',type:'recharge',amount:50000,balanceAfter:210000,relatedOrder:null,operator:'当前账号',remark:'用户充值',createdAt:'2026-08-01T11:20:00'},{id:'WL260725001',type:'orderConsume',amount:-30000,balanceAfter:160000,relatedOrder:'YZ20260725001',operator:'系统',remark:'租金支付',createdAt:'2026-07-25T17:40:00'},{id:'WL260719001',type:'orderConsume',amount:-10000,balanceAfter:40000,relatedOrder:null,operator:'系统',remark:'赠送余额抵扣',createdAt:'2026-07-19T12:10:00'},{id:'WL260712001',type:'gift',amount:50000,balanceAfter:50000,relatedOrder:null,operator:'运营',remark:'新用户注册赠送',createdAt:'2026-07-12T08:00:00'},{id:'WL260620001',type:'orderConsume',amount:-50000,balanceAfter:150000,relatedOrder:'YZ20260620001',operator:'系统',remark:'租金支付',createdAt:'2026-06-20T10:05:00'},{id:'WL260610001',type:'rechargeRefund',amount:200000,balanceAfter:200000,relatedOrder:'CZ20260610001',operator:'系统',remark:'充值退款',createdAt:'2026-06-10T09:00:00'}]);walletLedger.value.forEach(function(r){if(!r.storeId)r.storeId='雅迪电动车(双流区雅和北路店)'});walletLedger.value.push({id:'WL265180001',type:'orderConsume',amount:-20000,balanceAfter:60000,relatedOrder:'YZ20260518001',operator:'系统',remark:'租金支付',storeId:'雅迪电动车(锦江区春熙路店)',createdAt:'2026-05-18T15:00:00'},{id:'WL265130001',type:'orderRefund',amount:10000,balanceAfter:70000,relatedOrder:'YZ20260513001',operator:'系统',remark:'订单退款',storeId:'雅迪电动车(锦江区春熙路店)',createdAt:'2026-05-13T11:00:00'},{id:'WL265120001',type:'recharge',amount:50000,balanceAfter:80000,relatedOrder:null,operator:'当前账号',remark:'用户充值',storeId:'雅迪电动车(锦江区春熙路店)',createdAt:'2026-05-12T10:30:00'},{id:'WL265070001',type:'orderConsume',amount:-5000,balanceAfter:15000,relatedOrder:null,operator:'系统',remark:'赠送余额抵扣',storeId:'雅迪电动车(锦江区春熙路店)',createdAt:'2026-05-07T12:00:00'},{id:'WL265040001',type:'orderRefund',amount:3000,balanceAfter:20000,relatedOrder:'YZ20250504001',operator:'系统',remark:'赠送余额退款',storeId:'雅迪电动车(锦江区春熙路店)',createdAt:'2026-05-04T14:00:00'},{id:'WL265010001',type:'deduct',amount:-2000,balanceAfter:18000,relatedOrder:null,operator:'系统',remark:'赠送扣减',storeId:'雅迪电动车(锦江区春熙路店)',createdAt:'2026-05-01T10:00:00'},{id:'WL264220001',type:'gift',amount:20000,balanceAfter:20000,relatedOrder:null,operator:'运营',remark:'新用户注册赠送',storeId:'雅迪电动车(锦江区春熙路店)',createdAt:'2026-04-22T08:00:00'});
@@ -7842,7 +7837,7 @@ function goSwap(){location.href='swap.html'}
 function backToRental(){navBack()}
 function setLoggedIn(v){if(v&&firstLogin.value){firstLogin.value=false;switchSource.value='first';loggedIn.value=true;navSwap('subSwitchSystem');toast('请选择系统','info');return}loggedIn.value=v}
 function switchBack(){if(switchSource.value==='first'){switchSource.value='settings';doLogout();return}navBack()}
-return{tab,toasts,toast,copyText,setTab,luci,weatherScene,weatherData,demoActive,demoListEmpty,demoSetListEmpty,mapCtx,showFindPage,showTrackPage,refundRentOpen,refundDepositOpen,refundTotalOpen,refundChannels,locLoading,locRinging,locFocus,locAddressFull,locAddressShort,locDistM,locWalkMin,locVehPt,locUserPt,openFindPage,openFindPageBattery,closeFindPage,locFocusUser,locFocusVehicle,locRingDevice,locOpenNav,trackStartLabel,trackEndLabel,trackLoading,trackPoints,trackPolyline,trackStartPt,trackEndPt,trackPois,trackTimePicker,openTrackPage,openTrackPageBattery,closeTrackPage,openTrackTimePicker,cancelTrackTimePicker,confirmTrackTimePicker,trackDraft,trackDays,trackMonths,trackYears,trackHours,trackMins,p2u,trackWheelDay,trackWheelMonth,trackWheelYear,trackWheelHour,trackWheelMin,onTrackWheelScroll,vehicles,vehicleCount,setVehicleCount,vehicleSource,setVehicleSource,opLock,opHorn,myVehicleIdx,showVehiclePicker,currentVehicle,toggleVehiclePicker,selectMyVehicle,openMyVehicleFromHome,openVehicleDetail,closeVehicleDetail,openVNameEdit,closeVNameEdit,saveVNameEdit,vNameLoading,openUnbindConfirm,closeUnbindConfirm,confirmUnbind,pushNotify,showPushNotify,renewNotifyTemplates,unbindLoading,showVehicleDetail,showUnbindConfirm,showVNameEdit,vNameInput,vNameError,locked,lockLoading,toggleLock,hornLoading,sendHorn,openMyCarOrder,currentOrder,refreshHome,refreshRent,openRent,loggedIn,pendingRoute,appLang,appLangLabel,langOptions,showLogin,loginView,loginMode,loginSub,loginDial,loginPhone,loginEmail,loginAccount,loginPwd,loginCode,loginPwdVisible,loginAgree,loginCd,dialQ,dialFiltered,showDialPicker,activeDialCode,closeDialPicker,canSendCode,canLogin,loginOpenLang,selectLangFromLogin,openDialCode,pickDial,setLoginMode,setLoginSub,sendLoginCode,doLogin,openLogin,profileOV,profileSub,profileMod,profileModLoading,hasPhone,hasEmail,hasPwd,boundPhone,boundEmail,bpArea,bpPhone,bpCode,bpCd,beEmail,beCode,beCd,openBindPhone,openBindEmail,sendBpCode,doBindPhone,sendBeCode,doBindEmail,pwdChannel,pwdCode,pwdCd,npwd,npwd2,npwdVis,npwd2Vis,canConfirmPwd,openPwdFlow,switchPwdChannel,sendPwdCode,nextPwdVerify,doResetPwd,checkVersion,goUpdate,exitApp,relaunchApp,scanning,doScan,scanTorch,manualVin,showManualVin,scanCtx,openManualInput,confirmManualVin,scanBindMode,scanBindDevice,vdDevice,bdDevice,showBindConfirm,bindConfirmLoading,openBindConfirm,closeBindConfirm,confirmBind,homeDevSeg,homeBatteries,bSocColor,batteryAdd,showBatteryDetail,currentBattery,openBatteryDetail,openBatteryOrder,closeBatteryDetail,openBatteryUnbind,closeBatteryUnbind,confirmBatteryUnbind,showBatteryUnbind,batteryUnbindLoading,showVersionCheck,hasNewVersion,latestVersion,updateDesc,updating,appExited,selectLang,doLogout,profileMdT,profileMdD,profileMdDanger,profileMdOk,showRent,rentBannerIdx,rentBanners,showRentLoading,homeBannerIdx,homeBanners,showDatePicker,rentDateIdx,dateOptions,rentDateLabel,selectDate,showPeriodPicker,rentPeriodIdx,periodOptions,rentPeriodLabel,periodUnit,selectPeriod,showStore,storeSearch,storeFiltered,selectStore,openStore,searchStore,selectedStore,confStore,showVehicle,vehicleList,rentNow,showConfirm,selectedVehicle,confRentDays,confTotal,confTotalDays,confDurationLabel,confPeriodDetail,orderPlanDisplay,confTab,confPayType,cancelRules,noticeRules,billingRules,overdueRules,confAddDays,confSubDays,confirmOrder,confTotal,confDeposit,confGrandTotal,confPickupDate,confReturnDate,confPickupISO,confReturnISO,showOrderDetail,showRefundList,openRefundList,navBack,navOpen,refundRecords,confirmDocs,autoRenew,toggleAutoRenew,uploadIdEnabled,showConfirmDocs,showDocSheet,docSheetTab,docText,docImageTypes,docDeleteMod,docDeleteTarget,previewImage,openDocSheet,addDocImage,addDocText,requestDeleteDoc,confirmDeleteDoc,showCancelModal,idInfoList,showIdInfoSheet,idInfoTypes,idInfoCount,openIdInfoSheet,idName,idEditingId,openIdAdd,openIdEditRecord,deleteIdRecord,idCardNo,driverNo,idPhotos,driverPhotos,idDetailRec,openIdDetail,openIdDetailPreview,idNameErr,idCardErr,driverErr,idPhotoErr,driverPhotoErr,idActionTarget,openIdEditRecord,deleteIdRecord,showIdDelete,idDeleteTarget,openIdDelete,confirmIdDelete,idSelectMode,confirmIdInfo,openIdSelect,closeIdSelect,confirmIdSelect,showIdAction,idPickerSource,showIdPreview,idPreviewItem,showIdPicker,idPickerKind,idPickerSH,maskNo,maskNoFull,submitIdInfo,openIdPicker,pickIdSource,commitIdPhoto,openIdMore,idActionReupload,doIdReupload,idActionDelete,openIdPreview,cancelLoading,orderCountdown,orderCountdownText,orderDetailTab,cancelOrder,goToPay,orderInfo,startOrderTimer,stopOrderTimer,showMyOrders,showOrderList,orderListCategory,currentOrderList,openOrderCategory,openMyOrders,openOrderDetailFromList,orderFilter,orderFilterTabs,orderFilterMap,setOrderFilter,relocateRent,payChannel,setPayChannel,cancelBeforePay,setCancelBeforePay,delDocLoading,showWallet,showWalletLedger,showTopup,walletBalanceVisible,walletAccount,walletActive,walletLedgerActive,walletStorePick,pickStoreForWallet,walletStoreSheet,walletOpenedStores,walletSwitchStore,storeInfoOf,ensureWalletOpened,walletLedger,walletLedgerTab,walletLedgerList,walletLedgerMonthOpen,setWalletLedgerTab,toggleWalletLedgerMonth,rechargeLedger,bonusLedger,topupAmount,topupCustom,topupShowCustom,walletTopupAmounts,walletTopupBonus,openWallet,openWalletLedger,openTopup,selectTopupAmount,confirmTopup,onCustomAmountInput,walletLedgerTxn,walletLedgerTxnOpts,showRenewPlan,openRenew,confirmRenew,renewDateIdx,renewPeriodIdx,renewDateLabel,renewPeriodLabel,renewRentFee,showFeeDetail,feeRows,feeCardRow,feeChannelBreakdown,feeSummary,rentOpen,depositOpen,totalOpen,showPayment,confirmPayment,paymentType,paymentBusy,payTarget,openPayRenew,cancelRenew,requestCancelRenew,confirmCancelRenew,payRenewDirect,showCancelRenewModal,cancelRenewTarget,cancelRenewLoading,openPayOrder,markRenewPaid,deductWallet,parseRp,formatNow,pickerMode,renewDays,renewDetail,renewDurationLabel,renewPlanDisplay,renewAddDays,renewSubDays,detailOpen,feeRowChannels,showRechargeOrder,rechargeOrder,rechargeStatusTag,payRechargeOrder,rechargeChannelText,fmtRp,openRechargeOrderFromList,openRechargeList,setRechargeFilter,showRechargeList,rechargeFilterTabs,rechargeFilterMap,rechargeFilter,currentRechargeList,dialRechargePhone,setRechargeRefundState,showCancelRechargeModal,cancelRechargeLoading,requestCancelRecharge,confirmCancelRecharge,rechargeCustomFlag,rechargeEnabledFlag,csReceptionFlag,autoRenewEntryVisible,renewEntryVisible,rechargeTiers,csSheet,csPhones,batteryCount,setBatteryCount,goSwap,backToRental,firstLogin,switchSource,setLoggedIn,switchBack,curSystemName};
+return{tab,toasts,toast,copyText,setTab,luci,weatherScene,weatherData,demoActive,demoListEmpty,demoSetListEmpty,mapCtx,showFindPage,showTrackPage,refundRentOpen,refundDepositOpen,refundTotalOpen,refundChannels,locLoading,locRinging,locFocus,locAddressFull,locAddressShort,locDistM,locWalkMin,locVehPt,locUserPt,openFindPage,openFindPageBattery,closeFindPage,locFocusUser,locFocusVehicle,locRingDevice,locOpenNav,trackStartLabel,trackEndLabel,trackLoading,trackPoints,trackPolyline,trackStartPt,trackEndPt,trackPois,trackTimePicker,openTrackPage,openTrackPageBattery,closeTrackPage,openTrackTimePicker,cancelTrackTimePicker,confirmTrackTimePicker,trackDraft,trackDays,trackMonths,trackYears,trackHours,trackMins,p2u,trackWheelDay,trackWheelMonth,trackWheelYear,trackWheelHour,trackWheelMin,onTrackWheelScroll,vehicles,vehicleCount,setVehicleCount,vehicleSource,setVehicleSource,opLock,opHorn,myVehicleIdx,showVehiclePicker,currentVehicle,toggleVehiclePicker,selectMyVehicle,openMyVehicleFromHome,openVehicleDetail,closeVehicleDetail,openVNameEdit,closeVNameEdit,saveVNameEdit,vNameLoading,openUnbindConfirm,closeUnbindConfirm,confirmUnbind,pushNotify,showPushNotify,renewNotifyTemplates,unbindLoading,showVehicleDetail,showUnbindConfirm,showVNameEdit,vNameInput,vNameError,locked,lockLoading,toggleLock,hornLoading,sendHorn,openMyCarOrder,currentOrder,refreshHome,refreshRent,openRent,loggedIn,pendingRoute,appLang,appLangLabel,langOptions,showLogin,loginView,loginMode,loginSub,loginDial,loginPhone,loginEmail,loginAccount,loginPwd,loginCode,loginPwdVisible,loginAgree,loginCd,dialQ,dialFiltered,showDialPicker,activeDialCode,closeDialPicker,canSendCode,canLogin,loginOpenLang,selectLangFromLogin,openDialCode,pickDial,setLoginMode,setLoginSub,sendLoginCode,doLogin,openLogin,profileOV,profileSub,profileMod,profileModLoading,hasPhone,hasEmail,hasPwd,boundPhone,boundEmail,bpArea,bpPhone,bpCode,bpCd,beEmail,beCode,beCd,openBindPhone,openBindEmail,sendBpCode,doBindPhone,sendBeCode,doBindEmail,pwdChannel,pwdCode,pwdCd,npwd,npwd2,npwdVis,npwd2Vis,canConfirmPwd,openPwdFlow,switchPwdChannel,sendPwdCode,nextPwdVerify,doResetPwd,checkVersion,goUpdate,exitApp,relaunchApp,scanning,doScan,scanTorch,manualVin,showManualVin,scanCtx,openManualInput,confirmManualVin,scanBindMode,scanBindDevice,vdDevice,bdDevice,showBindConfirm,bindConfirmLoading,openBindConfirm,closeBindConfirm,confirmBind,homeDevSeg,homeBatteries,bSocColor,batteryAdd,showBatteryDetail,currentBattery,openBatteryDetail,openBatteryOrder,closeBatteryDetail,openBatteryUnbind,closeBatteryUnbind,confirmBatteryUnbind,showBatteryUnbind,batteryUnbindLoading,showVersionCheck,hasNewVersion,latestVersion,updateDesc,updating,appExited,selectLang,doLogout,profileMdT,profileMdD,profileMdDanger,profileMdOk,showRent,rentBannerIdx,rentBanners,showRentLoading,homeBannerIdx,homeBanners,showDatePicker,rentDateIdx,dateOptions,rentDateLabel,datePickerTitle,rentDateSel,closeDatePicker,selectDate,showPeriodPicker,rentPeriodIdx,periodOptions,rentPeriodLabel,periodPickerTitle,rentPeriodSel,closePeriodPicker,periodUnit,selectPeriod,showStore,storeSearch,storeFiltered,selectStore,openStore,searchStore,selectedStore,confStore,showVehicle,vehicleList,rentNow,showConfirm,selectedVehicle,confRentDays,confTotal,confTotalDays,confDurationLabel,confPeriodDetail,orderPlanDisplay,confTab,confPayType,cancelRules,noticeRules,billingRules,overdueRules,confAddDays,confSubDays,confirmOrder,confTotal,confDeposit,confGrandTotal,confPickupDate,confReturnDate,confPickupISO,confReturnISO,showOrderDetail,showRefundList,openRefundList,navBack,navOpen,refundRecords,confirmDocs,autoRenew,toggleAutoRenew,uploadIdEnabled,showConfirmDocs,showDocSheet,docSheetTab,docText,docImageTypes,docDeleteMod,docDeleteTarget,previewImage,openDocSheet,addDocImage,addDocText,requestDeleteDoc,confirmDeleteDoc,showCancelModal,idInfoList,showIdInfoSheet,idInfoTypes,idInfoCount,openIdInfoSheet,idName,idEditingId,openIdAdd,openIdEditRecord,deleteIdRecord,idCardNo,driverNo,idPhotos,driverPhotos,idDetailRec,openIdDetail,openIdDetailPreview,idNameErr,idCardErr,driverErr,idPhotoErr,driverPhotoErr,idActionTarget,openIdEditRecord,deleteIdRecord,showIdDelete,idDeleteTarget,openIdDelete,confirmIdDelete,idSelectMode,confirmIdInfo,openIdSelect,closeIdSelect,confirmIdSelect,showIdAction,idPickerSource,showIdPreview,idPreviewItem,showIdPicker,idPickerKind,idPickerSH,maskNo,maskNoFull,submitIdInfo,openIdPicker,pickIdSource,commitIdPhoto,openIdMore,idActionReupload,doIdReupload,idActionDelete,openIdPreview,cancelLoading,orderCountdown,orderCountdownText,orderDetailTab,cancelOrder,goToPay,orderInfo,startOrderTimer,stopOrderTimer,showMyOrders,showOrderList,orderListCategory,currentOrderList,openOrderCategory,openMyOrders,openOrderDetailFromList,orderFilter,orderFilterTabs,orderFilterMap,setOrderFilter,relocateRent,payChannel,setPayChannel,cancelBeforePay,setCancelBeforePay,delDocLoading,showWallet,showWalletLedger,showTopup,walletBalanceVisible,walletAccount,walletActive,walletLedgerActive,walletStorePick,pickStoreForWallet,walletStoreSheet,walletOpenedStores,walletSwitchStore,storeInfoOf,ensureWalletOpened,walletLedger,walletLedgerTab,walletLedgerList,walletLedgerMonthOpen,setWalletLedgerTab,toggleWalletLedgerMonth,rechargeLedger,bonusLedger,topupAmount,topupCustom,topupShowCustom,walletTopupAmounts,walletTopupBonus,openWallet,openWalletLedger,openTopup,selectTopupAmount,confirmTopup,onCustomAmountInput,walletLedgerTxn,walletLedgerTxnOpts,showRenewPlan,openRenew,confirmRenew,renewDateIdx,renewPeriodIdx,renewDateLabel,renewPeriodLabel,renewRentFee,showFeeDetail,feeRows,feeCardRow,feeChannelBreakdown,feeSummary,rentOpen,depositOpen,totalOpen,showPayment,confirmPayment,paymentType,paymentBusy,payTarget,openPayRenew,cancelRenew,requestCancelRenew,confirmCancelRenew,payRenewDirect,showCancelRenewModal,cancelRenewTarget,cancelRenewLoading,openPayOrder,markRenewPaid,deductWallet,parseRp,formatNow,pickerMode,renewDays,renewDetail,renewDurationLabel,renewPlanDisplay,renewAddDays,renewSubDays,detailOpen,feeRowChannels,showRechargeOrder,rechargeOrder,rechargeStatusTag,payRechargeOrder,rechargeChannelText,fmtRp,openRechargeOrderFromList,openRechargeList,setRechargeFilter,showRechargeList,rechargeFilterTabs,rechargeFilterMap,rechargeFilter,currentRechargeList,dialRechargePhone,setRechargeRefundState,showCancelRechargeModal,cancelRechargeLoading,requestCancelRecharge,confirmCancelRecharge,rechargeCustomFlag,rechargeEnabledFlag,csReceptionFlag,autoRenewEntryVisible,renewEntryVisible,rechargeTiers,csSheet,csPhones,storePhoneSheet,storePhoneList,openStorePhone,closeStorePhone,dialStorePhone,batteryCount,setBatteryCount,goSwap,backToRental,firstLogin,switchSource,setLoggedIn,switchBack,curSystemName};
 }
 });
 
@@ -10091,6 +10086,9 @@ function initI18nData(){
     {name:'雅迪电动车(武侯区磨子桥店)',addr:'四川省成都市武侯区磨子桥科华北路与一环路南二段交汇'},
     {name:'雅迪电动车(高新区天府大道店)',addr:'四川省成都市高新区天府大道中段天府软件园B区附近'}
   ];
+  /* 门店手机号（联系门店用） */
+  const _storePhones=['138 8001 2345','139 8002 6789','137 8003 4567','136 8004 7890'];
+  stores.value.forEach(function(s,i){if(!s.phone)s.phone=_storePhones[i]||_storePhones[_storePhones.length-1]});
   profileModels.value=[
     {name:'雅迪冠能Q7',count:15,plans:{hour:false,day:false,week:false,month:true},priceHour:0,priceDay:0,priceWeek:0,priceMonth:1200000,deposit:500000,sort:1,time:'2025-01-20 09:00:00'},
     {name:'雅迪小钢炮',count:8,plans:{hour:true,day:true,week:true,month:true},priceHour:20000,priceDay:120000,priceWeek:700000,priceMonth:2800000,deposit:400000,sort:2,time:'2025-01-19 16:30:00'},

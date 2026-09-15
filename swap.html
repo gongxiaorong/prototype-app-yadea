@@ -4,15 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>雅迪换电系统 · 用户端 + 商户端（外框架脚手架）</title>
-<!--
-  ═══════════════════════════════════════════════════════════════
-  雅迪换电系统 · 单文件双 App 外框架脚手架
-  与租车系统(index.html)技术栈 + iOS 外壳 + 布局完全一致
-  （Vue3 + UnoCSS + lucide + iPhone 393×852 框架/灵动岛/设计变量 +
-   每端内嵌 280px「原型操作」面板）。
-  仅搭建基础外框架，业务页占位，后续填充。
-  ═══════════════════════════════════════════════════════════════
--->
 <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"
         onerror="this.onerror=null;this.src='https://unpkg.com/vue@3/dist/vue.global.prod.js'"></script>
@@ -44,7 +35,7 @@ body.host-single-m #root-user{display:none}
 .od-stage{display:flex;align-items:stretch;justify-content:center;gap:32px;max-width:100%}
 .demo-ops-stack{position:relative;width:280px;min-width:280px;flex-shrink:0;align-self:center;height:852px}
 .demo-ops{position:absolute;inset:0;box-sizing:border-box;max-height:852px;overflow-y:auto;visibility:hidden;pointer-events:none}
-.demo-ops.is-active{background:#fff;border:1px solid #E5E5E5;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);visibility:visible;z-index:1}
+.demo-ops.is-active{background:#fff;border:1px solid #E5E5E5;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);visibility:visible;pointer-events:auto;z-index:1}
 .demo-ops-title{font-size:20px;font-weight:600;color:#111;letter-spacing:.02em;margin-bottom:14px}
 .demo-ops-label{font-size:12px;font-weight:600;color:#6B6B6B;margin-bottom:8px}
 .demo-ops-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
@@ -85,11 +76,14 @@ body.host-single-m #root-user{display:none}
 .sw-map-ctrl button{width:34px;height:34px;border-radius:10px;background:#fff;border:none;box-shadow:0 1px 5px rgba(0,0,0,.15);color:#455A4C;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .sw-scan{position:absolute;left:0;right:0;bottom:101px;z-index:30;display:flex;justify-content:center}
 .sw-scan button{display:flex;align-items:center;justify-content:center;gap:8px;padding:15px 34px;border-radius:16px;background:linear-gradient(135deg,#2B3F5F,#22324A);color:#fff;font-size:16px;font-weight:700;border:none;box-shadow:0 8px 20px rgba(43,63,95,.35);cursor:pointer}
-.sw-search{position:absolute;left:12px;right:12px;top:50px;z-index:25}
+.sw-search{position:absolute;left:12px;right:12px;top:50px;z-index:25;display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:10px 14px;box-shadow:0 1px 4px rgba(0,0,0,.12);cursor:pointer}
 /* ── 底部 Tab（对齐租车系统 tabbar：83px 白底毛玻璃 + 底部 Home 指示条） ── */
 .sw-tab-nav{position:absolute;left:0;right:0;bottom:0;height:83px;z-index:100;display:flex;padding-bottom:22px;border-top:1px solid #E5E5E5;background:rgba(255,255,255,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .sw-tab-nav .nv{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;user-select:none;-webkit-user-select:none}
 .sw-homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:135px;height:5px;border-radius:999px;background:rgba(0,0,0,.3);z-index:2001}
+/* 切换换电区域后重新加载数据 */
+@keyframes sw-spin{to{transform:rotate(360deg)}}
+.sw-spin{animation:sw-spin .8s linear infinite}
 .set-row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer}
 .set-row .ic{width:34px;height:34px;border-radius:10px;background:#EBF1FD;display:flex;align-items:center;justify-content:center}
 .set-row .lb{flex:1;font-size:14px;font-weight:600;color:var(--fg)}
@@ -98,6 +92,16 @@ body.host-single-m #root-user{display:none}
 .hide-scroll::-webkit-scrollbar{display:none}
 .hide-scroll{scrollbar-width:none}
 .demo-ops-group-hd{font-size:12px;font-weight:700;color:#333;margin:14px 0 8px}
+.demo-ops-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.demo-ops-link{font-size:11px;font-weight:600;color:var(--link);cursor:pointer;user-select:none}
+.demo-ops-link:active{opacity:.7}
+.demo-ops-perm-g{margin-bottom:10px}
+.demo-ops-perm-g:last-child{margin-bottom:0}
+.demo-ops-chip-code{margin-left:4px;font-size:9px;font-weight:400;color:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.demo-ops-chip-copy{margin-left:3px;display:inline-flex;align-items:center;opacity:.55;cursor:pointer;transition:opacity .15s}
+.demo-ops-chip-copy:hover{opacity:1}
+.demo-ops-chip.is-on-ok{background:var(--link);border-color:var(--link);color:#fff}
+.demo-ops-chip.is-on-warn{background:var(--link);border-color:var(--link);color:#fff}
 .demo-ops-section+.demo-ops-section{margin-top:4px;padding-top:12px;border-top:1px solid #E5E5E5}
 .login-field{box-sizing:border-box;min-height:48px;background:#F7F8FA;border:1px solid #EBEDF0;border-radius:12px;box-shadow:none;outline:none}
 .login-field input,.login-field select{box-sizing:border-box;border:0!important;outline:none!important;box-shadow:none!important;background:transparent!important;-webkit-appearance:none;appearance:none;width:100%}
@@ -143,6 +147,10 @@ body.host-single-m #root-user{display:none}
 .toast-wrap{position:absolute;top:50px;left:16px;right:16px;z-index:99999;display:flex;flex-direction:column;align-items:center;pointer-events:none}
 .toast-item{padding:10px 20px;border-radius:12px;font-size:14px;font-weight:500;color:#fff;pointer-events:auto;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);text-align:center;max-width:80%;line-height:1.4}
 .toast-success,.toast-error,.toast-info,.toast-warn{background:rgba(23,163,74,.9)}
+.toast-enter-active{transition:all .3s cubic-bezier(.32,.72,0,1)}
+.toast-leave-active{transition:all .25s ease-in}
+.toast-enter-from{opacity:0;transform:translateY(-20px) scale(.9)}
+.toast-leave-to{opacity:0;transform:translateY(-10px) scale(.95)}
 /* ── 运行时任意值工具类兜底（@unocss/runtime 不动态生成 arbitrary 值，故此显式补齐，保证与 index.html(build 内联) 观感一致） ── */
 .font-normal{font-weight:400}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}.tabular-nums{font-variant-numeric:tabular-nums}
 .text-\[9px\]{font-size:9px}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[12px\]{font-size:12px}.text-\[13px\]{font-size:13px}.text-\[14px\]{font-size:14px}.text-\[15px\]{font-size:15px}.text-\[16px\]{font-size:16px}.text-\[17px\]{font-size:17px}.text-\[18px\]{font-size:18px}.text-\[22px\]{font-size:22px}
@@ -159,17 +167,14 @@ body.host-single-m #root-user{display:none}
 <header id="host-bar">
   <div class="modes">
     <button data-mode="split" class="active">双端并排</button>
-    <button data-mode="single-u">换电用户端</button>
-    <button data-mode="single-m">换电商户端</button>
+    <button data-mode="single-u">用户端</button>
+    <button data-mode="single-m">商户端</button>
   </div>
   <div class="cur">
     <span class="cur-lbl">货币</span>
     <button data-currency="CNY">人民币</button>
     <button data-currency="IDR" class="active">印尼盾</button>
     <button data-currency="HKD">港币</button>
-  </div>
-  <div class="cur">
-    <button data-navhost="index.html" class="sysnav">租车系统 ›</button>
   </div>
 </header>
 <main id="host-main">
@@ -185,8 +190,9 @@ var MONEY=window.MONEY=Vue.reactive({cur:'IDR',sym:{CNY:'¥',IDR:'Rp',HKD:'HK$'}
 var RATES={CNY:1,IDR:2175,HKD:1.09};
 function fmtRp(n,dec){if(n==null||n===''||n===null)return'—';var v=Number(n)||0;try{return MONEY.sym[MONEY.cur]+' '+v.toLocaleString('en-US',{minimumFractionDigits:dec==null?0:dec,maximumFractionDigits:dec==null?0:dec})}catch(e){return MONEY.sym[MONEY.cur]+' '+v}}
 function luci(n,c){if(!window.lucide||!n||!lucide.icons)return'';try{var p=(s)=>s.replace(/(\w)(\w*)(-|\s*)/g,(_,a,b)=>a.toUpperCase()+b.toLowerCase());var d=lucide.icons[p(n)];if(!d||d[0]!=='svg')return'';var a=d[1],cls='lucide lucide-'+n+(c?' '+c:''),sv='<svg';for(var k in a)if(a.hasOwnProperty(k))sv+=' '+k+'="'+String(a[k]).replace(/"/g,'&quot;')+'"';sv+=' class="'+cls+'">';function b(ch){var h='';for(var i=0;i<ch.length;i++){var t=ch[i][0],at=ch[i][1];h+='<'+t;for(var k in at)if(at.hasOwnProperty(k))h+=' '+k+'="'+String(at[k]).replace(/"/g,'&quot;')+'"';if(ch[i][2]&&ch[i][2].length)h+='>'+b(ch[i][2])+'</'+t+'>';else h+='/>'}return h}sv+=b(d[2])+'</svg>';return sv}catch(ex){return''}}
-function toastPush(msg){window.__toast&&window.__toast(msg)}
-(function(){var t=document.createElement('div');t.className='toast-item toast-info';t.style.cssText='position:fixed;left:50%;top:50px;transform:translateX(-50%);z-index:99999;opacity:0;transition:opacity .3s cubic-bezier(.32,.72,0,1)';document.body.appendChild(t);window.__toast=function(m){t.textContent=m;t.style.opacity='1';clearTimeout(t._tm);t._tm=setTimeout(function(){t.style.opacity='0'},1800)}})();
+/* Toast 共享内核（与 index.html 一致）：每端一份独立列表，2s 自动移除 */
+function toastPush(list,cnt,msg,type){var id=++cnt.n;list.push({id:id,msg:msg,type:type||'info'});setTimeout(function(){for(var i=0;i<list.length;i++){if(list[i].id===id){list.splice(i,1);return}}},2000)}
+function createToastBus(){var list=Vue.ref([]),cnt={n:0};return {list:list,push:function(msg,type){toastPush(list.value,cnt,msg,type)}}}
 
 /* ===== 宿主逻辑 ===== */
 function hostSetMode(m){document.body.className='host-'+m;document.querySelectorAll('#host-bar .modes button').forEach(function(b){b.classList.toggle('active',b.dataset.mode===m)})}
@@ -204,10 +210,11 @@ var FRAME_TOP='<div class="w-[393px] h-[852px] bg-black rounded-[55px] p-3 relat
 var FRAME_BOT='</div></div>';
 
 
-function sideSetup(realm){return {realm:realm,goRental:function(){location.href='index.html'},clearData:function(){toastPush('演示数据已重置')},luci,fmtRp,MONEY}}
+function sideSetup(realm,bus){var toastPush=bus?bus.push:function(){};return {realm:realm,goRental:function(){location.href='index.html'},clearData:function(){toastPush('演示数据已重置')},luci,fmtRp,MONEY}}
 
 /* ===== 登录 + 我的 · 共享状态工厂（复刻 index.html 命名，每 App 一份独立实例） ===== */
-function authState(){
+function authState(bus){
+  var toastPush=bus?bus.push:function(){};
   var loggedIn=Vue.ref(false),firstLogin=Vue.ref(false),showLogin=Vue.ref(false);
   var loginView=Vue.ref('main'),loginMode=Vue.ref('phone'),loginSub=Vue.ref('password');
   var loginDial=Vue.ref('+62'),loginPhone=Vue.ref(''),loginEmail=Vue.ref(''),loginAccount=Vue.ref('');
@@ -331,7 +338,6 @@ function authState(){
   function toggleIdPhoto(group,idx){var a=(group==='id'?idPhotos:driverPhotos);var cur=a.value.slice();cur[idx]=cur[idx]?'':'1';a.value=cur}
   function confirmIdSelect(rec){confirmIdInfo.value=rec;navBack()}
   function submitIdInfo(){idNameErr.value='';idCardErr.value='';driverErr.value='';if(!(idName.value||'').trim()){idNameErr.value='请输入姓名';return}if(!(idCardNo.value||'').trim()){idCardErr.value='请输入证件号码';return}if(!(driverNo.value||'').trim()){driverErr.value='请输入证件号码';return}var rec={id:idEditingId.value||('id'+Date.now()),name:idName.value.trim(),idNo:idCardNo.value.trim(),driverNo:driverNo.value.trim(),idPhotos:idPhotos.value.slice(),driverPhotos:driverPhotos.value.slice()};if(idEditingId.value){var i=-1;for(var k=0;k<idInfoList.value.length;k++){if(idInfoList.value[k].id===idEditingId.value)i=k}if(i>-1)idInfoList.value.splice(i,1,rec)}else{idInfoList.value.push(rec)}toastPush(idEditingId.value?'已保存':'已新增');profileSub.value='idInfo'}
-  function checkVersion(){toastPush('已是最新版本')}
   function profileMdOk(){
     if(profileModLoading.value)return;
     if(profileMod.value==='logout'){profileModLoading.value=true;setTimeout(function(){profileModLoading.value=false;doLogout()},600);return}
@@ -340,7 +346,21 @@ function authState(){
   }
   function openDemoGoSwap(){location.href='swap.html'}
   function openDemoGoRental(){location.href='index.html'}
-  function can(mode){return true}
+  var perms=Vue.ref({});
+  function can(code){var p=perms.value;return code in p?!!p[code]:true}
+  function togglePerm(code){var n=Object.assign({},perms.value);n[code]=!can(code);perms.value=n}
+  function setPermGroup(codes,on){var n=Object.assign({},perms.value);(codes||[]).forEach(function(c){n[c]=on});perms.value=n}
+  var protoForceUpdate=Vue.ref('none'),hasNewVersion=Vue.ref(false),showVersionCheck=Vue.ref(false),latestVersion=Vue.ref('V1.30.0'),updateDesc=Vue.ref('优化了部分体验，建议更新到最新版本。'),updating=Vue.ref(0);
+  function checkVersion(){showVersionCheck.value=true;hasNewVersion.value=(protoForceUpdate.value!=='none');latestVersion.value='V1.30.0'}
+  function goUpdate(){if(updating.value)return;updating.value=1;setTimeout(function(){updating.value=0;showVersionCheck.value=false;toastPush('更新完成！已是最新版本')},1200)}
+  function exitApp(){showVersionCheck.value=false;toastPush('已退出应用（演示）')}
+  var demoOpsActive=Vue.computed(function(){return !showLogin.value});
+  var demoIsTopTab=Vue.computed(function(){return !profileOV.value&&!profileSub.value});
+  var demoPagePermTitle=Vue.computed(function(){if(profileOV.value==='settings'||['lang','subSwitchSystem','bindPhone','bindEmail','pwdVerify','pwdReset'].indexOf(profileSub.value)!==-1)return'系统设置';if(profileOV.value==='info'||['idInfo','idDetail','idAdd'].indexOf(profileSub.value)!==-1)return'个人信息';return'我的'});
+  var demoPagePermGroups=Vue.computed(function(){return[]});
+  var demoPagePermCodes=Vue.computed(function(){return[]});
+  var pageRoute=Vue.computed(function(){if(showLogin.value)return'/login';return '/profile'+(profileOV.value?('/'+profileOV.value):'')+(profileSub.value?('/'+profileSub.value):'')});
+  function copyPermCode(c){var v=(c+' '+pageRoute.value);if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(v).catch(function(){})}}
   function openMenu(id){if(id==='user'||id==='recharge'){}navOpen('menu');profileOV.value=id}
   var menuGroups=Vue.computed(function(){
     var all=[
@@ -365,10 +385,51 @@ function authState(){
     openLogin,closeLogin,loginOpenLang,selectLangFromLogin,selectLang,openDialCode,closeDialPicker,pickDial,setLoginMode,setLoginSub,sendLoginCode,doLogin,setLoggedIn,doLogout,
     navOpen,navBack,goBack,switchBack,openMyOrders,openWallet,openBindPhone,openBindEmail,openPwdFlow,sendBpCode,sendBeCode,sendPwdCode,switchPwdChannel,doBindPhone,doBindEmail,nextPwdVerify,doResetPwd,checkVersion,profileMdOk,
     idInfoList,idSelectMode,idDetailRec,idEditingId,idName,idCardNo,driverNo,idNameErr,idCardErr,driverErr,idPhotos,driverPhotos,maskNo,openIdAdd,openIdDetail,openIdEditRecord,openIdDelete,toggleIdPhoto,confirmIdSelect,submitIdInfo,
+    perms,togglePerm,setPermGroup,protoForceUpdate,hasNewVersion,showVersionCheck,latestVersion,updateDesc,updating,goUpdate,exitApp,demoOpsActive,demoIsTopTab,demoPagePermTitle,demoPagePermGroups,demoPagePermCodes,pageRoute,copyPermCode,
     can,openMenu,menuGroups,goSwap:openDemoGoSwap,goRental:openDemoGoRental};
 }
 
 /* 登录页（用户端主模板，含区号选择 + 登录内语言） */
+/* 原型操作面板：换电系统仅保留登录相关控制（登录状态 / 首次登录）+ 用户端定位授权 */
+function demoPanel(withUserCtrl){
+return '<div class="demo-ops-stack"><div class="demo-ops is-active"><div class="demo-ops-title">原型操作</div>'
++DEMO_AUTH
++(withUserCtrl?DEMO_LOC+DEMO_AREA+DEMO_PLAN:'')
++'</div></div>';
+}
+
+/* 版本更新弹窗（对齐 index） */
+const VERSION_MODAL=`
+<transition name="fd"><div v-if="showVersionCheck" class="absolute inset-0 z-[900] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-od-id="version-check-modal">
+<div class="bg-white rounded-xl w-[320px] px-5 pt-6 pb-4 flex flex-col" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
+<template v-if="hasNewVersion">
+<div class="text-[17px] font-bold text-center mb-1">发现新版本</div>
+<div class="text-[13px] text-[#666] text-center mb-3">{{ '最新版本 ' + (latestVersion) }}</div>
+<div class="bg-[#F6F7F9] rounded-lg px-4 py-3 mb-4 text-[13px] text-[#555] leading-relaxed">{{ updateDesc }}</div>
+<template v-if="protoForceUpdate==='force'">
+<div class="flex gap-3">
+<div data-cp @click="exitApp" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff">退出应用</div>
+<div data-cp @click="goUpdate" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)">{{ updating ? '下载中…' : '立即更新' }}</div>
+</div>
+</template>
+<template v-else>
+<div class="flex gap-3">
+<div data-cp @click="showVersionCheck=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff">稍后提醒</div>
+<div data-cp @click="goUpdate" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)">{{ updating ? '下载中…' : '立即更新' }}</div>
+</div>
+</template>
+</template>
+<template v-else>
+<div class="flex flex-col items-center py-6">
+<div class="w-14 h-14 rounded-full flex items-center justify-center mb-3" style="background:#EBF1FD"><span v-html="luci('check','w-7 h-7 text-[var(--accent)]')"></span></div>
+<div class="text-[17px] font-bold mb-1">已是最新版本</div>
+<div class="text-[13px] text-[#666]">{{ latestVersion }}</div>
+</div>
+<div data-cp @click="showVersionCheck=false" class="rounded-xl py-3 text-center text-[15px] font-semibold text-white cursor-pointer mt-2" style="background:var(--accent)">知道了</div>
+</template>
+</div></div></transition>
+`;
+
 const LOGIN_TPL_U=`
 <transition name="fd"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="login-page">
 <div v-show="loginView==='main'" class="flex-1 flex flex-col min-h-0 bg-[#F6F7F9]">
@@ -708,6 +769,12 @@ const LOGIN_TPL_M=`
 /* 「我的」用户端 tab 内容（登录横幅/账号卡片+菜单） */
 const MINE_TPL_U=`
 <div v-if="tab==='mine'" class="absolute left-0 right-0 top-0 bottom-[83px] bg-[#F6F7F9] flex flex-col overflow-hidden" data-od-id="profile-page">
+<div v-if="areaReloading" class="absolute inset-0 z-[900] flex items-center justify-center" style="background:rgba(255,255,255,.75)" data-od-id="area-reloading">
+<div class="flex flex-col items-center gap-2">
+<div class="w-7 h-7 rounded-full border-2 border-[#E5E5E5] sw-spin" style="border-top-color:#2B3F5F"></div>
+<div class="text-[12px]" style="color:#999">数据加载中...</div>
+</div>
+</div>
 <div class="pt-14 shrink-0"></div>
 <div class="px-5 py-4 flex items-center gap-3.5 shrink-0" data-od-id="profile-header">
 <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#FF6A00 0%,#E55A00 100%);box-shadow:0 4px 12px rgba(255,106,0,.25)"><span v-html="luci('bike','w-6 h-6 text-white')"></span></div>
@@ -732,6 +799,11 @@ const MINE_TPL_U=`
 <span class="flex-1 text-[15px] font-medium">我的钱包</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
 </div>
+<div data-cp @click="openSwapArea" class="px-4 py-3 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #F0F0F0" data-od-id="profile-swap-area">
+<div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:#EEF4FF"><span v-html="luci('map-pin','w-[18px] h-[18px] text-[#2F6FEB]')"></span></div>
+<span class="flex-1 text-[15px] font-medium">换电区域</span>
+<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
+</div>
 <div class="px-4 py-3 flex items-center gap-3" style="border-bottom:1px solid #F0F0F0" data-od-id="profile-about">
 <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:#FFF4E6"><span v-html="luci('info','w-[18px] h-[18px] text-[#FF6A00]')"></span></div>
 <span class="flex-1 text-[15px] font-medium">关于我们</span>
@@ -748,6 +820,163 @@ const MINE_TPL_U=`
 <span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
 </div>
 </div>
+</div>
+</div>
+`;
+
+/* 换电区域：国 / 省 / 市 三级数据（该市有多个运营商时追加「运营商」一级） */
+var AREA_TREE=[
+  {name:'中国',children:[
+    {name:'四川省',children:[
+      {name:'成都市',operators:['双流区运营商','金牛区运营商','武侯区运营商','高新区运营商','锦江区运营商']},
+      {name:'绵阳市',operators:['涪城区运营商']}
+    ]},
+    {name:'广东省',children:[
+      {name:'深圳市',operators:['南山区运营商','福田区运营商','龙岗区运营商']},
+      {name:'东莞市',operators:['东莞城区运营商']}
+    ]}
+  ]}
+];
+
+/* 「我的」换电区域页（列表 + 新增选择地区/运营商弹层） */
+const SWAP_AREA_TPL=`
+<transition name="sl"><div v-if="profileOV==='swapArea'" class="absolute inset-0 bg-[#F6F7F9] z-[600] flex flex-col" data-od-id="swap-area-page">
+<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
+<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
+<div class="flex-1 text-center text-[17px] font-semibold">换电区域</div>
+<div class="w-8 h-8 flex items-center justify-center shrink-0"><span data-cp @click="saveSwapArea" class="text-[15px] font-medium cursor-pointer active:opacity-60 whitespace-nowrap" style="color:#2B3F5F" data-od-id="swap-area-save">保存</span></div>
+</div>
+<div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-28" :class="!swapAreas.length?'flex flex-col items-center justify-center':''">
+<div v-for="(a,i) in swapAreas" :key="a.id" data-cp @click="pickSwapArea(i)" class="bg-white rounded-2xl px-4 py-3.5 mb-3 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex-1 min-w-0"><div class="text-[15px] font-medium truncate">{{ a.name }}</div><div class="text-[12px] mt-1 truncate" style="color:#999">{{ a.region }}</div></div>
+<span v-if="a.sel" class="shrink-0" style="color:#FF8A00"><span v-html="luci('check','w-5 h-5')"></span></span>
+</div>
+<div v-if="!swapAreas.length" class="flex flex-col items-center justify-center text-center">
+<div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:#F0F0F0"><span v-html="luci('map-pin','w-8 h-8 text-[#BBB]')"></span></div>
+<div class="text-[15px] font-semibold" style="color:#333">暂无换电区域</div>
+<div class="text-[12px] mt-1.5" style="color:#999">请点击下方「新增」添加</div>
+</div>
+</div>
+<div class="absolute left-4 right-4" style="bottom:34px">
+<button data-cp @click="openAreaSheet" class="w-full py-3.5 rounded-2xl text-[16px] font-semibold active:opacity-90" style="background:#2B3F5F;color:#fff" data-od-id="swap-area-add">新增</button>
+</div>
+</div></transition>
+
+<transition name="fd"><div v-if="showAreaSheet" class="absolute inset-0 z-[900] flex items-end" style="background:rgba(0,0,0,.45)" data-cp @click.self="closeAreaSheet" data-od-id="area-sheet">
+<div class="w-full bg-white flex flex-col" style="border-radius:24px 24px 0 0;max-height:74%;padding-bottom:24px">
+<div class="relative flex items-center justify-center px-4 pt-4 pb-3 shrink-0">
+<div class="text-[17px] font-semibold">换电区域</div>
+<div data-cp @click="closeAreaSheet" class="absolute right-4 w-7 h-7 flex items-center justify-center cursor-pointer" style="top:14px;color:#999" data-od-id="area-sheet-close"><span v-html="luci('x','w-5 h-5')"></span></div>
+</div>
+<div class="flex items-center gap-6 px-5 pb-3 shrink-0" style="border-bottom:1px solid #F0F0F0">
+<span v-for="(c,i) in areaCrumbs" :key="i" data-cp @click="areaGoto(i)" class="text-[14px] font-medium" :style="c.name?'color:#111':'color:#C4C4C4'">{{ c.name||c.label }}</span>
+</div>
+<div class="flex-1 overflow-y-auto hide-scroll px-5" style="min-height:0">
+<div v-for="(o,i) in areaList" :key="i" data-cp @click="pickAreaItem(o)" class="flex items-center gap-3 py-3.5 cursor-pointer active:opacity-70" style="border-bottom:1px solid #F5F5F5">
+<span class="flex-1 text-[14px] truncate">{{ o }}</span>
+<span v-if="areaLevel===3&&addedOperators.indexOf(o)!==-1" class="shrink-0" style="color:#FF8A00"><span v-html="luci('check','w-5 h-5')"></span></span>
+</div>
+</div>
+</div></div></transition>
+`;
+
+/* 套餐 Tab：购买套餐（列表 / 未设置换电区域 / 无数据） */
+const PLAN_TPL=`
+<div v-if="tab==='plan'" class="absolute left-0 right-0 top-0 bottom-[83px] flex flex-col" data-od-id="plan-page">
+<div class="px-4 pt-3 shrink-0">
+<div v-if="!swapAreaSet" data-cp @click="openSwapArea" class="bg-white rounded-2xl px-4 py-3 flex items-center justify-between gap-3 cursor-pointer active:opacity-90" style="border:1px solid #F0F0F0;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="plan-area-banner">
+<span class="text-[14px] font-medium" style="color:#111">您尚未设置换电区域</span>
+<span class="flex items-center gap-1 px-3 py-1.5 shrink-0" style="border:1px solid #2B3F5F;border-radius:10px;color:#2B3F5F;font-size:13px;font-weight:600">立即前往<span v-html="luci('chevron-right','w-4 h-4')"></span></span>
+</div>
+<div v-else class="bg-white rounded-2xl px-4 py-3 flex items-center justify-between" style="border:1px solid #F0F0F0;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="plan-topbar">
+<div data-cp @click="toast('查看我的卡包')" class="flex items-center gap-0.5 cursor-pointer active:opacity-70">
+<span class="text-[15px] font-medium" style="color:#111">我的卡包</span>
+<span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
+</div>
+<div class="flex items-center gap-1">
+<span v-html="luci('map-pin','w-4 h-4 text-[#999]')"></span>
+<span class="text-[14px]" style="color:#666">{{ curArea?curArea.name:'成都市' }}</span>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto hide-scroll px-4 pt-3 pb-4" :class="(swapAreaSet&&planList.length)?'':'flex flex-col items-center justify-center'" data-od-id="plan-body">
+<template v-if="swapAreaSet&&planList.length">
+<div v-for="(p,i) in planList" :key="p.id" data-cp @click="openPlanDetail(i)" class="w-full bg-white rounded-2xl p-3 mb-3 flex items-center gap-3 cursor-pointer active:bg-[#FAFAFA]" style="border:1px solid #F0F0F0;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'plan-item-'+p.id">
+<div class="w-14 h-14 rounded-xl shrink-0 flex items-center justify-center" style="background:linear-gradient(145deg,#EAF2FF 0%,#D9E7FF 100%)"><span v-html="luci('battery-charging','w-8 h-8 text-[#2F6FEB]')"></span></div>
+<div class="flex-1 min-w-0">
+<div class="text-[15px] font-semibold truncate" style="color:#111">{{ p.name }}</div>
+<div class="flex items-baseline gap-2 mt-1.5 whitespace-nowrap">
+<span class="text-[17px] font-bold" style="color:#FF3B30">{{ fmtRp(p.price) }}</span>
+<span class="text-[12px]" style="color:#BBB;text-decoration:line-through">{{ fmtRp(p.origin) }}</span>
+</div>
+<div class="text-[12px] mt-1.5" style="color:#999">有效期：{{ p.days }}天</div>
+</div>
+</div>
+</template>
+<div v-else class="flex flex-col items-center justify-center">
+<div class="w-[110px] h-[110px] rounded-2xl flex items-center justify-center mb-5" style="background:linear-gradient(145deg,#F5F7FA 0%,#ECEFF4 100%)"><span v-html="luci('file-text','w-[54px] h-[54px] text-[#C6CDD8]')"></span></div>
+<div class="text-[15px]" style="color:#999">暂无相关数据</div>
+</div>
+</div>
+</div>
+`;
+
+/* 套餐：未缴纳押金弹窗 + 套餐详情（购买）弹窗 */
+const PLAN_MODALS=`
+<transition name="fd"><div v-if="showDepositModal" class="absolute inset-0 z-[1000] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-od-id="deposit-modal">
+<div class="bg-white rounded-xl w-[320px] px-5 pt-6 pb-4 flex flex-col items-center" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
+<div class="text-[17px] font-bold mb-2">未缴纳押金</div>
+<div class="text-[13px] mb-4" style="color:#888">请您先缴纳押金，再购买套餐</div>
+<div class="flex gap-3 w-full">
+<div data-cp @click="showDepositModal=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff" data-od-id="deposit-cancel">我知道了</div>
+<div data-cp @click="goPayDeposit" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)" data-od-id="deposit-pay">前往缴纳</div>
+</div>
+</div></div></transition>
+
+<transition name="fd"><div v-if="planDetail" class="absolute inset-0 z-[1000] flex items-end" style="background:rgba(0,0,0,.45)" data-cp @click.self="closePlanDetail" data-od-id="plan-detail-sheet">
+<div class="w-full bg-white flex flex-col" style="border-radius:24px 24px 0 0;max-height:84%;padding-bottom:22px">
+<div class="relative flex items-center justify-center px-4 pt-4 pb-3 shrink-0">
+<div class="text-[17px] font-semibold">套餐详情</div>
+<div data-cp @click="closePlanDetail" class="absolute right-4 w-7 h-7 flex items-center justify-center cursor-pointer" style="top:14px;color:#999" data-od-id="plan-detail-close"><span v-html="luci('x','w-5 h-5')"></span></div>
+</div>
+<div class="flex-1 overflow-y-auto hide-scroll px-5" style="min-height:0">
+<div class="text-[16px] font-semibold mb-3" style="color:#111">{{ planDetail.name }}</div>
+<div class="rounded-xl px-4 mb-4" style="background:#F6F7F9">
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #EDEDED"><span class="text-[13px]" style="color:#888">有效期</span><span class="text-[14px]" style="color:#111">{{ planDetail.days }}天</span></div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #EDEDED"><span class="text-[13px]" style="color:#888">换电次数</span><span class="text-[14px]" style="color:#111">{{ planDetail.times }}</span></div>
+<div class="flex items-center justify-between py-3"><span class="text-[13px]" style="color:#888">可借电池</span><span class="text-[14px]" style="color:#111">{{ planDetail.batteries }}</span></div>
+</div>
+<div class="text-[15px] font-semibold mb-2" style="color:#111">套餐描述</div>
+<div class="text-[13px]" style="color:#888;line-height:1.7">{{ planDetail.desc }}</div>
+</div>
+<div class="shrink-0 px-5 pt-3 flex items-center justify-between gap-3" style="border-top:1px solid #F0F0F0">
+<div class="text-[20px] font-bold" style="color:#111">{{ fmtRp(planDetail.price) }}</div>
+<button data-cp @click="payPlan" class="px-7 py-3 rounded-xl text-[15px] font-semibold shrink-0 active:opacity-90" style="background:#2B3F5F;color:#fff;border:none;outline:none;appearance:none;-webkit-appearance:none" data-od-id="plan-pay">立即购买</button>
+</div>
+</div></div></transition>
+`;
+
+/* 原型操作面板：套餐（押金状态 / 套餐数据） */
+const DEMO_PLAN=`
+<div class="demo-ops-section" data-od-id="demo-deposit">
+<div class="demo-ops-label">押金状态</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setSwapDeposit(true)" :class="swapDeposit?'is-on':''">已缴纳</div>
+<div class="demo-ops-chip" data-cp @click="setSwapDeposit(false)" :class="!swapDeposit?'is-on':''">未缴纳</div>
+</div>
+</div>
+<div class="demo-ops-section" data-od-id="demo-deposit-cfg">
+<div class="demo-ops-label">押金配置（加盟商）</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setDepositEnabled(true)" :class="depositEnabled?'is-on':''">开启</div>
+<div class="demo-ops-chip" data-cp @click="setDepositEnabled(false)" :class="!depositEnabled?'is-on':''">关闭</div>
+</div>
+</div>
+<div class="demo-ops-section" data-od-id="demo-plan-data">
+<div class="demo-ops-label">套餐数据</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setPlanEmpty(false)" :class="planList.length?'is-on':''">有数据</div>
+<div class="demo-ops-chip" data-cp @click="setPlanEmpty(true)" :class="!planList.length?'is-on':''">无数据</div>
 </div>
 </div>
 `;
@@ -1002,8 +1231,8 @@ const IDINFO_TPL=`
 <transition name="sl"><div v-if="profileSub==='idInfo'" class="absolute inset-0 z-[600] bg-[#F6F7F9] flex flex-col overflow-hidden" :style="idSelectMode?{zIndex:'1910'}:{}" data-od-id="id-info-page">
 <div class="pt-14 px-4 pb-3 flex items-center justify-between bg-white shrink-0" style="border-bottom:1px solid #F0F0F0">
 <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<span class="flex-1 text-center text-[17px] font-semibold mr-8">{{ idSelectMode ? '选择实名信息' : '实名信息' }}</span>
-<span class="text-sm font-medium text-[#2F6FEB] cursor-pointer shrink-0 active:opacity-70" data-cp @click="openIdAdd">新增</span>
+<span class="flex-1 text-center text-[17px] font-semibold">{{ idSelectMode ? '选择实名信息' : '实名信息' }}</span>
+<div class="w-8 h-8 flex items-center justify-center shrink-0"><span class="text-sm font-medium text-[#2F6FEB] cursor-pointer active:opacity-70 whitespace-nowrap" data-cp @click="openIdAdd">新增</span></div>
 </div>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-3 pb-6" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
 <template v-if="idInfoList.length">
@@ -1106,7 +1335,7 @@ const IDINFO_TPL=`
 </div>
 </div>
 <div class="px-4 pb-8 shrink-0">
-<button data-cp @click="submitIdInfo" class="w-full h-[50px] flex items-center justify-center rounded-xl text-[16px] font-semibold text-white border-none cursor-pointer transition-colors active:opacity-90" style="background:#2B3F5F">保存</button>
+<button data-cp @click="submitIdInfo" class="w-full h-[50px] flex items-center justify-center rounded-xl text-[16px] font-semibold border-none cursor-pointer transition-colors active:opacity-90" style="background:#2B3F5F;color:#fff">保存</button>
 </div>
 </div></transition>
 `;
@@ -1133,7 +1362,6 @@ const PROFILE_MODAL=`
 
 /* 原型操作面板：登录状态 + 首次登录 */
 const DEMO_AUTH=`
-<div class="demo-ops-group-hd">功能控制</div>
 <div class="demo-ops-section" data-od-id="demo-login-state">
 <div class="demo-ops-label">登录状态</div>
 <div class="demo-ops-chips">
@@ -1141,7 +1369,7 @@ const DEMO_AUTH=`
 <div class="demo-ops-chip" data-cp @click="setLoggedIn(false)" :class="!loggedIn?'is-on':''">未登录</div>
 </div>
 </div>
-<div class="demo-ops-section" data-od-id="demo-first-login">
+<div v-if="showLogin" class="demo-ops-section" data-od-id="demo-first-login">
 <div class="demo-ops-label">首次登录</div>
 <div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="firstLogin=true" :class="firstLogin?'is-on':''">是</div>
@@ -1150,8 +1378,43 @@ const DEMO_AUTH=`
 </div>
 `;
 
-/* 原型操作面板通告：一组 chips */
-function chipGroup(field,label,opts){var h=`<div class="demo-ops-section"><div class="demo-ops-label">${label}</div><div class="demo-ops-chips">`;opts.forEach(function(o){var v=(typeof o.v==='number'?String(o.v):"'" + o.v + "'");h+=`<div class="demo-ops-chip" data-cp :class="dg.${field}===${v}?'is-on':''" @click="dg.${field}=${v}" data-page-node-id="Sp-${field}-${o.v}">${o.l}</div>`});h+=`</div></div>`;return h}
+/* 原型操作面板：定位授权（未开启时显示授权弹窗） */
+const DEMO_LOC=`
+<div class="demo-ops-section" data-od-id="demo-loc-auth">
+<div class="demo-ops-label">定位授权</div>
+<div class="demo-ops-chips">
+  <div class="demo-ops-chip" data-cp @click="setLocAuth(true)" :class="locAuth?'is-on':''">已开启</div>
+<div class="demo-ops-chip" data-cp @click="setLocAuth(false)" :class="!locAuth?'is-on':''">未开启</div>
+</div>
+</div>
+`;
+
+/* 原型操作面板：换电区域（未设置且已登录时首页显示引导横幅） */
+const DEMO_AREA=`
+<div class="demo-ops-section" data-od-id="demo-swap-area">
+<div class="demo-ops-label">换电区域</div>
+<div class="demo-ops-chips">
+  <div class="demo-ops-chip" data-cp @click="setSwapArea(true)" :class="swapAreaSet?'is-on':''">已设置</div>
+<div class="demo-ops-chip" data-cp @click="setSwapArea(false)" :class="!swapAreaSet?'is-on':''">未设置</div>
+</div>
+</div>
+`;
+
+/* 首次打开用户端：定位授权弹窗 */
+const LOC_AUTH_MODAL=`
+<transition name="fd"><div v-if="showLocAuth" class="absolute inset-0 z-[1200] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-od-id="loc-auth-modal">
+<div class="bg-white rounded-xl w-[320px] px-5 pt-6 pb-4 flex flex-col" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
+<div class="flex flex-col items-center mb-3">
+<div class="w-14 h-14 rounded-full flex items-center justify-center mb-3" style="background:#EBF1FD"><span v-html="luci('map-pin','w-7 h-7 text-[var(--accent)]')"></span></div>
+<div class="text-[17px] font-bold">需要获取您的位置权限</div>
+</div>
+<div class="text-[13px] text-[#666] text-center leading-relaxed mb-4">为推荐附近换电站 / 门店，需要开启定位权限</div>
+<div class="flex gap-3">
+<div data-cp @click="showLocAuth=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff">我知道了</div>
+<div data-cp @click="allowLocAuth" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)">立即开启</div>
+</div>
+</div></div></transition>
+`;
 
 /* ===== 换电用户端地图首页 组件块 ===== */
 var swStationEl=function(kind,no,left,top,cap){
@@ -1165,20 +1428,124 @@ var swAggEl=function(label,left,top,cap){
 Vue.createApp({
   setup:function(){
     var tab=Vue.ref('home'),settingsOpen=Vue.ref(false);
-    var dg=Vue.reactive({bal:'mid',batt:2});
+    var toastBus=createToastBus();
+    function toastPush(msg){toastBus.push(msg)}
     function setTab(t){tab.value=t;settingsOpen.value=false}
-    function toast(m){toastPush(m)}
+    function toast(m){toastBus.push(m)}
     function goScan(){toastPush('请将手机对准换电柜二维码进行扫码换电')}
-    function goLocate(){toastPush('已定位到当前位置，推荐最近换电站')}
-    function goRefresh(){toastPush('换电站点数据已刷新')}
-    function goLayer(){toastPush('已切换地图图层')}
+    /* 地图控件（图层 / 定位 / 刷新）：点击不弹提示 */
+    function goLocate(){}
+    function goRefresh(){}
+    function goLayer(){}
     function openStation(n){toastPush(n?('换电站 #'+n+' · 查看电池余量 / 柜机状态'):'该站点维护中，请前往附近可用电站')}
-    var auth=authState();
-    return Object.assign({tab,setTab,settingsOpen,dg,toast,goScan,goLocate,goRefresh,goLayer,openStation},auth,sideSetup('换电用户端'))
+    /* 定位授权：未开启时显示授权弹窗（首次打开默认未开启） */
+    var locAuth=Vue.ref(false),showLocAuth=Vue.ref(true);
+    function setLocAuth(on){locAuth.value=on;showLocAuth.value=!on}
+    function allowLocAuth(){locAuth.value=true;showLocAuth.value=false}
+    /* 换电区域：已登录且未设置时，首页搜索框下方显示引导横幅 */
+    var swapAreaSet=Vue.ref(false);
+    /* 列表初始为空，需在「新增」弹窗中逐级选择后手动添加 */
+    var swapAreas=Vue.ref([]);
+    var showAreaSheet=Vue.ref(false),areaSeq=2;
+    /* 当前生效的换电区域（加盟商）；切换后需按新加盟商重新加载数据 */
+    var curArea=Vue.ref(null),areaReloading=Vue.ref(false);
+    /* 套餐：押金状态 / 套餐列表 / 详情弹窗 + 未缴纳押金弹窗 */
+    var PLAN_ALL=[
+      {id:1,name:'换电服务30天不限次卡电换电换电换电换电换电换电换电',price:29990,origin:39990,days:30,times:'不限次',batteries:'10块',desc:'这是一段套餐描述，请完善套餐描述这是一段套餐描述，请完善套餐描述这是一段套餐描述，请完善套餐描述这是一段套餐描述，请完善套餐描述这是一段套餐描述，请完善套餐描述。'},
+      {id:2,name:'换电服务30天30次卡',price:3499,origin:4999,days:30,times:'30次',batteries:'10块',desc:'这是一段套餐描述，请完善套餐描述这是一段套餐描述，请完善套餐描述这是一段套餐描述，请完善套餐描述。'},
+      {id:3,name:'换电服务30天100次卡',price:4567990,origin:5500000,days:30,times:'100次',batteries:'10块',desc:'这是一段套餐描述，请完善套餐描述这是一段套餐描述，请完善套餐描述这是一段套餐描述，请完善套餐描述。'}
+    ];
+    var planList=Vue.ref(PLAN_ALL.slice());
+    var swapDeposit=Vue.ref(false);
+    /* 所属加盟商的押金配置开关 */
+    var depositEnabled=Vue.ref(true);
+    var showDepositModal=Vue.ref(false),planDetail=Vue.ref(null);
+    /* 选择层级：0 国 / 1 省 / 2 市 / 3 运营商（市内多运营商时才追加该级） */
+    var areaCountry=Vue.ref(null),areaProvince=Vue.ref(null),areaCity=Vue.ref(null);
+    var addedOperators=Vue.computed(function(){return swapAreas.value.map(function(a){return a.name})});
+    var areaLevel=Vue.computed(function(){if(!areaCountry.value)return 0;if(!areaProvince.value)return 1;if(!areaCity.value)return 2;return 3});
+    var areaCrumbs=Vue.computed(function(){
+      return [{label:'中国',name:areaCountry.value?areaCountry.value.name:null},
+              {label:'省份',name:areaProvince.value?areaProvince.value.name:null},
+              {label:'城市',name:areaCity.value?areaCity.value.name:null},
+              {label:'运营商',name:null}];
+    });
+    var areaList=Vue.computed(function(){
+      var lv=areaLevel.value;
+      if(lv===0)return AREA_TREE.map(function(n){return n.name});
+      if(lv===1)return (areaCountry.value.children||[]).map(function(n){return n.name});
+      if(lv===2)return (areaProvince.value.children||[]).map(function(n){return n.name});
+      return (areaCity.value.operators||[]);
+    });
+    var auth=authState(toastBus);
+    function setSwapArea(on){swapAreaSet.value=on}
+    function openSwapArea(){auth.profileOV.value='swapArea';auth.profileSub.value=null}
+    function goSetSwapArea(){openSwapArea()}
+    function pickSwapArea(i){swapAreas.value.forEach(function(a,k){a.sel=(k===i)})}
+    function areaFind(list,name){for(var i=0;i<list.length;i++){if(list[i].name===name)return list[i]}return null}
+    function openAreaSheet(){areaCountry.value=AREA_TREE[0];areaProvince.value=null;areaCity.value=null;showAreaSheet.value=true}
+    function closeAreaSheet(){showAreaSheet.value=false}
+    function areaGoto(level){
+      if(level<=0){areaCountry.value=null;areaProvince.value=null;areaCity.value=null;return}
+      if(level<=1){areaProvince.value=null;areaCity.value=null;return}
+      areaCity.value=null;
+    }
+    /* 新增：仅追加到列表，不改变选中状态（选中由列表点击单独处理） */
+    function addSwapArea(name,region,city){
+      var exists=false;
+      swapAreas.value.forEach(function(a){if(a.name===name)exists=true});
+      if(!exists)swapAreas.value.push({id:++areaSeq,name:name,region:region,city:city||'',sel:false});
+      showAreaSheet.value=false;
+    }
+    function pickAreaItem(name){
+      var lv=areaLevel.value;
+      if(lv===0){areaCountry.value=areaFind(AREA_TREE,name);return}
+      if(lv===1){areaProvince.value=areaFind(areaCountry.value.children,name);return}
+      if(lv===2){
+        var city=areaFind(areaProvince.value.children,name);
+        areaCity.value=city;
+        var ops=city.operators||[];
+        /* 该市仅一个运营商（或没有运营商）：不再追加一级，直接加入 */
+        if(ops.length<=1)addSwapArea(ops[0]||city.name,areaProvince.value.name+city.name,city.name);
+        return;
+      }
+      addSwapArea(name,areaProvince.value.name+areaCity.value.name,areaCity.value.name);
+    }
+    function reloadAreaData(){
+      areaReloading.value=true;
+      setTimeout(function(){areaReloading.value=false},700);
+    }
+    function saveSwapArea(){
+      var sel=null;swapAreas.value.forEach(function(a){if(a.sel)sel=a});
+      if(!sel)return;
+      var changed=!curArea.value||curArea.value.name!==sel.name;
+      curArea.value=sel;swapAreaSet.value=true;
+      /* 提交新增 / 变更后返回「我的」；切换了加盟商则重新加载页面数据 */
+      auth.profileOV.value=null;
+      if(changed)reloadAreaData();
+    }
+    /* ── 套餐 ── */
+    function setSwapDeposit(on){swapDeposit.value=on}
+    function setDepositEnabled(on){depositEnabled.value=on}
+    function setPlanEmpty(on){planList.value=on?[]:PLAN_ALL.slice()}
+    function openPlanDetail(i){
+      var p=planList.value[i];if(!p)return;
+      planDetail.value=p;
+    }
+    function closePlanDetail(){planDetail.value=null}
+    function goPayDeposit(){showDepositModal.value=false;toastPush('请前往缴纳押金')}
+    function payPlan(){
+      if(!planDetail.value)return;
+      /* 所属加盟商开启押金配置且用户未缴纳押金 → 弹未缴纳押金弹窗 */
+      if(depositEnabled.value&&!swapDeposit.value){planDetail.value=null;showDepositModal.value=true;return}
+      planDetail.value=null;toastPush('支付成功');
+    }
+    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,openStation,locAuth,setLocAuth,showLocAuth,allowLocAuth,swapAreaSet,setSwapArea,goSetSwapArea,swapAreas,showAreaSheet,addedOperators,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,saveSwapArea,curArea,areaReloading,planList,swapDeposit,setSwapDeposit,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan},auth,sideSetup('换电用户端',toastBus))
   },
   template:'<div class="od-stage">'
     +FRAME_TOP
-    +'<div v-if="!settingsOpen&&tab===\'plan\'" class="od-head"><span class="tt">套餐</span><button class="gear" data-cp @click="navOpen();profileOV=\'settings\'" v-html="luci(\'settings\',\'w-5 h-5\')"></button></div>'
+    +'<div class="toast-wrap"><transition-group name="toast"><div v-for="t in toasts" :key="t.id" class="toast-item" :class="\'toast-\'+t.type">{{ t.msg }}</div></transition-group></div>'
+    +'<div v-if="!settingsOpen&&tab===\'plan\'" class="od-head" style="justify-content:center;border-bottom:none;padding-top:52px" data-od-id="plan-head"><span class="tt" style="flex:0 0 auto">购买套餐</span></div>'
     +'<div v-if="!settingsOpen" class="od-body" style="flex:1;position:relative;min-height:0;padding:0;overflow:hidden;background:var(--bg)">'
     /* ── 首页：换电地图 ── */
     +'<div v-if="tab===\'home\'" class="sw-map">'
@@ -1195,19 +1562,25 @@ Vue.createApp({
     +swStationEl('on',3,'78%','62%','6/12')
     +swStationEl('off',null,'15%','68%','维护中')
     +swAggEl('10+','44%','14%','附近')
-    +'<div class="sw-loc" style="left:34%;top:61%" data-cp @click="goLocate"><div class="tag">推荐换电</div><div class="dot"></div></div>'
-    +'<div class="sw-search" style="display:flex;align-items:center;gap:8px"><div class="flex-1 flex items-center gap-2 bg-white rounded-[12px] px-3.5 py-2.5 cursor-pointer" data-cp @click="toast(\'输入换电站名称或地址进行搜索\')" style="box-shadow:0 1px 4px rgba(0,0,0,.12)"><span v-html="luci(\'search\',\'w-4 h-4 text-[#8A9999]\')"></span><span class="text-[13px] text-[#8A9999]">搜索目的地</span></div><button class="gear" style="flex-shrink:0;width:40px;height:40px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12);display:flex;align-items:center;justify-content:center;color:#455A4C" data-cp @click="navOpen();profileOV=\'settings\'" v-html="luci(\'settings\',\'w-5 h-5\')"></button></div>'
+    +'<div class="sw-loc" style="left:34%;top:61%" data-cp @click="goLocate"><div class="tag">推荐</div><div class="dot"></div></div>'
+    +'<div class="sw-search" data-cp @click="toast(\'输入换电站名称或地址进行搜索\')"><span v-html="luci(\'search\',\'w-4 h-4 text-[#8A9999]\')"></span><span class="text-[13px] text-[#8A9999]">搜索目的地</span></div>'
     +'<div class="sw-map-ctrl">'
     +'<button data-cp @click="goLayer" v-html="luci(\'layers\',\'w-4 h-4\')"></button>'
     +'<button data-cp @click="goLocate" v-html="luci(\'crosshair\',\'w-4 h-4\')"></button>'
     +'<button data-cp @click="goRefresh" v-html="luci(\'refresh-cw\',\'w-4 h-4\')"></button>'
     +'</div>'
-    +'<div class="sw-scan" :style="!loggedIn?{bottom:\'145px\'}:{}"><button data-cp @click="goScan"><span v-html="luci(\'scan-line\',\'w-5 h-5\')"></span>扫码换电</button></div>'
-    +'<div v-if="!loggedIn" data-cp @click="openLogin(\'home\')" class="absolute left-0 right-0 z-[99] flex items-center justify-between px-4 py-3 cursor-pointer active:opacity-90" style="bottom:83px;background:#2B3F5F" data-od-id="home-login-banner">'
+    +'<div class="sw-scan"><button data-cp @click="goScan"><span v-html="luci(\'scan-line\',\'w-5 h-5\')"></span>扫码换电</button></div>'
+    +'<div v-if="!loggedIn" data-cp @click="openLogin(\'home\')" class="absolute left-0 right-0 z-[99] flex items-center justify-between px-4 py-3 cursor-pointer active:opacity-90" style="top:99px;background:#2B3F5F" data-od-id="home-login-banner">'
     +'<span class="text-[13px] text-white font-medium">您还未登录，点我快速登录</span>'
     +'<button data-cp @click.stop="openLogin(\'home\')" class="px-3 py-1.5 rounded-lg text-[12px] font-semibold text-white" style="border:1px solid rgba(255,255,255,.5);background:transparent">去登录 &gt;</button>'
     +'</div>'
+    +'<div v-if="loggedIn&&!swapAreaSet" data-cp @click="goSetSwapArea" class="absolute z-[99] flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="left:12px;right:12px;top:99px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-area-banner">'
+    +'<span class="text-[13px] font-medium" style="color:#111">您尚未设置换电区域</span>'
+    +'<button data-cp @click.stop="goSetSwapArea" class="flex items-center gap-0.5 px-3 py-1.5 text-[12px] font-semibold" style="border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;border-radius:10px"><span>立即前往</span><span v-html="luci(\'chevron-right\',\'w-4 h-4\')"></span></button>'
     +'</div>'
+    +'</div>'
+    /* ── 套餐 Tab：购买套餐 ── */
+    +PLAN_TPL
     +MINE_TPL_U
     +'</div>'
     /* ── 底部 Tab 导航（首页 / 套餐 / 我的） · 对齐租车系统用户端 ── */
@@ -1217,14 +1590,9 @@ Vue.createApp({
     +'<div class="nv" data-cp @click="setTab(\'mine\')" :style="tab===\'mine\'?{color:\'#FF6A00\'}:{color:\'#999\'}"><span v-html="luci(\'user\',\'w-[22px] h-[22px]\')"></span><span class="text-[10px] font-semibold">我的</span></div>'
     +'</div>'
     +'<div class="sw-homebar"></div>'
-    +LOGIN_TPL_U+INFO_TPL_U+profileCommon('换电用户端','V1.30.0')+PROFILE_SUB_TPL+IDINFO_TPL+PROFILE_MODAL
+    +LOGIN_TPL_U+INFO_TPL_U+profileCommon('换电用户端','V1.30.0')+PROFILE_SUB_TPL+IDINFO_TPL+PROFILE_MODAL+VERSION_MODAL+LOC_AUTH_MODAL+SWAP_AREA_TPL+PLAN_MODALS
     +FRAME_BOT
-    +'<div class="demo-ops-stack"><div class="demo-ops is-active"><div class="demo-ops-title">原型操作</div>'
-    +'<div class="demo-ops-label" style="color:#999;font-size:12px;margin-bottom:12px">换电用户端 · 演示</div>'
-    +DEMO_AUTH
-    +chipGroup('bal','余额',[{v:'low',l:'低'},{v:'mid',l:'中'},{v:'high',l:'高'}])
-    +chipGroup('batt','电池数',[{v:0,l:'0'},{v:1,l:'1'},{v:2,l:'2'}])
-    +'</div></div>'
+    +demoPanel(true)
     +'</div>'
 }).mount(document.getElementById('root-user'));
 
@@ -1232,14 +1600,16 @@ Vue.createApp({
 Vue.createApp({
   setup:function(){
     var tab=Vue.ref('home'),settingsOpen=Vue.ref(false);
-    var dg=Vue.reactive({cab:'on',rev:'full'});
+    var toastBus=createToastBus();
+    function toastPush(msg){toastBus.push(msg)}
     function setTab(t){tab.value=t}
-    function toast(m){toastPush(m)}
-    var auth=authState();
-    return Object.assign({tab,setTab,settingsOpen,dg,toast},auth,sideSetup('换电商户端'))
+    function toast(m){toastBus.push(m)}
+    var auth=authState(toastBus);
+    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast},auth,sideSetup('换电商户端',toastBus))
   },
   template:'<div class="od-stage">'
     +FRAME_TOP
+    +'<div class="toast-wrap"><transition-group name="toast"><div v-for="t in toasts" :key="t.id" class="toast-item" :class="\'toast-\'+t.type">{{ t.msg }}</div></transition-group></div>'
     +'<div v-if="!settingsOpen" class="od-body" style="flex:1;position:relative;min-height:0;padding:0;overflow:hidden;background:var(--bg)">'
     +MINE_TPL_M
     +'</div>'
@@ -1250,14 +1620,9 @@ Vue.createApp({
     +'<div class="nv" data-cp @click="setTab(\'board\')" :style="tab===\'board\'?{color:\'#2B3F5F\'}:{color:\'#999\'}"><span v-html="luci(\'bar-chart-2\',\'w-[22px] h-[22px]\')"></span><span class="text-[10px] font-semibold">看板</span></div>'
     +'</div>'
     +'<div class="sw-homebar"></div>'
-    +LOGIN_TPL_M+INFO_TPL_M+profileCommon('换电商户端','V1.3.8')+PROFILE_SUB_TPL+PROFILE_MODAL
+    +LOGIN_TPL_M+INFO_TPL_M+profileCommon('换电商户端','V1.3.8')+PROFILE_SUB_TPL+PROFILE_MODAL+VERSION_MODAL
     +FRAME_BOT
-    +'<div class="demo-ops-stack"><div class="demo-ops is-active"><div class="demo-ops-title">原型操作</div>'
-    +'<div class="demo-ops-label" style="color:#999;font-size:12px;margin-bottom:12px">换电商户端 · 演示</div>'
-    +DEMO_AUTH
-    +chipGroup('cab','换电柜',[{v:'on',l:'在线'},{v:'off',l:'离线'}])
-    +chipGroup('rev','营收',[{v:'full',l:'全量'},{v:'zero',l:'清零'}])
-    +'</div></div>'
+    +demoPanel()
     +'</div>'
 }).mount(document.getElementById('root-merchant'));
 
