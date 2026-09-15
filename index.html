@@ -2970,7 +2970,7 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" :class="!loggedIn?'is-on':''" data-cp @click="setLoggedIn(false)">未登录</div>
 </div>
 </div>
-<div class="demo-ops-section" data-od-id="demo-first-login">
+<div v-if="showLogin" class="demo-ops-section" data-od-id="demo-first-login">
 <div class="demo-ops-label">首次登录</div>
 <div class="demo-ops-chips">
 <div class="demo-ops-chip" :class="firstLogin?'is-on':''" data-cp @click="firstLogin=true">是</div>
@@ -6790,7 +6790,7 @@ body.host-single-m #root-user{display:none}
       <div class="demo-ops-chip" :class="showLogin?'is-on':''" data-cp @click="demoLogout">未登录</div>
     </div>
   </div>
-  <div class="demo-ops-section" data-od-id="demo-first-login">
+  <div v-if="showLogin" class="demo-ops-section" data-od-id="demo-first-login">
     <div class="demo-ops-label">首次登录</div>
     <div class="demo-ops-chips">
       <div class="demo-ops-chip" :class="firstLogin?'is-on':''" data-cp @click="firstLogin=true">是</div>
