@@ -270,7 +270,21 @@
       "sceneRestaurant": "Restaurant",
       "sceneOfficeBuilding": "Office Building",
       "sceneOffice": "Office",
-      "sceneParking": "Parking Lot"
+      "sceneParking": "Parking Lot",
+      "yes": "Yes",
+      "no": "No",
+      "none": "None",
+      "selected": "Selected",
+      "unselected": "Not Selected",
+      "originalRent": "Original Rent",
+      "originalDeposit": "Original Deposit",
+      "chargeOrder": "Recharge Order",
+      "renewal": "Renewal",
+      "balanceFlow": "Balance Statement",
+      "beforeDue": "Before Due",
+      "paymentFailed": "Payment Failed",
+      "continuousPaymentFailed": "Continuous Payment Failed",
+      "deleteIrreversible": "Cannot be recovered after deletion"
     },
     "action": {
       "cancel": "Cancel",
@@ -289,7 +303,8 @@
       "bind": "Bind",
       "close": "Close",
       "viewFeeDetail": "View Fee Details",
-      "deactivateAccount": "Deactivate Account"
+      "deactivateAccount": "Deactivate Account",
+      "viewDetails": "View Details"
     },
     "unit": {
       "vehicle": "vehicle(s)",
@@ -299,7 +314,8 @@
       "slogan": "Ride Yadea for less",
       "safety": "Your safety is our top priority!",
       "features": "Locate · Remote lock · Horn"
-    }
+    },
+    "createTime": "Created At"
   },
   "rental": {
     "user": {

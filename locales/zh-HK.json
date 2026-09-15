@@ -270,7 +270,21 @@
       "sceneRestaurant": "餐飲門店",
       "sceneOfficeBuilding": "商業樓宇",
       "sceneOffice": "寫字樓",
-      "sceneParking": "停車場"
+      "sceneParking": "停車場",
+      "yes": "是",
+      "no": "否",
+      "none": "無",
+      "selected": "已選擇",
+      "unselected": "未選擇",
+      "originalRent": "原租金",
+      "originalDeposit": "原押金",
+      "chargeOrder": "充值訂單",
+      "renewal": "續租",
+      "balanceFlow": "餘額流水",
+      "beforeDue": "到期前",
+      "paymentFailed": "扣款失敗",
+      "continuousPaymentFailed": "連續扣款失敗",
+      "deleteIrreversible": "刪除後不可恢復"
     },
     "action": {
       "cancel": "取消",
@@ -289,7 +303,8 @@
       "bind": "綁定",
       "close": "關閉",
       "viewFeeDetail": "查看費用明細",
-      "deactivateAccount": "註銷帳號"
+      "deactivateAccount": "註銷帳號",
+      "viewDetails": "查看詳情"
     },
     "unit": {
       "vehicle": "輛",
@@ -299,7 +314,8 @@
       "slogan": "花小錢 騎雅迪",
       "safety": "您的安全是我們最關心的事！",
       "features": "定位 · 遠端鎖定 · 鳴笛"
-    }
+    },
+    "createTime": "建立時間"
   },
   "rental": {
     "user": {

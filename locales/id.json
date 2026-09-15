@@ -270,7 +270,21 @@
       "sceneRestaurant": "Restoran",
       "sceneOfficeBuilding": "Gedung Perkantoran",
       "sceneOffice": "Kantor",
-      "sceneParking": "Tempat Parkir"
+      "sceneParking": "Tempat Parkir",
+      "yes": "Ya",
+      "no": "Tidak",
+      "none": "Tidak ada",
+      "selected": "Dipilih",
+      "unselected": "Belum Dipilih",
+      "originalRent": "Sewa Awal",
+      "originalDeposit": "Deposit Awal",
+      "chargeOrder": "Pesanan Isi Ulang",
+      "renewal": "Perpanjangan",
+      "balanceFlow": "Mutasi Saldo",
+      "beforeDue": "Sebelum Jatuh Tempo",
+      "paymentFailed": "Pembayaran Gagal",
+      "continuousPaymentFailed": "Pembayaran Gagal Berturut-turut",
+      "deleteIrreversible": "Tidak dapat dipulihkan setelah dihapus"
     },
     "action": {
       "cancel": "Batal",
@@ -289,7 +303,8 @@
       "bind": "Hubungkan",
       "close": "Tutup",
       "viewFeeDetail": "Lihat Rincian Biaya",
-      "deactivateAccount": "Nonaktifkan Akun"
+      "deactivateAccount": "Nonaktifkan Akun",
+      "viewDetails": "Lihat Detail"
     },
     "unit": {
       "vehicle": "unit",
@@ -299,7 +314,8 @@
       "slogan": "Naik Yadea lebih hemat",
       "safety": "Keselamatan Anda adalah prioritas utama kami!",
       "features": "Lokasi · Kunci jarak jauh · Klakson"
-    }
+    },
+    "createTime": "Waktu Dibuat"
   },
   "rental": {
     "user": {

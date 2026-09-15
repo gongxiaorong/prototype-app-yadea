@@ -270,7 +270,21 @@
       "sceneRestaurant": "餐饮门店",
       "sceneOfficeBuilding": "商业楼宇",
       "sceneOffice": "写字楼",
-      "sceneParking": "停车场"
+      "sceneParking": "停车场",
+      "yes": "是",
+      "no": "否",
+      "none": "无",
+      "selected": "已选择",
+      "unselected": "未选择",
+      "originalRent": "原租金",
+      "originalDeposit": "原押金",
+      "chargeOrder": "充值订单",
+      "renewal": "续租",
+      "balanceFlow": "余额流水",
+      "beforeDue": "到期前",
+      "paymentFailed": "扣款失败",
+      "continuousPaymentFailed": "连续扣款失败",
+      "deleteIrreversible": "删除后不可恢复"
     },
     "action": {
       "cancel": "取消",
@@ -289,7 +303,8 @@
       "bind": "绑定",
       "close": "关闭",
       "viewFeeDetail": "查看费用明细",
-      "deactivateAccount": "注销账号"
+      "deactivateAccount": "注销账号",
+      "viewDetails": "查看详情"
     },
     "unit": {
       "vehicle": "辆",
@@ -299,7 +314,8 @@
       "slogan": "花小钱 骑雅迪",
       "safety": "您的安全是我们最关心的事！",
       "features": "定位 · 远程锁定 · 鸣笛"
-    }
+    },
+    "createTime": "创建时间"
   },
   "rental": {
     "user": {

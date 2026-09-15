@@ -270,7 +270,21 @@
       "sceneRestaurant": "ร้านอาหาร",
       "sceneOfficeBuilding": "อาคารสำนักงาน",
       "sceneOffice": "ออฟฟิศ",
-      "sceneParking": "ที่จอดรถ"
+      "sceneParking": "ที่จอดรถ",
+      "yes": "ใช่",
+      "no": "ไม่",
+      "none": "ไม่มี",
+      "selected": "เลือกแล้ว",
+      "unselected": "ยังไม่เลือก",
+      "originalRent": "ค่าเช่าเดิม",
+      "originalDeposit": "เงินมัดจำเดิม",
+      "chargeOrder": "คำสั่งเติมเงิน",
+      "renewal": "การต่ออายุ",
+      "balanceFlow": "รายการยอดคงเหลือ",
+      "beforeDue": "ก่อนครบกำหนด",
+      "paymentFailed": "การชำระเงินล้มเหลว",
+      "continuousPaymentFailed": "การชำระเงินล้มเหลวต่อเนื่อง",
+      "deleteIrreversible": "ไม่สามารถกู้คืนได้หลังลบ"
     },
     "action": {
       "cancel": "ยกเลิก",
@@ -289,7 +303,8 @@
       "bind": "ผูก",
       "close": "ปิด",
       "viewFeeDetail": "ดูรายละเอียดค่าใช้จ่าย",
-      "deactivateAccount": "ปิดใช้งานบัญชี"
+      "deactivateAccount": "ปิดใช้งานบัญชี",
+      "viewDetails": "ดูรายละเอียด"
     },
     "unit": {
       "vehicle": "คัน",
@@ -299,7 +314,8 @@
       "slogan": "ขี่ Yadea ในราคาประหยัด",
       "safety": "ความปลอดภัยของคุณคือสิ่งสำคัญที่สุดของเรา!",
       "features": "ระบุตำแหน่ง · ล็อกระยะไกล · บีบแตร"
-    }
+    },
+    "createTime": "เวลาสร้าง"
   },
   "rental": {
     "user": {
