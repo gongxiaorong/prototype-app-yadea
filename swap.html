@@ -859,6 +859,10 @@ body.host-single-m #root-user{display:none}
 <span class="flex-1 text-center text-[17px] font-semibold mr-8">我的电池</span>
 </div>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
+<div v-if="!batteryList.length" class="flex flex-col items-center justify-center text-center pt-24">
+<div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:#F0F0F0"><span v-html="luci('battery-charging','w-8 h-8 text-[#BBB]')"></span></div>
+<div class="text-[15px] font-semibold" style="color:#333">暂无电池</div>
+</div>
 <div v-for="b in batteryList" :key="b.id" data-cp @click="openBatteryDetail(b)" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3 cursor-pointer active:opacity-90" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'battery-item-'+b.id">
 <div class="flex items-center gap-2 pb-3" style="border-bottom:1px solid #F0F0F0">
 <span class="flex-1 text-[16px] font-bold text-[#1A1A1A]">{{ b.no }}</span>
@@ -1301,7 +1305,7 @@ body.host-single-m #root-user{display:none}
 <div class="grid grid-cols-2 gap-3">
 <div data-cp @click="openPlanOrders" class="bg-white rounded-2xl p-4 flex flex-col items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="order-cat-plan">
 <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:linear-gradient(135deg,#F0E8FF,#E0D1FF)"><span v-html="luci('package','w-6 h-6 text-[#7C3AED]')"></span></div>
-<span class="text-[15px] font-semibold text-[#1A1A1A]">套餐订单</span>
+<span class="text-[15px] font-semibold text-[#1A1A1A]">换电套餐</span>
 </div>
 </div>
 </div>
@@ -1309,7 +1313,7 @@ body.host-single-m #root-user{display:none}
 <transition name="sl"><div v-if="profileSub==='planOrders'" class="absolute inset-0 z-[630] flex flex-col" style="background:#F6F7F9" data-od-id="plan-orders-page">
 <div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
 <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<span class="flex-1 text-center text-[17px] font-semibold mr-8">套餐订单</span>
+<span class="flex-1 text-center text-[17px] font-semibold mr-8">换电套餐</span>
 </div>
 <div class="bg-white px-4 pt-3 pb-2.5 flex gap-2 overflow-x-auto hide-scroll select-none shrink-0" style="border-bottom:1px solid #E5E5E5;touch-action:pan-x" data-od-id="plan-order-filters">
 <div v-for="f in PLAN_ORDER_FILTERS" :key="f.v" data-cp @click="setPlanOrderFilter(f.v)" class="shrink-0 px-3 py-1.5 rounded-full text-[13px] font-medium cursor-pointer transition" :class="planOrderFilter===f.v?'text-white bg-[#2B3F5F]':'text-[#666] bg-[#F6F7F9]'" :data-od-id="'plan-order-filter-'+f.v">{{ f.label }}</div>
@@ -2451,7 +2455,7 @@ Vue.createApp({
     var expiredCards=Vue.computed(function(){return cards.value.filter(function(c){return c.expired})});
     function setCardPackEmpty(on){cards.value=on?[]:CARDS.slice()}
     function openCardPack(){auth.profileOV.value=null;auth.profileSub.value='cardPack'}
-    /* ── 套餐订单列表（「我的订单」下唯一入口） ── */
+    /* ── 换电套餐列表（「我的订单」下唯一入口） ── */
     var PLAN_ORDERS=[
       {id:1,name:'30天不限次套餐卡',days:30,times:'不限次',batteries:'3块',created:'2026.02.10 15:00:00',amount:29999,status:'待支付',color:'#FF8A00',orderNo:'SW2026021015000001'},
       {id:2,name:'30天不限次套餐卡',days:30,times:'23次',batteries:'3块',created:'2026.02.10 15:00:00',amount:29999,status:'已支付',color:'#17A34A',orderNo:'SW2026021015000002',paidTime:'2026.02.10 15:05:12'},
