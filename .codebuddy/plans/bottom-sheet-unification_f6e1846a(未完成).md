@@ -1,37 +1,47 @@
 ---
 name: bottom-sheet-unification
-overview: 全项目（index.html 租赁用户端+商户端共 32 个）底部弹窗抽公共组件统一规范：Sheet 基础壳（遮罩/圆角/头部/把手下滑关闭/安全区/z-index 刻度）+ OptionSheet/WheelDateSheet/ActionSheet/FormSheet 等子组件，max-height 默认 60%（4 个长表单例外），输出规范不一致清单与统一规范并分批改造回归。
+overview: 全项目（index.html 租赁用户端+商户端共 33 个）底部弹窗抽公共组件统一规范：Sheet 基础壳（遮罩/圆角/头部/把手下滑关闭/安全区/z-index 刻度）+ OptionSheet/WheelDateSheet/ActionSheet/FormSheet 等子组件，max-height 默认 60%（4 个长表单例外），输出规范不一致清单与统一规范并分批改造回归。
 todos:
   - id: sheet-kit-shared
     content: 在 SHARED CORE 新增 registerSheetKit(app)：BottomSheet 壳（把手下滑关闭 + 头部 A/B 型 + 安全区）、OptionSheet、v-sheet-drag 指令、.sheet-* 样式 token（含 max-height sm=60%/lg、z-index 刻度、合并三套滚动类），两端 mount 前各调用一次
-    status: in_progress
+    status: completed
   - id: sheet-spec-doc
     content: 将 32 个弹窗的 7 维度规范不一致清单与统一规范写入 AGENTS.md「底部弹窗规范」章节
-    status: pending
+    status: completed
   - id: user-batch1
     content: 用户端样板迁移：租赁类型/租赁方案 → OptionSheet，联系门店 → BottomSheet 号码列表，csSheet 居中弹窗改 OptionSheet（同数据同呈现），保留 closeXxx 单一出口
-    status: pending
+    status: completed
     dependencies:
       - sheet-kit-shared
   - id: user-batch2
     content: 用户端其余迁移：showDocSheet/showRenewPlan/showPayment(lg)/showIdPicker/showIdAction/walletStoreSheet/trackTimePicker，逐个核对内部结构后替换模板
-    status: pending
+    status: completed
     dependencies:
       - sheet-kit-shared
       - user-batch1
   - id: merchant-batch1
     content: 商户端迁移：userPick/orderPick/veh 与 batt 的 ModelSheet+FS/roShowFS/pkgPicker/uBindMod/钱包操作/showManualInput/roRefundMod
-    status: pending
+    status: completed
     dependencies:
       - sheet-kit-shared
   - id: merchant-wheel
     content: 商户端 roDatePicker 与 ordersDatePicker 合并为 WheelDateSheet（消除约 55 行重复），并让用户端/商户端 trackTimePicker 复用滚轮组件
-    status: pending
+    status: completed
     dependencies:
       - sheet-kit-shared
+  - id: sheet-row-tokens
+    content: 内容行 token 化第一批：`.sheet-search`（6 处搜索框）+ `.sheet-body`（7 处带 hid/hide-scroll/conf-scroll-hide 的内容滚动区），取值照搬、仅换类名，并把 .sheet-body 纳入 v-sheet-drag 滚动守卫
+    status: completed
+    dependencies:
+      - sheet-kit-shared
+  - id: sheet-row-tokens-rest
+    content: 内容行 token 化剩余部分（会改变视觉，需单独决策）：`.sheet-chip` 筛选 chips、`.sheet-row-danger` 危险行、10 处无隐藏滚动条类的 `flex-1 overflow-y-auto` 容器；另 z-index 刻度化 / 高度三档化需先出全层级顺序表
+    status: pending
+    dependencies:
+      - sheet-row-tokens
   - id: regression
     content: "[mcp:Playwright MCP Server] 双端全量回归：各弹窗打开/选中/关闭/下滑关闭/长列表滚动实测，console 0 错误，样式与规范逐项比对"
-    status: pending
+    status: completed
     dependencies:
       - user-batch2
       - merchant-batch1
@@ -120,3 +130,38 @@ graph TD
 - **Playwright MCP Server**
 - Purpose: 每批迁移后用 file:// 打开页面做双端回归（注意原型操作面板的 登录状态/押金状态 开关会改变页面形态）
 - Expected outcome: 每批 console 0 错误、关键弹窗样式（圆角/遮罩/间距/选中态/60% 封顶与内部滚动）实测通过
+---
+
+## 实施记录（2026-09-15）
+
+### 已完成
+- `registerSheetKit(app)` 套件进入 `index.html`：`.sheet-*` 令牌（`layer-base`）+ `sheet-drag` 指令 + `bottom-sheet` / `option-sheet` / `wheel-date-sheet` 组件，`mountUser` / `mountMerchant` 各调用一次。
+- 样板迁移 3 个：租赁类型 / 租赁方案 → `OptionSheet`，联系门店 → `BottomSheet`；`mask-z` 沿用原层级（2030 / 2590），未动 z-index 体系。
+- 规范文档（AGENTS.md §8）已完成，并补齐 8.5 验收、8.6 权威源与构建约束。
+
+### 关键根因（上一轮整体回滚的真实原因）
+- `v-sheet-drag="$emit('close')" 是**内联表达式**，每次渲染立即执行 → 弹窗打开即被自身关闭（DOM 看到面板停在 `sh-leave-active`）。修正为 `v-sheet-drag="()=>$emit('close')"` 后，打开/选中/X/下滑四项交互全部实测通过。
+- 上一轮判为"挂载失败"是**假阴性**：`vue.global.prod.js` 下 `app._instance` 与 `el.__vue_app__` 均不存在（dev-only），探针恒返回 `hasApp:false`。诊断应捕获 `app.mount(root)` 返回值。
+- 结论：`app.directive` 内联表达式陷阱 + 生产构建诊断陷阱，才是那次回滚的原因；组件方案本身无结构性问题。
+
+### 范围修正（后续批次按此执行）
+- **z-index / 遮罩取值不做归一**：现有 234 处 `z-[…]`、约 80 种取值，且页面栈占用 500/510/600；归一需先出全层级顺序表，单独立轮。`mask-z` 沿用原层级。
+- **csSheet 不改版式**：它是 `fixed z-[9999]` 的三列行（remark/phone/code + 关闭按钮），与 OptionSheet 的居中单行规范冲突；改造属交互变更，需先决策。
+- **swap.html 不在本轮范围**：其 4 个底部弹窗（`areaSheet` / `planDetail` / `showIdPicker` / `showIdAction`）待「字符串模板 → in-DOM HTML」迁移完成后按同一套件处理。
+- 待迁移仍为 30 个手写弹窗；下一步只迁"纯单选文字列表"型（预计 5-8 个），其余仅套壳。
+
+### 验证方式（可复用）
+- 打开 `file:///E:/test/yadea-rental-merge/index.html`（headless Chromium 即可），用 `.sheet-root` 存在判断组件已注册；四项交互实测；控制台 0 错误（仅 1 条与页面无关的 favicon 404）。
+
+---
+
+## 进展记录（2026-09-15）
+
+- **壳层 100% 收敛**：`index.html` 33 个底部弹窗全部改为 `<bottom-sheet>` ×31 + `<option-sheet>` ×2，手写 `rounded-t-[20px]` 面板计数为 0；`WheelDateSheet` 已删除，滚轮/日期类统一用 `BottomSheet type="B"`。
+- **内容行 token 第一批**：`.sheet-search`（6 处搜索框，替换前后 computed style 逐项一致：`margin:0 20px 12px` / `padding:10px 16px` / 面板宽 369 时实测 329×42）、`.sheet-body`（7 处带隐藏滚动条类的内容滚动区，等价替代 `flex-1 overflow-y-auto [min-h-0]` + `hid`/`hide-scroll`/`conf-scroll-hide`）；`v-sheet-drag` 滚动守卫补 `.sheet-body`。
+- **未纳入**：10 处无 hide 类的滚动容器（当前显示滚动条，归一属可见变化）、`.sheet-chip` / `.sheet-row-danger`、z-index 刻度化、高度三档化、`swap.html` 的 4 个弹窗。
+- 规范与坑位已同步到 `AGENTS.md` §8.7（含 UnoCSS 运行时按需生成导致的"类没生效"假象）。
+- **修复「车辆详情 → 用户详情 → 返回落到首页」**（2026-09-15）：商户端 `setTab()` 内部无条件 `navReset()`，而 `goVehicleDetail` / `goBatteryDetail` / `goUserDetail` 是「先 `navOpen()` 压来源快照 → `setTab(目标 Tab)` → 打开目标页」的顺序，刚压入的那层被自己清掉，目标页成了栈空页；`navBack()` 走边界兜底恢复 `_rootSnap`（首页）。日志证据：`push → (未命名)` / `push veh:detail` 之后紧跟 `reset 清空2层 → (首页)`。修法：`setTab(t, keepStack)` 只在手动切 Tab 时清栈，三处跨 Tab 跳转传 `true`；顺带把 `goUserDetail` 的 `if(!account)return` 提到 `navOpen()` 之前（避免空 account 压入幽灵层）。实测：日志变为 `push` 两层后 `back veh:detail` 只弹一层，页面回到「车辆详情」。已写入 `AGENTS.md` §9 页面栈导航。
+- **修复「绑定用户」弹窗在商户端首页自开**（2026-09-15）：根因是组件的 `open:Boolean` +  `userPickActive = ref('')`——Vue 的布尔属性转换把空字符串 `''` 变成 `true`（实测 3.5.42，`[Boolean,String]` 也照样转），窗口在空值即打开、且关闭出口置回 `''` 后仍为真所以 X 点不动；`uWalletSheet = ref('')` 同理（钱包页）。两个壳的 `open` 已改为无类型 + `default:false`，布尔/字符串/空值三类语义与手写 `v-if` 一致；实测空态 0 弹窗、`'vehicle'` 可开、置空即关、`showDatePicker` 布尔开关不受影响。已写入 `AGENTS.md` §8.3 陷阱 + §8.6 空态自检第 4 项。
+
+<!-- progress:2026-09-15 -->
