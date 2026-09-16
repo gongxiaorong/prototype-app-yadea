@@ -165,6 +165,29 @@ body.host-single-m #root-user{display:none}
 .scan-frame{width:220px;height:220px;border:2px solid rgba(255,255,255,.6);border-radius:16px;position:relative;overflow:hidden}
 .scan-line{position:absolute;left:4px;right:4px;height:2px;background:var(--accent);animation:scan-move 2s ease-in-out infinite}
 @keyframes scan-move{0%{top:4px}50%{top:212px}100%{top:4px}}
+/* 底部弹窗共享组件 token（registerSheetKit·与 index.html §8 一致） */
+.sheet-root{position:static;width:0;height:0;overflow:visible}
+.sheet-mask{position:absolute;inset:0;background:rgba(0,0,0,.4)}
+.sheet-panel{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;display:flex;flex-direction:column;max-height:60%;padding-bottom:max(24px,env(safe-area-inset-bottom));box-sizing:border-box}
+.sheet-panel-md{max-height:70%}
+.sheet-panel-lg{max-height:92%}
+.sheet-handle{width:36px;height:5px;margin:10px auto 4px;background:#CCC;border-radius:3px;flex-shrink:0}
+.sheet-head{position:relative;flex-shrink:0;text-align:center}
+.sheet-head-a{padding:16px 0 16px}
+.sheet-title{font-size:17px;font-weight:600;color:#111;display:inline-block;max-width:calc(100% - 72px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-sizing:border-box;padding:0 56px}
+.sheet-x{position:absolute;right:16px;top:calc(50% - 20px);transform:translateY(-50%);width:32px;height:32px;border-radius:9999px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#999;user-select:none}
+.sheet-x:active{background:#F6F7F9}
+.sheet-scroll{flex:1;overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.sheet-scroll::-webkit-scrollbar{display:none}
+.sheet-opt-list{flex:1;overflow-y:auto;min-height:0;padding:0 16px 4px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.sheet-opt-list::-webkit-scrollbar{display:none}
+.sheet-opt{width:100%;padding:14px 0;border-radius:12px;text-align:center;font-size:15px;cursor:pointer;transition:background .15s,color .15s;box-sizing:border-box}
+.sheet-opt:active{opacity:.8}
+.sheet-opt-off{background:#F6F7F9;color:#111}
+.sheet-opt-on{background:var(--accent);color:#fff;font-weight:600}
+.sheet-footer{position:relative;flex-shrink:0}
+.sh-enter-active,.sh-leave-active{transition:transform .3s cubic-bezier(.32,.72,0,1)}
+.sh-enter-from,.sh-leave-to{transform:translateY(100%)}
 </style>
 </head>
 <body>
@@ -657,11 +680,8 @@ body.host-single-m #root-user{display:none}
 </div>
 </div></transition>
 <!-- 拍照/相册选择器 -->
-<transition name="fd"><div v-if="showIdPicker" class="absolute inset-0 z-[750]" style="background:rgba(0,0,0,.35)" data-cp @click="showIdPicker=false" data-od-id="id-picker-mask"></div></transition>
-<transition name="sh"><div v-if="showIdPicker" class="absolute bottom-0 left-0 right-0 bg-white z-[751] rounded-t-[20px] flex flex-col" data-od-id="id-picker-sheet">
-<div class="w-9 h-[5px] mx-auto mt-2.5 mb-1" style="background:#CCC;border-radius:3px"></div>
-<div class="text-center text-[17px] font-semibold py-3 px-5 shrink-0">身份证照片</div>
-<div class="px-5 pb-8 pt-1">
+<bottom-sheet :open="showIdPicker" title="身份证照片" :mask-z="750" oid="id-picker-mask" panel-oid="id-picker-sheet" @close="()=>showIdPicker=false">
+<div class="px-5 pt-1">
 <div class="grid grid-cols-2 gap-2.5">
 <div data-cp @click="pickIdSource('camera')" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1.5px solid #E5E5E5">
 <div class="w-10 h-10 rounded-full flex items-center justify-center mb-2" style="background:#EBF1FD"><span v-html="luci('camera','w-5 h-5 text-[#2B3F5F]')"></span></div>
@@ -673,20 +693,14 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
+</bottom-sheet>
 <!-- 照片更多 ActionSheet -->
-<transition name="fd"><div v-if="showIdAction" class="absolute inset-0 z-[750]" style="background:rgba(0,0,0,.35)" data-cp @click="showIdAction=false" data-od-id="id-action-mask"></div></transition>
-<transition name="sh"><div v-if="showIdAction" class="absolute bottom-0 left-0 right-0 bg-white z-[751] rounded-t-[20px] flex flex-col" data-od-id="id-action-sheet">
-<div class="w-9 h-[5px] mx-auto mt-2.5 mb-1" style="background:#CCC;border-radius:3px"></div>
-<div class="relative flex items-center justify-center py-3 px-5 shrink-0">
-<div class="flex-1 text-center text-[17px] font-semibold">更多操作</div>
-<div class="absolute right-4 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F6F7F9]" data-cp @click="showIdAction=false"><span v-html="luci('x','w-5 h-5 text-[#999]')"></span></div>
-</div>
-<div class="px-5 pt-1 pb-8">
+<bottom-sheet :open="showIdAction" title="更多操作" :mask-z="750" oid="id-action-mask" panel-oid="id-action-sheet" @close="()=>showIdAction=false">
+<div class="px-5 pt-1">
 <div data-cp @click="idActionReupload" class="py-3.5 text-center text-[15px] text-[#1A1A1A] cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #F5F5F5">重新上传</div>
 <div data-cp @click="idActionDelete" class="py-3.5 text-center text-[15px] text-[#FF4343] cursor-pointer active:bg-[#F6F7F9]">删除照片</div>
 </div>
-</div></transition>
+</bottom-sheet>
 <!-- 照片大图预览 -->
 <transition name="fd"><div v-if="showIdPreview" class="absolute inset-0 z-[2500] flex flex-col items-center justify-center gap-5" style="background:rgba(0,0,0,.88)" data-cp @click="showIdPreview=false" data-od-id="id-preview">
 <div class="w-56 h-40 rounded-2xl flex items-center justify-center" style="background:#2B3F5F">
@@ -773,12 +787,7 @@ body.host-single-m #root-user{display:none}
 <button data-cp @click="openAreaSheet" class="w-full py-3.5 rounded-2xl text-[16px] font-semibold active:opacity-90" style="background:#2B3F5F;color:#fff" data-od-id="swap-area-add">新增</button>
 </div>
 </div></transition>
-<transition name="fd"><div v-if="showAreaSheet" class="absolute inset-0 z-[900] flex items-end" style="background:rgba(0,0,0,.45)" data-cp @click.self="closeAreaSheet" data-od-id="area-sheet">
-<div class="w-full bg-white flex flex-col" style="border-radius:24px 24px 0 0;max-height:74%;padding-bottom:24px">
-<div class="relative flex items-center justify-center px-4 pt-4 pb-3 shrink-0">
-<div class="text-[17px] font-semibold">换电区域</div>
-<div data-cp @click="closeAreaSheet" class="absolute right-4 w-7 h-7 flex items-center justify-center cursor-pointer" style="top:14px;color:#999" data-od-id="area-sheet-close"><span v-html="luci('x','w-5 h-5')"></span></div>
-</div>
+<bottom-sheet :open="showAreaSheet" title="换电区域" :mask-z="900" max-h="74%" oid="area-sheet" panel-oid="area-sheet-panel" @close="closeAreaSheet">
 <div class="flex items-center gap-6 px-5 pb-3 shrink-0" style="border-bottom:1px solid #F0F0F0">
 <span v-for="(c,i) in areaCrumbs" :key="i" data-cp @click="areaGoto(i)" class="text-[14px] font-medium" :style="c.name?'color:#111':'color:#C4C4C4'">{{ c.name||c.label }}</span>
 </div>
@@ -787,7 +796,7 @@ body.host-single-m #root-user{display:none}
 <span class="flex-1 text-[14px] truncate">{{ o }}</span>
 </div>
 </div>
-</div></div></transition>
+</bottom-sheet>
 <transition name="sl"><div v-if="profileOV==='deposit'" class="absolute inset-0 z-[600] flex flex-col" style="background:linear-gradient(180deg,#FBEFD2 0%,#FDF6E7 55%,#FDF9F0 100%)" data-od-id="deposit-page">
 <div class="flex items-center pt-14 px-4 pb-3 shrink-0">
 <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[rgba(255,255,255,.7)]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
@@ -1352,7 +1361,7 @@ body.host-single-m #root-user{display:none}
 <div class="bg-white rounded-2xl p-4 mb-3" data-od-id="pod-plan">
 <div class="flex items-center justify-between mb-2">
 <span class="text-[14px] font-bold text-[#1A1A1A]">{{ planOrderDetail.name }}</span>
-<span v-if="planOrderDetail.status==='已支付'" class="text-[13px] font-medium shrink-0" style="color:#17A34A">生效中</span>
+<span v-if="planOrderDetail.status!=='已取消'&&planOrderDetail.status!=='待支付'" class="text-[13px] font-medium shrink-0" style="color:#17A34A">已生效</span>
 </div>
 <div class="text-[13px] space-y-2.5">
 <div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">有效期</span><span class="flex-1 text-right text-[#333]">{{ planOrderDetail.days }}天</span></div>
@@ -1372,6 +1381,15 @@ body.host-single-m #root-user{display:none}
 <div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">订单金额</span><span class="flex-1 text-right text-[#333]">{{ fmtRp(planOrderDetail.amount) }}</span></div>
 <div v-if="planOrderDetail.paidTime" class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">实付金额</span><span class="flex-1 text-right text-[#333]">{{ fmtRp(planOrderDetail.amount) }}</span></div>
 <div v-if="planOrderDetail.paidTime" class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">支付时间</span><span class="flex-1 text-right text-[#333]">{{ planOrderDetail.paidTime }}</span></div>
+</div>
+</div>
+<div v-if="planOrderDetail.status==='已退款'" class="bg-white rounded-2xl p-4 mb-3" data-od-id="pod-refund">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[14px] font-bold text-[#1A1A1A]">退款信息</span>
+</div>
+<div class="text-[13px] space-y-2.5">
+<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">退款金额</span><span class="flex-1 text-right text-[#333]">{{ fmtRp(planOrderDetail.amount) }}</span></div>
+<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">退款时间</span><span class="flex-1 text-right text-[#333]">{{ planOrderDetail.refundTime }}</span></div>
 </div>
 </div>
 <div v-if="planOrderDetail.status==='待支付'" class="flex justify-center py-3">
@@ -1973,6 +1991,33 @@ document.getElementById('host-bar').addEventListener('click',function(e){
 });
 
 function sideSetup(realm,bus){var toastPush=bus?bus.push:function(){};return {realm:realm,goRental:function(){location.href='index.html'},clearData:function(){toastPush('演示数据已重置')},luci,fmtRp,MONEY}}
+/* ===== 共享弹窗套件（registerSheetKit，移植自 index.html） ===== */
+function registerSheetKit(app){
+  if(!app||app.__sheetKit)return;app.__sheetKit=true;
+  app.config.globalProperties=app.config.globalProperties||{};
+  app.config.globalProperties.luci=(typeof luci==='function')?luci:function(n,c){try{var p=(s)=>s.replace(/(\w)(\w*)(-|\s*)/g,(_,a,b)=>a.toUpperCase()+b.toLowerCase());var d=window.lucide&&window.lucide.icons?window.lucide.icons[p(n||'')]:null;return d&&d[0]==='svg'?'<svg></svg>':''}catch(ex){return ''}};
+  app.directive('sheet-drag',{mounted(el,binding){
+    var y0=0,on=false,active=false;
+    function scOf(t){return t&&t.closest?t.closest('.sheet-scroll,.sheet-opt-list,.sheet-body'):null}
+    el.addEventListener('touchstart',function(e){y0=e.touches[0].clientY;on=true;var sc=scOf(e.target);active=(!sc)||(sc.scrollTop<=0)},{passive:true});
+    el.addEventListener('touchmove',function(e){if(on&&active&&(e.touches[0].clientY-y0)>0)e.preventDefault()},{passive:false});
+    el.addEventListener('touchend',function(e){if(!on)return;on=false;var dy=e.changedTouches[0].clientY-y0;if(active&&dy>80&&typeof binding.value==='function')binding.value();active=false},{passive:true});
+  }});
+  app.component('bottom-sheet',{
+    name:'bottom-sheet',
+    props:{open:{default:false},title:{type:String,default:''},type:{type:String,default:'A'},size:{type:String,default:'sm'},maskZ:{type:Number,default:700},maxH:{type:String,default:''},handle:{type:Boolean,default:true},showX:{type:Boolean,default:true},oid:{type:String,default:''},panelOid:{type:String,default:''}},
+    emits:['close','confirm'],
+    computed:{sizeCls(){return this.size==='md'?'sheet-panel-md':this.size==='lg'?'sheet-panel-lg':''}},
+    template:'<div class="sheet-root"><transition name="fd"><div v-if="open" class="sheet-mask" :style="{zIndex:maskZ}" :data-od-id="oid||undefined" @click.self="$emit(\'close\')"></div></transition><transition name="sh"><div v-if="open" class="sheet-panel" :class="sizeCls" :style="{zIndex:maskZ+1,maxHeight:maxH||\'\'}" :data-od-id="panelOid||undefined" v-sheet-drag="()=>$emit(\'close\')"><div v-if="handle" class="sheet-handle"></div><div class="sheet-head" :class="type===\'B\'?\'sheet-head-b\':\'sheet-head-a\'"><template v-if="type===\'B\'"><div class="sheet-btn sheet-btn-cancel" @click="$emit(\'close\')">取消</div><span class="sheet-title">{{ title }}</span><div class="sheet-btn sheet-btn-confirm" @click="$emit(\'confirm\')">确定</div></template><template v-else><span class="sheet-title">{{ title }}</span><div v-if="showX" class="sheet-x" @click="$emit(\'close\')"><span v-html="luci(\'x\',\'w-5 h-5 text-[#999]\')"></span></div></template></div><div class="sheet-scroll"><slot></slot></div><div class="sheet-footer"><slot name="footer"></slot></div></div></transition></div>'
+  });
+  app.component('option-sheet',{
+    name:'option-sheet',
+    props:{open:{default:false},title:{type:String,default:''},options:{type:Array,default:function(){return[]}},modelValue:{default:null},size:{type:String,default:'sm'},maskZ:{type:Number,default:700},handle:{type:Boolean,default:true},showX:{type:Boolean,default:true},oid:{type:String,default:''},panelOid:{type:String,default:''}},
+    emits:['update:modelValue','select','close'],
+    methods:{labelOf:function(o){return (o&&o.label!=null)?o.label:o},valOf:function(o,i){return (o&&o.value!=null)?o.value:i},isOn:function(o,i){return this.modelValue!=null&&this.modelValue===this.valOf(o,i)},pick:function(o,i){var v=this.valOf(o,i);this.$emit('update:modelValue',v);this.$emit('select',v)}},
+    template:'<div class="sheet-root"><transition name="fd"><div v-if="open" class="sheet-mask" :style="{zIndex:maskZ}" :data-od-id="oid||undefined" @click.self="$emit(\'close\')"></div></transition><transition name="sh"><div v-if="open" class="sheet-panel" :class="size===\'md\'?\'sheet-panel-md\':size===\'lg\'?\'sheet-panel-lg\':\'\'" :style="{zIndex:maskZ+1}" :data-od-id="panelOid||undefined" v-sheet-drag="()=>$emit(\'close\')"><div v-if="handle" class="sheet-handle"></div><div class="sheet-head sheet-head-a"><span class="sheet-title">{{ title }}</span><div v-if="showX" class="sheet-x" @click="$emit(\'close\')"><span v-html="luci(\'x\',\'w-5 h-5 text-[#999]\')"></span></div></div><div class="sheet-opt-list"><div v-for="(o,i) in options" :key="i" class="sheet-opt" :class="isOn(o,i)?\'sheet-opt-on\':\'sheet-opt-off\'" @click="pick(o,i)">{{ labelOf(o) }}</div></div></div></transition></div>'
+  });
+}
 
 /* ===== 登录 + 我的 · 共享状态工厂（复刻 index.html 命名，每 App 一份独立实例） ===== */
 function authState(bus){
@@ -2180,7 +2225,7 @@ var AREA_TREE=[
 ];
 
 /* ===== 换电用户端 ===== */
-Vue.createApp({
+var _ua=Vue.createApp({
   setup:function(){
     var tab=Vue.ref('home'),settingsOpen=Vue.ref(false);
     var toastBus=createToastBus();
@@ -2534,10 +2579,10 @@ Vue.createApp({
     }
     return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,openStation,stations,locAuth,setLocAuth,showLocAuth,allowLocAuth,swapAreaSet,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,camAuth,setCamAuth,demoQrOk,demoOnline,demoDist,demoUnfinished,demoLevelLow,demoPlanEnough,demoTakeSlot,demoReturnSlot,planMax,setPlanMax,swapAnomaly,swapStart,swapScan,swapBranch,swapChoice,swapToBorrow,swapBorrowDone,swapToSwap,swapSwapAfterReturn,swapSwapDone,swapClose,swapRetry,swapResumeContinue,setBoundCount},auth,sideSetup('换电用户端',toastBus))
   }})
-.mount(document.getElementById('root-user'));
+registerSheetKit(_ua);_ua.mount(document.getElementById('root-user'));
 
 /* ===== 换电商户端 ===== */
-Vue.createApp({
+var _ma=Vue.createApp({
   setup:function(){
     var tab=Vue.ref('home'),settingsOpen=Vue.ref(false);
     var toastBus=createToastBus();
@@ -2547,7 +2592,7 @@ Vue.createApp({
     var auth=authState(toastBus);
     return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast},auth,sideSetup('换电商户端',toastBus))
   }})
-.mount(document.getElementById('root-merchant'));
+registerSheetKit(_ma);_ma.mount(document.getElementById('root-merchant'));
 
 hostSetMode('split');
 hostSetCurrency(MONEY.cur);
