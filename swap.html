@@ -274,14 +274,14 @@ body.host-single-m #root-user{display:none}
 <span class="flex-1 text-[15px] font-medium">我的套餐</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
 </div>
-<div data-cp @click="openSwapRecordsAll" class="px-4 py-3 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #F0F0F0" data-od-id="profile-swap-record">
-<div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:#EEF4FF"><span v-html="luci('history','w-[18px] h-[18px] text-[#2F6FEB]')"></span></div>
-<span class="flex-1 text-[15px] font-medium">换电记录</span>
-<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
-</div>
 <div data-cp @click="openMyBattery" class="px-4 py-3 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #F0F0F0" data-od-id="profile-my-battery">
 <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:#F0FDF4"><span v-html="luci('battery-full','w-[18px] h-[18px] text-[#17A34A]')"></span></div>
 <span class="flex-1 text-[15px] font-medium">我的电池</span>
+<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
+</div>
+<div data-cp @click="openSwapRecordsAll" class="px-4 py-3 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #F0F0F0" data-od-id="profile-swap-record">
+<div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:#EEF4FF"><span v-html="luci('history','w-[18px] h-[18px] text-[#2F6FEB]')"></span></div>
+<span class="flex-1 text-[15px] font-medium">换电记录</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
 </div>
 <div data-cp @click="openDeposit" class="px-4 py-3 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #F0F0F0" data-od-id="profile-deposit">
@@ -756,7 +756,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
 <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
 <div class="flex-1 text-center text-[17px] font-semibold">换电区域</div>
-<div class="w-8 h-8 flex items-center justify-center shrink-0"><span data-cp @click="saveSwapArea" class="text-[15px] font-medium cursor-pointer active:opacity-60 whitespace-nowrap" style="color:#2B3F5F" data-od-id="swap-area-save">保存</span></div>
+<div class="w-8 h-8 shrink-0"></div>
 </div>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-28" :class="!swapAreas.length?'flex flex-col items-center justify-center':''">
 <div v-for="(a,i) in swapAreas" :key="a.id" data-cp @click="pickSwapArea(i)" class="bg-white rounded-2xl px-4 py-3.5 mb-3 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
@@ -785,7 +785,6 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 overflow-y-auto hide-scroll px-5" style="min-height:0">
 <div v-for="(o,i) in areaList" :key="i" data-cp @click="pickAreaItem(o)" class="flex items-center gap-3 py-3.5 cursor-pointer active:opacity-70" style="border-bottom:1px solid #F5F5F5">
 <span class="flex-1 text-[14px] truncate">{{ o }}</span>
-<span v-if="areaLevel===3&&addedOperators.indexOf(o)!==-1" class="shrink-0" style="color:#FF8A00"><span v-html="luci('check','w-5 h-5')"></span></span>
 </div>
 </div>
 </div></div></transition>
@@ -841,16 +840,16 @@ body.host-single-m #root-user{display:none}
 <transition name="fd"><div v-if="showRefundTip" class="absolute inset-0 z-[1100] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-cp @click.self="showRefundTip=false" data-od-id="refund-tip-modal">
 <div class="bg-white rounded-2xl w-[320px] px-6 pt-6 pb-5 flex flex-col items-center" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
 <div class="text-[17px] font-bold mb-3">温馨提示</div>
-<div class="text-[13px] text-center mb-5" style="color:#888;line-height:1.7">您当前有生效中的换电套餐，押金退还后套餐权益仍保留，但将暂停换电使用权限确认要申请退还押金吗？</div>
+<div class="text-[13px] text-center mb-5" style="color:#888;line-height:1.7">您当前持有生效中的换电套餐，押金退还后，换电权益将暂停。确认申请退还押金吗？</div>
 <div class="flex gap-3 w-full">
 <div data-cp @click="showRefundTip=false" class="flex-1 py-2.5 rounded-full text-[15px] font-medium text-center cursor-pointer" style="border:1px solid #E5E5E5;color:#333" data-od-id="refund-tip-cancel">我再想想</div>
-<div data-cp @click="confirmRefundTip" class="flex-1 py-2.5 rounded-full text-[15px] font-semibold text-center text-white cursor-pointer" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="refund-tip-confirm">前往退押</div>
+<div data-cp @click="confirmRefundTip" class="flex-1 py-2.5 rounded-full text-[15px] font-semibold text-center text-white cursor-pointer" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="refund-tip-confirm">申请退款</div>
 </div>
 </div></div></transition>
 <transition name="fd"><div v-if="showRefundOk" class="absolute inset-0 z-[1100] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-od-id="refund-ok-modal">
 <div class="bg-white rounded-2xl w-[320px] px-6 pt-6 pb-5 flex flex-col items-center" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
 <div class="text-[17px] font-bold mb-3">申请成功</div>
-<div class="text-[13px] text-center mb-5" style="color:#888;line-height:1.7">押金退还申请已提交成功！押金将在 7 个工作日内按原支付路径原路退回，请您耐心等待。</div>
+<div class="text-[13px] text-center mb-5" style="color:#888;line-height:1.7">押金会在 7 个工作日内原路退回至您原支付账户，请您耐心等候。</div>
 <div data-cp @click="refundOkDone" class="w-full py-2.5 rounded-full text-[15px] font-semibold text-center text-white cursor-pointer" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="refund-ok-confirm">知道了</div>
 </div></div></transition>
 </div></transition>
@@ -1488,6 +1487,13 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="setBatteryEmpty(false)" :class="batteryList.length?'is-on':''">有数据</div>
 <div class="demo-ops-chip" data-cp @click="setBatteryEmpty(true)" :class="!batteryList.length?'is-on':''">无数据</div>
+</div>
+</div>
+<div v-if="profileOV==='swapArea'" class="demo-ops-section" data-od-id="demo-swap-area-list">
+<div class="demo-ops-label">列表数据</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setSwapAreasEmpty(false)" :class="swapAreas.length?'is-on':''">有数据</div>
+<div class="demo-ops-chip" data-cp @click="setSwapAreasEmpty(true)" :class="!swapAreas.length?'is-on':''">无数据</div>
 </div>
 </div>
 <div v-if="profileOV==='station'" class="demo-ops-section" data-od-id="demo-cabinet-full">
@@ -2343,7 +2349,8 @@ Vue.createApp({
       if(lv===0)return AREA_TREE.map(function(n){return n.name});
       if(lv===1)return (areaCountry.value.children||[]).map(function(n){return n.name});
       if(lv===2)return (areaProvince.value.children||[]).map(function(n){return n.name});
-      return (areaCity.value.operators||[]);
+      /* 运营商层级过滤掉已加入「换电区域」列表的数据（避免重复添加） */
+      return (areaCity.value.operators||[]).filter(function(n){return addedOperators.value.indexOf(n)===-1});
     });
     /* 首页地图换电站点（数据驱动渲染） */
     var stations=[
@@ -2367,7 +2374,9 @@ Vue.createApp({
     }
     function openSwapArea(){auth.profileOV.value='swapArea';auth.profileSub.value=null}
     function goSetSwapArea(){openSwapArea()}
-    function pickSwapArea(i){swapAreas.value.forEach(function(a,k){a.sel=(k===i)})}
+    function pickSwapArea(i){swapAreas.value.forEach(function(a,k){a.sel=(k===i)});var sel=swapAreas.value[i];if(sel){curArea.value=sel;swapAreaSet.value=true;reloadAreaData()}}
+    /* 原型操作：换电区域列表数据 有数据/无数据（恢复时重建带 sel:true 的默认项，避免复用被 pickSwapArea 改写 sel 的共享对象） */
+    function setSwapAreasEmpty(on){swapAreas.value=on?[]:[{id:DEFAULT_AREA.id,name:DEFAULT_AREA.name,region:DEFAULT_AREA.region,city:DEFAULT_AREA.city,sel:true}]}
     function areaFind(list,name){for(var i=0;i<list.length;i++){if(list[i].name===name)return list[i]}return null}
     function openAreaSheet(){areaCountry.value=AREA_TREE[0];areaProvince.value=null;areaCity.value=null;showAreaSheet.value=true}
     function closeAreaSheet(){showAreaSheet.value=false}
@@ -2400,15 +2409,6 @@ Vue.createApp({
     function reloadAreaData(){
       areaReloading.value=true;
       setTimeout(function(){areaReloading.value=false},700);
-    }
-    function saveSwapArea(){
-      var sel=null;swapAreas.value.forEach(function(a){if(a.sel)sel=a});
-      if(!sel)return;
-      var changed=!curArea.value||curArea.value.name!==sel.name;
-      curArea.value=sel;swapAreaSet.value=true;
-      /* 提交新增 / 变更后返回「我的」；切换了加盟商则重新加载页面数据 */
-      auth.profileOV.value=null;
-      if(changed)reloadAreaData();
     }
     /* ── 套餐 ── */
     function setDepositState(s){depositState.value=s;depositAgree.value=false;showRefundTip.value=false;showRefundOk.value=false}
@@ -2528,7 +2528,7 @@ Vue.createApp({
       if(depositEnabled.value&&depositState.value!=='paid'&&!depositFree.value){planDetail.value=null;showDepositModal.value=true;return}
       planDetail.value=null;planBought.value=true;toastPush('支付成功');
     }
-    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,openStation,stations,locAuth,setLocAuth,showLocAuth,allowLocAuth,swapAreaSet,setSwapArea,goSetSwapArea,swapAreas,showAreaSheet,addedOperators,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,saveSwapArea,curArea,areaReloading,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,camAuth,setCamAuth,demoQrOk,demoOnline,demoDist,demoUnfinished,demoLevelLow,demoPlanEnough,demoTakeSlot,demoReturnSlot,planMax,setPlanMax,swapAnomaly,swapStart,swapScan,swapBranch,swapChoice,swapToBorrow,swapBorrowDone,swapToSwap,swapSwapAfterReturn,swapSwapDone,swapClose,swapRetry,swapResumeContinue,setBoundCount},auth,sideSetup('换电用户端',toastBus))
+    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,openStation,stations,locAuth,setLocAuth,showLocAuth,allowLocAuth,swapAreaSet,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,camAuth,setCamAuth,demoQrOk,demoOnline,demoDist,demoUnfinished,demoLevelLow,demoPlanEnough,demoTakeSlot,demoReturnSlot,planMax,setPlanMax,swapAnomaly,swapStart,swapScan,swapBranch,swapChoice,swapToBorrow,swapBorrowDone,swapToSwap,swapSwapAfterReturn,swapSwapDone,swapClose,swapRetry,swapResumeContinue,setBoundCount},auth,sideSetup('换电用户端',toastBus))
   }})
 .mount(document.getElementById('root-user'));
 
