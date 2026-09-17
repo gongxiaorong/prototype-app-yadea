@@ -81,7 +81,6 @@ body.host-single-m #root-user{display:none}
 .sw-tab-nav{position:absolute;left:0;right:0;bottom:0;height:83px;z-index:100;display:flex;padding-bottom:22px;border-top:1px solid #E5E5E5;background:rgba(255,255,255,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .sw-tab-nav .nv{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;user-select:none;-webkit-user-select:none}
 .sw-homebar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:135px;height:5px;border-radius:999px;background:rgba(0,0,0,.3);z-index:2001}
-/* 切换换电区域后重新加载数据 */
 @keyframes sw-spin{to{transform:rotate(360deg)}}
 .sw-spin{animation:sw-spin .8s linear infinite}
 .set-row{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 14px;margin-bottom:10px;cursor:pointer}
@@ -132,11 +131,17 @@ body.host-single-m #root-user{display:none}
 .login-brand-mark{width:4.5rem;height:4.5rem;border-radius:1.25rem;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--accent) 0%,var(--accent) 100%);box-shadow:0 8px 20px rgba(43,63,95,.28);color:#fff}
 .form-hint{font-size:12px;color:var(--danger);margin-top:4px}
 .set-hd{font-size:13px;font-weight:500;color:#999;margin-bottom:8px;padding-left:4px}
-/* ── 四块的过渡动画与滚动类（copy from index.html） ── */
+/* ── 过渡动画与滚动类 ── */
 .fd-enter-active,.fd-leave-active{transition:opacity .25s}
 .fd-enter-from,.fd-leave-to{opacity:0}
 .sl-enter-active,.sl-leave-active{transition:transform .28s cubic-bezier(.32,.72,0,1)}
 .sl-enter-from,.sl-leave-to{transform:translateX(100%)}
+/* ── Tab 切换过渡（与 index.html 同名同参）；nav-noanim 期（快照还原）禁用，避免还原瞬间闪动 ── */
+.tab-fade-enter-active,.tab-fade-leave-active{transition:opacity .2s ease,transform .2s ease}
+.tab-fade-enter-from{opacity:0;transform:translateY(6px)}
+.tab-fade-leave-to{opacity:0;transform:translateY(-6px)}
+.nav-noanim .tab-fade-enter-active,.nav-noanim .tab-fade-leave-active{transition:none!important}
+.nav-noanim .tab-fade-enter-from,.nav-noanim .tab-fade-leave-to{opacity:1!important;transform:none!important}
 .hid::-webkit-scrollbar{display:none}
 .hid{scrollbar-width:none}
 .card-actions{display:flex;border-top:1px solid #E5E5E5;margin-top:0}
@@ -165,7 +170,7 @@ body.host-single-m #root-user{display:none}
 .scan-frame{width:220px;height:220px;border:2px solid rgba(255,255,255,.6);border-radius:16px;position:relative;overflow:hidden}
 .scan-line{position:absolute;left:4px;right:4px;height:2px;background:var(--accent);animation:scan-move 2s ease-in-out infinite}
 @keyframes scan-move{0%{top:4px}50%{top:212px}100%{top:4px}}
-/* 底部弹窗共享组件 token（registerSheetKit·与 index.html §8 一致） */
+/* 底部弹窗共享组件 token（registerSheetKit·见 AGENTS.md「底部弹窗规范」） */
 .sheet-root{position:static;width:0;height:0;overflow:visible}
 .sheet-mask{position:absolute;inset:0;background:rgba(0,0,0,.4)}
 .sheet-panel{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;display:flex;flex-direction:column;max-height:60%;padding-bottom:max(24px,env(safe-area-inset-bottom));box-sizing:border-box}
@@ -207,8 +212,8 @@ body.host-single-m #root-user{display:none}
 <main id="host-main">
   <div class="host-stage">
     <section id="root-user">
-<div class="od-stage"><div class="w-[393px] h-[852px] bg-black rounded-[55px] p-3 relative shrink-0" style="box-shadow:0 0 0 2px #333,0 30px 60px rgba(0,0,0,.35)"><div class="absolute top-[23px] left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-black rounded-[20px] z-[2000]"></div><div class="w-full h-full bg-[#F6F7F9] rounded-[44px] overflow-hidden flex flex-col relative"><div class="toast-wrap"><transition-group name="toast"><div v-for="t in toasts" :key="t.id" class="toast-item" :class="'toast-'+t.type">{{ t.msg }}</div></transition-group></div><div v-if="!settingsOpen&&tab==='plan'" class="od-head" style="justify-content:center;border-bottom:none;padding-top:52px" data-od-id="plan-head"><span class="tt" style="flex:0 0 auto">购买套餐</span></div><div v-if="!settingsOpen" class="od-body" style="flex:1;position:relative;min-height:0;padding:0;overflow:hidden;background:var(--bg)"><div v-if="tab==='home'" class="sw-map"><div class="road-h" style="top:24%"></div><div class="road-h" style="top:58%"></div><div class="road-v" style="left:28%"></div><div class="road-v" style="left:60%"></div><div class="road-v" style="left:84%"></div><div class="sw-maplbl" style="left:57%;top:22%">益州东二路</div><div class="sw-maplbl" style="left:70%;top:39%">创新时代广场</div><div class="sw-maplbl" style="left:9%;top:9%">瑞禧公馆</div><div class="sw-maplbl" style="left:45%;top:79%">天荟</div><div class="sw-maplbl" style="left:72%;top:86%">东方希望中心</div><div class="sw-maplbl" style="left:14%;top:46%">益州东一路</div><template v-for="s in stations" :key="'st-'+(s.label||s.no)"><div v-if="s.kind==='agg'" class="sw-station" :style="{left:s.left,top:s.top}" data-cp @click="openStation(0)"><div class="agg">{{ s.label }}</div><div class="cap">{{ s.cap }}</div></div><div v-else-if="s.kind==='off'" class="sw-station" :style="{left:s.left,top:s.top}" data-cp @click="openStation(0)"><div class="pin off"><span v-html="luci('zap','w-4 h-4')"></span></div><div class="cap">{{ s.cap }}</div></div><div v-else class="sw-station" :style="{left:s.left,top:s.top}" data-cp @click="openStation(s.no)"><div class="pin on"><span v-html="luci('zap','w-4 h-4')"></span><span class="num">{{ s.no }}</span></div><div class="cap">{{ s.cap }}</div></div></template><div class="sw-loc" style="left:34%;top:61%" data-cp @click="goLocate"><div class="tag">推荐</div><div class="dot"></div></div><div class="sw-search" data-cp @click="toast('输入换电站名称或地址进行搜索')"><span v-html="luci('search','w-4 h-4 text-[#8A9999]')"></span><span class="text-[13px] text-[#8A9999]">搜索目的地</span></div><div class="sw-map-ctrl"><button data-cp @click="goLayer" v-html="luci('layers','w-4 h-4')"></button><button data-cp @click="goLocate" v-html="luci('crosshair','w-4 h-4')"></button><button data-cp @click="goRefresh" v-html="luci('refresh-cw','w-4 h-4')"></button></div><div class="sw-scan"><button data-cp @click="goScan"><span v-html="luci('scan-line','w-5 h-5')"></span>扫码换电</button></div><div v-if="!loggedIn" data-cp @click="openLogin('home')" class="absolute left-0 right-0 z-[99] flex items-center justify-between px-4 py-3 cursor-pointer active:opacity-90" style="top:99px;background:#2B3F5F" data-od-id="home-login-banner"><span class="text-[13px] text-white font-medium">您还未登录，点我快速登录</span><button data-cp @click.stop="openLogin('home')" class="px-3 py-1.5 rounded-lg text-[12px] font-semibold text-white" style="border:1px solid rgba(255,255,255,.5);background:transparent">去登录 &gt;</button></div><div v-if="loggedIn&&!swapAreaSet" data-cp @click="goSetSwapArea" class="absolute z-[99] flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="left:12px;right:12px;top:99px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-area-banner"><span class="text-[13px] font-medium" style="color:#111">您尚未设置换电区域</span><button data-cp @click.stop="goSetSwapArea" class="flex items-center gap-0.5 px-3 py-1.5 text-[12px] font-semibold" style="border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;border-radius:10px"><span>立即前往</span><span v-html="luci('chevron-right','w-4 h-4')"></span></button></div></div>
-<div v-if="tab==='plan'" class="absolute left-0 right-0 top-0 bottom-[83px] flex flex-col" data-od-id="plan-page">
+<div class="od-stage"><div class="w-[393px] h-[852px] bg-black rounded-[55px] p-3 relative shrink-0" style="box-shadow:0 0 0 2px #333,0 30px 60px rgba(0,0,0,.35)"><div class="absolute top-[23px] left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-black rounded-[20px] z-[2000]"></div><div class="w-full h-full bg-[#F6F7F9] rounded-[44px] overflow-hidden flex flex-col relative"><div class="toast-wrap"><transition-group name="toast"><div v-for="t in toasts" :key="t.id" class="toast-item" :class="'toast-'+t.type">{{ t.msg }}</div></transition-group></div><div v-if="!settingsOpen&&tab==='plan'" class="od-head" style="justify-content:center;border-bottom:none;padding-top:52px" data-od-id="plan-head"><span class="tt" style="flex:0 0 auto">购买套餐</span></div><div v-if="!settingsOpen" class="od-body" style="flex:1;position:relative;min-height:0;padding:0;overflow:hidden;background:var(--bg)"><transition name="tab-fade"><div v-if="tab==='home'" class="sw-map"><div class="road-h" style="top:24%"></div><div class="road-h" style="top:58%"></div><div class="road-v" style="left:28%"></div><div class="road-v" style="left:60%"></div><div class="road-v" style="left:84%"></div><div class="sw-maplbl" style="left:57%;top:22%">益州东二路</div><div class="sw-maplbl" style="left:70%;top:39%">创新时代广场</div><div class="sw-maplbl" style="left:9%;top:9%">瑞禧公馆</div><div class="sw-maplbl" style="left:45%;top:79%">天荟</div><div class="sw-maplbl" style="left:72%;top:86%">东方希望中心</div><div class="sw-maplbl" style="left:14%;top:46%">益州东一路</div><template v-for="s in stations" :key="'st-'+(s.label||s.no)"><div v-if="s.kind==='agg'" class="sw-station" :style="{left:s.left,top:s.top}" data-cp @click="openStation(0)"><div class="agg">{{ s.label }}</div><div class="cap">{{ s.cap }}</div></div><div v-else-if="s.kind==='off'" class="sw-station" :style="{left:s.left,top:s.top}" data-cp @click="openStation(0)"><div class="pin off"><span v-html="luci('zap','w-4 h-4')"></span></div><div class="cap">{{ s.cap }}</div></div><div v-else class="sw-station" :style="{left:s.left,top:s.top}" data-cp @click="openStation(s.no)"><div class="pin on"><span v-html="luci('zap','w-4 h-4')"></span><span class="num">{{ s.no }}</span></div><div class="cap">{{ s.cap }}</div></div></template><div class="sw-loc" style="left:34%;top:61%" data-cp @click="goLocate"><div class="tag">推荐</div><div class="dot"></div></div><div class="sw-search" data-cp @click="toast('输入换电站名称或地址进行搜索')"><span v-html="luci('search','w-4 h-4 text-[#8A9999]')"></span><span class="text-[13px] text-[#8A9999]">搜索目的地</span></div><div class="sw-map-ctrl"><button data-cp @click="goLayer" v-html="luci('layers','w-4 h-4')"></button><button data-cp @click="goLocate" v-html="luci('crosshair','w-4 h-4')"></button><button data-cp @click="goRefresh" v-html="luci('refresh-cw','w-4 h-4')"></button></div><div class="sw-scan"><button data-cp @click="goScan"><span v-html="luci('scan-line','w-5 h-5')"></span>扫码换电</button></div><div v-if="!loggedIn" data-cp @click="openLogin('home')" class="absolute left-0 right-0 z-[99] flex items-center justify-between px-4 py-3 cursor-pointer active:opacity-90" style="top:99px;background:#2B3F5F" data-od-id="home-login-banner"><span class="text-[13px] text-white font-medium">您还未登录，点我快速登录</span><button data-cp @click.stop="openLogin('home')" class="px-3 py-1.5 rounded-lg text-[12px] font-semibold text-white" style="border:1px solid rgba(255,255,255,.5);background:transparent">去登录 &gt;</button></div><div v-if="loggedIn&&!swapAreaSet" data-cp @click="goSetSwapArea" class="absolute z-[99] flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="left:12px;right:12px;top:99px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-area-banner"><span class="text-[13px] font-medium" style="color:#111">您尚未设置换电区域</span><button data-cp @click.stop="goSetSwapArea" class="flex items-center gap-0.5 px-3 py-1.5 text-[12px] font-semibold" style="border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;border-radius:10px"><span>立即前往</span><span v-html="luci('chevron-right','w-4 h-4')"></span></button></div></div></transition>
+<transition name="tab-fade"><div v-if="tab==='plan'" class="absolute left-0 right-0 top-0 bottom-[83px] flex flex-col" data-od-id="plan-page">
 <div class="px-4 pt-3 shrink-0">
 <div v-if="!swapAreaSet" data-cp @click="openSwapArea" class="bg-white rounded-2xl px-4 py-3 flex items-center justify-between gap-3 cursor-pointer active:opacity-90" style="border:1px solid #F0F0F0;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="plan-area-banner">
 <span class="text-[14px] font-medium" style="color:#111">您尚未设置换电区域</span>
@@ -244,14 +249,9 @@ body.host-single-m #root-user{display:none}
 <div class="text-[15px]" style="color:#999">暂无相关数据</div>
 </div>
 </div>
-</div>
-<div v-if="tab==='mine'" class="absolute left-0 right-0 top-0 bottom-[83px] bg-[#F6F7F9] flex flex-col overflow-hidden" data-od-id="profile-page">
-<div v-if="areaReloading" class="absolute inset-0 z-[900] flex items-center justify-center" style="background:rgba(255,255,255,.75)" data-od-id="area-reloading">
-<div class="flex flex-col items-center gap-2">
-<div class="w-7 h-7 rounded-full border-2 border-[#E5E5E5] sw-spin" style="border-top-color:#2B3F5F"></div>
-<div class="text-[12px]" style="color:#999">数据加载中...</div>
-</div>
-</div>
+</div></transition>
+<transition name="tab-fade"><div v-if="tab==='mine'" class="absolute left-0 right-0 top-0 bottom-[83px] bg-[#F6F7F9] flex flex-col overflow-hidden" data-od-id="profile-page">
+<loading-overlay :open="areaReloading" :z="900" bg="rgba(255,255,255,.75)" text="数据加载中..." oid="area-reloading"></loading-overlay>
 <div class="pt-14 shrink-0"></div>
 <div class="px-5 py-4 flex items-center gap-3.5 shrink-0" data-od-id="profile-header">
 <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#FF6A00 0%,#E55A00 100%);box-shadow:0 4px 12px rgba(255,106,0,.25)"><span v-html="luci('bike','w-6 h-6 text-white')"></span></div>
@@ -319,8 +319,8 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div>
-</div><div v-if="!settingsOpen" class="sw-tab-nav"><div class="nv" data-cp @click="setTab('home')" :style="tab==='home'?{color:'#FF6A00'}:{color:'#999'}"><span v-html="luci('map-pin','w-[22px] h-[22px]')"></span><span class="text-[10px] font-semibold">首页</span></div><div class="nv" data-cp @click="setTab('plan')" :style="tab==='plan'?{color:'#FF6A00'}:{color:'#999'}"><span v-html="luci('package','w-[22px] h-[22px]')"></span><span class="text-[10px] font-semibold">套餐</span></div><div class="nv" data-cp @click="setTab('mine')" :style="tab==='mine'?{color:'#FF6A00'}:{color:'#999'}"><span v-html="luci('user','w-[22px] h-[22px]')"></span><span class="text-[10px] font-semibold">我的</span></div></div><div class="sw-homebar"></div>
+</div></transition>
+</div><tab-bar :show="!settingsOpen" active-color="#FF6A00" :items="[{key:'home',icon:'map-pin',label:'首页',activeWhen:tab==='home'},{key:'plan',icon:'package',label:'套餐',activeWhen:tab==='plan'},{key:'mine',icon:'user',label:'我的',activeWhen:tab==='mine'}]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
 <transition name="fd"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="login-page">
 <div v-show="loginView==='main'" class="flex-1 flex flex-col min-h-0 bg-[#F6F7F9]">
 <div class="pt-14 px-5 pb-1 flex items-center justify-between shrink-0">
@@ -452,10 +452,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 <div v-if="loginView==='lang'" class="absolute inset-0 z-10 bg-[#F6F7F9] flex flex-col" data-od-id="login-lang-page">
-<div class="pt-14 px-4 pb-3 flex items-center bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="loginView='main'"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-9">切换语言</div>
-</div>
+<nav-bar title="切换语言" border-color="#E5E5E5" @back="()=>loginView='main'"></nav-bar>
 <div class="mt-3 mx-4 rounded-xl overflow-hidden bg-white" style="border:1px solid #E5E5E5">
 <div v-for="(l,i) in langOptions" :key="l.id" data-cp @click="selectLangFromLogin(l.id)" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" :style="i<langOptions.length-1?'border-bottom:1px solid #EDEDED':''">
 <span class="flex-1 text-[15px] font-medium">{{ l.label }}</span>
@@ -479,14 +476,11 @@ body.host-single-m #root-user{display:none}
 <span class="flex-1 text-[15px] min-w-0" :class="activeDialCode===c.code ? 'font-semibold text-[#333]' : 'font-medium text-[#111]'">{{ c.name }}</span>
 <span class="text-[14px] tabular-nums shrink-0" :class="activeDialCode===c.code ? 'font-semibold text-[#333]' : 'text-[#6B6B6B]'">{{ c.code }}</span>
 </div>
-<div v-if="!dialFiltered.length" class="py-16 text-center text-[14px] text-[#999]">未找到匹配地区</div>
+<empty-state v-if="!dialFiltered.length" icon="" text="未找到匹配地区" text-class="text-[14px] font-normal text-[#999]"></empty-state>
 </div>
 </div></transition>
-<transition name="sl"><div v-if="profileOV==='info'" class="absolute inset-0 bg-[#F6F7F9] z-[500] flex flex-col">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8">个人信息</div>
-</div>
+<page :open="profileOV==='info'" :z="500">
+<nav-bar title="个人信息" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hid">
 <div class="bg-white rounded-xl overflow-hidden mb-6" style="border:1px solid #E5E5E5">
 <div class="flex items-center px-4 py-4" style="border-bottom:1px solid #EDEDED"><span class="flex-1 text-[15px] font-medium">头像</span><div class="w-10 h-10 rounded-full bg-[#E8F0FE] flex items-center justify-center shrink-0"><span v-html="luci('user','w-5 h-5 text-[#4A7CF7]')"></span></div></div>
@@ -505,13 +499,10 @@ body.host-single-m #root-user{display:none}
 <div class="absolute bottom-7 left-5 right-5" data-od-id="profile-cancel-account">
 <button data-cp @click="profileMod='cancelAccount'" class="w-full py-3.5 rounded-xl text-[15px] font-semibold text-center cursor-pointer active:opacity-90 transition-colors" style="background:#fff;border:1px solid #E5E5E5;color:#999">注销账号</button>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileOV==='settings'" class="absolute inset-0 bg-[#F6F7F9] z-[500] flex flex-col" data-od-id="settings-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8">系统设置</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll"><div class="set-hd">通用设置</div><div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><div data-cp @click="navOpen('subLang')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-lang-row"><span class="flex-1 text-[15px] font-medium">切换语言</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ appLangLabel }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div><div data-cp @click="navOpen('subSwitchSystem')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-sys-row"><span class="flex-1 text-[15px] font-medium">切换系统</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ curSystemName }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div><div data-cp @click="checkVersion" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" data-od-id="settings-version-row"><span class="flex-1 text-[15px] font-medium">当前版本</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] font-mono">V1.30.0</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div></div></div><div class="absolute bottom-7 left-5 right-5" data-od-id="settings-logout-btn"><button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90 transition-colors" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button></div></div></transition><transition name="sl"><div v-if="profileSub==='lang'" class="absolute inset-0 bg-[#F6F7F9] z-[510] flex flex-col" data-od-id="settings-lang-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8">切换语言</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll"><div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><div v-for="(lg,i) in langOptions" :key="lg.id" data-cp @click="selectLang(lg.id)" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" :style="i<langOptions.length-1?{borderBottom:'1px solid #EDEDED'}:{}"><span class="flex-1 text-[15px] font-medium">{{ lg.label }}</span><span v-if="appLang===lg.id"><span v-html="luci('check','w-5 h-5 text-[#2B3F5F]')"></span></span></div></div></div></div></transition><transition name="sl"><div v-if="profileSub==='subSwitchSystem'" class="absolute inset-0 bg-[#F6F7F9] z-[512] flex flex-col" data-od-id="switch-system-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="switchBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8" style="color:#111">选择系统</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-4"><div v-if="switchSource==='first'" data-cp @click="goRental" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#EEF4FF;color:#2F6FEB"><span v-html="luci('bike','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">租车系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div><div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#FFF3E0;color:#FF8A00"><span v-html="luci('plug-zap','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">充电系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div><div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#E8F7EE;color:#17A34A"><span v-html="luci('battery-charging','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">换电系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div></div><div class="px-5 pb-8 shrink-0" v-if="switchSource==='first'"><button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button></div></div></transition>
-<transition name="sl"><div v-if="profileSub==='bindPhone'" class="absolute inset-0 bg-[#F6F7F9] z-[600] flex flex-col" data-od-id="bind-phone-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8">绑定手机号</div>
-</div>
+</page>
+<page :open="profileOV==='settings'" :z="500" oid="settings-page"><nav-bar title="系统设置" border-color="#E5E5E5" @back="navBack()"></nav-bar><div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll"><div class="set-hd">通用设置</div><div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><div data-cp @click="navOpen('subLang')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-lang-row"><span class="flex-1 text-[15px] font-medium">切换语言</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ appLangLabel }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div><div data-cp @click="navOpen('subSwitchSystem')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-sys-row"><span class="flex-1 text-[15px] font-medium">切换系统</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ curSystemName }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div><div data-cp @click="checkVersion" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" data-od-id="settings-version-row"><span class="flex-1 text-[15px] font-medium">当前版本</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] font-mono">V1.30.0</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div></div></div><div class="absolute bottom-7 left-5 right-5" data-od-id="settings-logout-btn"><button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90 transition-colors" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button></div></page><page :open="profileSub==='lang'" :z="510" oid="settings-lang-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8">切换语言</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll"><div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><div v-for="(lg,i) in langOptions" :key="lg.id" data-cp @click="selectLang(lg.id)" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" :style="i<langOptions.length-1?{borderBottom:'1px solid #EDEDED'}:{}"><span class="flex-1 text-[15px] font-medium">{{ lg.label }}</span><span v-if="appLang===lg.id"><span v-html="luci('check','w-5 h-5 text-[#2B3F5F]')"></span></span></div></div></div></page><page :open="profileSub==='subSwitchSystem'" :z="512" oid="switch-system-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="switchBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8" style="color:#111">选择系统</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-4"><div v-if="switchSource==='first'" data-cp @click="goRental" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#EEF4FF;color:#2F6FEB"><span v-html="luci('bike','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">租车系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div><div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#FFF3E0;color:#FF8A00"><span v-html="luci('plug-zap','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">充电系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div><div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#E8F7EE;color:#17A34A"><span v-html="luci('battery-charging','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">换电系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div></div><div class="px-5 pb-8 shrink-0" v-if="switchSource==='first'"><button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button></div></page>
+<page :open="profileSub==='bindPhone'" :z="600" oid="bind-phone-page">
+<nav-bar title="绑定手机号" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div v-if="hasPhone" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundPhone }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-card">
@@ -534,12 +525,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='bindEmail'" class="absolute inset-0 bg-[#F6F7F9] z-[600] flex flex-col" data-od-id="bind-email-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8">绑定邮箱</div>
-</div>
+</page>
+<page :open="profileSub==='bindEmail'" :z="600" oid="bind-email-page">
+<nav-bar title="绑定邮箱" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div v-if="hasEmail" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundEmail }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-card">
@@ -559,12 +547,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='pwdVerify'" class="absolute inset-0 bg-[#F6F7F9] z-[600] flex flex-col" data-od-id="pwd-verify-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8">修改密码</div>
-</div>
+</page>
+<page :open="profileSub==='pwdVerify'" :z="600" oid="pwd-verify-page">
+<nav-bar title="修改密码" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="px-4 pt-4 flex-1 overflow-y-auto flex flex-col">
 <div class="form-card">
 <template v-if="pwdChannel==='phone'">
@@ -595,12 +580,9 @@ body.host-single-m #root-user{display:none}
 <div v-else-if="pwdChannel==='email'&&hasPhone"><span class="login-switch-primary" data-cp @click="switchPwdChannel('phone')">手机号验证</span></div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='pwdReset'" class="absolute inset-0 bg-[#F6F7F9] z-[600] flex flex-col" data-od-id="pwd-reset-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8">重置密码</div>
-</div>
+</page>
+<page :open="profileSub==='pwdReset'" :z="600" oid="pwd-reset-page">
+<nav-bar title="重置密码" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-card">
 <div class="form-row">
@@ -616,13 +598,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='idDetail'&&idSingle" class="absolute inset-0 z-[600] bg-[#F6F7F9] flex flex-col overflow-hidden" data-od-id="id-detail-page">
-<div class="pt-14 px-4 pb-3 flex items-center justify-between bg-white shrink-0" style="border-bottom:1px solid #F0F0F0">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<span class="flex-1 text-center text-[17px] font-semibold">实名详情</span>
-<div class="w-8 h-8 flex items-center justify-center shrink-0"><span class="text-sm font-medium text-[#2F6FEB] cursor-pointer active:opacity-70 whitespace-nowrap" data-cp @click="openIdForm">编辑</span></div>
-</div>
+</page>
+<page :open="profileSub==='idDetail'&&idSingle" :z="600" oid="id-detail-page">
+<nav-bar title="实名详情" border-color="#F0F0F0" @back="navBack"><template #right><span class="text-sm font-medium text-[#2F6FEB] cursor-pointer active:opacity-70 whitespace-nowrap" data-cp @click="openIdForm">编辑</span></template></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-6" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
 <div class="form-card">
 <div class="form-row"><div class="form-label">姓名</div><div class="text-[15px] text-[#1A1A1A] py-1">{{ idSingle.name }}</div></div>
@@ -638,13 +616,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='idForm'" class="absolute inset-0 z-[600] bg-[#F6F7F9] flex flex-col overflow-hidden" data-od-id="id-form-page">
-<div class="pt-14 px-4 pb-3 flex items-center justify-between bg-white shrink-0" style="border-bottom:1px solid #F0F0F0">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<span class="flex-1 text-center text-[17px] font-semibold">实名认证</span>
-<span class="w-8 h-8"></span>
-</div>
+</page>
+<page :open="profileSub==='idForm'" :z="600" oid="id-form-page">
+<nav-bar title="实名认证" border-color="#F0F0F0" @back="navBack"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
 <div class="form-card">
 <div class="form-row">
@@ -678,7 +652,7 @@ body.host-single-m #root-user{display:none}
 <div class="px-4 pb-8 shrink-0">
 <button data-cp @click="submitIdForm" class="w-full h-[50px] flex items-center justify-center rounded-xl text-[16px] font-semibold border-none cursor-pointer transition-colors active:opacity-90" style="background:#2B3F5F;color:#fff">保存</button>
 </div>
-</div></transition>
+</page>
 <!-- 拍照/相册选择器 -->
 <bottom-sheet :open="showIdPicker" title="身份证照片" :mask-z="750" oid="id-picker-mask" panel-oid="id-picker-sheet" @close="()=>showIdPicker=false">
 <div class="px-5 pt-1">
@@ -702,58 +676,11 @@ body.host-single-m #root-user{display:none}
 </div>
 </bottom-sheet>
 <!-- 照片大图预览 -->
-<transition name="fd"><div v-if="showIdPreview" class="absolute inset-0 z-[2500] flex flex-col items-center justify-center gap-5" style="background:rgba(0,0,0,.88)" data-cp @click="showIdPreview=false" data-od-id="id-preview">
-<div class="w-56 h-40 rounded-2xl flex items-center justify-center" style="background:#2B3F5F">
-<span v-html="luci('credit-card','w-20 h-20 text-white/80')"></span>
-</div>
-<div v-if="idPreviewItem" class="text-white text-[18px] font-bold">身份证照片</div>
-<div v-if="idPreviewItem" class="text-white/40 text-[13px] -mt-3">{{ idPreviewItem.time }}</div>
-<div class="text-white/30 text-[13px] mt-2">点击空白处关闭</div>
-</div></transition>
-<transition name="fd"><div v-if="profileMod" class="absolute inset-0 z-[800] flex items-center justify-center" style="background:rgba(0,0,0,.45)" data-cp @click.self="!profileModLoading&&(profileMod=null)" data-od-id="profile-modal">
-<div class="relative bg-white rounded-xl w-[300px] px-5 pt-6 pb-4 flex flex-col gap-3 overflow-hidden" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
-<div class="text-[17px] font-bold text-center">{{ profileMdT }}</div>
-<div v-if="profileMdD" class="text-sm text-[#666] text-center leading-relaxed">{{ profileMdD }}</div>
-<div class="flex gap-3 mt-2">
-<div data-cp @click="profileMod=null" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff">取消</div>
-<div data-cp @click="profileMdOk" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer active:opacity-90 transition-colors" style="background:#2B3F5F">确认</div>
-</div>
-<div v-if="profileModLoading" class="absolute inset-0 flex items-center justify-center" style="background:rgba(255,255,255,.7);backdrop-filter:blur(2px)">
-<div class="flex flex-col items-center gap-2">
-<svg class="animate-spin" width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#E5E5E5" stroke-width="3"/><path d="M14 3a11 11 0 0 1 11 11" stroke="#2B3F5F" stroke-width="3" stroke-linecap="round"/></svg>
-<div class="text-[12px] text-[#999]">处理中...</div>
-</div>
-</div>
-</div>
-</div></transition>
-<transition name="fd"><div v-if="showVersionCheck" class="absolute inset-0 z-[900] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-od-id="version-check-modal">
-<div class="bg-white rounded-xl w-[320px] px-5 pt-6 pb-4 flex flex-col" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
-<template v-if="hasNewVersion">
-<div class="text-[17px] font-bold text-center mb-1">发现新版本</div>
-<div class="text-[13px] text-[#666] text-center mb-3">{{ '最新版本 ' + (latestVersion) }}</div>
-<div class="bg-[#F6F7F9] rounded-lg px-4 py-3 mb-4 text-[13px] text-[#555] leading-relaxed">{{ updateDesc }}</div>
-<template v-if="protoForceUpdate==='force'">
-<div class="flex gap-3">
-<div data-cp @click="exitApp" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff">退出应用</div>
-<div data-cp @click="goUpdate" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)">{{ updating ? '下载中…' : '立即更新' }}</div>
-</div>
-</template>
-<template v-else>
-<div class="flex gap-3">
-<div data-cp @click="showVersionCheck=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff">稍后提醒</div>
-<div data-cp @click="goUpdate" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)">{{ updating ? '下载中…' : '立即更新' }}</div>
-</div>
-</template>
-</template>
-<template v-else>
-<div class="flex flex-col items-center py-6">
-<div class="w-14 h-14 rounded-full flex items-center justify-center mb-3" style="background:#EBF1FD"><span v-html="luci('check','w-7 h-7 text-[var(--accent)]')"></span></div>
-<div class="text-[17px] font-bold mb-1">已是最新版本</div>
-<div class="text-[13px] text-[#666]">{{ latestVersion }}</div>
-</div>
-<div data-cp @click="showVersionCheck=false" class="rounded-xl py-3 text-center text-[15px] font-semibold text-white cursor-pointer mt-2" style="background:var(--accent)">知道了</div>
-</template>
-</div></div></transition>
+<page :open="showIdPreview" :z="2500" trans="fd" bg="#000" oid="id-preview" @close="showIdPreview=false">
+<image-viewer :src="idPreviewItem?{color:'#2B3F5F',label:'身份证照片',time:idPreviewItem.time}:null" tip="点击空白处关闭" @close="showIdPreview=false"></image-viewer>
+</page>
+<confirm-dialog :open="profileMod" :z="800" oid="profile-modal" :title="profileMdT" :desc="profileMdD" :loading="profileModLoading" @close="profileMod=null" @confirm="profileMdOk"></confirm-dialog>
+<confirm-dialog :open="showVersionCheck" :z="900" oid="version-check-modal" :mask-close="false" :title="hasNewVersion?'发现新版本':'已是最新版本'" :cancel-text="hasNewVersion?(protoForceUpdate==='force'?'退出应用':'稍后提醒'):''" :confirm-text="hasNewVersion?(updating?'下载中…':'立即更新'):'知道了'" confirm-bg="var(--accent)" @close="hasNewVersion&&protoForceUpdate==='force'?exitApp():(showVersionCheck=false)" @confirm="hasNewVersion?goUpdate():(showVersionCheck=false)"><template v-if="hasNewVersion"><div class="text-[13px] text-[#666] text-center">{{ '最新版本 ' + (latestVersion) }}</div><div class="bg-[#F6F7F9] rounded-lg px-4 py-3 text-[13px] text-[#555] leading-relaxed">{{ updateDesc }}</div></template><template v-else><div class="w-14 h-14 rounded-full flex items-center justify-center mb-3" style="background:#EBF1FD"><span v-html="luci('check','w-7 h-7 text-[var(--accent)]')"></span></div><div class="text-[13px] text-[#666]">{{ latestVersion }}</div></template></confirm-dialog>
 <transition name="fd"><div v-if="showLocAuth" class="absolute inset-0 z-[1200] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-od-id="loc-auth-modal">
 <div class="bg-white rounded-xl w-[320px] px-5 pt-6 pb-4 flex flex-col" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
 <div class="flex flex-col items-center mb-3">
@@ -766,27 +693,19 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="allowLocAuth" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)">立即开启</div>
 </div>
 </div></div></transition>
-<transition name="sl"><div v-if="profileOV==='swapArea'" class="absolute inset-0 bg-[#F6F7F9] z-[600] flex flex-col" data-od-id="swap-area-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold">换电区域</div>
-<div class="w-8 h-8 shrink-0"></div>
-</div>
+<page :open="profileOV==='swapArea'" :z="600" oid="swap-area-page">
+<nav-bar title="换电区域" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-28" :class="!swapAreas.length?'flex flex-col items-center justify-center':''">
 <div v-for="(a,i) in swapAreas" :key="a.id" data-cp @click="pickSwapArea(i)" class="bg-white rounded-2xl px-4 py-3.5 mb-3 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
 <div class="flex-1 min-w-0"><div class="text-[15px] font-medium truncate">{{ a.name }}</div><div class="text-[12px] mt-1 truncate" style="color:#999">{{ a.region }}</div></div>
 <span v-if="a.sel" class="shrink-0" style="color:#FF8A00"><span v-html="luci('check','w-5 h-5')"></span></span>
 </div>
-<div v-if="!swapAreas.length" class="flex flex-col items-center justify-center text-center">
-<div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:#F0F0F0"><span v-html="luci('map-pin','w-8 h-8 text-[#BBB]')"></span></div>
-<div class="text-[15px] font-semibold" style="color:#333">暂无换电区域</div>
-<div class="text-[12px] mt-1.5" style="color:#999">请点击下方「新增」添加</div>
-</div>
+<empty-state v-if="!swapAreas.length" icon="map-pin" text="暂无换电区域" sub="请点击下方「新增」添加" root-class="flex flex-col items-center justify-center text-center" circle-class="w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-8 h-8 text-[#BBB]" text-class="text-[15px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1.5"></empty-state>
 </div>
 <div class="absolute left-4 right-4" style="bottom:34px">
 <button data-cp @click="openAreaSheet" class="w-full py-3.5 rounded-2xl text-[16px] font-semibold active:opacity-90" style="background:#2B3F5F;color:#fff" data-od-id="swap-area-add">新增</button>
 </div>
-</div></transition>
+</page>
 <bottom-sheet :open="showAreaSheet" title="换电区域" :mask-z="900" max-h="74%" oid="area-sheet" panel-oid="area-sheet-panel" @close="closeAreaSheet">
 <div class="flex items-center gap-6 px-5 pb-3 shrink-0" style="border-bottom:1px solid #F0F0F0">
 <span v-for="(c,i) in areaCrumbs" :key="i" data-cp @click="areaGoto(i)" class="text-[14px] font-medium" :style="c.name?'color:#111':'color:#C4C4C4'">{{ c.name||c.label }}</span>
@@ -797,7 +716,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </bottom-sheet>
-<transition name="sl"><div v-if="profileOV==='deposit'" class="absolute inset-0 z-[600] flex flex-col" style="background:linear-gradient(180deg,#FBEFD2 0%,#FDF6E7 55%,#FDF9F0 100%)" data-od-id="deposit-page">
+<page :open="profileOV==='deposit'" :z="600" :bg="'linear-gradient(180deg,#FBEFD2 0%,#FDF6E7 55%,#FDF9F0 100%)'" oid="deposit-page">
 <div class="flex items-center pt-14 px-4 pb-3 shrink-0">
 <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[rgba(255,255,255,.7)]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
 <div class="flex-1 text-center text-[17px] font-semibold mr-8">押金详情</div>
@@ -846,32 +765,12 @@ body.host-single-m #root-user{display:none}
 <span>{{ depositState==='unpaid'?'立即支付':'申请退款' }}</span>
 </div>
 </div>
-<transition name="fd"><div v-if="showRefundTip" class="absolute inset-0 z-[1100] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-cp @click.self="showRefundTip=false" data-od-id="refund-tip-modal">
-<div class="bg-white rounded-2xl w-[320px] px-6 pt-6 pb-5 flex flex-col items-center" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
-<div class="text-[17px] font-bold mb-3">温馨提示</div>
-<div class="text-[13px] text-center mb-5" style="color:#888;line-height:1.7">您当前持有生效中的换电套餐，押金退还后，换电权益将暂停。确认申请退还押金吗？</div>
-<div class="flex gap-3 w-full">
-<div data-cp @click="showRefundTip=false" class="flex-1 py-2.5 rounded-full text-[15px] font-medium text-center cursor-pointer" style="border:1px solid #E5E5E5;color:#333" data-od-id="refund-tip-cancel">我再想想</div>
-<div data-cp @click="confirmRefundTip" class="flex-1 py-2.5 rounded-full text-[15px] font-semibold text-center text-white cursor-pointer" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="refund-tip-confirm">申请退款</div>
-</div>
-</div></div></transition>
-<transition name="fd"><div v-if="showRefundOk" class="absolute inset-0 z-[1100] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-od-id="refund-ok-modal">
-<div class="bg-white rounded-2xl w-[320px] px-6 pt-6 pb-5 flex flex-col items-center" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
-<div class="text-[17px] font-bold mb-3">申请成功</div>
-<div class="text-[13px] text-center mb-5" style="color:#888;line-height:1.7">押金会在 7 个工作日内原路退回至您原支付账户，请您耐心等候。</div>
-<div data-cp @click="refundOkDone" class="w-full py-2.5 rounded-full text-[15px] font-semibold text-center text-white cursor-pointer" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="refund-ok-confirm">知道了</div>
-</div></div></transition>
-</div></transition>
-<transition name="sl"><div v-if="profileOV==='battery'" class="absolute inset-0 z-[600] bg-[#F6F7F9] flex flex-col" data-od-id="battery-page">
-<div class="flex items-center pt-14 px-4 pb-2.5 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<span class="flex-1 text-center text-[17px] font-semibold mr-8">我的电池</span>
-</div>
+<confirm-dialog :open="showRefundTip" :z="1100" oid="refund-tip-modal" title="温馨提示" desc="您当前持有生效中的换电套餐，押金退还后，换电权益将暂停。确认申请退还押金吗？" cancel-text="我再想想" confirm-text="申请退款" :confirm-bg="'linear-gradient(135deg,#33456B,#22304E)'" @close="showRefundTip=false" @confirm="confirmRefundTip"></confirm-dialog></page>
+<confirm-dialog :open="showRefundOk" :z="1100" oid="refund-ok-modal" title="申请成功" desc="押金会在 7 个工作日内原路退回至您原支付账户，请您耐心等候。" cancel-text="" confirm-text="知道了" :confirm-bg="'linear-gradient(135deg,#33456B,#22304E)'" @close="refundOkDone"></confirm-dialog>
+<page :open="profileOV==='battery'" :z="600" oid="battery-page">
+<nav-bar title="我的电池" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
-<div v-if="!batteryList.length" class="flex flex-col items-center justify-center text-center pt-24">
-<div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background:#F0F0F0"><span v-html="luci('battery-charging','w-8 h-8 text-[#BBB]')"></span></div>
-<div class="text-[15px] font-semibold" style="color:#333">暂无电池</div>
-</div>
+<empty-state v-if="!batteryList.length" icon="battery-charging" text="暂无电池" root-class="flex flex-col items-center justify-center text-center pt-24" circle-class="w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-8 h-8 text-[#BBB]" text-class="text-[15px] font-semibold text-[#333]"></empty-state>
 <div v-for="b in batteryList" :key="b.id" data-cp @click="openBatteryDetail(b)" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3 cursor-pointer active:opacity-90" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'battery-item-'+b.id">
 <div class="flex items-center gap-2 pb-3" style="border-bottom:1px solid #F0F0F0">
 <span class="flex-1 text-[16px] font-bold text-[#1A1A1A]">{{ b.no }}</span>
@@ -882,12 +781,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileOV==='station'&&curStation&&curCab" class="absolute inset-0 z-[600] bg-[#F6F7F9] flex flex-col" data-od-id="station-page">
-<div class="flex items-center pt-14 px-4 pb-2.5 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<span class="flex-1 text-center text-[17px] font-semibold mr-8">换电柜详情</span>
-</div>
+</page>
+<page :open="profileOV==='station'&&curStation&&curCab" :z="600" oid="station-page">
+<nav-bar title="换电柜详情" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-28">
 <div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
 <div class="text-[17px] font-bold" style="color:#111">{{ curStation.name }}</div>
@@ -910,33 +806,9 @@ body.host-single-m #root-user{display:none}
 <div class="absolute left-4 right-4" style="bottom:34px">
 <div data-cp @click="openReturn" class="w-full h-[52px] rounded-full flex items-center justify-center text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="station-return-btn">还电到此柜</div>
 </div>
-<transition name="fd"><div v-if="showBorrow" class="absolute inset-0 z-[1100] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-cp @click.self="showBorrow=false" data-od-id="borrow-sheet">
-<div class="bg-white rounded-2xl w-[330px] px-5 pt-5 pb-4 flex flex-col" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
-<div class="text-[17px] font-bold mb-1">确认借电</div>
-<div class="text-[13px] mb-4" style="color:#888">将从 <span style="color:#333">{{ curStation.name }} · {{ curCab.no }} 号柜</span> 借出一块满电电池</div>
-<div class="flex items-center justify-between py-2.5" style="border-top:1px solid #F0F0F0;border-bottom:1px solid #F0F0F0">
-<span class="text-[14px]" style="color:#999">可用满电电池</span>
-<span class="text-[15px] font-bold" :style="(cabinetFull&&curCab&&curCab.full>0)?'color:#17A34A':'color:#FF3B30'">{{ (cabinetFull&&curCab&&curCab.full>0)?(curCab.full+' 块'):'暂无' }}</span>
-</div>
-<div v-if="!(cabinetFull&&curCab&&curCab.full>0)" class="text-[12px] mt-2" style="color:#FF3B30">该柜机暂无可借满电电池，请前往其他柜机或站点</div>
-<div data-cp @click="confirmBorrow" class="mt-4 w-full py-2.5 rounded-full text-[15px] font-semibold text-center text-white cursor-pointer active:opacity-90" :style="(cabinetFull&&curCab&&curCab.full>0)?'background:linear-gradient(135deg,#33456B,#22304E)':'background:#C9CED6'" :data-od-id="borrow-confirm">{{ (cabinetFull&&curCab&&curCab.full>0)?'确认借电':'无法借电' }}</div>
-<div data-cp @click="showBorrow=false" class="mt-2 w-full py-2.5 rounded-full text-[15px] font-medium text-center cursor-pointer" style="border:1px solid #E5E5E5;color:#666" data-od-id="borrow-cancel">取消</div>
-</div></div></transition>
-<transition name="fd"><div v-if="showReturn" class="absolute inset-0 z-[1100] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-cp @click.self="showReturn=false" data-od-id="return-sheet">
-<div class="bg-white rounded-2xl w-[330px] px-5 pt-5 pb-4 flex flex-col" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
-<div class="text-[17px] font-bold mb-1">还电到此柜</div>
-<div class="text-[13px] mb-3" style="color:#888">{{ curStation.name }} · {{ curCab.no }} 号柜</div>
-<div class="text-[13px] font-medium mb-2" style="color:#666">选择要归还的电池</div>
-<div class="max-h-[180px] overflow-y-auto hide-scroll">
-<div v-for="b in batteryList" :key="b.id" data-cp @click="returnBattery=b" class="flex items-center justify-between py-3 px-3 rounded-xl cursor-pointer" :style="returnBattery&&returnBattery.id===b.id?'background:#EEF1F8;border:1px solid #2B3F5F':'border:1px solid #F0F0F0'" :data-od-id="'return-bat-'+b.id">
-<span class="text-[14px] font-medium" style="color:#111">{{ b.no }}</span>
-<span v-if="returnBattery&&returnBattery.id===b.id" v-html="luci('check','w-4 h-4 text-[#2B3F5F]')"></span>
-</div>
-</div>
-<div data-cp @click="confirmReturn" class="mt-4 w-full py-2.5 rounded-full text-[15px] font-semibold text-center text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="return-confirm">确认还电</div>
-<div data-cp @click="showReturn=false" class="mt-2 w-full py-2.5 rounded-full text-[15px] font-medium text-center cursor-pointer" style="border:1px solid #E5E5E5;color:#666" data-od-id="return-cancel">取消</div>
-</div></div></transition>
-<transition name="sl"><div v-if="profileOV==='swap'" class="absolute inset-0 z-[700] flex flex-col" style="background:linear-gradient(180deg,#0E1116 0%,#161B22 100%)" data-od-id="swap-flow">
+<confirm-dialog :open="showBorrow" :z="1100" oid="borrow-sheet" title="确认借电" :confirm-text="(cabinetFull&&curCab&&curCab.full>0)?'确认借电':'无法借电'" :confirm-bg="(cabinetFull&&curCab&&curCab.full>0)?'linear-gradient(135deg,#33456B,#22304E)':'#C9CED6'" @close="showBorrow=false" @confirm="confirmBorrow"><div class="text-[13px] mb-4" style="color:#888">将从 <span style="color:#333">{{ curStation.name }} · {{ curCab.no }} 号柜</span> 借出一块满电电池</div><div class="flex items-center justify-between py-2.5" style="border-top:1px solid #F0F0F0;border-bottom:1px solid #F0F0F0"><span class="text-[14px]" style="color:#999">可用满电电池</span><span class="text-[15px] font-bold" :style="(cabinetFull&&curCab&&curCab.full>0)?'color:#17A34A':'color:#FF3B30'">{{ (cabinetFull&&curCab&&curCab.full>0)?(curCab.full+' 块'):'暂无' }}</span></div><div v-if="!(cabinetFull&&curCab&&curCab.full>0)" class="text-[12px] mt-2" style="color:#FF3B30">该柜机暂无可借满电电池，请前往其他柜机或站点</div></confirm-dialog></page>
+<confirm-dialog :open="showReturn" :z="1100" oid="return-sheet" title="还电到此柜" confirm-text="确认还电" :confirm-bg="'linear-gradient(135deg,#33456B,#22304E)'" @close="showReturn=false" @confirm="confirmReturn"><div class="text-[13px] mb-3" style="color:#888">{{ curStation.name }} · {{ curCab.no }} 号柜</div><div class="text-[13px] font-medium mb-2" style="color:#666">选择要归还的电池</div><div class="max-h-[180px] overflow-y-auto hide-scroll"><div v-for="b in batteryList" :key="b.id" data-cp @click="returnBattery=b" class="flex items-center justify-between py-3 px-3 rounded-xl cursor-pointer" :style="returnBattery&&returnBattery.id===b.id?'background:#EEF1F8;border:1px solid #2B3F5F':'border:1px solid #F0F0F0'" :data-od-id="'return-bat-'+b.id"><span class="text-[14px] font-medium" style="color:#111">{{ b.no }}</span><span v-if="returnBattery&&returnBattery.id===b.id" v-html="luci('check','w-4 h-4 text-[#2B3F5F]')"></span></div></div></confirm-dialog>
+<page :open="profileOV==='swap'" :z="700" :bg="'linear-gradient(180deg,#0E1116 0%,#161B22 100%)'" oid="swap-flow">
   <div class="flex items-center pt-14 px-4 pb-3 shrink-0">
     <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-white/90 active:bg-white/10" data-cp @click="swapClose"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
     <div class="flex-1 text-center text-[17px] font-semibold mr-8 text-white">{{ swapTitle }}</div>
@@ -1017,12 +889,7 @@ body.host-single-m #root-user{display:none}
         <div class="ml-3"><div class="text-[15px] font-semibold" style="color:#fff">新增借电</div><div class="text-[12px]" style="color:#9AA4B2">不归还，再借一块满电电池</div></div>
       </div>
     </div>
-    <div v-else-if="swapStep==='borrow-noslot'" class="flex flex-col items-center pt-16 text-center">
-      <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FDECEA"><span v-html="luci('x-circle','w-8 h-8 text-[#FF3B30]')"></span></div>
-      <div class="text-[17px] font-bold mt-5" style="color:#fff">暂无可用仓位</div>
-      <div class="text-[13px] mt-2" style="color:#9AA4B2">请稍后再试或更换附近柜机</div>
-      <button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">我知道了</button>
-    </div>
+    <empty-state v-else-if="swapStep==='borrow-noslot'" icon="x-circle" text="暂无可用仓位" sub="请稍后再试或更换附近柜机" root-class="flex flex-col items-center pt-16 text-center" circle-class="w-16 h-16 rounded-full flex items-center justify-center bg-[#FDECEA]" icon-class="w-8 h-8 text-[#FF3B30]" text-class="text-[17px] font-bold text-white mt-5" sub-class="text-[13px] text-[#9AA4B2] mt-2"><button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">我知道了</button></empty-state>
     <div v-else-if="swapStep==='borrow-door'" class="pt-8">
       <div class="rounded-2xl px-5 py-5" style="background:#1C2430;border:1px solid #2A3340">
         <div class="flex items-center justify-between"><span class="text-[14px]" style="color:#9AA4B2">机柜</span><span class="text-[14px] font-semibold" style="color:#fff">{{ swapCtx.station.name }} · {{ swapCtx.cab.no }} 号柜</span></div>
@@ -1053,12 +920,7 @@ body.host-single-m #root-user{display:none}
         <div class="text-[13px] mt-2" style="color:#9AA4B2">请先购买换电套餐</div>
         <button data-cp @click="swapClose();setTab('plan')" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">去购买套餐</button>
       </div>
-      <div v-else class="flex flex-col items-center pt-16 text-center">
-        <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FDECEA"><span v-html="luci('x-circle','w-8 h-8 text-[#FF3B30]')"></span></div>
-        <div class="text-[17px] font-bold mt-5" style="color:#fff">暂无可用归还仓</div>
-        <div class="text-[13px] mt-2" style="color:#9AA4B2">请稍后再试或更换附近柜机</div>
-        <button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">我知道了</button>
-      </div>
+      <empty-state v-else icon="x-circle" text="暂无可用归还仓" sub="请稍后再试或更换附近柜机" root-class="flex flex-col items-center pt-16 text-center" circle-class="w-16 h-16 rounded-full flex items-center justify-center bg-[#FDECEA]" icon-class="w-8 h-8 text-[#FF3B30]" text-class="text-[17px] font-bold text-white mt-5" sub-class="text-[13px] text-[#9AA4B2] mt-2"><button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">我知道了</button></empty-state>
     </template>
     <div v-else-if="swapStep==='swap-returndoor'" class="pt-8">
       <div class="rounded-2xl px-5 py-5" style="background:#1C2430;border:1px solid #2A3340">
@@ -1092,9 +954,8 @@ body.host-single-m #root-user{display:none}
       <button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">完成</button>
     </div>
   </div>
-</div></transition>
-</div></transition>
-<transition name="sl"><div v-if="(profileSub==='batteryDetail'||profileSub==='batteryFind'||profileSub==='batteryTrack'||(profileSub==='batteryRecords'&&recordsFrom==='battery'))&&batteryDetailRec" class="absolute inset-0 z-[610] bg-[#F6F7F9] flex flex-col overflow-hidden" data-od-id="battery-detail-page">
+</page>
+<page :open="(profileSub==='batteryDetail'||profileSub==='batteryFind'||profileSub==='batteryTrack'||(profileSub==='batteryRecords'&&recordsFrom==='battery'))&&batteryDetailRec" :z="610" oid="battery-detail-page">
 <div class="shrink-0" style="background:linear-gradient(180deg,#11161F 0%,#1B2434 100%)">
 <div class="flex items-center pt-14 px-4 pb-1">
 <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-white/90 active:bg-white/10" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
@@ -1144,13 +1005,10 @@ body.host-single-m #root-user{display:none}
 <span data-cp @click="goScan" class="text-[14px] font-medium cursor-pointer select-none active:opacity-70" style="color:#DC2626" data-od-id="battery-scan-return">扫码还电</span>
 </div>
 </div>
-</div></transition>
+</page>
 <!-- 我的电池：当前位置页（电池找回，对齐租车 find-page 布局） -->
-<transition name="sl"><div v-if="profileSub==='batteryFind'&&batteryDetailRec" class="absolute inset-0 z-[620] bg-[#F6F7F9] flex flex-col overflow-hidden" data-od-id="battery-find-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8 truncate px-1">当前位置</div>
-</div>
+<page :open="profileSub==='batteryFind'&&batteryDetailRec" :z="620" oid="battery-find-page">
+<nav-bar title="当前位置" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 min-h-0 relative overflow-hidden" style="background:#E8EEF5;background-image:linear-gradient(rgba(255,255,255,.8) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.8) 2px,transparent 2px);background-size:56px 44px" data-od-id="battery-find-map">
 <svg class="absolute inset-0 w-full h-full z-[8] pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="30" y1="32" x2="58" y2="66" stroke="#2B3F5F" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="2.2 1.6" vector-effect="non-scaling-stroke" opacity="0.95"/></svg>
 <div class="absolute z-[14] -translate-x-1/2 -translate-y-1/2" style="left:30%;top:32%">
@@ -1177,13 +1035,10 @@ body.host-single-m #root-user{display:none}
 <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-white" style="background:#E67E22;box-shadow:0 2px 10px rgba(230,126,34,.35)"><span v-html="luci('navigation','w-5 h-5')"></span></div>
 </div>
 </div>
-</div></transition>
+</page>
 <!-- 我的电池：历史轨迹页（对齐租车 track-page 布局） -->
-<transition name="sl"><div v-if="profileSub==='batteryTrack'&&batteryDetailRec" class="absolute inset-0 z-[620] bg-[#F6F7F9] flex flex-col overflow-hidden" data-od-id="battery-track-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8">历史轨迹</div>
-</div>
+<page :open="profileSub==='batteryTrack'&&batteryDetailRec" :z="620" oid="battery-track-page">
+<nav-bar title="历史轨迹" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="bg-white px-4 py-3 shrink-0 flex items-center gap-2" style="border-bottom:1px solid #E5E5E5" data-od-id="battery-track-time-bar">
 <div class="flex-1 min-w-0">
 <div class="text-[11px] text-[#999] mb-1">开始时间</div>
@@ -1220,12 +1075,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='batteryRecords'" class="absolute inset-0 z-[620] bg-[#F6F7F9] flex flex-col" data-od-id="swap-records-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<span class="flex-1 text-center text-[17px] font-semibold mr-8">换电记录</span>
-</div>
+</page>
+<page :open="profileSub==='batteryRecords'" :z="620" oid="swap-records-page">
+<nav-bar title="换电记录" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
 <template v-if="swapRecordsView.length">
 <div v-for="r in swapRecordsView" :key="r.id" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'swap-record-'+r.id">
@@ -1242,13 +1094,10 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </template>
-<div v-else class="flex flex-col items-center justify-center text-center" style="padding-top:150px" data-od-id="swap-records-empty">
-<span v-html="luci('scroll-text','w-20 h-20 text-[#C6CDD8]')"></span>
-<div class="text-[15px] font-semibold text-[#333] mt-5">暂无记录</div>
+<empty-state v-else icon="scroll-text" text="暂无记录" root-class="flex flex-col items-center justify-center text-center" style="padding-top:150px" circle-class="contents" icon-class="w-20 h-20 text-[#C6CDD8]" text-class="text-[15px] font-semibold text-[#333] mt-5" data-od-id="swap-records-empty"></empty-state>
 </div>
-</div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='cardPack'" class="absolute inset-0 z-[620] flex flex-col" style="background:#F6F7F9" data-od-id="card-pack-page">
+</page>
+<page :open="profileSub==='cardPack'" :z="620" oid="card-pack-page">
 <div class="relative flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
 <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
 <div class="absolute left-0 right-0 text-center text-[17px] font-semibold pointer-events-none">我的套餐</div>
@@ -1277,13 +1126,9 @@ body.host-single-m #root-user{display:none}
 <div class="text-[16px] font-semibold text-[#333] mt-5">暂无套餐</div>
 </div>
 </div>
-</div>
-</transition>
-<transition name="sl"><div v-if="profileSub==='cardExpired'" class="absolute inset-0 z-[630] flex flex-col" style="background:#F6F7F9" data-od-id="card-expired-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<span class="flex-1 text-center text-[17px] font-semibold mr-8">失效套餐</span>
-</div>
+</page>
+<page :open="profileSub==='cardExpired'" :z="630" bg="#F6F7F9" oid="card-expired-page">
+<nav-bar title="失效套餐" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
 <template v-if="expiredCards.length">
 <div v-for="c in expiredCards" :key="c.id" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'card-expired-'+c.id">
@@ -1299,17 +1144,11 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </template>
-<div v-else class="flex flex-col items-center justify-center text-center" style="padding-top:150px" data-od-id="card-expired-empty">
-<span v-html="luci('clipboard-list','w-20 h-20 text-[#C6CDD8]')"></span>
-<div class="text-[15px] font-semibold text-[#333] mt-5">暂无失效套餐</div>
+<empty-state v-else icon="clipboard-list" text="暂无失效套餐" root-class="flex flex-col items-center justify-center text-center" style="padding-top:150px" circle-class="contents" icon-class="w-20 h-20 text-[#C6CDD8]" text-class="text-[15px] font-semibold text-[#333] mt-5" data-od-id="card-expired-empty"></empty-state>
 </div>
-</div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='myOrders'" class="absolute inset-0 z-[620] flex flex-col" style="background:#F6F7F9" data-od-id="my-orders-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<span class="flex-1 text-center text-[17px] font-semibold mr-8">我的订单</span>
-</div>
+</page>
+<page :open="profileSub==='myOrders'" :z="620" oid="my-orders-page">
+<nav-bar title="我的订单" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-5 pb-6">
 <div class="grid grid-cols-2 gap-3">
 <div data-cp @click="openPlanOrders" class="bg-white rounded-2xl p-4 flex flex-col items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="order-cat-plan">
@@ -1318,12 +1157,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='planOrders'" class="absolute inset-0 z-[630] flex flex-col" style="background:#F6F7F9" data-od-id="plan-orders-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<span class="flex-1 text-center text-[17px] font-semibold mr-8">换电套餐</span>
-</div>
+</page>
+<page :open="profileSub==='planOrders'" :z="630" oid="plan-orders-page">
+<nav-bar title="换电套餐" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="bg-white px-4 pt-3 pb-2.5 flex gap-2 overflow-x-auto hide-scroll select-none shrink-0" style="border-bottom:1px solid #E5E5E5;touch-action:pan-x" data-od-id="plan-order-filters">
 <div v-for="f in PLAN_ORDER_FILTERS" :key="f.v" data-cp @click="setPlanOrderFilter(f.v)" class="shrink-0 px-3 py-1.5 rounded-full text-[13px] font-medium cursor-pointer transition" :class="planOrderFilter===f.v?'text-white bg-[#2B3F5F]':'text-[#666] bg-[#F6F7F9]'" :data-od-id="'plan-order-filter-'+f.v">{{ f.label }}</div>
 </div>
@@ -1345,17 +1181,11 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </template>
-<div v-else class="flex flex-col items-center justify-center text-center" style="padding-top:150px" data-od-id="plan-orders-empty">
-<span v-html="luci('clipboard-list','w-20 h-20 text-[#C6CDD8]')"></span>
-<div class="text-[15px] font-semibold text-[#333] mt-5">暂无订单</div>
+<empty-state v-else icon="clipboard-list" text="暂无订单" root-class="flex flex-col items-center justify-center text-center" style="padding-top:150px" circle-class="contents" icon-class="w-20 h-20 text-[#C6CDD8]" text-class="text-[15px] font-semibold text-[#333] mt-5" data-od-id="plan-orders-empty"></empty-state>
 </div>
-</div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='planOrderDetail'" class="absolute inset-0 z-[640] flex flex-col" style="background:#F6F7F9" data-od-id="plan-order-detail-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<span class="flex-1 text-center text-[17px] font-semibold mr-8">订单详情</span>
-</div>
+</page>
+<page :open="profileSub==='planOrderDetail'" :z="640" oid="plan-order-detail-page">
+<nav-bar title="订单详情" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div v-if="planOrderDetail.status==='待支付'" class="px-4 py-2.5 bg-[#FEF2F2] flex items-center shrink-0"><span class="text-[13px] text-[#DC2626] font-medium">{{ fmtCountdown(planOrderLeft) }}，超时未支付，订单将自动取消</span></div>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-3 pb-6">
 <div class="bg-white rounded-2xl p-4 mb-3" data-od-id="pod-plan">
@@ -1399,31 +1229,10 @@ body.host-single-m #root-user{display:none}
 <div v-if="planOrderDetail.status==='待支付'" class="px-4 py-3 bg-white shrink-0" style="border-top:1px solid #F0F0F0;box-shadow:0 -2px 8px rgba(0,0,0,.04);padding-bottom:max(12px,env(safe-area-inset-bottom))">
 <button data-cp @click="payPlanOrder" class="appearance-none w-full h-12 rounded-xl text-[15px] font-semibold text-white flex items-center justify-center active:opacity-90 transition-opacity cursor-pointer" style="background:var(--accent)" data-od-id="pod-pay">立即支付</button>
 </div>
-</div></transition>
-<transition name="fd"><div v-if="showCancelPlanTip" class="absolute inset-0 z-[2000] flex items-center justify-center" style="background:rgba(0,0,0,.45)" data-cp @click.self="showCancelPlanTip=false" data-od-id="cancel-plan-tip-modal">
-<div class="relative bg-white rounded-xl w-[300px] px-5 pt-6 pb-4 flex flex-col gap-3 overflow-hidden" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
-<div class="text-[17px] font-bold text-center">取消订单</div>
-<div class="text-sm text-[#666] text-center leading-relaxed">确定取消该订单？取消后不可恢复</div>
-<div class="flex gap-3 mt-2">
-<div data-cp @click="showCancelPlanTip=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff" data-od-id="cancel-plan-tip-cancel">取消</div>
-<div data-cp @click="cancelPlanOrder" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer active:opacity-90 transition-colors" style="background:#2B3F5F" data-od-id="cancel-plan-tip-confirm">确认</div>
-</div>
-</div></div></transition>
-<transition name="fd"><div v-if="showDepositModal" class="absolute inset-0 z-[1000] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-od-id="deposit-modal">
-<div class="bg-white rounded-xl w-[320px] px-5 pt-6 pb-4 flex flex-col items-center" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
-<div class="text-[17px] font-bold mb-2">未缴纳押金</div>
-<div class="text-[13px] mb-4" style="color:#888">请您先缴纳押金，再购买套餐</div>
-<div class="flex gap-3 w-full">
-<div data-cp @click="showDepositModal=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff" data-od-id="deposit-cancel">我知道了</div>
-<div data-cp @click="goPayDeposit" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)" data-od-id="deposit-pay">前往缴纳</div>
-</div>
-</div></div></transition>
-<transition name="fd"><div v-if="planDetail" class="absolute inset-0 z-[1000] flex items-end" style="background:rgba(0,0,0,.45)" data-cp @click.self="closePlanDetail" data-od-id="plan-detail-sheet">
-<div class="w-full bg-white flex flex-col" style="border-radius:24px 24px 0 0;max-height:84%;padding-bottom:22px">
-<div class="relative flex items-center justify-center px-4 pt-4 pb-3 shrink-0">
-<div class="text-[17px] font-semibold">套餐详情</div>
-<div data-cp @click="closePlanDetail" class="absolute right-4 w-7 h-7 flex items-center justify-center cursor-pointer" style="top:14px;color:#999" data-od-id="plan-detail-close"><span v-html="luci('x','w-5 h-5')"></span></div>
-</div>
+</page>
+<confirm-dialog :open="showCancelPlanTip" :z="2000" oid="cancel-plan-tip-modal" title="取消订单" desc="确定取消该订单？取消后不可恢复" @close="showCancelPlanTip=false" @confirm="cancelPlanOrder"></confirm-dialog>
+<confirm-dialog :open="showDepositModal" :z="1000" oid="deposit-modal" :mask-close="false" title="未缴纳押金" desc="请您先缴纳押金，再购买套餐" cancel-text="我知道了" confirm-text="前往缴纳" confirm-bg="var(--accent)" @close="showDepositModal=false" @confirm="goPayDeposit"></confirm-dialog>
+<bottom-sheet :open="!!planDetail" title="套餐详情" :mask-z="1000" max-h="84%" oid="plan-detail-sheet" panel-oid="plan-detail-panel" @close="closePlanDetail">
 <div class="flex-1 overflow-y-auto hide-scroll px-5" style="min-height:0">
 <div class="text-[16px] font-semibold mb-3" style="color:#111">{{ planDetail.name }}</div>
 <div class="rounded-xl px-4 mb-4" style="background:#F6F7F9">
@@ -1434,11 +1243,13 @@ body.host-single-m #root-user{display:none}
 <div class="text-[15px] font-semibold mb-2" style="color:#111">套餐描述</div>
 <div class="text-[13px]" style="color:#888;line-height:1.7">{{ planDetail.desc }}</div>
 </div>
-<div class="shrink-0 px-5 pt-3 flex items-center justify-between gap-3" style="border-top:1px solid #F0F0F0">
+<template #footer>
+<div class="flex items-center justify-between gap-3 px-5 pt-3" style="border-top:1px solid #F0F0F0">
 <div class="text-[20px] font-bold" style="color:#111">{{ fmtRp(planDetail.price) }}</div>
 <button data-cp @click="payPlan" class="px-7 py-3 rounded-xl text-[15px] font-semibold shrink-0 active:opacity-90" style="background:#2B3F5F;color:#fff;border:none;outline:none;appearance:none;-webkit-appearance:none" data-od-id="plan-pay">立即购买</button>
 </div>
-</div></div></transition>
+</template>
+</bottom-sheet>
 </div></div><div class="demo-ops-stack"><div class="demo-ops is-active"><div class="demo-ops-title">原型操作</div>
 <div class="demo-ops-section" data-od-id="demo-login-state">
 <div class="demo-ops-label">登录状态</div>
@@ -1609,7 +1420,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div><div v-if="!settingsOpen" class="sw-tab-nav"><div class="nv" data-cp @click="setTab('home')" :style="tab==='home'?{color:'#2B3F5F'}:{color:'#999'}"><span v-html="luci('bar-chart-3','w-[22px] h-[22px]')"></span><span class="text-[10px] font-semibold">首页</span></div><div class="nv" data-cp @click="setTab('cab')" :style="tab==='cab'?{color:'#2B3F5F'}:{color:'#999'}"><span v-html="luci('box','w-[22px] h-[22px]')"></span><span class="text-[10px] font-semibold">换电柜</span></div><div class="nv" data-cp @click="setTab('batt')" :style="tab==='batt'?{color:'#2B3F5F'}:{color:'#999'}"><span v-html="luci('battery-charging','w-[22px] h-[22px]')"></span><span class="text-[10px] font-semibold">电池</span></div><div class="nv" data-cp @click="setTab('board')" :style="tab==='board'?{color:'#2B3F5F'}:{color:'#999'}"><span v-html="luci('bar-chart-2','w-[22px] h-[22px]')"></span><span class="text-[10px] font-semibold">看板</span></div></div><div class="sw-homebar"></div>
+</div><tab-bar :show="!settingsOpen" active-color="#2B3F5F" :items="[{key:'home',icon:'bar-chart-3',label:'首页',activeWhen:tab==='home'},{key:'cab',icon:'box',label:'换电柜',activeWhen:tab==='cab'},{key:'batt',icon:'battery-charging',label:'电池',activeWhen:tab==='batt'},{key:'board',icon:'bar-chart-2',label:'看板',activeWhen:tab==='board'}]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
 <transition name="fd"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="login-page">
 <div v-show="loginView==='main'" class="flex-1 flex flex-col min-h-0 bg-[#F6F7F9]">
 <div class="pt-14 px-5 pb-1 flex items-center justify-end shrink-0">
@@ -1775,14 +1586,11 @@ body.host-single-m #root-user{display:none}
 <span class="flex-1 text-[15px] min-w-0" :class="activeDialCode===c.code ? 'font-semibold text-[#333]' : 'font-medium text-[#111]'">{{ c.name }}</span>
 <span class="text-[14px] tabular-nums shrink-0" :class="activeDialCode===c.code ? 'font-semibold text-[#333]' : 'text-[#6B6B6B]'">{{ c.code }}</span>
 </div>
-<div v-if="!dialFiltered.length" class="py-16 text-center text-[14px] text-[#999]">未找到匹配地区</div>
+<empty-state v-if="!dialFiltered.length" icon="" text="未找到匹配地区" text-class="text-[14px] font-normal text-[#999]"></empty-state>
 </div>
 </div></transition>
-<transition name="sl"><div v-if="profileOV==='info'" class="absolute inset-0 bg-[#F6F7F9] z-[500] flex flex-col">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[var(--accent)] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8">个人信息</div>
-</div>
+<page :open="profileOV==='info'" :z="500">
+<nav-bar title="个人信息" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
 <div class="bg-white rounded-xl overflow-hidden mb-6" style="border:1px solid #E5E5E5">
 <div class="flex items-center px-4 py-4" style="border-bottom:1px solid #EDEDED"><span class="flex-1 text-[15px] font-medium">头像</span><div class="w-10 h-10 rounded-full bg-[#E8F0FE] flex items-center justify-center shrink-0"><span v-html="luci('user','w-5 h-5 text-[#4A7CF7]')"></span></div></div>
@@ -1795,13 +1603,10 @@ body.host-single-m #root-user{display:none}
 <div v-if="hasPhone||hasEmail" data-cp @click="openPwdFlow" class="flex items-center px-4 py-4 cursor-pointer active:bg-[#F6F7F9]" data-od-id="profile-pwd-entry"><span class="flex-1 text-[15px] font-medium">密码管理</span><span class="text-[13px] text-[#666] mr-1">{{ hasPwd?'修改密码':'设置密码' }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileOV==='settings'" class="absolute inset-0 bg-[#F6F7F9] z-[500] flex flex-col" data-od-id="settings-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8">系统设置</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll"><div class="set-hd">通用设置</div><div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><div data-cp @click="navOpen('subLang')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-lang-row"><span class="flex-1 text-[15px] font-medium">切换语言</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ appLangLabel }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div><div data-cp @click="navOpen('subSwitchSystem')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-sys-row"><span class="flex-1 text-[15px] font-medium">切换系统</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ curSystemName }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div><div data-cp @click="checkVersion" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" data-od-id="settings-version-row"><span class="flex-1 text-[15px] font-medium">当前版本</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] font-mono">V1.3.8</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div></div></div><div class="absolute bottom-7 left-5 right-5" data-od-id="settings-logout-btn"><button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90 transition-colors" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button></div></div></transition><transition name="sl"><div v-if="profileSub==='lang'" class="absolute inset-0 bg-[#F6F7F9] z-[510] flex flex-col" data-od-id="settings-lang-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8">切换语言</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll"><div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><div v-for="(lg,i) in langOptions" :key="lg.id" data-cp @click="selectLang(lg.id)" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" :style="i<langOptions.length-1?{borderBottom:'1px solid #EDEDED'}:{}"><span class="flex-1 text-[15px] font-medium">{{ lg.label }}</span><span v-if="appLang===lg.id"><span v-html="luci('check','w-5 h-5 text-[#2B3F5F]')"></span></span></div></div></div></div></transition><transition name="sl"><div v-if="profileSub==='subSwitchSystem'" class="absolute inset-0 bg-[#F6F7F9] z-[512] flex flex-col" data-od-id="switch-system-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="switchBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8" style="color:#111">选择系统</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-4"><div v-if="switchSource==='first'" data-cp @click="goRental" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#EEF4FF;color:#2F6FEB"><span v-html="luci('bike','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">租车系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div><div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#FFF3E0;color:#FF8A00"><span v-html="luci('plug-zap','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">充电系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div><div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#E8F7EE;color:#17A34A"><span v-html="luci('battery-charging','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">换电系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div></div><div class="px-5 pb-8 shrink-0" v-if="switchSource==='first'"><button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button></div></div></transition>
-<transition name="sl"><div v-if="profileSub==='bindPhone'" class="absolute inset-0 bg-[#F6F7F9] z-[600] flex flex-col" data-od-id="bind-phone-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8">绑定手机号</div>
-</div>
+</page>
+<page :open="profileOV==='settings'" :z="500" oid="settings-page"><nav-bar title="系统设置" border-color="#E5E5E5" @back="navBack()"></nav-bar><div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll"><div class="set-hd">通用设置</div><div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><div data-cp @click="navOpen('subLang')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-lang-row"><span class="flex-1 text-[15px] font-medium">切换语言</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ appLangLabel }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div><div data-cp @click="navOpen('subSwitchSystem')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-sys-row"><span class="flex-1 text-[15px] font-medium">切换系统</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ curSystemName }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div><div data-cp @click="checkVersion" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" data-od-id="settings-version-row"><span class="flex-1 text-[15px] font-medium">当前版本</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] font-mono">V1.3.8</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div></div></div><div class="absolute bottom-7 left-5 right-5" data-od-id="settings-logout-btn"><button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90 transition-colors" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button></div></page><page :open="profileSub==='lang'" :z="510" oid="settings-lang-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8">切换语言</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll"><div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><div v-for="(lg,i) in langOptions" :key="lg.id" data-cp @click="selectLang(lg.id)" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" :style="i<langOptions.length-1?{borderBottom:'1px solid #EDEDED'}:{}"><span class="flex-1 text-[15px] font-medium">{{ lg.label }}</span><span v-if="appLang===lg.id"><span v-html="luci('check','w-5 h-5 text-[#2B3F5F]')"></span></span></div></div></div></page><page :open="profileSub==='subSwitchSystem'" :z="512" oid="switch-system-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="switchBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8" style="color:#111">选择系统</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-4"><div v-if="switchSource==='first'" data-cp @click="goRental" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#EEF4FF;color:#2F6FEB"><span v-html="luci('bike','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">租车系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div><div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#FFF3E0;color:#FF8A00"><span v-html="luci('plug-zap','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">充电系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div><div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#E8F7EE;color:#17A34A"><span v-html="luci('battery-charging','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">换电系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div></div><div class="px-5 pb-8 shrink-0" v-if="switchSource==='first'"><button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button></div></page>
+<page :open="profileSub==='bindPhone'" :z="600" oid="bind-phone-page">
+<nav-bar title="绑定手机号" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div v-if="hasPhone" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundPhone }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-card">
@@ -1824,12 +1629,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='bindEmail'" class="absolute inset-0 bg-[#F6F7F9] z-[600] flex flex-col" data-od-id="bind-email-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8">绑定邮箱</div>
-</div>
+</page>
+<page :open="profileSub==='bindEmail'" :z="600" oid="bind-email-page">
+<nav-bar title="绑定邮箱" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div v-if="hasEmail" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundEmail }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-card">
@@ -1849,12 +1651,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='pwdVerify'" class="absolute inset-0 bg-[#F6F7F9] z-[600] flex flex-col" data-od-id="pwd-verify-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8">修改密码</div>
-</div>
+</page>
+<page :open="profileSub==='pwdVerify'" :z="600" oid="pwd-verify-page">
+<nav-bar title="修改密码" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="px-4 pt-4 flex-1 overflow-y-auto flex flex-col">
 <div class="form-card">
 <template v-if="pwdChannel==='phone'">
@@ -1885,12 +1684,9 @@ body.host-single-m #root-user{display:none}
 <div v-else-if="pwdChannel==='email'&&hasPhone"><span class="login-switch-primary" data-cp @click="switchPwdChannel('phone')">手机号验证</span></div>
 </div>
 </div>
-</div></transition>
-<transition name="sl"><div v-if="profileSub==='pwdReset'" class="absolute inset-0 bg-[#F6F7F9] z-[600] flex flex-col" data-od-id="pwd-reset-page">
-<div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
-<div class="flex-1 text-center text-[17px] font-semibold mr-8">重置密码</div>
-</div>
+</page>
+<page :open="profileSub==='pwdReset'" :z="600" oid="pwd-reset-page">
+<nav-bar title="重置密码" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-card">
 <div class="form-row">
@@ -1906,51 +1702,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
-<transition name="fd"><div v-if="profileMod" class="absolute inset-0 z-[800] flex items-center justify-center" style="background:rgba(0,0,0,.45)" data-cp @click.self="!profileModLoading&&(profileMod=null)" data-od-id="profile-modal">
-<div class="relative bg-white rounded-xl w-[300px] px-5 pt-6 pb-4 flex flex-col gap-3 overflow-hidden" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
-<div class="text-[17px] font-bold text-center">{{ profileMdT }}</div>
-<div v-if="profileMdD" class="text-sm text-[#666] text-center leading-relaxed">{{ profileMdD }}</div>
-<div class="flex gap-3 mt-2">
-<div data-cp @click="profileMod=null" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff">取消</div>
-<div data-cp @click="profileMdOk" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer active:opacity-90 transition-colors" style="background:#2B3F5F">确认</div>
-</div>
-<div v-if="profileModLoading" class="absolute inset-0 flex items-center justify-center" style="background:rgba(255,255,255,.7);backdrop-filter:blur(2px)">
-<div class="flex flex-col items-center gap-2">
-<svg class="animate-spin" width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#E5E5E5" stroke-width="3"/><path d="M14 3a11 11 0 0 1 11 11" stroke="#2B3F5F" stroke-width="3" stroke-linecap="round"/></svg>
-<div class="text-[12px] text-[#999]">处理中...</div>
-</div>
-</div>
-</div>
-</div></transition>
-<transition name="fd"><div v-if="showVersionCheck" class="absolute inset-0 z-[900] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-od-id="version-check-modal">
-<div class="bg-white rounded-xl w-[320px] px-5 pt-6 pb-4 flex flex-col" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
-<template v-if="hasNewVersion">
-<div class="text-[17px] font-bold text-center mb-1">发现新版本</div>
-<div class="text-[13px] text-[#666] text-center mb-3">{{ '最新版本 ' + (latestVersion) }}</div>
-<div class="bg-[#F6F7F9] rounded-lg px-4 py-3 mb-4 text-[13px] text-[#555] leading-relaxed">{{ updateDesc }}</div>
-<template v-if="protoForceUpdate==='force'">
-<div class="flex gap-3">
-<div data-cp @click="exitApp" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff">退出应用</div>
-<div data-cp @click="goUpdate" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)">{{ updating ? '下载中…' : '立即更新' }}</div>
-</div>
-</template>
-<template v-else>
-<div class="flex gap-3">
-<div data-cp @click="showVersionCheck=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff">稍后提醒</div>
-<div data-cp @click="goUpdate" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)">{{ updating ? '下载中…' : '立即更新' }}</div>
-</div>
-</template>
-</template>
-<template v-else>
-<div class="flex flex-col items-center py-6">
-<div class="w-14 h-14 rounded-full flex items-center justify-center mb-3" style="background:#EBF1FD"><span v-html="luci('check','w-7 h-7 text-[var(--accent)]')"></span></div>
-<div class="text-[17px] font-bold mb-1">已是最新版本</div>
-<div class="text-[13px] text-[#666]">{{ latestVersion }}</div>
-</div>
-<div data-cp @click="showVersionCheck=false" class="rounded-xl py-3 text-center text-[15px] font-semibold text-white cursor-pointer mt-2" style="background:var(--accent)">知道了</div>
-</template>
-</div></div></transition>
+</page>
+<confirm-dialog :open="profileMod" :z="800" oid="profile-modal" :title="profileMdT" :desc="profileMdD" :loading="profileModLoading" @close="profileMod=null" @confirm="profileMdOk"></confirm-dialog>
+<confirm-dialog :open="showVersionCheck" :z="900" oid="version-check-modal" :mask-close="false" :title="hasNewVersion?'发现新版本':'已是最新版本'" :cancel-text="hasNewVersion?(protoForceUpdate==='force'?'退出应用':'稍后提醒'):''" :confirm-text="hasNewVersion?(updating?'下载中…':'立即更新'):'知道了'" confirm-bg="var(--accent)" @close="hasNewVersion&&protoForceUpdate==='force'?exitApp():(showVersionCheck=false)" @confirm="hasNewVersion?goUpdate():(showVersionCheck=false)"><template v-if="hasNewVersion"><div class="text-[13px] text-[#666] text-center">{{ '最新版本 ' + (latestVersion) }}</div><div class="bg-[#F6F7F9] rounded-lg px-4 py-3 text-[13px] text-[#555] leading-relaxed">{{ updateDesc }}</div></template><template v-else><div class="w-14 h-14 rounded-full flex items-center justify-center mb-3" style="background:#EBF1FD"><span v-html="luci('check','w-7 h-7 text-[var(--accent)]')"></span></div><div class="text-[13px] text-[#666]">{{ latestVersion }}</div></template></confirm-dialog>
 </div></div><div class="demo-ops-stack"><div class="demo-ops is-active"><div class="demo-ops-title">原型操作</div>
 <div class="demo-ops-section" data-od-id="demo-login-state">
 <div class="demo-ops-label">登录状态</div>
@@ -2008,15 +1762,141 @@ function registerSheetKit(app){
     props:{open:{default:false},title:{type:String,default:''},type:{type:String,default:'A'},size:{type:String,default:'sm'},maskZ:{type:Number,default:700},maxH:{type:String,default:''},handle:{type:Boolean,default:true},showX:{type:Boolean,default:true},oid:{type:String,default:''},panelOid:{type:String,default:''}},
     emits:['close','confirm'],
     computed:{sizeCls(){return this.size==='md'?'sheet-panel-md':this.size==='lg'?'sheet-panel-lg':''}},
+    /* 单根节点：避免 fragment 多根导致 transition 无法正确渲染 */
     template:'<div class="sheet-root"><transition name="fd"><div v-if="open" class="sheet-mask" :style="{zIndex:maskZ}" :data-od-id="oid||undefined" @click.self="$emit(\'close\')"></div></transition><transition name="sh"><div v-if="open" class="sheet-panel" :class="sizeCls" :style="{zIndex:maskZ+1,maxHeight:maxH||\'\'}" :data-od-id="panelOid||undefined" v-sheet-drag="()=>$emit(\'close\')"><div v-if="handle" class="sheet-handle"></div><div class="sheet-head" :class="type===\'B\'?\'sheet-head-b\':\'sheet-head-a\'"><template v-if="type===\'B\'"><div class="sheet-btn sheet-btn-cancel" @click="$emit(\'close\')">取消</div><span class="sheet-title">{{ title }}</span><div class="sheet-btn sheet-btn-confirm" @click="$emit(\'confirm\')">确定</div></template><template v-else><span class="sheet-title">{{ title }}</span><div v-if="showX" class="sheet-x" @click="$emit(\'close\')"><span v-html="luci(\'x\',\'w-5 h-5 text-[#999]\')"></span></div></template></div><div class="sheet-scroll"><slot></slot></div><div class="sheet-footer"><slot name="footer"></slot></div></div></transition></div>'
   });
   app.component('option-sheet',{
     name:'option-sheet',
     props:{open:{default:false},title:{type:String,default:''},options:{type:Array,default:function(){return[]}},modelValue:{default:null},size:{type:String,default:'sm'},maskZ:{type:Number,default:700},handle:{type:Boolean,default:true},showX:{type:Boolean,default:true},oid:{type:String,default:''},panelOid:{type:String,default:''}},
     emits:['update:modelValue','select','close'],
+    /*options支持统一[{value,label}]，也支持纯字符串/数字数组（此时value=下标、label=元素本身）*/
     methods:{labelOf:function(o){return (o&&o.label!=null)?o.label:o},valOf:function(o,i){return (o&&o.value!=null)?o.value:i},isOn:function(o,i){return this.modelValue!=null&&this.modelValue===this.valOf(o,i)},pick:function(o,i){var v=this.valOf(o,i);this.$emit('update:modelValue',v);this.$emit('select',v)}},
     template:'<div class="sheet-root"><transition name="fd"><div v-if="open" class="sheet-mask" :style="{zIndex:maskZ}" :data-od-id="oid||undefined" @click.self="$emit(\'close\')"></div></transition><transition name="sh"><div v-if="open" class="sheet-panel" :class="size===\'md\'?\'sheet-panel-md\':size===\'lg\'?\'sheet-panel-lg\':\'\'" :style="{zIndex:maskZ+1}" :data-od-id="panelOid||undefined" v-sheet-drag="()=>$emit(\'close\')"><div v-if="handle" class="sheet-handle"></div><div class="sheet-head sheet-head-a"><span class="sheet-title">{{ title }}</span><div v-if="showX" class="sheet-x" @click="$emit(\'close\')"><span v-html="luci(\'x\',\'w-5 h-5 text-[#999]\')"></span></div></div><div class="sheet-opt-list"><div v-for="(o,i) in options" :key="i" class="sheet-opt" :class="isOn(o,i)?\'sheet-opt-on\':\'sheet-opt-off\'" @click="pick(o,i)">{{ labelOf(o) }}</div></div></div></transition></div>'
   });
+  /* NavBar：顶部导航栏（返回按钮 + 居中标题 + 右侧 32px 动作槽）。左右恒 32px 对称，标题 flex-1 text-center 恒居中 */
+  app.component('nav-bar',{
+    name:'nav-bar',
+    props:{title:{type:String,default:''},back:{type:Boolean,default:true},borderColor:{type:String,default:'#F0F0F0'},bg:{type:String,default:'#FFFFFF'},oid:{type:String,default:''}},
+    emits:['back'],
+    computed:{barStyle(){return {background:this.bg,borderBottom:this.borderColor?('1px solid '+this.borderColor):'none'}}},
+    template:'<div class="pt-14 px-4 pb-3 flex items-center justify-between shrink-0" :style="barStyle" :data-od-id="oid||undefined"><div v-if="back" data-cp class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[var(--accent)]" @click="$emit(\'back\')"><span v-html="luci(\'chevron-left\',\'w-5 h-5\')"></span></div><div v-else class="w-8 h-8"></div><div class="flex-1 text-center text-[17px] font-semibold min-w-0 px-1">{{ title }}</div><div class="w-8 h-8 flex items-center justify-center shrink-0"><slot name="right"></slot></div></div>'
+  });
+  /* ConfirmDialog：居中确认弹窗（遮罩 rgba(0,0,0,.45) + 300px 白卡 + 标题/描述/取消确认双按钮 + loading 遮罩） */
+  app.component('confirm-dialog',{
+    name:'confirm-dialog',
+    props:{open:{default:false},title:{type:String,default:''},desc:{type:String,default:''},loading:{type:Boolean,default:false},z:{type:Number,default:2000},oid:{type:String,default:''},maskClose:{type:Boolean,default:true},confirmBg:{type:String,default:'#2B3F5F'},confirmText:{type:String,default:'确认'},cancelText:{type:String,default:'取消'}},
+    emits:['close','confirm'],
+    template:'<div class="sheet-root"><transition name="fd"><div v-if="open" data-cp class="absolute inset-0 flex items-center justify-center" :style="{zIndex:z,background:\'rgba(0,0,0,.45)\'}" :data-od-id="oid||undefined" @click.self="maskClose&&!loading&&$emit(\'close\')"><div class="relative bg-white rounded-xl w-[300px] px-5 pt-6 pb-4 flex flex-col gap-3 overflow-hidden" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)"><div class="text-[17px] font-bold text-center">{{ title }}</div><div v-if="desc" class="text-sm text-[#666] text-center leading-relaxed">{{ desc }}</div><slot></slot><div class="flex gap-3 mt-2"><div v-if="cancelText" data-cp :class="[\'flex-1 py-3 rounded-xl text-[15px] font-medium text-center transition-colors\',loading?\'opacity-40 cursor-not-allowed\':\'cursor-pointer active:bg-[#F6F7F9]\']" style="border:1px solid #E5E5E5;background:#fff" @click="!loading&&$emit(\'close\')">{{ cancelText }}</div><div data-cp :class="[\'flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center transition-colors\',loading?\'opacity-40 cursor-not-allowed\':\'active:opacity-90\']" :style="{background:confirmBg}" @click="!loading&&$emit(\'confirm\')">{{ confirmText }}</div></div><div v-if="loading" class="absolute inset-0 flex items-center justify-center" style="background:rgba(255,255,255,.7);backdrop-filter:blur(2px)"><div class="flex flex-col items-center gap-2"><svg class="animate-spin" width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#E5E5E5" stroke-width="3"/><path d="M14 3a11 11 0 0 1 11 11" stroke="#2B3F5F" stroke-width="3" stroke-linecap="round"/></svg><div class="text-[12px] text-[#999]">处理中...</div></div></div></div></div></transition></div>'
+  });
+  /* LoadingOverlay：全屏 loading 遮罩（fd 淡入 + 品牌 yadi-loading 或 spinner + 可选文案） */
+  app.component('loading-overlay',{
+    name:'loading-overlay',
+    props:{open:{default:false},z:{type:Number,default:3000},text:{type:String,default:''},bg:{type:String,default:'rgba(255,255,255,.7)'},brand:{type:Boolean,default:false},oid:{type:String,default:''}},
+    template:'<div class="sheet-root"><transition name="fd"><div v-if="open" class="absolute inset-0 flex items-center justify-center" :style="{zIndex:z,background:bg}" :data-od-id="oid||undefined"><div v-if="brand" class="yadi-loading"><span class="yadi-ring"></span><img class="yadi-logo" src="images/logo.png" alt="logo"></div><div v-else class="flex flex-col items-center gap-2"><svg class="animate-spin" width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#E5E5E5" stroke-width="3"/><path d="M14 3a11 11 0 0 1 11 11" stroke="#2B3F5F" stroke-width="3" stroke-linecap="round"/></svg><div v-if="text" class="text-[12px] text-[#999]">{{ text }}</div></div></div></transition></div>'
+  });
+  /* ImageViewer：黑底资料预览内容（放在 <page trans="fd"> 壳内使用） */
+  app.component('image-viewer',{
+    name:'image-viewer',
+    props:{src:{default:null},tip:{type:String,default:'点击空白处关闭'}},
+    emits:['close'],
+    template:'<div v-if="src" class="absolute inset-0 flex flex-col items-center justify-center gap-5" style="background:rgba(0,0,0,.88)" data-cp @click="$emit(\'close\')"><div class="w-40 h-40 rounded-2xl flex items-center justify-center" :style="{background:src.color+\'20\',border:\'2px solid \'+src.color+\'50\'}"><span v-html="luci(\'image\',\'w-20 h-20\')" :style="{color:src.color}"></span></div><div class="text-white text-[18px] font-bold">{{ src.label }}</div><div class="text-white/40 text-[13px] -mt-3">{{ src.time }}</div><div class="text-white/30 text-[13px] mt-2">{{ tip }}</div></div>'
+  });
+  /* ExitedView：应用已退出全屏内容（放 <page :z="950" trans="fd" bg="black"> 壳内） */
+  app.component('exited-view',{
+    name:'exited-view',
+    emits:['relaunch'],
+    template:'<div class="absolute inset-0 flex flex-col items-center justify-center rounded-[44px]"><div class="text-white/50 text-[14px] mb-6">应用已退出</div><div data-cp @click="$emit(\'relaunch\')" class="px-6 py-2.5 rounded-full text-[14px] text-white cursor-pointer active:bg-white/10 transition-colors" style="background:rgba(255,255,255,.12)">重新打开应用</div></div>'
+  });
+  /* EmptyState：空状态（图标圆 + 主文案 + 次文案 + slot 附加按钮）；icon 传空串隐藏图标圆 */
+  app.component('empty-state',{
+    name:'empty-state',
+    props:{icon:{type:String,default:'inbox'},text:{type:String,default:''},sub:{type:String,default:''},rootClass:{type:String,default:'flex flex-col items-center justify-center py-16'},circleClass:{type:String,default:'w-16 h-16 rounded-full bg-[#EBF1FD] flex items-center justify-center mb-4'},iconClass:{type:String,default:'w-8 h-8 text-[var(--accent)]'},textClass:{type:String,default:'text-[15px] font-semibold text-[#111] mb-1'},subClass:{type:String,default:'text-[13px] text-[#999] text-center mt-1'}},
+    template:'<div :class="rootClass"><div v-if="icon" :class="circleClass"><span v-html="luci(icon,iconClass)"></span></div><div v-if="text" :class="textClass">{{ text }}</div><div v-if="sub" :class="subClass">{{ sub }}</div><slot></slot></div>'
+  });
+  /* TabBar：底部导航（图标+文字，active 高亮，支持权限 hidden 与自定义 go） */
+  app.component('tab-bar',{
+    name:'tab-bar',
+    props:{items:{type:Array,default:function(){return[]}},show:{type:Boolean,default:true},activeColor:{type:String,default:'#FF6A00'},inactiveColor:{type:String,default:'#999'},z:{type:Number,default:100},borderColor:{type:String,default:'#E5E5E5'}},
+    emits:['select'],
+    template:'<div v-if="show" class="absolute bottom-0 left-0 right-0 h-[83px] bg-white/90 backdrop-blur-[20px] flex pb-[22px]" :style="{zIndex:z,borderTop:\'1px solid \'+borderColor}"><template v-for="it in items" :key="it.key"><div v-if="!it.hidden" data-cp class="flex-1 flex flex-col items-center justify-center cursor-pointer gap-[3px] select-none" :style="{color:it.activeWhen?activeColor:inactiveColor}" :data-od-id="\'tabbar-\'+it.key" @click="it.go?it.go():$emit(\'select\',it.key)"><span v-html="luci(it.icon,\'w-[22px] h-[22px]\')"></span><span class="text-[10px] font-semibold">{{ it.label }}</span></div></template></div>'
+  });
+  /* Page：全屏子页容器（transition + absolute inset-0 + 可选下滑关闭） */
+  app.component('page',{
+    name:'page',
+    props:{open:{default:false},z:{type:Number,default:1000},bg:{type:String,default:'#F6F7F9'},trans:{type:String,default:'sl'},swipeClose:{type:Function,default:null},oid:{type:String,default:''}},
+    emits:['close'],
+    methods:{onSwipe(){if(typeof this.swipeClose==='function')this.swipeClose();else this.$emit('close')}},
+    template:'<div class="sheet-root"><transition :name="trans"><div v-if="open" class="absolute inset-0 flex flex-col overflow-hidden" :style="{zIndex:z,background:bg}" :data-od-id="oid||undefined" v-swipe-close="onSwipe"><slot></slot></div></transition></div>'
+  });
+}
+
+/* 页面栈导航（快照式）统一实现：纯导航，不触碰任何 app 状态（与 index.html 同源）。
+   opts: { screens, pageRefList, nameOf } */
+function createNav(o){
+  var screens=o.screens||{}, pageRefList=(o.pageRefList||[]).slice(), nameOf=o.nameOf||function(){return ''};
+  var navStack=[];
+  var _pagePushed=false,navSuppress=0,navLastBackAt=0;
+  var _rootSnap=_navSnapshot();
+  function _navClone(v){return (v&&typeof v==='object')?JSON.parse(JSON.stringify(v)):v}
+  function _navSnapshot(){return pageRefList.map(function(r){return _navClone(r.get())})}
+  function _navRestore(s){pageRefList.forEach(function(r,i){if(i<s.length)r.set(_navClone(s[i]))})}
+  /* 运行期追加页面级 ref（app setup 内的 ref 晚于 createNav 创建时注册）：同步重捕根快照，保证快照长度一致 */
+  function navAddRefs(list){
+    (list||[]).forEach(function(r){if(r&&typeof r.get==='function'&&typeof r.set==='function')pageRefList.push(r)});
+    if(!navStack.length)_rootSnap=_navSnapshot();
+  }
+  function _navScreen(name){return screens[name]||null}
+  function _navNoAnim(){var d=document.documentElement;if(!d)return;if(_navNoAnim._t)clearTimeout(_navNoAnim._t);d.classList.add('nav-noanim');_navNoAnim._t=setTimeout(function(){d.classList.remove('nav-noanim')},60)}
+  function navLog(a,n){console.log('[页面栈]',a+(n?' '+n:''),'→',navStack.map(function(e){return e.name||'(未命名)'}).join(' <- ')||'(首页)','| history.length='+history.length)}
+  function navOpen(name){
+    if(_pagePushed)return;_pagePushed=true;
+    setTimeout(function(){_pagePushed=false},0);
+    if(!name){var auto=nameOf();name=auto||''}
+    if(name&&navStack.some(function(e){return e.name===name})){navLog('重复入栈已忽略',name);return}
+    var snap=_navSnapshot();
+    if(!name&&navStack.length&&JSON.stringify(snap)===JSON.stringify(navStack[navStack.length-1].snap)){navLog('重复入栈已忽略',name||'');return}
+    var sc=_navScreen(name);
+    navStack.push({name:name||'',snap:snap});
+    if(sc&&sc.open)sc.open();
+    navLog('push',name||'');
+  }
+  function navBack(){
+    var now=Date.now();if(now-navLastBackAt<250)return;navLastBackAt=now;
+    if(!navStack.length){
+      if(JSON.stringify(_navSnapshot())!==JSON.stringify(_rootSnap)){_navNoAnim();_navRestore(_rootSnap);navLog('边界兜底·恢复首页');return}
+      navLog('已到首页，边界兜底，禁止继续返回');return;
+    }
+    var e=navStack.pop();
+    var sc=_navScreen(e.name);
+    if(sc&&sc.close)sc.close();
+    _navNoAnim();
+    _navRestore(e.snap);
+    navLog('back',e.name||'');
+  }
+  function navDrop(name){
+    var i=navStack.length-1;
+    if(i<0)return;
+    if(name&&navStack[i].name!==name)return;
+    var e=navStack.pop();
+    var sc=_navScreen(e.name);
+    if(sc&&sc.close)sc.close();
+    navLog('drop',e.name||'');
+  }
+  function navSwap(name){
+    var s=_navScreen(name);if(!s)return;
+    var top=navStack.length?navStack.pop():null;
+    if(top){var sc=_navScreen(top.name);if(sc&&sc.close)sc.close()}
+    _navNoAnim();
+    s.open();
+    navStack.push({name:name||'',snap:top?top.snap:_navSnapshot()});
+    navLog('replace',name);
+  }
+  function navReset(){
+    var n=navStack.length;
+    while(navStack.length){var e=navStack.pop();var sc=_navScreen(e.name);if(sc&&sc.close)sc.close()}
+    navLog('reset','清空'+n+'层');
+  }
+  return {navOpen,navBack,navDrop,navSwap,navReset,navLog,navAddRefs};
 }
 
 /* ===== 登录 + 我的 · 共享状态工厂（复刻 index.html 命名，每 App 一份独立实例） ===== */
@@ -2066,8 +1946,8 @@ function authState(bus){
   var MSG={accountRequired:'请输入账号',accountFormat:'账号仅支持字母、数字、下划线',phoneRequired:'请输入手机号',phoneDigit:'手机号仅支持数字',emailRequired:'请输入邮箱',emailFormat:'邮箱格式不正确',pwdRequired:'请输入密码',pwdChars:'密码仅支持大小写字母、数字、键盘符号',codeRequired:'请输入验证码',codeFormat:'验证码格式不正确'};
   var EMAIL_RE=/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
   function resetLoginForm(){loginView.value='main';loginMode.value='phone';loginSub.value='password';loginPhone.value='';loginEmail.value='';loginAccount.value='';loginPwd.value='';loginCode.value='';loginPwdVisible.value=false;loginAgree.value=false;dialQ.value='';dialPickerSource.value=null;loginErr.phone='';loginErr.pwd='';loginErr.code='';loginErr.email='';loginErr.account='';if(loginCdTimer){clearInterval(loginCdTimer);loginCdTimer=null}loginCd.value=0}
-  function openLogin(){resetLoginForm();showLogin.value=true;profileSub.value=null}
-  function closeLogin(){showLogin.value=false;loginView.value='main';dialPickerSource.value=null;loginErr.phone='';loginErr.pwd='';loginErr.code='';loginErr.email='';loginErr.account=''}
+  function openLogin(){navOpen('login');resetLoginForm();showLogin.value=true;profileSub.value=null}
+  function closeLogin(){navDrop('login');showLogin.value=false;loginView.value='main';dialPickerSource.value=null;loginErr.phone='';loginErr.pwd='';loginErr.code='';loginErr.email='';loginErr.account=''}
   function loginOpenLang(){loginView.value='lang'}
   function selectLangFromLogin(id){appLang.value=id;loginView.value='main'}
   function selectLang(id){appLang.value=id}
@@ -2098,7 +1978,7 @@ function authState(bus){
       else if(!/^[A-Za-z0-9!-~]{1,64}$/.test(loginPwd.value)){loginErr.pwd=MSG.pwdChars;err=MSG.pwdChars}
     }
     if(err){toastPush(err);return}
-    resetLoginForm();loggedIn.value=true;showLogin.value=false;
+    resetLoginForm();loggedIn.value=true;showLogin.value=false;navDrop('login');
     if(firstLogin.value){firstLogin.value=false;switchSource.value='first';profileOV.value='settings';profileSub.value='subSwitchSystem';toastPush('请选择系统');return}
     toastPush('登录成功');
   }
@@ -2107,28 +1987,46 @@ function authState(bus){
     loggedIn.value=true;
     if(firstLogin.value){firstLogin.value=false;switchSource.value='first';profileOV.value='settings';profileSub.value='subSwitchSystem';toastPush('请选择系统')}
   }
-  function doLogout(){profileMod.value=null;loggedIn.value=false;showLogin.value=true;profileOV.value=null;profileSub.value=null;toastPush('已退出登录')}
-  function navOpen(name){
-    if(!name)return;
-    if(name==='login'){openLogin();return}
-    if(name==='ovInfo'){profileOV.value='info';profileSub.value=null;return}
-    if(name==='ovSettings'){profileOV.value='settings';profileSub.value=null;return}
-    if(name==='subLang'){profileOV.value='settings';profileSub.value='lang';return}
-    if(name==='subSwitchSystem'){profileOV.value='settings';profileSub.value='subSwitchSystem';return}
-    if(name==='subBindPhone'){profileSub.value='bindPhone';return}
-    if(name==='subBindEmail'){profileSub.value='bindEmail';return}
-    if(name==='subPwdVerify'){profileSub.value='pwdVerify';return}
-    if(name==='subPwdReset'){profileSub.value='pwdReset';return}
-    if(name==='subIdDetail'){profileSub.value='idDetail';return}
-    if(name==='subIdForm'){profileSub.value='idForm';return}
-    if(name==='myOrders'){profileSub.value='myOrders';return}
-    if(name==='planOrders'){profileSub.value='planOrders';return}
+  function doLogout(){profileMod.value=null;navReset();loggedIn.value=false;showLogin.value=true;profileOV.value=null;profileSub.value=null;toastPush('已退出登录')}
+  /* 页面栈接线（createNav 实例 + NAV_SCREENS + nameOf）；createNav 实现见文件上方共享核心。
+     用法与不变量见 AGENTS.md §4「页面栈导航」 */
+  function _navWrap(r){return{raw:r,get:function(){return r.value},set:function(v){r.value=v}}}
+  var _navWrapped=[profileOV,profileSub,recordsFrom,showLogin].map(_navWrap);
+  /* 页面级状态可后续注册（app setup 内的 ref：Tab / 换电流程 / 站点 / 电池详情 / 订单详情等）；
+     追加时同步重捕根快照（createNav.navAddRefs），保证页面栈快照长度一致 */
+  function addNavRefs(list){
+    var add=[];
+    (list||[]).forEach(function(r){
+      if(!r||r.value===undefined)return;
+      if(_navWrapped.some(function(w){return w.raw===r}))return;
+      var w=_navWrap(r);_navWrapped.push(w);add.push(w);
+    });
+    if(add.length)_nav.navAddRefs(add);
   }
-  function navBack(){if(profileSub.value){if(profileSub.value==='idForm'){profileSub.value=idSingle.value?'idDetail':null;return}if(profileSub.value==='planOrderDetail'){profileSub.value='planOrders';return}if(profileSub.value==='planOrders'){profileSub.value='myOrders';return}if(profileSub.value==='cardExpired'){profileSub.value='cardPack';return}if(profileSub.value==='batteryRecords'){if(recordsFrom.value==='mine'){profileSub.value=null;profileOV.value=null;return}profileSub.value='batteryDetail';return}if(profileSub.value==='batteryFind'||profileSub.value==='batteryTrack'){profileSub.value='batteryDetail';return}profileSub.value=null;return}if(profileOV.value){profileOV.value=null;return}if(showLogin.value){closeLogin();return}}
+  var NAV_SCREENS={
+    ovInfo:{open:function(){profileOV.value='info';profileSub.value=null}},
+    ovSettings:{open:function(){profileOV.value='settings';profileSub.value=null}},
+    subLang:{open:function(){profileOV.value='settings';profileSub.value='lang'}},
+    subSwitchSystem:{open:function(){profileOV.value='settings';profileSub.value='subSwitchSystem'}},
+    subBindPhone:{open:function(){profileSub.value='bindPhone'}},
+    subBindEmail:{open:function(){profileSub.value='bindEmail'}},
+    subPwdVerify:{open:function(){profileSub.value='pwdVerify'}},
+    subPwdReset:{open:function(){profileSub.value='pwdReset'}},
+    subIdDetail:{open:function(){profileSub.value='idDetail'}},
+    subIdForm:{open:function(){profileSub.value='idForm'}},
+    myOrders:{open:function(){profileSub.value='myOrders'}},
+    planOrders:{open:function(){profileSub.value='planOrders'}}
+  };
+  var _nav=createNav({screens:NAV_SCREENS,pageRefList:_navWrapped,nameOf:function(){
+    if(showLogin.value)return 'login';
+    if(profileSub.value)return profileSub.value;
+    if(profileOV.value)return profileOV.value;
+    return '';
+  }});
+  var navOpen=_nav.navOpen,navBack=_nav.navBack,navDrop=_nav.navDrop,navSwap=_nav.navSwap,navReset=_nav.navReset,navLog=_nav.navLog;
   function goBack(){navBack()}
   function switchBack(){if(switchSource.value==='first'){switchSource.value='settings';doLogout();return}navBack()}
   function openMyOrders(){navOpen('myOrders')}
-  function openWallet(){navOpen('wallet')}
   function openBindPhone(){navOpen('subBindPhone')}
   function openBindEmail(){navOpen('subBindEmail')}
   function openPwdFlow(){if(!hasPhone.value&&!hasEmail.value){toastPush('请先绑定手机号或邮箱');return}pwdChannel.value=hasPhone.value?'phone':'email';pwdCode.value='';navOpen('subPwdVerify')}
@@ -2156,7 +2054,7 @@ function authState(bus){
   function idActionReupload(){if(idActionTarget.value==null)return;showIdAction.value=false;openIdPicker('reupload')}
   function doIdReupload(){var i=idActionTarget.value;if(i==null)return;var arr=idPhotos.value.slice();if(arr[i])arr[i]={id:Date.now()+'-'+Math.random().toString(36).slice(2,7),time:new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-')};idPhotos.value=arr;idActionTarget.value=null}
   function idActionDelete(){var i=idActionTarget.value;if(i==null)return;var arr=idPhotos.value.slice();arr.splice(i,1);idPhotos.value=arr;showIdAction.value=false;idActionTarget.value=null;toastPush('照片已删除')}
-  function submitIdForm(){idNameErr.value='';idCardErr.value='';idPhotoErr.value='';var ok=true;if(!(idName.value||'').trim()){idNameErr.value='请输入姓名';ok=false}if(!(idCardNo.value||'').trim()){idCardErr.value='请输入证件号码';ok=false}if(idPhotos.value.length<1){idPhotoErr.value='请至少上传1张身份证照片';ok=false}if(!ok)return;var wasSaved=!!idSingle.value;idSingle.value={name:idName.value.trim(),idNo:idCardNo.value.trim(),idPhotos:idPhotos.value.slice()};toastPush(wasSaved?'实名信息已更新':'实名信息已添加');profileSub.value='idDetail'}
+  function submitIdForm(){idNameErr.value='';idCardErr.value='';idPhotoErr.value='';var ok=true;if(!(idName.value||'').trim()){idNameErr.value='请输入姓名';ok=false}if(!(idCardNo.value||'').trim()){idCardErr.value='请输入证件号码';ok=false}if(idPhotos.value.length<1){idPhotoErr.value='请至少上传1张身份证照片';ok=false}if(!ok)return;var wasSaved=!!idSingle.value;idSingle.value={name:idName.value.trim(),idNo:idCardNo.value.trim(),idPhotos:idPhotos.value.slice()};toastPush(wasSaved?'实名信息已更新':'实名信息已添加');navBack()}
   function profileMdOk(){
     if(profileModLoading.value)return;
     if(profileMod.value==='logout'){profileModLoading.value=true;setTimeout(function(){profileModLoading.value=false;doLogout()},600);return}
@@ -2180,32 +2078,16 @@ function authState(bus){
   var demoPagePermCodes=Vue.computed(function(){return[]});
   var pageRoute=Vue.computed(function(){if(showLogin.value)return'/login';return '/profile'+(profileOV.value?('/'+profileOV.value):'')+(profileSub.value?('/'+profileSub.value):'')});
   function copyPermCode(c){var v=(c+' '+pageRoute.value);if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(v).catch(function(){})}}
-  function openMenu(id){if(id==='user'||id==='recharge'){}navOpen('menu');profileOV.value=id}
-  var menuGroups=Vue.computed(function(){
-    var all=[
-      {id:'store',label:'切换门店',icon:'building-2',sub:curStore.value,code:null},
-      {id:'model',label:'车型管理',icon:'bike',code:'model.list'},
-      {id:'battModel',label:'电池型号管理',icon:'battery-charging',code:'batt_model.list'},
-      {id:'package',label:'套餐管理',icon:'package',code:'package.list'},
-      {id:'account',label:'账号管理',icon:'users',code:'account.list'},
-      {id:'pos',label:'职位管理',icon:'clock',code:'position.list'},
-      {id:'user',label:'用户管理',icon:'users',code:'user.list'},
-      {id:'config',label:'订单配置',icon:'settings',code:'order_config.detail'},
-      {id:'cs',label:'客服信息',icon:'headset',code:'cs_info.list'},
-      {id:'recharge',label:'充值配置',icon:'wallet',code:'recharge.list'}
-    ];
-    var items=all.filter(function(m){return !m.code||can(m.code)});
-    return items.length?[{name:'常用功能',items:items}]:[];
-  });
+
   return {loggedIn,firstLogin,showLogin,loginView,loginMode,loginSub,loginDial,loginPhone,loginEmail,loginAccount,loginPwd,loginCode,loginPwdVisible,loginAgree,loginCd,
     dialQ,showDialPicker,activeDialCode,dialFiltered,appLang,langOptions,appLangLabel,canSendCode,canLogin,profileOV,profileSub,switchSource,curSystemName,
     loginErr,profileMod,profileModLoading,profileMdT,profileMdD,hasPhone,hasEmail,hasPwd,boundPhone,boundEmail,curStore,
     bpArea,bpPhone,bpCode,bpCd,beEmail,beCode,beCd,pwdChannel,pwdCode,pwdCd,npwd,npwd2,npwdVis,npwd2Vis,canConfirmPwd,
     openLogin,closeLogin,loginOpenLang,selectLangFromLogin,selectLang,openDialCode,closeDialPicker,pickDial,setLoginMode,setLoginSub,sendLoginCode,doLogin,setLoggedIn,doLogout,recordsFrom,
-    navOpen,navBack,goBack,switchBack,openMyOrders,openWallet,openBindPhone,openBindEmail,openPwdFlow,sendBpCode,sendBeCode,sendPwdCode,switchPwdChannel,doBindPhone,doBindEmail,nextPwdVerify,doResetPwd,checkVersion,profileMdOk,
+    navOpen,navBack,navDrop,navReset,navSwap,navLog,addNavRefs,goBack,switchBack,openMyOrders,openBindPhone,openBindEmail,openPwdFlow,sendBpCode,sendBeCode,sendPwdCode,switchPwdChannel,doBindPhone,doBindEmail,nextPwdVerify,doResetPwd,checkVersion,profileMdOk,
     idSingle,idName,idCardNo,idNameErr,idCardErr,idPhotoErr,idPhotos,maskNo,openIdForm,submitIdForm,openIdPicker,pickIdSource,openIdPreview,openSavedPreview,openIdMore,idActionReupload,idActionDelete,showIdPicker,showIdAction,showIdPreview,idPreviewItem,
     perms,togglePerm,setPermGroup,protoForceUpdate,hasNewVersion,showVersionCheck,latestVersion,updateDesc,updating,goUpdate,exitApp,demoOpsActive,demoIsTopTab,demoPagePermTitle,demoPagePermGroups,demoPagePermCodes,pageRoute,copyPermCode,
-    can,openMenu,menuGroups,goSwap:openDemoGoSwap,goRental:openDemoGoRental};
+    can,goSwap:openDemoGoSwap,goRental:openDemoGoRental};
 }
 
 /* 登录页（用户端主模板，含区号选择 + 登录内语言） */
@@ -2241,7 +2123,7 @@ var _ua=Vue.createApp({
       if(!n){toastPush('该站点维护中，请前往附近可用电站');return}
       var s=null;stations.forEach(function(x){if(x.no===n)s=x});
       if(!s){toastPush('该站点维护中，请前往附近可用电站');return}
-      curStation.value=s;curCab.value=s.cabinets[0];auth.profileOV.value='station';auth.profileSub.value=null;
+      auth.navOpen('station');curStation.value=s;curCab.value=s.cabinets[0];auth.profileOV.value='station';auth.profileSub.value=null;
     }
     /* ── 核心换电流程：扫码对应单台柜机详情 + 借电 + 还电 ── */
     var curStation=Vue.ref(null);
@@ -2291,7 +2173,7 @@ var _ua=Vue.createApp({
     var swapTitle=Vue.computed(swapTitleFn);
     function swapPickCab(){var s=null;stations.forEach(function(x){if(x.kind==='on')s=s||x});s=s||stations[0];swapCtx.value={station:s,cab:s.cabinets?s.cabinets[0]:null}}
     function setBoundCount(n){var t=nowStr(),arr=[];for(var i=0;i<n;i++){arr.push({id:i+1,no:'BAT'+(1000+i),location:'成都市双流区',bindTime:t})}batteryList.value=arr}
-    function swapStart(){swapStep.value='scan';swapShow.value=true;auth.profileOV.value='swap';auth.profileSub.value=null}
+    function swapStart(){auth.navOpen('swap');swapStep.value='scan';swapShow.value=true;auth.profileOV.value='swap';auth.profileSub.value=null}
     function swapScan(){
       swapPickCab();
       if(!auth.loggedIn.value){swapStep.value='gate-login';return}
@@ -2341,7 +2223,7 @@ var _ua=Vue.createApp({
       if(cab){cab.used=Math.max(0,cab.used-1);cab.full=Math.max(0,cab.full-1)}
       swapStep.value='swap-done';
     }
-    function swapClose(){swapShow.value=false;auth.profileOV.value=null;swapStep.value='scan';swapCtx.value={}}
+    function swapClose(){swapShow.value=false;swapStep.value='scan';swapCtx.value={};auth.navDrop('swap');auth.profileOV.value=null;auth.profileSub.value=null}
     function swapRetry(){swapStep.value='scan'}
     function genBatNo(){var s='';for(var i=0;i<13;i++)s+=Math.floor(Math.random()*10);return s}
     function genOrderNo(){var d=new Date(),p=function(n){return (n<10?'0':'')+n};return 'SW'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+p(d.getHours())+p(d.getMinutes())+p(d.getSeconds())+Math.floor(Math.random()*1000)}
@@ -2421,7 +2303,7 @@ var _ua=Vue.createApp({
         curArea.value=null;
       }
     }
-    function openSwapArea(){auth.profileOV.value='swapArea';auth.profileSub.value=null}
+    function openSwapArea(){auth.navOpen('swapArea');auth.profileOV.value='swapArea';auth.profileSub.value=null}
     function goSetSwapArea(){openSwapArea()}
     function pickSwapArea(i){swapAreas.value.forEach(function(a,k){a.sel=(k===i)});var sel=swapAreas.value[i];if(sel){curArea.value=sel;swapAreaSet.value=true;reloadAreaData()}}
     /* 原型操作：换电区域列表数据 有数据/无数据（恢复时重建带 sel:true 的默认项，避免复用被 pickSwapArea 改写 sel 的共享对象） */
@@ -2473,10 +2355,10 @@ var _ua=Vue.createApp({
     var BATTERY_STAT={soc:0,range:0,minutes:86};
     var GAUGE_TICKS=[0,1,2,3,4,5,6,7,8,9,10];
     var TRACK_POIS=[{x:38,y:62,label:'中和街道'},{x:63,y:48,label:'博雅城市广场'}];
-    function openMyBattery(){auth.profileOV.value='battery';auth.profileSub.value=null}
-    function openBatteryDetail(rec){if(!rec)return;batteryDetailRec.value=rec;auth.profileSub.value='batteryDetail'}
-    function openBatteryFind(){auth.profileSub.value='batteryFind'}
-    function openBatteryTrack(){auth.profileSub.value='batteryTrack'}
+    function openMyBattery(){auth.navOpen('battery');auth.profileOV.value='battery';auth.profileSub.value=null}
+    function openBatteryDetail(rec){if(!rec)return;auth.navOpen('batteryDetail');batteryDetailRec.value=rec;auth.profileSub.value='batteryDetail'}
+    function openBatteryFind(){auth.navOpen('batteryFind');auth.profileSub.value='batteryFind'}
+    function openBatteryTrack(){auth.navOpen('batteryTrack');auth.profileSub.value='batteryTrack'}
     /* ── 换电记录：「我的」入口查全部；电池详情入口仅查该电池 ── */
     var SWAP_RECORDS=[
       {id:1,type:'borrow',title:'借电成功',status:'使用中',batteryId:'2345676543223',station:'成都市武侯区剑南大道188号',cabinet:'CHZD08TBA1220823099',orderNo:'3243847283723942394',time:'2026.02.10 15:00:00'},
@@ -2486,8 +2368,8 @@ var _ua=Vue.createApp({
     var swapRecordsScope=Vue.ref('all');
     var swapRecordsView=Vue.computed(function(){return swapRecordsScope.value==='battery'&&batteryDetailRec.value?swapRecords.value.filter(function(r){return r.batteryId===batteryDetailRec.value.no}):swapRecords.value});
     function setSwapRecordsEmpty(on){swapRecords.value=on?[]:SWAP_RECORDS.slice()}
-    function openSwapRecordsAll(){swapRecordsScope.value='all';auth.recordsFrom.value='mine';auth.profileSub.value='batteryRecords'}
-    function openSwapRecords(){swapRecordsScope.value='battery';auth.recordsFrom.value='battery';auth.profileSub.value='batteryRecords'}
+    function openSwapRecordsAll(){auth.navOpen('batteryRecords');swapRecordsScope.value='all';auth.recordsFrom.value='mine';auth.profileSub.value='batteryRecords'}
+    function openSwapRecords(){auth.navOpen('batteryRecords');swapRecordsScope.value='battery';auth.recordsFrom.value='battery';auth.profileSub.value='batteryRecords'}
     function copyText(t){t=String(t||'');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).catch(function(){})}toastPush('复制成功')}
     /* ── 我的卡包：有效套餐卡 / 失效套餐（列表卡片为 key-value 形式） ── */
     var CARDS=[
@@ -2499,7 +2381,7 @@ var _ua=Vue.createApp({
     var activeCards=Vue.computed(function(){return cards.value.filter(function(c){return !c.expired})});
     var expiredCards=Vue.computed(function(){return cards.value.filter(function(c){return c.expired})});
     function setCardPackEmpty(on){cards.value=on?[]:CARDS.slice()}
-    function openCardPack(){auth.profileOV.value=null;auth.profileSub.value='cardPack'}
+    function openCardPack(){auth.navOpen('cardPack');auth.profileOV.value=null;auth.profileSub.value='cardPack'}
     /* ── 换电套餐列表（「我的订单」下唯一入口） ── */
     var PLAN_ORDERS=[
       {id:1,name:'30天不限次套餐卡',days:30,times:'不限次',batteries:'3块',created:'2026.02.10 15:00:00',amount:29999,status:'待支付',color:'#FF8A00',orderNo:'SW2026021015000001'},
@@ -2515,7 +2397,7 @@ var _ua=Vue.createApp({
     var planOrdersView=Vue.computed(function(){if(planOrderFilter.value==='all')return planOrders.value;return planOrders.value.filter(function(o){return o.status===planOrderFilter.value})});
     function setPlanOrderFilter(v){planOrderFilter.value=v}
     function setPlanOrdersEmpty(on){planOrders.value=on?[]:PLAN_ORDERS.slice()}
-    function openPlanOrders(){planOrderFilter.value='all';auth.profileSub.value='planOrders'}
+    function openPlanOrders(){auth.navOpen('planOrders');planOrderFilter.value='all';auth.profileSub.value='planOrders'}
     var planOrderDetail=Vue.ref(null);
     var planOrderLeft=Vue.ref(0);
     var showCancelPlanTip=Vue.ref(false);
@@ -2524,6 +2406,7 @@ var _ua=Vue.createApp({
     Vue.watch(auth.profileSub,function(v){if(v!=='planOrderDetail')clearPlanOrderTimer()});
     function fmtCountdown(s){var m=Math.floor(s/60),ss=s%60;return '剩余'+m+'分'+(ss<10?'0'+ss:ss)+'秒'}
     function openPlanOrder(o){
+      auth.navOpen('planOrderDetail');
       auth.profileSub.value='planOrderDetail';
       planOrderDetail.value=o;
       clearPlanOrderTimer();
@@ -2551,10 +2434,10 @@ var _ua=Vue.createApp({
       showCancelPlanTip.value=false;
       toastPush('订单已取消');
     }
-    function openCardExpired(){auth.profileSub.value='cardExpired'}
-    function goPlanRenew(){auth.profileSub.value=null;auth.profileOV.value=null;setTab('plan')}
+    function openCardExpired(){auth.navOpen('cardExpired');auth.profileSub.value='cardExpired'}
+    function goPlanRenew(){auth.navReset();auth.profileSub.value=null;auth.profileOV.value=null;setTab('plan')}
     /* ── 押金详情页 ── */
-    function openDeposit(){auth.profileOV.value='deposit';auth.profileSub.value=null}
+    function openDeposit(){auth.navOpen('deposit');auth.profileOV.value='deposit';auth.profileSub.value=null}
     function toggleDepositAgree(){depositAgree.value=!depositAgree.value}
     function payDeposit(){
       if(!depositAgree.value){toastPush('请先阅读并同意《押金协议》');return}
@@ -2577,6 +2460,8 @@ var _ua=Vue.createApp({
       if(depositEnabled.value&&depositState.value!=='paid'&&!depositFree.value){planDetail.value=null;showDepositModal.value=true;return}
       planDetail.value=null;planBought.value=true;toastPush('支付成功');
     }
+    /* 页面级状态注册进导航快照（Tab / 换电流程 / 站点 / 电池详情 / 订单详情 / 记录范围） */
+    auth.addNavRefs([tab,swapShow,swapStep,curStation,curCab,batteryDetailRec,planOrderDetail,swapRecordsScope]);
     return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,openStation,stations,locAuth,setLocAuth,showLocAuth,allowLocAuth,swapAreaSet,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,camAuth,setCamAuth,demoQrOk,demoOnline,demoDist,demoUnfinished,demoLevelLow,demoPlanEnough,demoTakeSlot,demoReturnSlot,planMax,setPlanMax,swapAnomaly,swapStart,swapScan,swapBranch,swapChoice,swapToBorrow,swapBorrowDone,swapToSwap,swapSwapAfterReturn,swapSwapDone,swapClose,swapRetry,swapResumeContinue,setBoundCount},auth,sideSetup('换电用户端',toastBus))
   }})
 registerSheetKit(_ua);_ua.mount(document.getElementById('root-user'));
@@ -2587,9 +2472,10 @@ var _ma=Vue.createApp({
     var tab=Vue.ref('home'),settingsOpen=Vue.ref(false);
     var toastBus=createToastBus();
     function toastPush(msg){toastBus.push(msg)}
-    function setTab(t){tab.value=t}
+    function setTab(t){tab.value=t;auth.navReset()}
     function toast(m){toastBus.push(m)}
     var auth=authState(toastBus);
+    auth.addNavRefs([tab]);
     return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast},auth,sideSetup('换电商户端',toastBus))
   }})
 registerSheetKit(_ma);_ma.mount(document.getElementById('root-merchant'));

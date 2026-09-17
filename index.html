@@ -24,7 +24,7 @@ body{font-family:var(--font-body)}
 .sh-enter-from,.sh-leave-to{transform:translateY(100%)}
 .item-enter-active{transition:all .35s cubic-bezier(.32,.72,0,1)}
 .item-enter-from{opacity:0;transform:translateY(12px)}
-/* 底部弹窗触发器（统一规范 v1） */
+/* 底部弹窗触发器 */
 .sheet-trigger{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:10px 14px;border-radius:12px;background:#F7F8FA}
 .sheet-trigger:active{opacity:.8}
 .filter-tabs::-webkit-scrollbar{display:none}
@@ -105,7 +105,7 @@ body{font-family:var(--font-body)}
 .track-wheel-item.is-on{color:#111;font-weight:600;font-size:17px}
 .track-wheel-mask{position:absolute;left:0;right:0;top:50%;height:36px;margin-top:-18px;pointer-events:none;border-top:1px solid #E5E5E5;border-bottom:1px solid #E5E5E5;background:rgba(43,63,95,.04)}
 :where(span):where(:has(> svg.lucide)){display:inline-flex;align-items:center;justify-content:center;vertical-align:middle}
-/* ═══ 底部弹窗共享组件 token（registerSheetKit·统一规范 v2，见 AGENTS.md「底部弹窗规范」） ═══ */
+/* ═══ 底部弹窗共享组件 token（registerSheetKit·见 AGENTS.md「底部弹窗规范」） ═══ */
 .sheet-mask{position:absolute;inset:0;background:rgba(0,0,0,.4)}
 .sheet-panel{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;display:flex;flex-direction:column;max-height:60%;padding-bottom:max(24px,env(safe-area-inset-bottom));box-sizing:border-box}
 .sheet-panel-md{max-height:70%}
@@ -124,9 +124,9 @@ body{font-family:var(--font-body)}
 .sheet-scroll{flex:1;overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch}
 .sheet-scroll::-webkit-scrollbar{display:none}
 .sheet-scroll{scrollbar-width:none}
-/* 内容行 token：搜索框（6 处手写签名收敛） */
+/* 内容行 token：搜索框 */
 .sheet-search{position:relative;margin:0 20px 12px;display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:9999px;background:#F6F7F9;border:1px solid #E5E5E5;flex-shrink:0;box-sizing:border-box}
-/* 内容行 token：弹窗内容滚动区（收敛 flex-1/overflow-y-auto/min-h-0 + hid|hide-scroll|conf-scroll-hide 三套隐藏滚动条） */
+/* 内容行 token：弹窗内容滚动区（统一 flex-1/min-h-0 + 隐藏滚动条） */
 .sheet-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .sheet-body::-webkit-scrollbar{display:none}
 .sheet-footer{position:relative;flex-shrink:0}
@@ -160,7 +160,6 @@ body{font-family:var(--font-body)}
 #root-user .carousel-dots{display:flex;gap:6px;justify-content:center;align-items:center}
 #root-user .carousel-dot{width:6px;height:6px;border-radius:9999px;background:rgba(255,255,255,.4);transition:all .2s}
 #root-user .carousel-dot.is-active{width:18px;background:#fff}
-/* 租赁类型/租赁方案 底部弹窗已改为统一结构（layer-base 工具类），原 .date-picker-* 专用类已移除 */
 #root-user .store-search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #E5E5E5;border-radius:12px;padding:10px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 #root-user .store-search-box input{flex:1;border:none;outline:none;background:transparent;font-size:14px;color:#111}
 #root-user .store-search-box input::placeholder{color:#999}
@@ -867,8 +866,6 @@ body.host-single-m #root-user{display:none}
 </div>
 </page>
 
-<!-- weather removed -->
-
 <div class="ptr-indicator" id="ptr-home" data-page-node-id="egpUmb6jVMg7p3NryIFeAn"><span class="ptr-text" data-page-node-id="Y5ECXoV2sYgaq3GBG2M9jk">下拉刷新</span></div>
 
 <div id="sc-home" class="flex-1 overflow-y-auto min-h-0 px-4 pb-24 hide-scroll" style="touch-action:pan-y;-webkit-overflow-scrolling:touch" data-page-node-id="d6O6sD4ycFVOCFhaIpZ6vG">
@@ -929,8 +926,6 @@ body.host-single-m #root-user{display:none}
 
 </div>
 
-<!-- <div v-if="homeDevSeg==='vehicles'" data-cp @click="scanCtx='vehicle';scanning=true" class="px-5 py-4 flex items-center justify-center gap-2 cursor-pointer active:bg-[#F6F7F9]" data-od-id="home-add-vehicle"><span class="text-[14px] font-semibold text-[var(--link)]">绑定车辆</span></div>
-<div v-else data-cp @click="scanCtx='battery';scanning=true" class="px-5 py-4 flex items-center justify-center gap-2 cursor-pointer active:bg-[#F6F7F9]" data-od-id="home-add-battery"><span class="text-[14px] font-semibold text-[var(--link)]">绑定电池</span></div> -->
 </div>
 
 </div>
@@ -2783,7 +2778,7 @@ body.host-single-m #root-user{display:none}
 <div class="absolute top-[23px] left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-black rounded-[20px] z-[2000]"></div>
 <div class="w-full h-full bg-[#F6F7F9] rounded-[44px] overflow-hidden flex flex-col relative" ref="stage" data-cp @click="tipHide">
 
-<!-- ═══ BRAND LOADING: 全屏品牌 loading 遮罩（橙色圆环 + logo，参考项目A） ═══ -->
+<!-- ═══ BRAND LOADING ═══ -->
 <loading-overlay :open="brandLoading" brand oid="brand-loading-overlay"></loading-overlay>
 
 <!-- ═══ Toast ═══ -->
@@ -4143,7 +4138,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </template>
 </div>
-<!-- ═══ 退款明细 · 卡片（仿参考项目，费用明细下方） ═══ -->
+<!-- ═══ 退款明细 · 卡片（费用明细下方） ═══ -->
 <div v-if="orderPerm('refund.list')" class="bg-white rounded-2xl p-4 mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
 <div class="mb-3 flex items-center justify-between">
 <span class="text-[14px] font-bold text-[#1A1A1A]">退款明细</span>
@@ -4196,7 +4191,7 @@ body.host-single-m #root-user{display:none}
   </div>
 </div>
 
-<!-- ═══ 车辆信息 · 卡片（仿参考项目，实名信息下方） ═══ -->
+<!-- ═══ 车辆信息 · 卡片（实名信息下方） ═══ -->
 <div v-if="do_.type!=='battery'" class="bg-white rounded-2xl p-4 mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
 <div class="flex items-center justify-between mb-3"><span class="text-[14px] font-bold text-[#1A1A1A]">车辆信息</span><span v-if="['progress','return','overdue','breach'].indexOf(dSt)!==-1&&orderPerm('operate.change_vehicle')" data-cp @click="openOrderPick('changeVehicle')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('refresh-cw','w-3.5 h-3.5')"></span><span v-else-if="dSt==='pickup'&&orderPerm('operate.assign_vehicle')" data-cp @click="openOrderPick('assignVehicle')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('link','w-3.5 h-3.5')"></span></div>
 <div class="text-[13px] space-y-2.5">
@@ -4206,7 +4201,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 
-<!-- ═══ 电池信息 · 卡片（仿参考项目，实名信息下方） ═══ -->
+<!-- ═══ 电池信息 · 卡片（实名信息下方） ═══ -->
 <div v-if="do_.type!=='vehicle'" class="bg-white rounded-2xl p-4 mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
 <div class="flex items-center justify-between mb-3"><span class="text-[14px] font-bold text-[#1A1A1A]">电池信息</span><span v-if="['progress','return','overdue','breach'].indexOf(dSt)!==-1&&orderPerm('operate.change_battery')" data-cp @click="openOrderPick('changeBattery')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('refresh-cw','w-3.5 h-3.5')"></span><span v-else-if="dSt==='pickup'&&orderPerm('operate.assign_battery')" data-cp @click="openOrderPick('assignBattery')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('link','w-3.5 h-3.5')"></span></div>
 <div class="text-[13px] space-y-2.5">
@@ -6021,13 +6016,18 @@ function ptrBind(root,containerId,indicatorId,onRefresh){
    两端调用一致：createNav({screens, pageRefList})，无 app 差异参数。
    opts: { screens, pageRefList } */
 function createNav(o){
-  var screens=o.screens||{}, pageRefList=o.pageRefList||[], nameOf=o.nameOf||function(){return ''};
+  var screens=o.screens||{}, pageRefList=(o.pageRefList||[]).slice(), nameOf=o.nameOf||function(){return ''};
   var navStack=[];
   var _pagePushed=false,navSuppress=0,navLastBackAt=0;
   var _rootSnap=_navSnapshot();
   function _navClone(v){return (v&&typeof v==='object')?JSON.parse(JSON.stringify(v)):v}
   function _navSnapshot(){return pageRefList.map(function(r){return _navClone(r.get())})}
-  function _navRestore(s){pageRefList.forEach(function(r,i){r.set(_navClone(s[i]))})}
+  function _navRestore(s){pageRefList.forEach(function(r,i){if(i<s.length)r.set(_navClone(s[i]))})}
+  /* 运行期追加页面级 ref（app setup 内的 ref 晚于 createNav 创建时注册）：同步重捕根快照，保证快照长度一致 */
+  function navAddRefs(list){
+    (list||[]).forEach(function(r){if(r&&typeof r.get==='function'&&typeof r.set==='function')pageRefList.push(r)});
+    if(!navStack.length)_rootSnap=_navSnapshot();
+  }
   function _navScreen(name){return screens[name]||null}
   function _navNoAnim(){var d=document.documentElement;if(!d)return;if(_navNoAnim._t)clearTimeout(_navNoAnim._t);d.classList.add('nav-noanim');_navNoAnim._t=setTimeout(function(){d.classList.remove('nav-noanim')},60)}
   function navLog(a,n){console.log('[页面栈]',a+(n?' '+n:''),'→',navStack.map(function(e){return e.name||'(未命名)'}).join(' <- ')||'(首页)','| history.length='+history.length)}
@@ -6079,7 +6079,7 @@ function createNav(o){
     while(navStack.length){var e=navStack.pop();var sc=_navScreen(e.name);if(sc&&sc.close)sc.close()}
     navLog('reset','清空'+n+'层');
   }
-  return {navOpen,navBack,navDrop,navSwap,navReset,navLog};
+  return {navOpen,navBack,navDrop,navSwap,navReset,navLog,navAddRefs};
 }
 
 /* 货币状态：reactive，双端金额经 fmtRp 联动切换（默认印尼盾；rate 为对 1 IDR 的折算，演示用近似值） */
@@ -6151,7 +6151,7 @@ var CZ_ORDERS=Vue.ref([{orderNo:'CZ202609010001',storeName:'测试门店',create
 /* 订单/充值订单时间归一：保持创建时间位于近 N 天内（相对当前时间动态重写） */
 function SYS_recent(n){try{var N=Date.now(),D=(n||15)*24*3600*1000;var f=function(off){var d=new Date(N-off*D);var p=function(x){return (x<10?'0':'')+x};return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())};var o=(typeof orders!=='undefined'&&orders&&orders.value)?orders.value:[];var cz=(typeof CZ_ORDERS!=='undefined'&&CZ_ORDERS&&CZ_ORDERS.value)?CZ_ORDERS.value:[];o.forEach(function(x,i){var off=((i%14)/14)+0.06;if(x.created)x.created=f(off);if(x.payTime)x.payTime=f(off-0.03);if(x.rentStart)x.rentStart=f(off-0.06);if(x.pickupTime)x.pickupTime=f(off-0.04)});cz.forEach(function(x,i){var off=((i%14)/14)+0.06;if(x.createTime)x.createTime=f(off);if(x.payTime)x.payTime=f(off-0.03);if(x.cancelTime&&x.cancelTime!=='-')x.cancelTime=f(off+0.4)})}catch(e){}}
 
-/* ══ 底部弹窗共享套件（统一规范 v2，见 AGENTS.md「底部弹窗规范」） ══
+/* ══ 底部弹窗共享套件（见 AGENTS.md「底部弹窗规范」） ══
    纯新增件：BottomSheet 壳 / OptionSheet 单选列表 / v-sheet-drag 下滑关闭 + .sheet-* 样式 token。
    双端 mount 前各调用一次 registerSheetKit(app)，实现一套组件双端可用。 */
 function registerSheetKit(app){
@@ -6179,7 +6179,7 @@ function registerSheetKit(app){
     props:{open:{default:false},title:{type:String,default:''},type:{type:String,default:'A'},size:{type:String,default:'sm'},maskZ:{type:Number,default:700},maxH:{type:String,default:''},handle:{type:Boolean,default:true},showX:{type:Boolean,default:true},oid:{type:String,default:''},panelOid:{type:String,default:''}},
     emits:['close','confirm'],
     computed:{sizeCls(){return this.size==='md'?'sheet-panel-md':this.size==='lg'?'sheet-panel-lg':''}},
-    /* 单根节点：避免 fragment 多根导致 transition 无法正确渲染（点击没反应/布局异常的根本原因） */
+    /* 单根节点：避免 fragment 多根导致 transition 无法正确渲染 */
     template:'<div class="sheet-root"><transition name="fd"><div v-if="open" class="sheet-mask" :style="{zIndex:maskZ}" :data-od-id="oid||undefined" @click.self="$emit(\'close\')"></div></transition><transition name="sh"><div v-if="open" class="sheet-panel" :class="sizeCls" :style="{zIndex:maskZ+1,maxHeight:maxH||\'\'}" :data-od-id="panelOid||undefined" v-sheet-drag="()=>$emit(\'close\')"><div v-if="handle" class="sheet-handle"></div><div class="sheet-head" :class="type===\'B\'?\'sheet-head-b\':\'sheet-head-a\'"><template v-if="type===\'B\'"><div class="sheet-btn sheet-btn-cancel" @click="$emit(\'close\')">取消</div><span class="sheet-title">{{ title }}</span><div class="sheet-btn sheet-btn-confirm" @click="$emit(\'confirm\')">确定</div></template><template v-else><span class="sheet-title">{{ title }}</span><div v-if="showX" class="sheet-x" @click="$emit(\'close\')"><span v-html="luci(\'x\',\'w-5 h-5 text-[#999]\')"></span></div></template></div><div class="sheet-scroll"><slot></slot></div><div class="sheet-footer"><slot name="footer"></slot></div></div></transition></div>'
   });
   /* OptionSheet：单选列表（options=[{value,label}]，v-model 选中值，@select=value，@close=关闭出口） */
@@ -6191,7 +6191,7 @@ function registerSheetKit(app){
     methods:{labelOf:function(o){return (o&&o.label!=null)?o.label:o},valOf:function(o,i){return (o&&o.value!=null)?o.value:i},isOn:function(o,i){return this.modelValue!=null&&this.modelValue===this.valOf(o,i)},pick:function(o,i){var v=this.valOf(o,i);this.$emit('update:modelValue',v);this.$emit('select',v)}},
     template:'<div class="sheet-root"><transition name="fd"><div v-if="open" class="sheet-mask" :style="{zIndex:maskZ}" :data-od-id="oid||undefined" @click.self="$emit(\'close\')"></div></transition><transition name="sh"><div v-if="open" class="sheet-panel" :class="size===\'md\'?\'sheet-panel-md\':size===\'lg\'?\'sheet-panel-lg\':\'\'" :style="{zIndex:maskZ+1}" :data-od-id="panelOid||undefined" v-sheet-drag="()=>$emit(\'close\')"><div v-if="handle" class="sheet-handle"></div><div class="sheet-head sheet-head-a"><span class="sheet-title">{{ title }}</span><div v-if="showX" class="sheet-x" @click="$emit(\'close\')"><span v-html="luci(\'x\',\'w-5 h-5 text-[#999]\')"></span></div></div><div class="sheet-opt-list"><div v-for="(o,i) in options" :key="i" class="sheet-opt" :class="isOn(o,i)?\'sheet-opt-on\':\'sheet-opt-off\'" @click="pick(o,i)">{{ labelOf(o) }}</div></div></div></transition></div>'
    });   /* NavBar：顶部导航栏（返回按钮 + 居中标题 + 右侧 32px 动作槽）。左右恒 32px 对称，标题 flex-1 text-center 恒居中，
-      不再受左右按钮宽度影响（历史坑：mr-8 补偿式头部在带右侧动作时标题左偏 14px+）。
+      不再受左右按钮宽度影响（禁止 mr-* 补偿式头部）。
       用法：<nav-bar title="车辆详情" @back="navBack()"></nav-bar>；右侧动作 <template #right>（内容需在 32px 内：单图标或 2 字文本按钮）；
       border-color 传 '' 关闭底部分割线；bg 传 '#F6F7F9' 等自定义背景；:back="false" 时左侧仍占位 32px 保持标题居中。
       禁止自闭合 <nav-bar />（in-DOM 模板会被吞后续兄弟节点）。 */
@@ -6242,8 +6242,8 @@ function registerSheetKit(app){
       根节点为普通 div，支持 v-if/v-else 与 data-od-id 透传。 */
    app.component('empty-state',{
      name:'empty-state',
-     props:{icon:{type:String,default:'inbox'},text:{type:String,default:''},sub:{type:String,default:''},circleClass:{type:String,default:'w-16 h-16 rounded-full bg-[#EBF1FD] flex items-center justify-center mb-4'},iconClass:{type:String,default:'w-8 h-8 text-[var(--accent)]'},textClass:{type:String,default:'text-[15px] font-semibold text-[#111] mb-1'},subClass:{type:String,default:'text-[13px] text-[#999] text-center mt-1'}},
-     template:'<div class="flex flex-col items-center justify-center py-16"><div v-if="icon" :class="circleClass"><span v-html="luci(icon,iconClass)"></span></div><div v-if="text" :class="textClass">{{ text }}</div><div v-if="sub" :class="subClass">{{ sub }}</div><slot></slot></div>'
+     props:{icon:{type:String,default:'inbox'},text:{type:String,default:''},sub:{type:String,default:''},rootClass:{type:String,default:'flex flex-col items-center justify-center py-16'},circleClass:{type:String,default:'w-16 h-16 rounded-full bg-[#EBF1FD] flex items-center justify-center mb-4'},iconClass:{type:String,default:'w-8 h-8 text-[var(--accent)]'},textClass:{type:String,default:'text-[15px] font-semibold text-[#111] mb-1'},subClass:{type:String,default:'text-[13px] text-[#999] text-center mt-1'}},
+     template:'<div :class="rootClass"><div v-if="icon" :class="circleClass"><span v-html="luci(icon,iconClass)"></span></div><div v-if="text" :class="textClass">{{ text }}</div><div v-if="sub" :class="subClass">{{ sub }}</div><slot></slot></div>'
    });
    /* TabBar：底部导航（图标+文字，active 高亮，支持权限 hidden 与自定义 go）。
       用法：<tab-bar :items="[{key:'home',icon:'home',label:'首页',activeWhen:tab==='home',hidden:!can('home.view'),go:function(){setTab('home')}}]" :show="!showLogin" active-color="#2B3F5F" @select="setTab"></tab-bar>;
@@ -6256,7 +6256,7 @@ function registerSheetKit(app){
    });
    /* Page：全屏子页容器（transition + absolute inset-0 + 可选下滑关闭）。
       用法：<page :open="vehOV==='detail'" :z="560" :swipe-close="()=>goBack()">...原页内容...</page>；
-      trans 可选 'sl'(滑入,默认)/'fd'(淡入)；存量手写 sl 覆盖层已全部迁移（57 处，2026-09-16），新页一律用 <page>。 */
+      trans 可选 'sl'(滑入,默认)/'fd'(淡入)；新页一律用 <page>。 */
    app.component('page',{
      name:'page',
      props:{open:{default:false},z:{type:Number,default:1000},bg:{type:String,default:'#F6F7F9'},trans:{type:String,default:'sl'},swipeClose:{type:Function,default:null},oid:{type:String,default:''}},
@@ -6992,14 +6992,9 @@ function markRenewPaid(no,payMethod){const pm=payMethod==='offline'?'线下支�
 function deductWallet(amt){try{if(rechargeEnabled&&rechargeEnabled.value!==undefined&&!rechargeEnabled.value){}SYS_deduct(amt)}catch(e){}const w=walletActive.value;if(!w)return;let need=amt;const useRe=Math.min(w.rechargeBalance,need);w.rechargeBalance-=useRe;need-=useRe;if(need>0){const useBo=Math.min(w.bonusBalance,need);w.bonusBalance-=useBo;need-=useBo}w.totalBalance=w.rechargeBalance+w.bonusBalance;walletLedger.value.unshift({id:'WL'+Date.now(),type:'orderConsume',amount:-amt,balanceAfter:w.totalBalance,relatedOrder:orderInfo.value.orderId,operator:'当前账号',remark:'钱包支付',createdAt:new Date().toISOString()})}
 function confirmPayment(){if(!payTarget.value)return;if(payTarget.value.type==='renew'&&paymentType.value==='offline'){showPayment.value=false;toast('请等待门店确认','info');return}if(paymentType.value==='balance'){const need=payTarget.value.amount;if(!walletActive.value||walletActive.value.totalBalance<need){toast('钱包余额不足，请充值','warn');return}deductWallet(need)}paymentBusy.value=true;showRentLoading.value=true;const t=payTarget.value;setTimeout(()=>{showRentLoading.value=false;paymentBusy.value=false;if(t.type==='renew'){markRenewPaid(t.no,paymentType.value)}else{const o=orderInfo.value;orderInfo.value={...o,payStatus:'PAID',status:o.status==='created'?'pickup':o.status,statusText:o.status==='created'?'待取用':o.statusText,statusColor:o.status==='created'?'#FF8C1B':o.statusColor,payee:paymentType.value==='offline'?'线下支付':paymentType.value==='balance'?'钱包':'2C2P',payTime:formatNow()}}SYS_payOrder(orderInfo.value?orderInfo.value.orderId:null);showPayment.value=false;toast('支付成功','success')},900)}
 var rentPtrInit=false;function openRent(){navOpen('rent')}
-/* ================= 统一页面导航栈：内存栈与浏览器 history 双向同步 =================
-   - navOpen(name)   入栈 push（普通页面跳转），同步 history.pushState
-   - navBack()       统一返回（UI 返回按钮 / 侧滑手势统一走这里），同步 history.back
-   - navDrop(name)   程序性关闭某页（业务完成），同步回退一条 history
-   - navSwap(name)   关当前页并 replace 打开新页（如登录后进租车，不重复入栈）
-   - navReset()      清空整个栈（退出登录），history 同步回退
-   - popstate 监听   物理/浏览器返回与内存栈保持同步；栈空时交还浏览器（首页可退出）
-   每次跳转均打印页面栈数组，方便调试。*/
+/* ================= 统一页面导航栈（快照式，实现见下方 createNav） =================
+   NAV_SCREENS 描述各页开关状态；pageRefList 为参与快照/恢复的 ref；nameOf 由当前状态推导页名。
+   每次跳转均打印页面栈数组（[页面栈] 日志），方便调试。 */
 const NAV_SCREENS={
 login:{open:()=>{showLogin.value=true},close:()=>{showLogin.value=false}},
 rent:{open:()=>{showRent.value=true;nextTick(()=>{if(!rentPtrInit){initPullToRefresh('sc-rent','ptr-rent',refreshRent);rentPtrInit=true}})},close:()=>{showRent.value=false}},
@@ -8340,7 +8335,7 @@ var psRentPart=computed(function(){ return psRentBase() });
 var psDepPart=computed(function(){ return psDepBase() });
 var psRentSum=computed(function(){ return psRound(psRent2c2p.value+psRentWallet.value+psRentOffline.value) });
 var psDepSum=computed(function(){ return psRound(psDep2c2p.value+psDepWallet.value+psDepOffline.value) });
-// 最小合理性校验已移除：各渠道合计即改价后新金额，允许整部分清零
+// 改价：各渠道合计即新金额，允许整部分清零（不做最小合理性校验，故 Valid 恒 true）
 var psRentValid=computed(function(){ return true });
 var psDepValid=computed(function(){ return true });
 var psValid=computed(function(){ return true });
@@ -9213,13 +9208,8 @@ function rechargeCustomerText(o){if(o.phone&&String(o.phone).trim())return o.pho
 const profileMdT=computed(()=>{if(profileMod.value==='toggle')return(tgtAcc&&tgtAcc.status==='启用')?'禁用账号':'启用账号';if(profileMod.value==='delPos')return '删除职位';if(profileMod.value==='delCs')return '删除客服';if(profileMod.value==='delRecharge')return '删除充值配置';if(profileMod.value==='logout')return '退出登录';return''});
 const profileMdD=computed(()=>{if(profileMod.value==='toggle')return(tgtAcc&&tgtAcc.status==='启用')?'禁用后该账号将无法登录，确定禁用？':'确定重新启用该账号？启用后可正常登录。';if(profileMod.value==='delPos')return '确定删除该职位？删除后不可恢复。';if(profileMod.value==='delCs')return '确定删除该客服信息？删除后不可恢复。';if(profileMod.value==='delRecharge')return '确定删除该充值配置？删除后不可恢复。';if(profileMod.value==='logout')return '确定要退出当前账号吗？退出后需重新登录。';return''});
 const profileMdDanger=computed(()=>(profileMod.value==='toggle'&&tgtAcc&&tgtAcc.status==='启用')||profileMod.value==='delPos'||profileMod.value==='delCs'||profileMod.value==='logout');
-/* ================= 统一页面导航栈（快照式，与 C 端用户端同一实现） =================
-   navOpen(name?)   入栈：快照当前页面状态入栈并 pushState；name 用于查重与日志
-   navBack()        统一返回（UI 返回按钮/侧滑/物理返回共用）：防连点 → 弹栈顶 → close 钩子 → 恢复快照 → history.back
-   navDrop(name?)   完成类操作（保存/提交后返回列表）丢弃栈顶，避免重复页面
-   navSwap(name)    关当前页并 replace 打开新页（预留，需注册 NAV_SCREENS）
-   navReset()       Tab 根切换/登录登出，清空整栈
-   popstate         物理/浏览器返回与内存栈同步；栈空交还浏览器 */
+/* 统一页面导航栈（快照式，与 C 端用户端同一实现，见 createNav）
+   本端 NAV_SCREENS 为空，页面开关全部由 pageRefList 快照恢复驱动。 */
 const NAV_SCREENS={};
 function _navClone(v){return (v&&typeof v==='object')?JSON.parse(JSON.stringify(v)):v}
 function _navR(r){return{get:function(){return r.value},set:function(v){r.value=v}}}
