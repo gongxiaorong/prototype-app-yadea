@@ -484,8 +484,8 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hid">
 <div class="bg-white rounded-xl overflow-hidden mb-6" style="border:1px solid #E5E5E5">
 <div class="flex items-center px-4 py-4" style="border-bottom:1px solid #EDEDED"><span class="flex-1 text-[15px] font-medium">头像</span><div class="w-10 h-10 rounded-full bg-[#E8F0FE] flex items-center justify-center shrink-0"><span v-html="luci('user','w-5 h-5 text-[#4A7CF7]')"></span></div></div>
-<div class="flex items-center px-4 py-4" style="border-bottom:1px solid #EDEDED"><span class="flex-1 text-[15px] font-medium">账号</span><span class="text-[13px] text-[#666]">User001</span></div>
-<div class="flex items-center px-4 py-4"><span class="flex-1 text-[15px] font-medium">昵称</span><span class="text-[13px] text-[#666]">小迪</span></div>
+<div data-cp @click="openAccountEdit" class="flex items-center px-4 py-4 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="profile-account-row"><span class="flex-1 text-[15px] font-medium">账号</span><span class="text-[13px] text-[#666] mr-1">{{ profileAccount }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
+<div data-cp @click="openNicknameEdit" class="flex items-center px-4 py-4 cursor-pointer active:bg-[#F6F7F9]" data-od-id="profile-nickname-row"><span class="flex-1 text-[15px] font-medium">昵称</span><span class="text-[13px] text-[#666] mr-1">{{ profileNickname }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
 </div>
 <div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5" data-od-id="profile-info-contact">
 <div data-cp @click="openBindPhone" class="flex items-center px-4 py-4 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED"><span class="flex-1 text-[15px] font-medium">手机号</span><span class="text-[13px] text-[#666] mr-1">{{ hasPhone?boundPhone:'未绑定' }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
@@ -498,6 +498,26 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="absolute bottom-7 left-5 right-5" data-od-id="profile-cancel-account">
 <button data-cp @click="profileMod='cancelAccount'" class="w-full py-3.5 rounded-xl text-[15px] font-semibold text-center cursor-pointer active:opacity-90 transition-colors" style="background:#fff;border:1px solid #E5E5E5;color:#999">注销账号</button>
+</div>
+</page>
+<page :open="profileSub==='nickname'" :z="512" :swipe-close="navBack" oid="nickname-page">
+<nav-bar title="修改昵称" border-color="#E5E5E5" @back="navBack()"><template #right><span data-cp :class="['text-sm font-medium whitespace-nowrap transition-colors',nickValid?'text-[#2F6FEB] cursor-pointer active:opacity-70':'text-[#C8C8C8] cursor-not-allowed']" data-od-id="nickname-save" @click="saveNickname">保存</span></template></nav-bar>
+<div class="flex-1 overflow-y-auto px-4 pt-3 pb-10">
+<div class="bg-white rounded-xl px-4 h-[56px] flex items-center gap-2">
+<input v-model="nickDraft" type="text" maxlength="20" placeholder="请输入昵称" class="flex-1 min-w-0 h-full text-[16px] bg-transparent outline-none border-none" style="color:#111">
+<span v-if="nickDraft" data-cp data-od-id="nickname-clear" @click="nickDraft=''" class="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0" style="background:#C9C9C9"><span v-html="luci('x','w-3 h-3 text-white')"></span></span>
+</div>
+<div class="text-[12px] text-[#999] px-1 mt-3">支持输入2-20个字符，不限中文、数字、字母、符号</div>
+</div>
+</page>
+<page :open="profileSub==='account'" :z="512" :swipe-close="navBack" oid="account-page">
+<nav-bar title="修改账号" border-color="#E5E5E5" @back="navBack()"><template #right><span data-cp :class="['text-sm font-medium whitespace-nowrap transition-colors',accValid?'text-[#2F6FEB] cursor-pointer active:opacity-70':'text-[#C8C8C8] cursor-not-allowed']" data-od-id="account-save" @click="saveAccount">保存</span></template></nav-bar>
+<div class="flex-1 overflow-y-auto px-4 pt-3 pb-10">
+<div class="bg-white rounded-xl px-4 h-[56px] flex items-center gap-2">
+<input v-model="accDraft" type="text" maxlength="20" placeholder="请输入账号" class="flex-1 min-w-0 h-full text-[16px] bg-transparent outline-none border-none" style="color:#111">
+<span v-if="accDraft" data-cp data-od-id="account-clear" @click="accDraft=''" class="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0" style="background:#C9C9C9"><span v-html="luci('x','w-3 h-3 text-white')"></span></span>
+</div>
+<div class="text-[12px] text-[#999] px-1 mt-3">必须字母开头，仅支持字母、数字、下划线，长度4～20位</div>
 </div>
 </page>
 <page :open="profileOV==='settings'" :z="500" oid="settings-page"><nav-bar title="系统设置" border-color="#E5E5E5" @back="navBack()"></nav-bar><div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll"><div class="set-hd">通用设置</div><div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><div data-cp @click="navOpen('subLang')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-lang-row"><span class="flex-1 text-[15px] font-medium">切换语言</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ appLangLabel }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div><div data-cp @click="navOpen('subSwitchSystem')" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="settings-sys-row"><span class="flex-1 text-[15px] font-medium">切换系统</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">{{ curSystemName }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div><div data-cp @click="checkVersion" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" data-od-id="settings-version-row"><span class="flex-1 text-[15px] font-medium">当前版本</span><div class="flex items-center gap-1"><span class="text-[13px] text-[#666] font-mono">V1.30.0</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div></div></div></div><div class="absolute bottom-7 left-5 right-5" data-od-id="settings-logout-btn"><button data-cp @click="profileMod='logout'" class="w-full py-4 rounded-xl text-[16px] font-semibold cursor-pointer active:opacity-90 transition-colors" style="background:#fff;border:1px solid #E5E5E5;color:#DC2626">退出登录</button></div></page><page :open="profileSub==='lang'" :z="510" oid="settings-lang-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8">切换语言</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll"><div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><div v-for="(lg,i) in langOptions" :key="lg.id" data-cp @click="selectLang(lg.id)" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" :style="i<langOptions.length-1?{borderBottom:'1px solid #EDEDED'}:{}"><span class="flex-1 text-[15px] font-medium">{{ lg.label }}</span><span v-if="appLang===lg.id"><span v-html="luci('check','w-5 h-5 text-[#2B3F5F]')"></span></span></div></div></div></page><page :open="profileSub==='subSwitchSystem'" :z="512" oid="switch-system-page"><div class="flex items-center pt-14 px-4 pb-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5"><div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="switchBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div><div class="flex-1 text-center text-[17px] font-semibold mr-8" style="color:#111">切换系统</div></div><div class="flex-1 overflow-y-auto px-5 pt-4 pb-4"><div data-cp @click="goRental" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#EEF4FF;color:#2F6FEB"><span v-html="luci('bike','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">租车系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div><div data-cp @click="goSwap" class="flex items-center bg-white rounded-2xl px-5 py-5 mb-4 active:opacity-85" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)"><div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#FFF3E0;color:#FF8A00"><span v-html="luci('plug-zap','w-6 h-6')"></span></div><div class="flex-1 min-w-0 ml-3"><div class="text-[16px] font-semibold" style="color:#111">充电系统</div></div><div class="flex items-center gap-1 text-[14px] font-medium shrink-0" style="color:#999"><span>进入系统</span><span class="inline-flex"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></div></div></div></page>
@@ -821,22 +841,18 @@ body.host-single-m #root-user{display:none}
       <div class="flex-1 min-h-0 relative overflow-hidden" style="background:rgba(0,0,0,.85)">
         <div class="absolute inset-0 flex flex-col">
           <div class="flex-1 flex flex-col items-center justify-center">
-            <div class="scan-frame" data-od-id="swap-scan-frame"><div class="scan-line"></div><div class="absolute inset-0 flex items-center justify-center"><span v-html="luci('scan','w-10 h-10 text-white/20')"></span></div></div>
+            <div class="scan-frame cursor-pointer" data-cp @click="swapScan" data-od-id="swap-scan-frame"><div class="scan-line"></div><div class="absolute inset-0 flex items-center justify-center"><span v-html="luci('scan','w-10 h-10 text-white/20')"></span></div></div>
             <div class="text-white/50 text-[13px] mt-5">请将换电柜二维码对准取景框</div>
           </div>
           <div class="px-6 pb-[calc(60px+env(safe-area-inset-bottom,0px))] flex items-end justify-between shrink-0">
-            <div data-cp @click="swapScan" class="flex items-center gap-1.5 text-white/80 text-[14px] cursor-pointer active:opacity-70"><span v-html="luci('keyboard','w-4 h-4')"></span>手动输入编号</div>
-            <div data-cp @click="swapScan" class="px-5 py-2 rounded-full text-[14px] font-semibold text-white cursor-pointer active:opacity-90" style="background:rgba(255,255,255,.15)" data-od-id="swap-scan-btn">模拟扫码</div>
+            <div data-cp @click="swapManualOpen" class="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer active:opacity-80" style="background:rgba(255,255,255,.16)" data-od-id="swap-scan-manual"><span v-html="luci('keyboard','w-5 h-5 text-white')"></span></div>
+            <div class="flex flex-col items-center gap-3">
+              <div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,.16)" data-od-id="swap-scan-album"><span v-html="luci('images','w-5 h-5 text-white')"></span></div>
+              <div data-cp @click="swapTorch=!swapTorch" class="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-all" :style="swapTorch?{background:'#fff',boxShadow:'0 0 22px rgba(255,255,255,.45)'}:{background:'rgba(255,255,255,.16)'}" data-od-id="swap-scan-torch"><span v-html="luci(swapTorch?'flashlight':'flashlight-off','w-5 h-5 '+(swapTorch?'text-[#1A1A1A]':'text-white'))"></span></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div v-else-if="swapStep==='gate-login'" class="flex flex-col items-center pt-16 text-center">
-      <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FFF7E6"><span v-html="luci('user-x','w-8 h-8 text-[#E9A23B]')"></span></div>
-      <div class="text-[17px] font-bold mt-5" style="color:#fff">请先登录</div>
-      <div class="text-[13px] mt-2" style="color:#9AA4B2">登录后才能使用扫码换电服务</div>
-      <button data-cp @click="swapClose();openLogin('home')" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">去登录</button>
-      <button data-cp @click="swapClose" class="mt-3 w-full h-[48px] rounded-full text-[15px] font-medium cursor-pointer" style="border:1px solid #2A3340;color:#9AA4B2">退出</button>
     </div>
     <div v-else-if="swapStep==='gate-perm'" class="flex flex-col items-center pt-16 text-center">
       <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#EBF1FD"><span v-html="luci('shield','w-8 h-8 text-[#2B3F5F]')"></span></div>
@@ -954,6 +970,22 @@ body.host-single-m #root-user{display:none}
       <button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">完成</button>
     </div>
   </div>
+</page>
+<!-- 扫码：手动输入机柜编号页面（扫码页键盘入口，样式与租车「输入车架号」页一致） -->
+<page :open="showSwapManual" :z="1890" :swipe-close="navBack" oid="swap-manual-page">
+<div class="pt-14 px-4 pb-3 flex items-center bg-[#F6F7F9] shrink-0">
+<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F]" data-cp @click="navBack()"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
+</div>
+<div class="flex-1 min-h-0 flex flex-col justify-start px-6 pt-[40px] pb-[calc(64px+env(safe-area-inset-bottom,0px))]">
+<div class="text-[22px] font-bold text-[#1A1A1A] text-center">机柜编号</div>
+<div class="text-[14px] text-[#999] text-center mt-2.5">请输入机柜二维码下方编号</div>
+<div class="mt-10 relative">
+<input v-model="swapManualNo" type="text" maxlength="32" class="w-full bg-transparent outline-none text-center text-[17px] font-medium" style="border:0;padding:12px 0;caret-color:#2B3F5F">
+<div class="absolute bottom-0 left-0 right-0" style="height:1px;background:#97A0AB"></div>
+<div class="absolute right-0 text-[12px] text-[#999] tabular-nums pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ swapManualNo.length }}/32</div>
+</div>
+<button data-cp @click="confirmSwapManual" class="h-12 w-full mt-10 rounded-xl text-white text-[15px] font-semibold cursor-pointer active:opacity-90 transition-opacity flex items-center justify-center" :style="swapManualNo.trim()?{background:'var(--accent)',border:0}:{background:'#E0E0E0',color:'#999',pointerEvents:'none',border:0}" data-od-id="swap-manual-submit">确定</button>
+</div>
 </page>
 <page :open="(profileSub==='batteryDetail'||profileSub==='batteryFind'||profileSub==='batteryTrack'||(profileSub==='batteryRecords'&&recordsFrom==='battery'))&&batteryDetailRec" :z="610" oid="battery-detail-page">
 <div class="shrink-0" style="background:linear-gradient(180deg,#11161F 0%,#1B2434 100%)">
@@ -1336,8 +1368,10 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" data-cp @click="setCabinetFull(false)" :class="!cabinetFull?'is-on':''">无满电</div>
 </div>
 </div>
-<div class="demo-ops-section" data-od-id="demo-swap-flow" v-if="(tab==='home'&&!profileOV)||profileOV==='swap'||profileOV==='station'">
+<div class="demo-ops-section" data-od-id="demo-swap-flow" v-if="profileOV==='swap'&&swapStep==='scan'">
 <div class="demo-ops-label">扫码换电主流程</div>
+<div class="demo-ops-row"><span class="text-[12px]">扫码</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="swapScan">模拟扫码</div></div></div>
 <div class="demo-ops-row"><span class="text-[12px]">相机权限</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="setCamAuth(true)" :class="camAuth?'is-on':''">已开启</div>
 <div class="demo-ops-chip" data-cp @click="setCamAuth(false)" :class="!camAuth?'is-on':''">未开启</div></div></div>
@@ -1920,7 +1954,7 @@ function authState(bus){
   ];
   var dialFiltered=Vue.computed(function(){var q=(dialQ.value||'').trim().toLowerCase().replace(/\s+/g,'');if(!q)return dialCodes;return dialCodes.filter(function(c){var h=(c.name+c.code).toLowerCase().replace(/\s+/g,'');return h.indexOf(q)!==-1||c.code.replace('+','').indexOf(q.replace('+',''))!==-1})});
   var appLang=Vue.ref('zh-CN');
-  var langOptions=[{id:'zh-CN',label:'简体中文'},{id:'zh-HK',label:'繁體中文（中國香港）'},{id:'en',label:'English'},{id:'id',label:'Bahasa Indonesia'}];
+  var langOptions=[{id:'en',label:'English'},{id:'zh-CN',label:'简体中文'},{id:'zh-HK',label:'繁體中文（中國香港）'},{id:'id',label:'Bahasa Indonesia'}];
   var appLangLabel=Vue.computed(function(){var f=null;for(var i=0;i<langOptions.length;i++){if(langOptions[i].id===appLang.value)f=langOptions[i]};return f?f.label:'简体中文'});
   var canSendCode=Vue.computed(function(){if(loginCd.value>0||!loginAgree.value)return false;if(loginMode.value==='phone')return !!(loginPhone.value||'').trim();if(loginMode.value==='email')return !!(loginEmail.value||'').trim();return false});
   var canLogin=Vue.computed(function(){if(!loginAgree.value)return false;if(loginMode.value==='phone'){if(!(loginPhone.value||'').trim())return false;return loginSub.value==='password'?!!(loginPwd.value||'').trim():!!(loginCode.value||'').trim()}if(loginMode.value==='email'){if(!(loginEmail.value||'').trim())return false;return loginSub.value==='password'?!!(loginPwd.value||'').trim():!!(loginCode.value||'').trim()}return !!(loginAccount.value||'').trim()&&!!(loginPwd.value||'').trim()});
@@ -1951,6 +1985,15 @@ function authState(bus){
   function loginOpenLang(){loginView.value='lang'}
   function selectLangFromLogin(id){appLang.value=id;loginView.value='main'}
   function selectLang(id){appLang.value=id}
+  /* 个人信息 · 昵称/账号编辑（与 index 同形态：白卡输入 + 右上保存 + 清除按钮 + 字符提示） */
+  var profileAccount=Vue.ref('User001'),profileNickname=Vue.ref('小迪');
+  var accDraft=Vue.ref(''),nickDraft=Vue.ref('');
+  var accValid=Vue.computed(function(){return /^[a-zA-Z][a-zA-Z0-9_]{3,19}$/.test((accDraft.value||'').trim())});
+  var nickValid=Vue.computed(function(){var v=(nickDraft.value||'').trim();return v.length>=2&&v.length<=20});
+  function openAccountEdit(){navOpen('account');accDraft.value=profileAccount.value}
+  function saveAccount(){if(!accValid.value)return;profileAccount.value=accDraft.value.trim();toastPush('账号已保存');navBack()}
+  function openNicknameEdit(){navOpen('nickname');nickDraft.value=profileNickname.value}
+  function saveNickname(){if(!nickValid.value)return;profileNickname.value=nickDraft.value.trim();toastPush('昵称已保存');navBack()}
   function openDialCode(src){dialQ.value='';dialPickerSource.value=src||'login'}
   function closeDialPicker(){dialPickerSource.value=null;dialQ.value=''}
   function pickDial(c){if(dialPickerSource.value==='bind'){bpArea.value=c.code}else{loginDial.value=c.code}closeDialPicker()}
@@ -2015,7 +2058,9 @@ function authState(bus){
     subIdDetail:{open:function(){profileSub.value='idDetail'}},
     subIdForm:{open:function(){profileSub.value='idForm'}},
     myOrders:{open:function(){profileSub.value='myOrders'}},
-    planOrders:{open:function(){profileSub.value='planOrders'}}
+    planOrders:{open:function(){profileSub.value='planOrders'}},
+    nickname:{open:function(){profileSub.value='nickname'}},
+    account:{open:function(){profileSub.value='account'}}
   };
   var _nav=createNav({screens:NAV_SCREENS,pageRefList:_navWrapped,nameOf:function(){
     if(showLogin.value)return 'login';
@@ -2080,7 +2125,7 @@ function authState(bus){
   function copyPermCode(c){var v=(c+' '+pageRoute.value);if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(v).catch(function(){})}}
 
   return {loggedIn,firstLogin,showLogin,loginView,loginMode,loginSub,loginDial,loginPhone,loginEmail,loginAccount,loginPwd,loginCode,loginPwdVisible,loginAgree,loginCd,
-    dialQ,showDialPicker,activeDialCode,dialFiltered,appLang,langOptions,appLangLabel,canSendCode,canLogin,profileOV,profileSub,switchSource,curSystemName,
+    dialQ,showDialPicker,activeDialCode,dialFiltered,appLang,langOptions,appLangLabel,canSendCode,canLogin,profileOV,profileSub,switchSource,curSystemName,profileAccount,profileNickname,accDraft,nickDraft,accValid,nickValid,openAccountEdit,saveAccount,openNicknameEdit,saveNickname,
     loginErr,profileMod,profileModLoading,profileMdT,profileMdD,hasPhone,hasEmail,hasPwd,boundPhone,boundEmail,curStore,
     bpArea,bpPhone,bpCode,bpCd,beEmail,beCode,beCd,pwdChannel,pwdCode,pwdCd,npwd,npwd2,npwdVis,npwd2Vis,canConfirmPwd,
     openLogin,closeLogin,loginOpenLang,selectLangFromLogin,selectLang,openDialCode,closeDialPicker,pickDial,setLoginMode,setLoginSub,sendLoginCode,doLogin,setLoggedIn,doLogout,recordsFrom,
@@ -2114,7 +2159,8 @@ var _ua=Vue.createApp({
     function toastPush(msg){toastBus.push(msg)}
     function setTab(t){tab.value=t;settingsOpen.value=false}
     function toast(m){toastBus.push(m)}
-    function goScan(){window.__gc=(window.__gc||0)+1;swapStart()}
+    /* 登录校验前移到入口：点击「扫码换电」即校验，未登录先拉起登录页；扫码页内不再做登录拦截 */
+    function goScan(){window.__gc=(window.__gc||0)+1;if(!auth.loggedIn.value){pendingScan.value=true;auth.openLogin();return}swapStart()}
     /* 地图控件（图层 / 定位 / 刷新）：点击不弹提示 */
     function goLocate(){}
     function goRefresh(){}
@@ -2156,6 +2202,9 @@ var _ua=Vue.createApp({
     var swapShow=Vue.ref(false);
     var swapStep=Vue.ref('scan');
     var swapCtx=Vue.ref({});
+    var swapTorch=Vue.ref(false);
+    var showSwapManual=Vue.ref(false),swapManualNo=Vue.ref('');
+    var pendingScan=Vue.ref(false);
     var camAuth=Vue.ref(true);
     var demoQrOk=Vue.ref(true);
     var demoOnline=Vue.ref(true);
@@ -2169,14 +2218,16 @@ var _ua=Vue.createApp({
     var swapAnomaly=Vue.ref(null);
     function setCamAuth(on){camAuth.value=on}
     function setPlanMax(n){planMax.value=n}
-    function swapTitleFn(){var s=swapStep.value;if(s.indexOf('borrow')===0)return '借电';if(s.indexOf('swap')===0)return '换电';var m={scan:'扫码换电',resume:'未完成订单',choice:'选择操作','warn-level':'电量提醒','gate-login':'扫码换电','gate-perm':'权限申请','err-qr':'扫码失败','err-offline':'设备离线','err-dist':'距离过远'};return m[s]||'扫码换电'}
+    function swapTitleFn(){var s=swapStep.value;if(s.indexOf('borrow')===0)return '借电';if(s.indexOf('swap')===0)return '换电';var m={scan:'扫码换电',resume:'未完成订单',choice:'选择操作','warn-level':'电量提醒','gate-perm':'权限申请','err-qr':'扫码失败','err-offline':'设备离线','err-dist':'距离过远'};return m[s]||'扫码换电'}
     var swapTitle=Vue.computed(swapTitleFn);
     function swapPickCab(){var s=null;stations.forEach(function(x){if(x.kind==='on')s=s||x});s=s||stations[0];swapCtx.value={station:s,cab:s.cabinets?s.cabinets[0]:null}}
     function setBoundCount(n){var t=nowStr(),arr=[];for(var i=0;i<n;i++){arr.push({id:i+1,no:'BAT'+(1000+i),location:'成都市双流区',bindTime:t})}batteryList.value=arr}
     function swapStart(){auth.navOpen('swap');swapStep.value='scan';swapShow.value=true;auth.profileOV.value='swap';auth.profileSub.value=null}
+    /* 扫码页「键盘」入口：手动输入换电柜编号（与租车「输入车架号/电池编号」同规范），确认后按同一状态机继续 */
+    function swapManualOpen(){swapManualNo.value='';auth.navOpen('swapManual');showSwapManual.value=true}
+    function confirmSwapManual(){var v=(swapManualNo.value||'').trim();if(!v){toastPush('请输入机柜编号');return}auth.navDrop('swapManual');showSwapManual.value=false;swapManualNo.value='';swapScan()}
     function swapScan(){
       swapPickCab();
-      if(!auth.loggedIn.value){swapStep.value='gate-login';return}
       if(!locAuth.value||!camAuth.value){swapStep.value='gate-perm';return}
       if(!demoQrOk.value){swapStep.value='err-qr';return}
       if(!demoOnline.value){swapStep.value='err-offline';return}
@@ -2292,6 +2343,10 @@ var _ua=Vue.createApp({
       {kind:'agg',label:'10+',left:'44%',top:'14%',cap:'附近'}
     ];
     var auth=authState(toastBus);
+    /* 入口登录校验的续跑：登录成功自动进入扫码换电；登录页被关闭则取消续跑；首次登录需先完成「选择系统」
+       注意：watch 的 getter 会在注册时立即求值，必须放在 auth 创建之后，否则读到 undefined */
+    Vue.watch(function(){return auth.loggedIn.value},function(v){if(!v||!pendingScan.value)return;pendingScan.value=false;if(auth.profileSub.value==='subSwitchSystem')return;swapStart()});
+    Vue.watch(function(){return auth.showLogin.value},function(v){if(v===false&&!auth.loggedIn.value)pendingScan.value=false});
     function setSwapArea(on){
       swapAreaSet.value=on;
       /* 与「我的-换电区域」列表选中态及当前生效运营商联动 */
@@ -2461,8 +2516,8 @@ var _ua=Vue.createApp({
       planDetail.value=null;planBought.value=true;toastPush('支付成功');
     }
     /* 页面级状态注册进导航快照（Tab / 换电流程 / 站点 / 电池详情 / 订单详情 / 记录范围） */
-    auth.addNavRefs([tab,swapShow,swapStep,curStation,curCab,batteryDetailRec,planOrderDetail,swapRecordsScope]);
-    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,openStation,stations,locAuth,setLocAuth,showLocAuth,allowLocAuth,swapAreaSet,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,camAuth,setCamAuth,demoQrOk,demoOnline,demoDist,demoUnfinished,demoLevelLow,demoPlanEnough,demoTakeSlot,demoReturnSlot,planMax,setPlanMax,swapAnomaly,swapStart,swapScan,swapBranch,swapChoice,swapToBorrow,swapBorrowDone,swapToSwap,swapSwapAfterReturn,swapSwapDone,swapClose,swapRetry,swapResumeContinue,setBoundCount},auth,sideSetup('换电用户端',toastBus))
+    auth.addNavRefs([tab,swapShow,swapStep,showSwapManual,curStation,curCab,batteryDetailRec,planOrderDetail,swapRecordsScope]);
+    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,openStation,stations,locAuth,setLocAuth,showLocAuth,allowLocAuth,swapAreaSet,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,camAuth,setCamAuth,demoQrOk,demoOnline,demoDist,demoUnfinished,demoLevelLow,demoPlanEnough,demoTakeSlot,demoReturnSlot,planMax,setPlanMax,swapAnomaly,swapStart,swapScan,swapTorch,showSwapManual,swapManualNo,swapManualOpen,confirmSwapManual,swapBranch,swapChoice,swapToBorrow,swapBorrowDone,swapToSwap,swapSwapAfterReturn,swapSwapDone,swapClose,swapRetry,swapResumeContinue,setBoundCount},auth,sideSetup('换电用户端',toastBus))
   }})
 registerSheetKit(_ua);_ua.mount(document.getElementById('root-user'));
 
