@@ -60,23 +60,67 @@ body.host-single-m #root-user{display:none}
 .sw-map .road-h{height:14px;left:0;right:0}
 .sw-map .road-v{width:14px;top:0;bottom:0}
 .sw-maplbl{position:absolute;font-size:9px;color:#6B7A66;background:rgba(255,255,255,.85);border-radius:3px;padding:1px 4px;white-space:nowrap;font-weight:500}
-.sw-loc{position:absolute;display:flex;flex-direction:column;align-items:center;cursor:pointer}
-.sw-loc .dot{width:14px;height:14px;border-radius:50%;background:#2F6FEB;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3);position:relative}
-.sw-loc .dot::before{content:'';position:absolute;inset:-9px;border-radius:50%;border:1.5px solid rgba(47,111,235,.35)}
-.sw-loc .tag{position:absolute;top:-19px;left:50%;transform:translateX(-50%);background:#2F6FEB;color:#fff;font-size:9px;padding:1px 6px;border-radius:8px;white-space:nowrap;font-weight:600}
 .sw-station{position:absolute;display:flex;flex-direction:column;align-items:center;cursor:pointer;transform:translate(-50%,-50%)}
 .sw-station .pin{position:relative;width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.18)}
-.sw-station .pin.on{background:#17A34A}
-.sw-station .pin.off{background:#AAB3AA}
-.sw-station .pin .num{position:absolute;right:-5px;top:-5px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:#fff;border:1px solid #17A34A;color:#17A34A;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.sw-station .pin.off .num{border-color:#8A938A;color:#8A938A}
-.sw-station .agg{width:40px;height:40px;border-radius:50%;background:#12963E;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.sw-station .pin .num{position:absolute;right:-5px;top:-5px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:#fff;border:1px solid #15B88C;color:#15B88C;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+/* 切换地图 · 选项卡片（填充水滴形 pin + 白色字形，颜色随地图类型） */
+.sw-mt-opt{flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.sw-mt-card{width:100%;height:74px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:#F6F7F9;border:1.5px solid transparent;transition:background .18s,border-color .18s}
+.sw-mt-pin{position:relative;width:32px;height:32px;margin-bottom:6px}
+.sw-mt-pin .body{position:absolute;inset:0;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-sizing:border-box;box-shadow:0 2px 6px rgba(0,0,0,.16)}
+.sw-mt-pin .body>.g{transform:rotate(45deg);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;line-height:1}
 .sw-station .cap{font-size:9px;color:#5C695C;background:rgba(255,255,255,.85);border-radius:7px;padding:0 5px;margin-top:3px;white-space:nowrap;font-weight:500}
+/* ── 地图点位选中态（选中放大 + 距离气泡 + 落点） ── */
+.sw-station .bubble{position:absolute;left:50%;bottom:calc(100% + 10px);transform:translateX(-50%);background:rgba(48,48,48,.92);color:#fff;font-size:12px;font-weight:500;line-height:1;padding:8px 12px;border-radius:10px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.2);cursor:pointer}
+.sw-station .bubble::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:rgba(48,48,48,.92)}
+.sw-station .dot{display:none}
+.sw-station.sel{z-index:40}
+.sw-station.sel .pin{width:48px;height:48px;border-radius:50%;border:3px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.sw-station.sel .pin .num{right:-3px;top:-3px}
+.sw-station.sel .dot{display:block;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 1px 5px rgba(0,0,0,.35);margin-top:6px}
+/* ── 还电视图点位：水滴造型（圆形 + 下方尖角）+ 白色图标，底色沿用该类型主题色（代码绘制） ── */
+.sw-station .pin.is-img{width:38px;height:38px;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.sw-station .pin.is-img::after{content:'';position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);width:0;height:0;border:7px solid transparent;border-top-color:var(--pin-c,#FF5F00)}
+.sw-station.sel .pin.is-img{width:50px;height:50px}
+/* ── 地图站点选中卡片（贴底，覆盖底部 Tab） ── */
+.sw-card{position:absolute;left:0;right:0;bottom:0;z-index:150;background:#fff;border-radius:20px 20px 0 0;padding:18px 20px 28px;box-shadow:0 -6px 24px rgba(0,0,0,.12)}
+.sw-card-head{display:flex;align-items:flex-start;gap:8px}
+.sw-card-tt{flex:1;font-size:17px;font-weight:700;color:#111;line-height:1.35}
+.sw-card-x{width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:none;background:transparent;color:#999;cursor:pointer;margin:-2px -4px 0 0}
+.sw-card-addr{display:flex;align-items:center;gap:4px;font-size:13px;color:#888;margin-top:7px}
+.sw-card-stats{display:flex;align-items:center;background:#F6F7F9;border-radius:14px;padding:14px 0;margin-top:14px}
+.sw-card-stat{flex:1;text-align:center}
+.sw-card-stat .n{font-size:22px;font-weight:700;color:#111;line-height:1.1}
+.sw-card-stat .l{font-size:12px;color:#888;margin-top:6px}
+.sw-card-sep{width:1px;height:34px;background:#E5E5E5}
+.sw-card-btns{display:flex;gap:12px;margin-top:16px}
+.sw-card-btns button{flex:1;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:15px;cursor:pointer}
+.sw-card-scan{border:1px solid #DDD;background:#fff;color:#111;font-weight:600}
+.sw-card-book{border:none;background:linear-gradient(135deg,#2B3F5F,#22324A);color:#fff;font-weight:700}
+/* ── 门店卡片（门店地图点位点击后弹出） ── */
+.sw-store-card{position:absolute;left:0;right:0;bottom:0;z-index:150;background:#fff;border-radius:20px 20px 0 0;padding:18px 20px 28px;display:flex;gap:12px;box-shadow:0 -6px 24px rgba(0,0,0,.12)}
+.sw-store-thumb{width:90px;height:90px;flex-shrink:0;border-radius:14px;overflow:hidden;background:linear-gradient(160deg,#FFF1DF,#FFE2BC);display:flex;align-items:center;justify-content:center}
+.sw-store-body{flex:1;min-width:0}
+.swup-enter-active,.swup-leave-active{transition:transform .28s ease,opacity .28s ease}
+.swup-enter-from,.swup-leave-to{transform:translateY(100%);opacity:.5}
+/* ── 首页「进行中的换电流程」横幅 ── */
+.sw-flow{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.sw-flow .tx{flex:1;min-width:0;font-size:13px;font-weight:500;color:#111}
+.sw-flow .go{flex-shrink:0;display:flex;align-items:center;gap:2px;padding:7px 12px;border-radius:10px;border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer}
+/* ── 首页「预约中」横幅（10 分钟倒计时） ── */
+.sw-reserve{background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.12);cursor:pointer}
+.sw-reserve .nm{font-size:15px;font-weight:700;color:#111;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sw-reserve .ad{display:flex;align-items:center;gap:3px;font-size:12px;color:#999;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sw-reserve .ft{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sw-reserve .cd{font-size:13px;font-weight:600;color:#FF6A00;white-space:nowrap}
+.sw-reserve .cancel{flex-shrink:0;display:flex;align-items:center;gap:2px;padding:6px 11px;border-radius:10px;border:1px solid #DDD;color:#333;background:#fff;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer}
+.sw-card-book.is-off{border:none;background:#E8E8E8;color:#AAA;cursor:not-allowed}
+.sw-card-book.is-off:disabled{background:#E8E8E8;color:#AAA}
 .sw-map-ctrl{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:20}
 .sw-map-ctrl button{width:34px;height:34px;border-radius:10px;background:#fff;border:none;box-shadow:0 1px 5px rgba(0,0,0,.15);color:#455A4C;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .sw-scan{position:absolute;left:0;right:0;bottom:101px;z-index:30;display:flex;justify-content:center}
 .sw-scan button{display:flex;align-items:center;justify-content:center;gap:8px;padding:15px 34px;border-radius:16px;background:linear-gradient(135deg,#2B3F5F,#22324A);color:#fff;font-size:16px;font-weight:700;border:none;box-shadow:0 8px 20px rgba(43,63,95,.35);cursor:pointer}
-.sw-search{position:absolute;left:12px;right:12px;top:50px;z-index:25;display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:10px 14px;box-shadow:0 1px 4px rgba(0,0,0,.12);cursor:pointer}
+.sw-top{position:absolute;left:12px;right:12px;top:50px;z-index:99;display:flex;flex-direction:column;gap:8px}.sw-search{display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:10px 14px;box-shadow:0 1px 4px rgba(0,0,0,.12);cursor:pointer}
 /* ── 底部 Tab（对齐租车系统 tabbar：83px 白底毛玻璃 + 底部 Home 指示条） ── */
 .sw-tab-nav{position:absolute;left:0;right:0;bottom:0;height:83px;z-index:100;display:flex;padding-bottom:22px;border-top:1px solid #E5E5E5;background:rgba(255,255,255,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .sw-tab-nav .nv{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;user-select:none;-webkit-user-select:none}
@@ -212,17 +256,23 @@ body.host-single-m #root-user{display:none}
 <main id="host-main">
   <div class="host-stage">
     <section id="root-user">
-<div class="od-stage"><div class="w-[393px] h-[852px] bg-black rounded-[55px] p-3 relative shrink-0" style="box-shadow:0 0 0 2px #333,0 30px 60px rgba(0,0,0,.35)"><div class="absolute top-[23px] left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-black rounded-[20px] z-[2000]"></div><div class="w-full h-full bg-[#F6F7F9] rounded-[44px] overflow-hidden flex flex-col relative"><div class="toast-wrap"><transition-group name="toast"><div v-for="t in toasts" :key="t.id" class="toast-item" :class="'toast-'+t.type">{{ t.msg }}</div></transition-group></div><div v-if="!settingsOpen&&tab==='plan'" class="od-head" style="justify-content:center;border-bottom:none;padding-top:52px" data-od-id="plan-head"><span class="tt" style="flex:0 0 auto">购买套餐</span></div><div v-if="!settingsOpen" class="od-body" style="flex:1;position:relative;min-height:0;padding:0;overflow:hidden;background:var(--bg)"><transition name="tab-fade"><div v-if="tab==='home'" class="sw-map"><div class="road-h" style="top:24%"></div><div class="road-h" style="top:58%"></div><div class="road-v" style="left:28%"></div><div class="road-v" style="left:60%"></div><div class="road-v" style="left:84%"></div><div class="sw-maplbl" style="left:57%;top:22%">益州东二路</div><div class="sw-maplbl" style="left:70%;top:39%">创新时代广场</div><div class="sw-maplbl" style="left:9%;top:9%">瑞禧公馆</div><div class="sw-maplbl" style="left:45%;top:79%">天荟</div><div class="sw-maplbl" style="left:72%;top:86%">东方希望中心</div><div class="sw-maplbl" style="left:14%;top:46%">益州东一路</div><template v-for="s in stations" :key="'st-'+(s.label||s.no)"><div v-if="s.kind==='agg'" class="sw-station" :style="{left:s.left,top:s.top}" data-cp @click="openStation(0)"><div class="agg">{{ s.label }}</div><div class="cap">{{ s.cap }}</div></div><div v-else-if="s.kind==='off'" class="sw-station" :style="{left:s.left,top:s.top}" data-cp @click="openStation(0)"><div class="pin off"><span v-html="luci('zap','w-4 h-4')"></span></div><div class="cap">{{ s.cap }}</div></div><div v-else class="sw-station" :style="{left:s.left,top:s.top}" data-cp @click="openStation(s.no)"><div class="pin on"><span v-html="luci('zap','w-4 h-4')"></span><span class="num">{{ s.no }}</span></div><div class="cap">{{ s.cap }}</div></div></template><div class="sw-loc" style="left:34%;top:61%" data-cp @click="goLocate"><div class="tag">推荐</div><div class="dot"></div></div><div class="sw-search" data-cp @click="toast('输入换电站名称或地址进行搜索')"><span v-html="luci('search','w-4 h-4 text-[#8A9999]')"></span><span class="text-[13px] text-[#8A9999]">搜索目的地</span></div><div class="sw-map-ctrl"><button data-cp @click="goLayer" v-html="luci('layers','w-4 h-4')"></button><button data-cp @click="goLocate" v-html="luci('crosshair','w-4 h-4')"></button><button data-cp @click="goRefresh" v-html="luci('refresh-cw','w-4 h-4')"></button></div><div class="sw-scan"><button data-cp @click="goScan"><span v-html="luci('scan-line','w-5 h-5')"></span>扫码换电</button></div><div v-if="!loggedIn" data-cp @click="openLogin('home')" class="absolute left-0 right-0 z-[99] flex items-center justify-between px-4 py-3 cursor-pointer active:opacity-90" style="top:99px;background:#2B3F5F" data-od-id="home-login-banner"><span class="text-[13px] text-white font-medium">您还未登录，点我快速登录</span><button data-cp @click.stop="openLogin('home')" class="px-3 py-1.5 rounded-lg text-[12px] font-semibold text-white" style="border:1px solid rgba(255,255,255,.5);background:transparent">去登录 &gt;</button></div><div v-if="loggedIn&&!swapAreaSet" data-cp @click="goSetSwapArea" class="absolute z-[99] flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="left:12px;right:12px;top:99px;background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-area-banner"><span class="text-[13px] font-medium" style="color:#111">您尚未设置换电区域</span><button data-cp @click.stop="goSetSwapArea" class="flex items-center gap-0.5 px-3 py-1.5 text-[12px] font-semibold" style="border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;border-radius:10px"><span>立即前往</span><span v-html="luci('chevron-right','w-4 h-4')"></span></button></div></div></transition>
+<div class="od-stage"><div class="w-[393px] h-[852px] bg-black rounded-[55px] p-3 relative shrink-0" style="box-shadow:0 0 0 2px #333,0 30px 60px rgba(0,0,0,.35)"><div class="absolute top-[23px] left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-black rounded-[20px] z-[2000]"></div><div class="w-full h-full bg-[#F6F7F9] rounded-[44px] overflow-hidden flex flex-col relative"><div class="toast-wrap"><transition-group name="toast"><div v-for="t in toasts" :key="t.id" class="toast-item" :class="'toast-'+t.type">{{ t.msg }}</div></transition-group></div><div v-if="!settingsOpen&&tab==='plan'" class="od-head" style="justify-content:center;border-bottom:none;padding-top:52px" data-od-id="plan-head"><span class="tt" style="flex:0 0 auto">购买套餐</span></div><div v-if="!settingsOpen" class="od-body" style="flex:1;position:relative;min-height:0;padding:0;overflow:hidden;background:var(--bg)"><transition name="tab-fade"><div v-if="tab==='home'" class="sw-map" @click="onMapClick"><div class="road-h" style="top:24%"></div><div class="road-h" style="top:58%"></div><div class="road-v" style="left:28%"></div><div class="road-v" style="left:60%"></div><div class="road-v" style="left:84%"></div><div class="sw-maplbl" style="left:57%;top:22%">益州东二路</div><div class="sw-maplbl" style="left:70%;top:39%">创新时代广场</div><div class="sw-maplbl" style="left:9%;top:9%">瑞禧公馆</div><div class="sw-maplbl" style="left:45%;top:79%">天荟</div><div class="sw-maplbl" style="left:72%;top:86%">东方希望中心</div><div class="sw-maplbl" style="left:14%;top:46%">益州东一路</div><template v-for="p in mapPoints" :key="'pt-'+mapType+'-'+p.id"><div class="sw-station" :class="{'sel':selPoint&&selPoint.id===p.id}" :style="{left:p.left,top:p.top}" data-cp :data-od-id="'map-pt-'+mapType+'-'+p.id" @click="openMapPoint(p)"><div v-if="selPoint&&selPoint.id===p.id" class="bubble" data-cp @click.stop="openStoreNav">{{ p.dist }} | 导航</div><div class="pin" :class="{'is-img':mapType==='reCharing'}" :style="{background:mapTheme.color,'--pin-c':mapTheme.color}"><span v-if="mapType==='reCharing'" v-html="luci('inbox','w-5 h-5')"></span><template v-else><span v-if="mapTheme.icon" v-html="luci(mapTheme.icon,'w-4 h-4')"></span><span v-else class="text-[11px] font-bold leading-none">{{ mapTheme.text }}</span></template><span v-if="p.rec" class="num" :style="{borderColor:mapTheme.color,color:mapTheme.color}">推荐</span><span v-else-if="p.badge!=null" class="num" :style="{borderColor:mapTheme.color,color:mapTheme.color}">{{ p.badge }}</span></div><div v-if="selPoint&&selPoint.id===p.id" class="dot"></div><div v-if="p.cap" class="cap">{{ p.cap }}</div></div></template><div class="sw-top"><div class="sw-search" data-cp @click="toast('输入换电站名称或地址进行搜索')"><span v-html="luci('search','w-4 h-4 text-[#8A9999]')"></span><span class="text-[13px] text-[#8A9999]">请输入目的地</span></div><div v-if="swapOngoing" class="sw-flow" data-od-id="home-flow-banner"><span class="tx">您有一个进行中的换电流程</span><button class="go" data-cp @click="goFlowNow">立即前往</button></div><div v-else-if="reservedCab" class="sw-reserve" data-cp @click="openReservedCard" data-od-id="home-reserve-banner"><div class="nm" data-cp @click.stop="openReservedDetail">{{ reservedCab.point.name }} · {{ reservedCab.cabNo }}号柜</div><div class="ad">{{ reservedCab.point.addr }}</div><div class="ft"><span class="cd">预约中 {{ fmtReserve(reserveLeft) }}</span><button class="cancel" data-cp @click.stop="askCancelReserve">取消预约</button></div></div><div v-if="!loggedIn" data-cp @click="openLogin('home')" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#2B3F5F;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-login-banner"><span class="flex-1 min-w-0 text-[13px] text-white font-medium">您还未登录，点我快速登录</span><button data-cp @click.stop="openLogin('home')" class="shrink-0 px-3 py-1.5 rounded-lg text-[12px] font-semibold text-white" style="border:1px solid rgba(255,255,255,.5);background:transparent">去登录</button></div><div v-if="!locReady" data-cp @click="goEnableLoc" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-loc-banner"><span class="flex-1 min-w-0 flex flex-col gap-1"><span class="text-[15px] font-semibold leading-tight" style="color:#111">定位服务未开启</span><span class="text-[12px] leading-snug" style="color:#999">开启后才能获取附近换电站点</span></span><button data-cp @click.stop="goEnableLoc" class="shrink-0 flex items-center gap-0.5 px-3 py-1.5 text-[12px] font-semibold whitespace-nowrap" style="border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;border-radius:10px"><span>去开启</span></button></div><div v-if="loggedIn&&!swapAreaSet" data-cp @click="goSetSwapArea" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-area-banner"><span class="flex-1 min-w-0 text-[13px] font-medium" style="color:#111">您尚未设置换电区域</span><button data-cp @click.stop="goSetSwapArea" class="shrink-0 flex items-center gap-0.5 px-3 py-1.5 text-[12px] font-semibold" style="border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;border-radius:10px">去设置</button></div><div v-if="areaNoService" data-cp @click="goSetSwapArea" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-noservice-banner"><span class="flex-1 min-w-0 text-[13px] font-medium" style="color:#111">当前区域未开通服务</span></div></div><div class="sw-map-ctrl"><button data-cp @click="goLayer" v-html="luci('layers','w-4 h-4')"></button><button data-cp @click="goLocate" v-html="luci('crosshair','w-4 h-4')"></button><button data-cp @click="goRefresh" v-html="luci('refresh-cw','w-4 h-4')"></button></div><div v-if="!selPoint" class="sw-scan"><button data-cp @click="goScan"><span v-html="luci('scan-line','w-5 h-5')"></span>扫码换电</button></div></div></transition>
 <transition name="tab-fade"><div v-if="tab==='plan'" class="absolute left-0 right-0 top-0 bottom-[83px] flex flex-col" data-od-id="plan-page">
 <div class="px-4 pt-3 shrink-0">
-<div v-if="!swapAreaSet" data-cp @click="openSwapArea" class="bg-white rounded-2xl px-4 py-3 flex items-center justify-between gap-3 cursor-pointer active:opacity-90" style="border:1px solid #F0F0F0;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="plan-area-banner">
-<span class="text-[14px] font-medium" style="color:#111">您尚未设置换电区域</span>
-<span class="flex items-center gap-1 px-3 py-1.5 shrink-0" style="border:1px solid #2B3F5F;border-radius:10px;color:#2B3F5F;font-size:13px;font-weight:600">立即前往<span v-html="luci('chevron-right','w-4 h-4')"></span></span>
+<div v-if="!loggedIn" data-cp @click="openLogin()" class="flex items-center justify-between gap-3 px-3.5 py-3 mb-3 cursor-pointer active:opacity-90" style="background:#2B3F5F;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="plan-login-banner">
+<span class="flex-1 min-w-0 text-[13px] text-white font-medium">您还未登录，点我快速登录</span>
+<button data-cp @click.stop="openLogin()" class="shrink-0 px-3 py-1.5 rounded-lg text-[12px] font-semibold text-white" style="border:1px solid rgba(255,255,255,.5);background:transparent">去登录</button>
 </div>
-<div v-else class="bg-white rounded-2xl px-4 py-3 flex items-center justify-between" style="border:1px solid #F0F0F0;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="plan-topbar">
+<div v-if="loggedIn&&!swapAreaSet" data-cp @click="openSwapArea" class="bg-white rounded-2xl px-4 py-3 flex items-center justify-between gap-3 cursor-pointer active:opacity-90" style="border:1px solid #F0F0F0;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="plan-area-banner">
+<span class="flex flex-col gap-0.5">
+<span class="text-[14px] font-medium" style="color:#111">您尚未设置换电区域</span>
+</span>
+<span class="flex items-center gap-1 px-3 py-1.5 shrink-0" style="border:1px solid #2B3F5F;border-radius:10px;color:#2B3F5F;font-size:13px;font-weight:600">去设置</span>
+</div>
+<div v-else-if="loggedIn" class="bg-white rounded-2xl px-4 py-3 flex items-center justify-between" style="border:1px solid #F0F0F0;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="plan-topbar">
 <div class="flex items-center gap-1">
 <span v-html="luci('map-pin','w-4 h-4 text-[#999]')"></span>
-<span class="text-[14px]" style="color:#666">{{ curArea?curArea.name:'请选择运营商' }}</span>
+<span class="text-[14px]" style="color:#666">{{ curArea?areaLabel(curArea):'请选择运营商' }}</span>
 </div>
 <div data-cp @click="openCardPack" class="flex items-center gap-0.5 cursor-pointer active:opacity-70">
 <span class="text-[15px] font-medium leading-none" style="color:#666">我的套餐</span>
@@ -320,7 +370,39 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div></transition>
-</div><tab-bar :show="!settingsOpen" active-color="#FF6A00" :items="[{key:'home',icon:'map-pin',label:'首页',activeWhen:tab==='home'},{key:'plan',icon:'package',label:'套餐',activeWhen:tab==='plan'},{key:'mine',icon:'user',label:'我的',activeWhen:tab==='mine'}]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
+</div><transition name="swup"><div v-if="tab==='home'&&!settingsOpen&&selPoint" class="sw-card" data-od-id="map-sel-card">
+<div class="sw-card-head">
+<div class="sw-card-tt" data-cp @click="openSelDetail">{{ selPoint.name }}</div>
+<button class="sw-card-x" data-cp @click="closeSelPoint"><span v-html="luci('x','w-5 h-5')"></span></button>
+</div>
+<div class="sw-card-addr">{{ selPoint.addr }}</div>
+<div class="sw-card-stats">
+<div class="sw-card-stat"><div class="n">{{ pointStat(selPoint).full }}</div><div class="l">可换电池数量</div></div>
+<div class="sw-card-sep"></div>
+<div class="sw-card-stat"><div class="n">{{ pointStat(selPoint).empty }}</div><div class="l">空仓数</div></div>
+</div>
+<div class="sw-card-btns">
+<button class="sw-card-scan" data-cp @click="scanFromCard"><span v-html="luci('scan-line','w-5 h-5')"></span>扫码换电</button>
+<button class="sw-card-book" data-cp @click="goReturnScan"><span v-html="luci('scan-line','w-5 h-5')"></span>扫码还电</button>
+</div>
+</div></transition><transition name="swup"><div v-if="tab==='home'&&!settingsOpen&&selStore" class="sw-store-card" data-od-id="store-card">
+<div class="sw-store-thumb"><span v-html="luci('store','w-9 h-9 text-[#E08A2E]')"></span></div>
+<div class="sw-store-body">
+<div class="flex items-start gap-2">
+<div class="flex-1 min-w-0 text-[16px] font-bold" style="color:#111;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" data-cp @click="openStoreDetail(selStore)">{{ selStore.name }}</div>
+<button class="w-6 h-6 flex items-center justify-center shrink-0" style="border:none;background:transparent;color:#999;padding:0" data-cp @click="closeSelStore"><span v-html="luci('x','w-4 h-4')"></span></button>
+</div>
+<div class="text-[12px] mt-1.5" style="color:#999;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ selStore.addr }}</div>
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1.5"><span v-for="sv in selStore.services" :key="sv" class="text-[13px] whitespace-nowrap" style="color:#2F6FEB">{{ sv }}</span></div>
+<div class="flex items-center mt-2">
+<span class="flex-1 text-[12px]" style="color:#999">{{ selStore.hours }}</span>
+<div class="w-5 h-5 rounded-full flex items-center justify-center cursor-pointer active:scale-95 transition-transform" style="background:rgba(255,106,0,.1)" data-cp @click="callStore" data-od-id="store-call-icon"><span v-html="luci('phone','w-3 h-3')" style="color:#FF6A00"></span></div>
+</div>
+</div>
+</div></transition><tab-bar :show="!settingsOpen" active-color="#FF6A00" :items="[{key:'home',icon:'map-pin',label:'首页',activeWhen:tab==='home'},{key:'plan',icon:'package',label:'套餐',activeWhen:tab==='plan'},{key:'mine',icon:'user',label:'我的',activeWhen:tab==='mine'}]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
+<confirm-dialog :open="showCancelReserve" z="1700" oid="cancel-reserve-dialog" title="取消预约" desc="确定取消预约？取消预约后，10分钟内不可再次预约" :cancel-text="'取消'" :confirm-text="'确认'" confirm-bg="var(--accent)" @close="closeCancelReserve()" @confirm="confirmCancelReserve()"></confirm-dialog>
+<confirm-dialog :open="showPrecheck" z="1750" oid="swap-precheck-dialog" title="温馨提示" :desc="precheckDesc" :cancel-text="'取消'" :confirm-text="'确认'" confirm-bg="var(--accent)" @close="closePrecheck()" @confirm="confirmPrecheck()"></confirm-dialog>
+<option-sheet :open="storeNavSheet" title="导航" :options="storeNavOptions" :mask-z="1100" oid="store-nav-mask" panel-oid="store-nav-sheet" @select="pickStoreNav" @close="closeStoreNav"></option-sheet>
 <transition name="fd"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="login-page">
 <div v-show="loginView==='main'" class="flex-1 flex flex-col min-h-0 bg-[#F6F7F9]">
 <div class="pt-14 px-5 pb-1 flex items-center justify-between shrink-0">
@@ -704,15 +786,15 @@ body.host-single-m #root-user{display:none}
 <transition name="fd"><div v-if="showLocAuth" class="absolute inset-0 z-[1200] flex items-center justify-center rounded-[44px] overflow-hidden" style="background:rgba(0,0,0,.45)" data-od-id="loc-auth-modal">
 <div class="bg-white rounded-xl w-[320px] px-5 pt-6 pb-4 flex flex-col" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)">
 <div class="flex flex-col items-center mb-3">
-<div class="w-14 h-14 rounded-full flex items-center justify-center mb-3" style="background:#EBF1FD"><span v-html="luci('map-pin','w-7 h-7 text-[var(--accent)]')"></span></div>
-<div class="text-[17px] font-bold">需要获取您的位置权限</div>
+<div class="text-[17px] font-bold">定位服务</div>
 </div>
-<div class="text-[13px] text-[#666] text-center leading-relaxed mb-4">为推荐附近换电站 / 门店，需要开启定位权限</div>
+<div class="text-[13px] text-[#666] text-center leading-relaxed mb-4">需要获取您的位置信息，以便查找附近换电站点，请前往设置并打开定位服务</div>
 <div class="flex gap-3">
-<div data-cp @click="showLocAuth=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff">我知道了</div>
-<div data-cp @click="allowLocAuth" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)">立即开启</div>
+<div data-cp @click="dismissLocAuth" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1px solid #E5E5E5;background:#fff">取消</div>
+<div data-cp @click="allowLocAuth" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer transition-colors" style="background:var(--accent)">去开启</div>
 </div>
 </div></div></transition>
+<confirm-dialog :open="showLocAppAuth" z="2010" oid="loc-app-auth-modal" title="允许“雅迪换电”使用你的位置信息吗？" desc="您的位置信息将用于查找附近换电站点" :cancel-text="'不允许'" :confirm-text="'允许'" confirm-bg="var(--accent)" @close="denyLocAppAuth()" @confirm="allowLocAppAuth()"></confirm-dialog>
 <page :open="profileOV==='swapArea'" :z="600" oid="swap-area-page">
 <nav-bar title="换电区域" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-28" :class="!swapAreas.length?'flex flex-col items-center justify-center':''">
@@ -732,10 +814,12 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="flex-1 overflow-y-auto hide-scroll px-5" style="min-height:0">
 <div v-for="(o,i) in areaList" :key="i" data-cp @click="pickAreaItem(o)" class="flex items-center gap-3 py-3.5 cursor-pointer active:opacity-70" style="border-bottom:1px solid #F5F5F5">
-<span class="flex-1 text-[14px] truncate">{{ o }}</span>
+<span class="flex-1 text-[14px] truncate">{{ areaLevel===3 ? ((areaCity?areaCity.name:'')+o) : o }}</span>
 </div>
 </div>
 </bottom-sheet>
+<!-- 首次登录：按定位区域匹配运营商，多运营商弹窗选择 -->
+<option-sheet :open="showOperatorPicker" title="选择运营商" :options="operatorOptions" :mask-z="950" oid="operator-pick-mask" panel-oid="operator-pick-sheet" @select="pickFirstLoginOperator" @close="closeOperatorPicker"></option-sheet>
 <page :open="profileOV==='deposit'" :z="600" :bg="'linear-gradient(180deg,#FBEFD2 0%,#FDF6E7 55%,#FDF9F0 100%)'" oid="deposit-page">
 <div class="flex items-center pt-14 px-4 pb-3 shrink-0">
 <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[rgba(255,255,255,.7)]" data-cp @click="navBack"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
@@ -752,7 +836,7 @@ body.host-single-m #root-user{display:none}
 <span class="text-[11px] px-1.5 py-0.5 rounded whitespace-nowrap" style="border:1px solid rgba(245,208,140,.55);color:#F5D08C">{{ (depositState==='paid'||depositState==='refunding')?'已缴纳':'未缴纳' }}</span>
 </div>
 <div class="relative flex items-end justify-between mt-6" style="min-height:28px">
-<span class="text-[13px]" style="color:rgba(255,255,255,.85)">生效范围：{{ curArea?curArea.name:'请选择运营商' }}</span>
+<span class="text-[13px]" style="color:rgba(255,255,255,.85)">生效范围：{{ curArea?areaLabel(curArea):'请选择运营商' }}</span>
 <span v-if="depositFree" class="text-[20px] font-bold text-white leading-[28px]">已免押</span>
 <span v-else class="text-[20px] font-bold text-white leading-[28px]">{{ fmtRp(4599) }}</span>
 </div>
@@ -802,29 +886,36 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </page>
-<page :open="profileOV==='station'&&curStation&&curCab" :z="600" oid="station-page">
-<nav-bar title="换电柜详情" border-color="#E5E5E5" @back="navBack()"></nav-bar>
-<div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-28">
-<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[17px] font-bold" style="color:#111">{{ curStation.name }}</div>
-<div class="flex items-center gap-1.5 mt-1.5"><span v-html="luci('map-pin','w-4 h-4 text-[#999]')"></span><span class="text-[13px]" style="color:#666">{{ curStation.addr }}</span></div>
-<div class="text-[13px] mt-1" style="color:#2F6FEB">距您 {{ curStation.dist }}</div>
-</div>
-<div class="text-[14px] font-semibold mb-2" style="color:#333">当前柜机</div>
-<div class="bg-white rounded-2xl px-4 py-3.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'cabinet-'+curCab.no">
-<div class="flex items-center justify-between">
-<span class="text-[15px] font-bold" style="color:#1A1A1A">{{ curCab.no }} 号柜</span>
-<span class="text-[13px]" style="color:#999">可用槽位 {{ curCab.total-curCab.used }}/{{ curCab.total }}</span>
-</div>
-<div class="flex items-center mt-2.5">
-<span class="text-[13px] shrink-0" style="color:#999">满电电池</span>
-<span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px] font-semibold" :style="(cabinetFull&&curCab.full>0)?'color:#17A34A':'color:#999'">{{ (cabinetFull&&curCab.full>0)?(curCab.full+' 块'):'暂无' }}</span>
-</div>
-<div data-cp @click="showBorrow=true" class="mt-3 w-full h-10 rounded-xl flex items-center justify-center text-[14px] font-semibold text-white cursor-pointer active:opacity-90" :style="(cabinetFull&&curCab.full>0)?'background:linear-gradient(135deg,#33456B,#22304E)':'background:#C9CED6'" :data-od-id="'cabinet-borrow-'+curCab.no">{{ (cabinetFull&&curCab.full>0)?'借电':'不可借' }}</div>
+<page :open="profileOV==='station'&&curStation" :z="600" oid="station-page">
+<nav-bar :title="curStation&&curStation.isStore?'门店详情':'站点详情'" border-color="#E5E5E5" @back="navBack()"></nav-bar>
+<div class="flex-1 overflow-y-auto hide-scroll px-4 pt-3 pb-8">
+<div class="rounded-2xl overflow-hidden mb-3 flex items-center justify-center" style="height:180px;background:linear-gradient(160deg,#EDEFF3,#D9DEE5)" data-od-id="station-photo"><span v-html="luci('store','w-10 h-10 text-[#C9CED6]')"></span></div>
+<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #EFEFEF" data-od-id="station-info">
+<div class="text-[18px] font-bold" style="color:#111;line-height:1.35">{{ curStation.name }}</div>
+<div class="text-[13px] mt-2.5" style="color:#666;line-height:1.5"><span>{{ curStation.dist }}</span><span class="mx-1.5" style="color:#DDD">|</span><span>{{ curStation.addr }}</span></div>
+<div v-if="curStation.isStore&&curStation.point&&curStation.point.services" class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2"><span v-for="sv in curStation.point.services" :key="sv" class="text-[13px] whitespace-nowrap" style="color:#2F6FEB">{{ sv }}</span></div>
+<div class="flex items-center mt-1.5">
+<div class="flex-1 min-w-0 text-[13px]" style="color:#999">{{ curStation.hours }}</div>
+<div class="flex items-center gap-2 shrink-0">
+<div class="w-5 h-5 rounded-full flex items-center justify-center cursor-pointer active:scale-95 transition-transform" style="background:rgba(255,106,0,.1)" data-cp @click="callStation" data-od-id="station-call-icon"><span v-html="luci('phone','w-3 h-3')" style="color:#FF6A00"></span></div>
+<div class="w-5 h-5 rounded-full flex items-center justify-center cursor-pointer active:scale-95 transition-transform" style="background:rgba(255,106,0,.1)" data-cp @click="openStoreNav" data-od-id="station-nav-icon"><span v-html="luci('navigation','w-3 h-3')" style="color:#FF6A00"></span></div>
 </div>
 </div>
-<div class="absolute left-4 right-4" style="bottom:34px">
-<div data-cp @click="openReturn" class="w-full h-[52px] rounded-full flex items-center justify-center text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="station-return-btn">还电到此柜</div>
+</div>
+<div v-for="cab in curStation.cabinets" :key="cab.no" class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #EFEFEF" :data-od-id="'station-cab-'+cab.no">
+<div class="text-[15px] font-bold" style="color:#111">{{ cab.code }}</div>
+<div class="text-[12px] mt-1" style="color:#9AA0A6">{{ cab.no }}号换电柜</div>
+<div class="flex items-center mt-3.5">
+<div class="flex-1 text-center"><div class="text-[15px] font-bold" style="color:#111">{{ cabinetFull?cab.full:0 }}</div><div class="text-[12px] mt-0.5" style="color:#9AA0A6">可换电池数量</div></div>
+<div class="w-px h-7" style="background:#F0F0F0"></div>
+<div class="flex-1 text-center"><div class="text-[15px] font-bold" style="color:#111">{{ cab.total-cab.used }}</div><div class="text-[12px] mt-0.5" style="color:#9AA0A6">空仓数</div></div>
+</div>
+<div class="mt-4 flex items-center gap-2.5">
+<div v-if="isCabReserved(cab.no)" class="flex-1 min-w-0 h-11 rounded-xl flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer active:opacity-90" style="background:#FFF4E8" data-cp @click="askCancelReserve" data-od-id="cab-cancel-reserve"><span class="text-[13px] font-semibold" style="color:#FF7A00">预约中 {{ fmtReserve(reserveLeft) }}</span><span class="text-[13px] font-semibold" style="color:#FF7A00">取消预约</span></div>
+<button v-else-if="!hasReservedOther(cab.no)&&curStation.fromMapType!=='reCharing'" class="flex-1 min-w-0 h-11 rounded-xl text-[15px] font-semibold whitespace-nowrap" style="background:#fff;color:#111;border:1px solid #E0E0E0" data-cp @click="bookFromStation(cab)">预约换电</button>
+<button v-if="curStation.fromMapType==='reCharing'" class="flex-1 min-w-0 h-11 rounded-xl flex items-center justify-center gap-1.5 text-[15px] font-semibold whitespace-nowrap" style="background:#fff;color:#111;border:1px solid #E0E0E0" data-cp @click="goReturnScan" :data-od-id="'cab-return-'+cab.no"><span class="flex items-center" v-html="luci('scan-line','w-5 h-5')"></span>扫码还电</button>
+</div>
+</div>
 </div>
 <confirm-dialog :open="showBorrow" :z="1100" oid="borrow-sheet" title="确认借电" :confirm-text="(cabinetFull&&curCab&&curCab.full>0)?'确认借电':'无法借电'" :confirm-bg="(cabinetFull&&curCab&&curCab.full>0)?'linear-gradient(135deg,#33456B,#22304E)':'#C9CED6'" @close="showBorrow=false" @confirm="confirmBorrow"><div class="text-[13px] mb-4" style="color:#888">将从 <span style="color:#333">{{ curStation.name }} · {{ curCab.no }} 号柜</span> 借出一块满电电池</div><div class="flex items-center justify-between py-2.5" style="border-top:1px solid #F0F0F0;border-bottom:1px solid #F0F0F0"><span class="text-[14px]" style="color:#999">可用满电电池</span><span class="text-[15px] font-bold" :style="(cabinetFull&&curCab&&curCab.full>0)?'color:#17A34A':'color:#FF3B30'">{{ (cabinetFull&&curCab&&curCab.full>0)?(curCab.full+' 块'):'暂无' }}</span></div><div v-if="!(cabinetFull&&curCab&&curCab.full>0)" class="text-[12px] mt-2" style="color:#FF3B30">该柜机暂无可借满电电池，请前往其他柜机或站点</div></confirm-dialog></page>
 <confirm-dialog :open="showReturn" :z="1100" oid="return-sheet" title="还电到此柜" confirm-text="确认还电" :confirm-bg="'linear-gradient(135deg,#33456B,#22304E)'" @close="showReturn=false" @confirm="confirmReturn"><div class="text-[13px] mb-3" style="color:#888">{{ curStation.name }} · {{ curCab.no }} 号柜</div><div class="text-[13px] font-medium mb-2" style="color:#666">选择要归还的电池</div><div class="max-h-[180px] overflow-y-auto hide-scroll"><div v-for="b in batteryList" :key="b.id" data-cp @click="returnBattery=b" class="flex items-center justify-between py-3 px-3 rounded-xl cursor-pointer" :style="returnBattery&&returnBattery.id===b.id?'background:#EEF1F8;border:1px solid #2B3F5F':'border:1px solid #F0F0F0'" :data-od-id="'return-bat-'+b.id"><span class="text-[14px] font-medium" style="color:#111">{{ b.no }}</span><span v-if="returnBattery&&returnBattery.id===b.id" v-html="luci('check','w-4 h-4 text-[#2B3F5F]')"></span></div></div></confirm-dialog>
@@ -987,6 +1078,21 @@ body.host-single-m #root-user{display:none}
 <button data-cp @click="confirmSwapManual" class="h-12 w-full mt-10 rounded-xl text-white text-[15px] font-semibold cursor-pointer active:opacity-90 transition-opacity flex items-center justify-center" :style="swapManualNo.trim()?{background:'var(--accent)',border:0}:{background:'#E0E0E0',color:'#999',pointerEvents:'none',border:0}" data-od-id="swap-manual-submit">确定</button>
 </div>
 </page>
+<!-- 切换地图（首页地图图层：换电 / 还电 / 门店，三视图各自独立点位） -->
+<bottom-sheet :open="showMapSheet" title="切换地图" :mask-z="900" oid="map-type-mask" panel-oid="map-type-sheet" @close="showMapSheet=false">
+<div class="px-5 pt-1 pb-2">
+<div class="flex gap-3">
+<template v-for="t in MAP_TYPES" :key="t.key">
+<div class="sw-mt-opt" data-cp :data-od-id="'map-type-'+t.key" @click="pickMapType(t.key)">
+<div class="sw-mt-card" :style="mapType===t.key?{background:t.tint,borderColor:t.color}:''">
+<div class="sw-mt-pin"><div class="body" :style="{background:t.color}"><span class="g"><span v-if="t.icon" v-html="luci(t.icon,'w-4 h-4')"></span><span v-else>{{ t.text }}</span></span></div></div>
+</div>
+<div class="text-[13px] mt-2.5" :style="mapType===t.key?{color:t.color,fontWeight:'600'}:{color:'#666'}">{{ t.label }}</div>
+</div>
+</template>
+</div>
+</div>
+</bottom-sheet>
 <page :open="(profileSub==='batteryDetail'||profileSub==='batteryFind'||profileSub==='batteryTrack'||(profileSub==='batteryRecords'&&recordsFrom==='battery'))&&batteryDetailRec" :z="610" oid="battery-detail-page">
 <div class="shrink-0" style="background:linear-gradient(180deg,#11161F 0%,#1B2434 100%)">
 <div class="flex items-center pt-14 px-4 pb-1">
@@ -1263,7 +1369,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </page>
 <confirm-dialog :open="showCancelPlanTip" :z="2000" oid="cancel-plan-tip-modal" title="取消订单" desc="确定取消该订单？取消后不可恢复" @close="showCancelPlanTip=false" @confirm="cancelPlanOrder"></confirm-dialog>
-<confirm-dialog :open="showDepositModal" :z="1000" oid="deposit-modal" :mask-close="false" title="未缴纳押金" desc="请您先缴纳押金，再购买套餐" cancel-text="我知道了" confirm-text="前往缴纳" confirm-bg="var(--accent)" @close="showDepositModal=false" @confirm="goPayDeposit"></confirm-dialog>
+<confirm-dialog :open="showDepositModal" :z="1000" oid="deposit-modal" :mask-close="false" title="未缴纳押金" desc="请您先缴纳押金，再购买套餐" cancel-text="取消" confirm-text="前往缴纳" confirm-bg="var(--accent)" @close="showDepositModal=false" @confirm="goPayDeposit"></confirm-dialog>
 <bottom-sheet :open="!!planDetail" title="套餐详情" :mask-z="1000" max-h="84%" oid="plan-detail-sheet" panel-oid="plan-detail-panel" @close="closePlanDetail">
 <div class="flex-1 overflow-y-auto hide-scroll px-5" style="min-height:0">
 <div class="text-[16px] font-semibold mb-3" style="color:#111">{{ planDetail.name }}</div>
@@ -1297,11 +1403,26 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" data-cp @click="firstLogin=false" :class="!firstLogin?'is-on':''">否</div>
 </div>
 </div>
-<div v-if="tab==='home'&&!profileOV" class="demo-ops-section" data-od-id="demo-loc-auth">
+<div v-if="tab==='home'&&!profileOV" class="demo-ops-section" data-od-id="demo-loc-app-auth">
 <div class="demo-ops-label">定位授权</div>
+<div class="demo-ops-chips">
+  <div class="demo-ops-chip" data-cp @click="setLocAppAuth(true)" :class="locAppAuth?'is-on':''">已授权</div>
+<div class="demo-ops-chip" data-cp @click="setLocAppAuth(false)" :class="!locAppAuth?'is-on':''">未授权</div>
+</div>
+</div>
+<div v-if="tab==='home'&&!profileOV" class="demo-ops-section" data-od-id="demo-loc-auth">
+<div class="demo-ops-label">定位服务</div>
 <div class="demo-ops-chips">
   <div class="demo-ops-chip" data-cp @click="setLocAuth(true)" :class="locAuth?'is-on':''">已开启</div>
 <div class="demo-ops-chip" data-cp @click="setLocAuth(false)" :class="!locAuth?'is-on':''">未开启</div>
+</div>
+</div>
+<div v-if="tab==='home'&&!profileOV" class="demo-ops-section" data-od-id="demo-loc-city">
+<div class="demo-ops-label">定位城市</div>
+<div class="demo-ops-chips">
+  <div class="demo-ops-chip" data-cp @click="pickMockCity('成都市')" :class="mockCity==='成都市'?'is-on':''">成都市·多</div>
+  <div class="demo-ops-chip" data-cp @click="pickMockCity('绵阳市')" :class="mockCity==='绵阳市'?'is-on':''">绵阳市·单</div>
+  <div class="demo-ops-chip" data-cp @click="pickMockCity('乐山市')" :class="mockCity==='乐山市'?'is-on':''">乐山市·未开通</div>
 </div>
 </div>
 <div v-if="(tab==='home'||tab==='plan')&&!profileOV" class="demo-ops-section" data-od-id="demo-swap-area">
@@ -1309,6 +1430,27 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chips">
   <div class="demo-ops-chip" data-cp @click="setSwapArea(true)" :class="swapAreaSet?'is-on':''">已设置</div>
 <div class="demo-ops-chip" data-cp @click="setSwapArea(false)" :class="!swapAreaSet?'is-on':''">未设置</div>
+</div>
+</div>
+<div v-if="tab==='home'&&!profileOV" class="demo-ops-section" data-od-id="demo-swap-flow">
+<div class="demo-ops-label">进行中的换电流程</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setSwapOngoing(true)" :class="swapOngoing?'is-on':''">有</div>
+<div class="demo-ops-chip" data-cp @click="setSwapOngoing(false)" :class="!swapOngoing?'is-on':''">无</div>
+</div>
+</div>
+<div v-if="tab==='home'&&!profileOV" class="demo-ops-section" data-od-id="demo-pay-deposit">
+<div class="demo-ops-label">缴纳押金</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setDepositState('paid')" :class="depositState==='paid'?'is-on':''">已缴纳</div>
+<div class="demo-ops-chip" data-cp @click="setDepositState('unpaid')" :class="depositState!=='paid'?'is-on':''">未缴纳</div>
+</div>
+</div>
+<div v-if="tab==='home'&&!profileOV" class="demo-ops-section" data-od-id="demo-buy-plan">
+<div class="demo-ops-label">购买套餐</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setPlanBought(true)" :class="planBought?'is-on':''">已购买</div>
+<div class="demo-ops-chip" data-cp @click="setPlanBought(false)" :class="!planBought?'is-on':''">未购买</div>
 </div>
 </div>
 <div v-if="profileOV==='deposit'" class="demo-ops-section" data-od-id="demo-deposit-free">
@@ -1934,7 +2076,7 @@ function createNav(o){
 }
 
 /* ===== 登录 + 我的 · 共享状态工厂（复刻 index.html 命名，每 App 一份独立实例） ===== */
-function authState(bus){
+function authState(bus,ext){
   var toastPush=bus?bus.push:function(){};
   var loggedIn=Vue.ref(false),firstLogin=Vue.ref(false),showLogin=Vue.ref(false);
   var loginView=Vue.ref('main'),loginMode=Vue.ref('phone'),loginSub=Vue.ref('password');
@@ -2022,13 +2164,13 @@ function authState(bus){
     }
     if(err){toastPush(err);return}
     resetLoginForm();loggedIn.value=true;showLogin.value=false;navDrop('login');
-    if(firstLogin.value){firstLogin.value=false;switchSource.value='first';profileOV.value='settings';profileSub.value='subSwitchSystem';toastPush('请选择系统');return}
+    if(firstLogin.value){firstLogin.value=false;if(ext&&typeof ext.firstLoginRegionFlow==='function'){ext.firstLoginRegionFlow();return}switchSource.value='first';profileOV.value='settings';profileSub.value='subSwitchSystem';toastPush('请选择系统');return}
     toastPush('登录成功');
   }
   function setLoggedIn(v){
     if(v===false){loggedIn.value=false;return}
     loggedIn.value=true;
-    if(firstLogin.value){firstLogin.value=false;switchSource.value='first';profileOV.value='settings';profileSub.value='subSwitchSystem';toastPush('请选择系统')}
+    if(firstLogin.value){firstLogin.value=false;if(ext&&typeof ext.firstLoginRegionFlow==='function'){ext.firstLoginRegionFlow();return}switchSource.value='first';profileOV.value='settings';profileSub.value='subSwitchSystem';toastPush('请选择系统')}
   }
   function doLogout(){profileMod.value=null;navReset();loggedIn.value=false;showLogin.value=true;profileOV.value=null;profileSub.value=null;toastPush('已退出登录')}
   /* 页面栈接线（createNav 实例 + NAV_SCREENS + nameOf）；createNav 实现见文件上方共享核心。
@@ -2142,7 +2284,8 @@ var AREA_TREE=[
   {name:'中国',children:[
     {name:'四川省',children:[
       {name:'成都市',operators:['双流区运营商','金牛区运营商','武侯区运营商','高新区运营商','锦江区运营商']},
-      {name:'绵阳市',operators:['涪城区运营商']}
+      {name:'绵阳市',operators:['涪城区运营商']},
+      {name:'乐山市'}
     ]},
     {name:'广东省',children:[
       {name:'深圳市',operators:['南山区运营商','福田区运营商','龙岗区运营商']},
@@ -2160,17 +2303,12 @@ var _ua=Vue.createApp({
     function setTab(t){tab.value=t;settingsOpen.value=false}
     function toast(m){toastBus.push(m)}
     /* 登录校验前移到入口：点击「扫码换电」即校验，未登录先拉起登录页；扫码页内不再做登录拦截 */
-    function goScan(){window.__gc=(window.__gc||0)+1;if(!auth.loggedIn.value){pendingScan.value=true;auth.openLogin();return}swapStart()}
-    /* 地图控件（图层 / 定位 / 刷新）：点击不弹提示 */
-    function goLocate(){}
-    function goRefresh(){}
-    function goLayer(){}
-    function openStation(n){
-      if(!n){toastPush('该站点维护中，请前往附近可用电站');return}
-      var s=null;stations.forEach(function(x){if(x.no===n)s=x});
-      if(!s){toastPush('该站点维护中，请前往附近可用电站');return}
-      auth.navOpen('station');curStation.value=s;curCab.value=s.cabinets[0];auth.profileOV.value='station';auth.profileSub.value=null;
-    }
+    function goScan(){window.__gc=(window.__gc||0)+1;if(!auth.loggedIn.value){pendingScan.value=true;auth.openLogin();return}if(!precheckPass())return;swapStart()}
+    /* 地图控件（图层 / 定位 / 刷新）：图层打开「切换地图」弹窗；
+       定位 / 刷新属定位相关操作：先校验定位授权（未授权拉起授权弹窗），再校验定位服务（未开启拉起「位置权限」弹窗；均已开启时为空实现，不弹提示） */
+    function goLocate(){if(!locAppAuth.value){showLocAppAuth.value=true;return}if(!locAuth.value)showLocAuth.value=true}
+    function goRefresh(){if(!locAppAuth.value){showLocAppAuth.value=true;return}if(!locAuth.value)showLocAuth.value=true}
+    function goLayer(){showMapSheet.value=true}
     /* ── 核心换电流程：扫码对应单台柜机详情 + 借电 + 还电 ── */
     var curStation=Vue.ref(null);
     var curCab=Vue.ref(null);
@@ -2220,7 +2358,7 @@ var _ua=Vue.createApp({
     function setPlanMax(n){planMax.value=n}
     function swapTitleFn(){var s=swapStep.value;if(s.indexOf('borrow')===0)return '借电';if(s.indexOf('swap')===0)return '换电';var m={scan:'扫码换电',resume:'未完成订单',choice:'选择操作','warn-level':'电量提醒','gate-perm':'权限申请','err-qr':'扫码失败','err-offline':'设备离线','err-dist':'距离过远'};return m[s]||'扫码换电'}
     var swapTitle=Vue.computed(swapTitleFn);
-    function swapPickCab(){var s=null;stations.forEach(function(x){if(x.kind==='on')s=s||x});s=s||stations[0];swapCtx.value={station:s,cab:s.cabinets?s.cabinets[0]:null}}
+    function swapPickCab(){var s=stations[0];swapCtx.value={station:s,cab:s.cabinets?s.cabinets[0]:null}}
     function setBoundCount(n){var t=nowStr(),arr=[];for(var i=0;i<n;i++){arr.push({id:i+1,no:'BAT'+(1000+i),location:'成都市双流区',bindTime:t})}batteryList.value=arr}
     function swapStart(){auth.navOpen('swap');swapStep.value='scan';swapShow.value=true;auth.profileOV.value='swap';auth.profileSub.value=null}
     /* 扫码页「键盘」入口：手动输入换电柜编号（与租车「输入车架号/电池编号」同规范），确认后按同一状态机继续 */
@@ -2279,12 +2417,27 @@ var _ua=Vue.createApp({
     function genBatNo(){var s='';for(var i=0;i<13;i++)s+=Math.floor(Math.random()*10);return s}
     function genOrderNo(){var d=new Date(),p=function(n){return (n<10?'0':'')+n};return 'SW'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+p(d.getHours())+p(d.getMinutes())+p(d.getSeconds())+Math.floor(Math.random()*1000)}
     function nowStr(){var d=new Date(),p=function(n){return (n<10?'0':'')+n};return d.getFullYear()+'.'+p(d.getMonth()+1)+'.'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())}
-    /* 定位授权：未开启且用户触发定位相关操作时才弹授权弹窗（首屏不再强弹，避免遮挡首页与扫码换电入口；权限状态仍可在右侧「原型操作」预置，扫码流程的「需要定位与相机权限」步骤也会处理） */
+    /* 定位授权 = iOS 原生 App 权限（已授权/未授权）；定位服务 = 系统定位开关。定位有效（locReady）= 授权已授权 且 服务已开启。后续所有定位校验一律走此链：先定位授权 → 再定位服务 */
+    var locAppAuth=Vue.ref(false),showLocAppAuth=Vue.ref(false);
     var locAuth=Vue.ref(false),showLocAuth=Vue.ref(false);
-    function setLocAuth(on){locAuth.value=on;showLocAuth.value=!on}
-    function allowLocAuth(){locAuth.value=true;showLocAuth.value=false}
-    /* 换电区域：已登录且未设置时，首页搜索框下方显示引导横幅 */
+    var locReady=Vue.computed(function(){return locAppAuth.value&&locAuth.value});
+    function setLocAppAuth(on){locAppAuth.value=on;showLocAppAuth.value=false}
+    /* 定位就绪后的统一续跑：授权弹窗「允许」与服务弹窗「去开启」本质都是模拟再次获取定位，
+       定位成功（授权+服务均已就绪）后走同一链路：真实首登 → 进首页；换电区域未设置 → 按定位城市匹配运营商 */
+    function afterLocReady(){
+      if(pendingFirstLogin.value){pendingFirstLogin.value=false;enterFirstHome();return}
+      if(!swapAreaSet.value){/* 换电区域未设置 → 按定位城市匹配运营商并拉起选择弹窗（原型演示，与真实首登解耦） */matchFirstLoginOperator()}
+    }
+    /* iOS 原生授权弹窗：允许 → 已授权；若定位服务未开启则继续拉起定位服务弹窗（校验链：定位授权 → 定位服务） */
+    function allowLocAppAuth(){locAppAuth.value=true;showLocAppAuth.value=false;if(!locAuth.value){showLocAuth.value=true;return}afterLocReady()}
+    function denyLocAppAuth(){showLocAppAuth.value=false}
+    function setLocAuth(on){locAuth.value=on}
+    function allowLocAuth(){if(!locAppAuth.value){showLocAuth.value=false;showLocAppAuth.value=true;return}locAuth.value=true;showLocAuth.value=false;afterLocReady()}
+    /* 定位未有效横幅（定位授权未授权 或 定位服务未开启）：【去开启】按缺的层拉起对应弹窗 */
+    function goEnableLoc(){if(!locAppAuth.value)showLocAppAuth.value=true;else showLocAuth.value=true}
+    /* 换电区域：已登录且未设置时，首页搜索框下方显示引导横幅；当前定位城市未开通服务时横幅第二行提示 */
     var swapAreaSet=Vue.ref(true);
+    var areaNoService=Vue.ref(false);
     /* 默认预置一条已选中的区域数据（成都市某运营商），「我的-换电区域」与套餐页顶部栏直接有内容；可经「新增」追加或重选 */
     var DEFAULT_AREA={id:1,name:'双流区运营商',region:'四川省成都市',city:'成都市',sel:true};
     var swapAreas=Vue.ref([DEFAULT_AREA]);
@@ -2305,6 +2458,19 @@ var _ua=Vue.createApp({
     /* 押金：depositState = unpaid 未缴纳 / paid 已缴纳 / refunding 退押中；depositFree = 免押状态（true 已免押 / false 未免押） */
     var depositState=Vue.ref('unpaid');
     var depositFree=Vue.ref(false);
+    /* ── 扫码换电前置校验：先押金后套餐（免押用户跳过押金） ── */
+    var showPrecheck=Vue.ref(false),precheckType=Vue.ref('deposit');
+    var precheckDesc=Vue.computed(function(){return precheckType.value==='deposit'?'请先缴纳押金，方可使用换电服务':'请您先购买套餐，再使用换电服务。'});
+    function closePrecheck(){showPrecheck.value=false}
+    /* 确认 → 按类型跳转：押金未缴去押金页；套餐未购去套餐页 */
+    function confirmPrecheck(){var t=precheckType.value;showPrecheck.value=false;if(t==='deposit'){openDeposit();return}setTab('plan')}
+    /* 扫码换电前置校验链：未设置加盟商(换电区域) → 先跳换电区域页；已设置 → 押金 → 套餐（免押跳过押金）；全部通过返回 true */
+    function precheckPass(){
+      if(!swapAreaSet.value){openSwapArea();return false}
+      if(!depositFree.value&&depositState.value!=='paid'){precheckType.value='deposit';showPrecheck.value=true;return false}
+      if(!planBought.value){precheckType.value='plan';showPrecheck.value=true;return false}
+      return true
+    }
     var depositAgree=Vue.ref(false);
     var showRefundTip=Vue.ref(false),showRefundOk=Vue.ref(false);
     var DEPOSIT_TIPS=[
@@ -2318,6 +2484,8 @@ var _ua=Vue.createApp({
     var showDepositModal=Vue.ref(false),planDetail=Vue.ref(null);
     /* 选择层级：0 国 / 1 省 / 2 市 / 3 运营商（市内多运营商时才追加该级） */
     var areaCountry=Vue.ref(null),areaProvince=Vue.ref(null),areaCity=Vue.ref(null);
+    /* 运营商显示名：城市 + 运营商名（如「成都市双流区运营商」） */
+    function areaLabel(a){return a?((a.city||'')+(a.name||'')):''}
     var addedOperators=Vue.computed(function(){return swapAreas.value.map(function(a){return a.name})});
     var areaLevel=Vue.computed(function(){if(!areaCountry.value)return 0;if(!areaProvince.value)return 1;if(!areaCity.value)return 2;return 3});
     var areaCrumbs=Vue.computed(function(){
@@ -2334,24 +2502,206 @@ var _ua=Vue.createApp({
       /* 运营商层级过滤掉已加入「换电区域」列表的数据（避免重复添加） */
       return (areaCity.value.operators||[]).filter(function(n){return addedOperators.value.indexOf(n)===-1});
     });
-    /* 首页地图换电站点（数据驱动渲染） */
+    /* 首页地图点位（仅模拟「可用」点位，不含灰色禁用点；换电 / 还电 / 门店 三视图各自独立数据）
+       点位仅两种形态：pin + 右上角数字角标（换电=站点序号，还电=空仓数）｜门店无角标、仅下方文案
+       推荐点：pin 与普通点完全一致，仅把右上角数字角标换成「推荐」；只有换电 / 还电两个视图有推荐点 */
     var stations=[
-      {kind:'on',no:1,left:'25%',top:'34%',cap:'8/12',name:'剑南大道换电站',addr:'成都市武侯区剑南大道188号',dist:'1.2km',cabinets:[{no:'A01',total:12,used:4,full:6},{no:'A02',total:12,used:9,full:1}]},
-      {kind:'on',no:2,left:'62%',top:'27%',cap:'余量充足',name:'天府三街换电站',addr:'成都市高新区天府三街69号',dist:'2.0km',cabinets:[{no:'B01',total:12,used:5,full:5}]},
-      {kind:'on',no:3,left:'78%',top:'62%',cap:'6/12',name:'锦城湖换电站',addr:'成都市高新区锦城湖公园南门',dist:'3.4km',cabinets:[{no:'C01',total:12,used:11,full:0}]},
-      {kind:'off',no:null,left:'15%',top:'68%',cap:'维护中'},
-      {kind:'agg',label:'10+',left:'44%',top:'14%',cap:'附近'}
+      {id:1,badge:1,left:'25%',top:'34%',name:'剑南大道换电站',addr:'成都市武侯区剑南大道188号',dist:'1.2km',cabinets:[{no:'A01',total:12,used:4,full:6},{no:'A02',total:12,used:9,full:1},{no:'A03',total:12,used:12,full:0}]},
+      {id:2,badge:2,left:'62%',top:'27%',name:'天府三街换电站',addr:'成都市高新区天府三街69号',dist:'2.0km',cabinets:[{no:'B01',total:12,used:5,full:5}]},
+      {id:3,badge:3,left:'78%',top:'62%',name:'锦城湖换电站',addr:'成都市高新区锦城湖公园南门',dist:'3.4km',cabinets:[{no:'C01',total:12,used:7,full:3}]},
+      {id:4,rec:true,left:'34%',top:'61%',name:'益州大道换电站',addr:'成都市高新区益州大道中段722号',dist:'0.6km',cabinets:[{no:'D01',total:12,used:3,full:8}]}
     ];
-    var auth=authState(toastBus);
+    var reChargePoints=[
+      {id:1,badge:8,left:'17%',top:'50%',name:'剑南大道换电站',addr:'成都市武侯区剑南大道188号',dist:'1.2km',cabinets:[{no:'A02',total:12,used:4,full:6},{no:'A03',total:12,used:12,full:0}]},
+      {id:2,badge:5,left:'47%',top:'69%',name:'天府三街换电站',addr:'成都市高新区天府三街69号',dist:'2.0km',cabinets:[{no:'B01',total:12,used:7,full:5}]},
+      {id:3,badge:3,left:'80%',top:'38%',name:'锦城湖换电站',addr:'成都市高新区锦城湖公园南门',dist:'3.4km',cabinets:[{no:'C01',total:12,used:9,full:3}]},
+      {id:4,rec:true,left:'34%',top:'61%',name:'益州大道换电站',addr:'成都市高新区益州大道中段722号',dist:'0.6km',cabinets:[{no:'D02',total:12,used:3,full:8}]}
+    ];
+    var STORE_SERVICES=['换电','租车','售后/维修','卖车/电池'];
+    var storePoints=[
+      {id:1,left:'36%',top:'21%',name:'雅迪换电 · 剑南大道门店',addr:'成都市武侯区剑南大道188号1层',dist:'1.0km',hours:'9:00-19:00',services:STORE_SERVICES,cabinets:[{no:'A01',total:12,used:5,full:5},{no:'A02',total:12,used:8,full:2}]},
+      {id:2,left:'70%',top:'47%',name:'雅迪换电 · 天府三街门店',addr:'成都市高新区天府三街69号',dist:'2.1km',hours:'9:00-19:00',services:STORE_SERVICES,cabinets:[{no:'B01',total:12,used:6,full:4}]},
+      {id:3,left:'22%',top:'72%',name:'雅迪换电 · 锦城湖门店',addr:'成都市高新区锦城湖公园南门',dist:'3.2km',hours:'9:00-19:00',services:STORE_SERVICES,cabinets:[{no:'C01',total:12,used:3,full:7}]}
+    ];
+    /* 地图类型（对齐原首页「切换地图」）：换电 #15B88C / 还电 #FF5F00 / 门店 #1A82F4 */
+    var MAP_TYPES=[
+      {key:'charing',label:'换电',color:'#15B88C',tint:'#E8F8F3',icon:'zap'},
+      {key:'reCharing',label:'还电',color:'#FF5F00',tint:'#FFF0E6',icon:'inbox'},
+      {key:'store',label:'门店',color:'#1A82F4',tint:'#E8F2FE',icon:'store'}
+    ];
+    var MAP_POINTS={charing:stations,reCharing:reChargePoints,store:storePoints};
+    var mapType=Vue.ref('charing'),showMapSheet=Vue.ref(false),selPoint=Vue.ref(null),selStore=Vue.ref(null);
+    var mapTheme=Vue.computed(function(){var t=MAP_TYPES[0];MAP_TYPES.forEach(function(x){if(x.key===mapType.value)t=x});return t});
+    var mapPoints=Vue.computed(function(){return MAP_POINTS[mapType.value]||[]});
+    function pickMapType(k){mapType.value=k;showMapSheet.value=false;selPoint.value=null;selStore.value=null}
+    /* 地图点位点击：换电 / 还电 → 选中点位并弹出底部站点卡片；门店暂无详情页，仅原型提示 */
+    function openMapPoint(p){
+      if(mapType.value==='store'){selStore.value=p;return}
+      selPoint.value=p;
+    }
+    function closeSelPoint(){selPoint.value=null}
+    function closeSelStore(){selStore.value=null}
+    function callStore(){var s=selStore.value;if(!s)return;toastPush('正在呼叫 '+s.name)}
+    /* 选中卡片统计：可换电池数量 = 满电仓位数合计；空仓数 = 未占用仓位数合计 */
+    function pointStat(p){
+      var full=0,empty=0;
+      ((p&&p.cabinets)||[]).forEach(function(c){full+=(c.full||0);empty+=((c.total||0)-(c.used||0))});
+      return {full:full,empty:empty};
+    }
+    /* 柜机详情入口（沿用原「点击点位进柜机详情」逻辑，现由卡片标题 / 预约横幅站名承载） */
+    function openStationDetail(p){
+      if(!p)return;
+      /* 站点详情数据：补齐营业时间/客服电话（原型固定值） */
+      var cabs=(p.cabinets||[]).map(function(c,i){return {no:c.no,total:c.total,used:c.used,full:c.full,code:'CHZD06KX0123060112'+(i+1)}});
+      curStation.value={name:p.name,addr:p.addr,dist:p.dist,no:p.id,hours:'09:00-19:00',phone:'1528****8288',point:p,cabinets:cabs,fromMapType:mapType.value};
+      curCab.value=cabs[0]||null;
+      auth.navOpen('station');auth.profileOV.value='station';auth.profileSub.value=null;
+    }
+    /* 门店详情：复用站点详情版式（照片 + 信息卡 + 该门店的换电柜） */
+    function openStoreDetail(s){
+      if(!s)return;
+      var cabs=(s.cabinets||[]).map(function(c,i){return {no:c.no,total:c.total,used:c.used,full:c.full,code:'CHZD06KX0123060113'+(i+1)}});
+      curStation.value={name:s.name,addr:s.addr,dist:s.dist,no:s.id,hours:s.hours||'9:00-19:00',phone:'1528****8288',point:s,cabinets:cabs,fromMapType:mapType.value,isStore:true};
+      curCab.value=cabs[0]||null;
+      auth.navOpen('station');auth.profileOV.value='station';auth.profileSub.value=null;
+    }
+    /* 详情页预约：按柜机维度，预约具体某个柜（预约态由 isCabReserved / hasReservedOther 判断） */
+    function bookFromStation(cab){if(!cab)return;bookCab(curStation.value&&curStation.value.point,cab.no)}
+    function callStation(){var s=curStation.value;if(!s)return;toastPush('正在呼叫 '+s.phone)}
+    /* 导航：底部拉起弹窗选择地图应用（对齐租车 index.html「导航到店」） */
+    var storeNavSheet=Vue.ref(false);
+    var storeNavOptions=[{value:'高德地图',label:'高德地图'},{value:'百度地图',label:'百度地图'},{value:'谷歌地图',label:'谷歌地图'}];
+    function openStoreNav(){storeNavSheet.value=true}
+    function closeStoreNav(){storeNavSheet.value=false}
+    function pickStoreNav(){storeNavSheet.value=false}
+    function openSelDetail(){openStationDetail(selPoint.value)}
+    /* 预约横幅站点名 → 直接打开站点详情 */
+    function openReservedDetail(){openStationDetail(reservedCab.value&&reservedCab.value.point)}
+    /* 点击地图空白/装饰区域关闭站点卡片（点图标、顶部横幅、右侧控件、扫码钮不触发） */
+    function onMapClick(e){
+      if(!selPoint.value&&!selStore.value)return;
+      var t=e.target;
+      if(t.closest('.sw-station')||t.closest('.sw-top')||t.closest('.sw-map-ctrl')||t.closest('.sw-scan'))return;
+      selPoint.value=null;selStore.value=null;
+    }
+    function scanFromCard(){selPoint.value=null;goScan()}
+    /* 还电：直接拉起扫码页（归还操作不校验押金/套餐；未登录先登录） */
+    function goReturnScan(){window.__gc=(window.__gc||0)+1;if(!auth.loggedIn.value){pendingScan.value=true;auth.openLogin();return}swapStart()}
+    function bookFromCard(){
+      var p=selPoint.value;if(!p||reservedCab.value)return;
+      var cabs=p.cabinets||[];
+      /* 多柜站点：先进入详情页由用户选择具体柜机再预约；单柜站点直接预约 */
+      if(cabs.length>1){openSelDetail();toastPush('请选择要预约的柜机');return}
+      if(!cabs.length)return;
+      bookCab(p,cabs[0].no);
+    }
+
+    /* ── 预约（10 分钟倒计时）：以「站点 + 柜机」为维度，同一时间仅一个柜机可预约 ── */
+    var reservedCab=Vue.ref(null),reserveLeft=Vue.ref(0),swapOngoing=Vue.ref(false),reserveTimer=null,showCancelReserve=Vue.ref(false);
+    /* 地图卡片站点级：当前站点是否有预约 */
+    var stationReserved=Vue.computed(function(){return !!(reservedCab.value&&selPoint.value&&reservedCab.value.point===selPoint.value)});
+    var bookDisabled=Vue.computed(function(){return !!reservedCab.value&&!stationReserved.value});
+    function bookCab(point,cabNo){if(!point||!cabNo||reservedCab.value)return;reservedCab.value={point:point,cabNo:cabNo};reserveLeft.value=600;startReserveTimer()}
+    /* 详情页：某柜是否已预约 / 是否已被其它柜（或其它站点）占用 */
+    function isCabReserved(cabNo){return !!(reservedCab.value&&curStation.value&&reservedCab.value.point===curStation.value.point&&reservedCab.value.cabNo===cabNo)}
+    function hasReservedOther(cabNo){return !!reservedCab.value&&!isCabReserved(cabNo)}
+    function fmtReserve(sec){var m=Math.floor(sec/60),s=sec%60;return (m<10?'0':'')+m+'分'+(s<10?'0':'')+s+'秒'}
+    function stopReserveTimer(){if(reserveTimer){clearInterval(reserveTimer);reserveTimer=null}}
+    function startReserveTimer(){
+      stopReserveTimer();
+      reserveTimer=setInterval(function(){
+        if(reserveLeft.value>0)reserveLeft.value--;
+        if(reserveLeft.value<=0){stopReserveTimer();reservedCab.value=null;toastPush('预约已超时，可重新预约')}
+      },1000);
+    }
+    function cancelReserve(){stopReserveTimer();reservedCab.value=null;reserveLeft.value=0}
+    function askCancelReserve(){showCancelReserve.value=true}
+    function closeCancelReserve(){showCancelReserve.value=false}
+    function confirmCancelReserve(){showCancelReserve.value=false;cancelReserve()}
+    function onBookClick(){if(stationReserved.value){askCancelReserve();return}bookFromCard()}
+    function openReservedCard(){if(reservedCab.value)selPoint.value=reservedCab.value.point}
+    function goFlowNow(){selPoint.value=null;swapStart()}
+    function setSwapOngoing(v){swapOngoing.value=v}
+    /* 首次登录：定位授权后按定位信息匹配当前区域运营商；同区域存在多个运营商则弹窗选择 */
+    var mockCity=Vue.ref('成都市');
+    var pendingFirstLogin=Vue.ref(false);
+    var showOperatorPicker=Vue.ref(false);
+    var operatorPickerCity=Vue.ref('');
+    var operatorOptions=Vue.ref([]);
+    /* 原型：定位逆地理编码得到城市；真实环境由经纬度解析 */
+    function resolveLocCity(){return mockCity.value}
+    function findCityNode(city){
+      for(var i=0;i<AREA_TREE.length;i++){
+        var provs=AREA_TREE[i].children||[];
+        for(var j=0;j<provs.length;j++){
+          var cityNode=(provs[j].children||[]).filter(function(c){return c.name===city})[0];
+          if(cityNode)return {province:provs[j].name,node:cityNode};
+        }
+      }
+      return null;
+    }
+    /* 原型：切换定位城市（demo 面板），并同步「当前区域未开通服务」提示 */
+    function pickMockCity(city){mockCity.value=city;syncAreaNoService(city)}
+    /* 根据定位城市是否开通运营商，更新首页「当前区域未开通服务」横幅（无运营商 → 未开通） */
+    function syncAreaNoService(city){
+      var info=findCityNode(city),ops=info?((info.node.operators)||[]):[];
+      areaNoService.value=ops.length===0;
+    }
+    /* 首次登录流程入口（由 authState 在 firstLogin 分支调用）。登录与定位解耦：直接进首页，不再按定位城市匹配运营商 */
+    function firstLoginRegionFlow(){enterFirstHome()}
+    /* 真实首登（经 pendingFirstLogin 门控）完成：直接进入首页，定位授权与运营商匹配不再耦合 */
+    function enterFirstHome(){
+      pendingFirstLogin.value=false;
+      /* 定位校验链：进入时仅拉起定位授权（iOS 原生权限）；定位服务未开启不主动弹窗，由横幅「去开启」/地图 Fab 等交互拉起 */
+      showLocAppAuth.value=!locAppAuth.value;
+      auth.switchSource.value='first';
+      auth.profileOV.value=null;
+      auth.profileSub.value=null;
+      tab.value='home';
+    }
+    /* 按定位城市匹配运营商：多运营商弹窗选择，单运营商直接采用 */
+    function matchFirstLoginOperator(){
+      var city=resolveLocCity();
+      operatorPickerCity.value=city;
+      syncAreaNoService(city);
+      var info=findCityNode(city),ops=info?((info.node.operators)||[]):[];
+      if(ops.length>1){/* 弹窗选择运营商前提：登录状态已登录，未登录不弹窗 */
+        if(!auth.loggedIn.value)return;
+        operatorOptions.value=ops.map(function(n){return {value:n,label:(city||'')+n}});showOperatorPicker.value=true;return}
+      if(ops.length===1){addFirstLoginOperator(ops[0],city,info?info.province:'');finishFirstLogin();return}
+      /* 未开通服务城市：不自动添加运营商，提示后进入首页（换电区域保持未设置，首页「当前区域未开通服务」横幅提示） */
+      toastPush('该城市暂未开通换电服务');
+      finishFirstLogin();
+    }
+    function pickFirstLoginOperator(name){showOperatorPicker.value=false;if(!name)return;var city=operatorPickerCity.value,info=findCityNode(city);addFirstLoginOperator(name,city,info?info.province:'');finishFirstLogin()}
+    function closeOperatorPicker(){showOperatorPicker.value=false;finishFirstLogin()}
+    function dismissLocAuth(){showLocAuth.value=false;if(pendingFirstLogin.value){pendingFirstLogin.value=false;enterFirstHome()}}
+    function addFirstLoginOperator(name,city,province){
+      var region=(province?province:'')+(city||'');
+      swapAreas.value.forEach(function(a){a.sel=false});
+      var item={id:++areaSeq,name:name,region:region,city:city||'',sel:true};
+      swapAreas.value=swapAreas.value.concat([item]);
+      curArea.value=item;swapAreaSet.value=true;areaNoService.value=false;reloadAreaData();
+    }
+    /* 完成首登：关闭运营商弹窗/已选运营商后直接进入首页（换电区域已在 addFirstLoginOperator 置为已设置） */
+    function finishFirstLogin(){
+      pendingFirstLogin.value=false;
+      auth.switchSource.value='first';
+      auth.profileOV.value=null;
+      auth.profileSub.value=null;
+      tab.value='home';
+    }
+    var auth=authState(toastBus,{firstLoginRegionFlow:firstLoginRegionFlow});
     /* 入口登录校验的续跑：登录成功自动进入扫码换电；登录页被关闭则取消续跑；首次登录需先完成「选择系统」
        注意：watch 的 getter 会在注册时立即求值，必须放在 auth 创建之后，否则读到 undefined */
-    Vue.watch(function(){return auth.loggedIn.value},function(v){if(!v||!pendingScan.value)return;pendingScan.value=false;if(auth.profileSub.value==='subSwitchSystem')return;swapStart()});
+    Vue.watch(function(){return auth.loggedIn.value},function(v){if(!v||!pendingScan.value)return;pendingScan.value=false;if(auth.profileSub.value==='subSwitchSystem')return;if(!precheckPass())return;swapStart()});
     Vue.watch(function(){return auth.showLogin.value},function(v){if(v===false&&!auth.loggedIn.value)pendingScan.value=false});
     function setSwapArea(on){
       swapAreaSet.value=on;
       /* 与「我的-换电区域」列表选中态及当前生效运营商联动 */
       swapAreas.value.forEach(function(a){a.sel=on});
       if(on){
+        areaNoService.value=false;
         var sel=null;swapAreas.value.forEach(function(a){if(a.sel)sel=a});
         curArea.value=sel||swapAreas.value[0]||null;
       }else{
@@ -2360,7 +2710,7 @@ var _ua=Vue.createApp({
     }
     function openSwapArea(){auth.navOpen('swapArea');auth.profileOV.value='swapArea';auth.profileSub.value=null}
     function goSetSwapArea(){openSwapArea()}
-    function pickSwapArea(i){swapAreas.value.forEach(function(a,k){a.sel=(k===i)});var sel=swapAreas.value[i];if(sel){curArea.value=sel;swapAreaSet.value=true;reloadAreaData()}}
+    function pickSwapArea(i){swapAreas.value.forEach(function(a,k){a.sel=(k===i)});var sel=swapAreas.value[i];if(sel){curArea.value=sel;swapAreaSet.value=true;areaNoService.value=false;reloadAreaData()}}
     /* 原型操作：换电区域列表数据 有数据/无数据（恢复时重建带 sel:true 的默认项，避免复用被 pickSwapArea 改写 sel 的共享对象） */
     function setSwapAreasEmpty(on){swapAreas.value=on?[]:[{id:DEFAULT_AREA.id,name:DEFAULT_AREA.name,region:DEFAULT_AREA.region,city:DEFAULT_AREA.city,sel:true}]}
     function areaFind(list,name){for(var i=0;i<list.length;i++){if(list[i].name===name)return list[i]}return null}
@@ -2517,7 +2867,7 @@ var _ua=Vue.createApp({
     }
     /* 页面级状态注册进导航快照（Tab / 换电流程 / 站点 / 电池详情 / 订单详情 / 记录范围） */
     auth.addNavRefs([tab,swapShow,swapStep,showSwapManual,curStation,curCab,batteryDetailRec,planOrderDetail,swapRecordsScope]);
-    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,openStation,stations,locAuth,setLocAuth,showLocAuth,allowLocAuth,swapAreaSet,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,camAuth,setCamAuth,demoQrOk,demoOnline,demoDist,demoUnfinished,demoLevelLow,demoPlanEnough,demoTakeSlot,demoReturnSlot,planMax,setPlanMax,swapAnomaly,swapStart,swapScan,swapTorch,showSwapManual,swapManualNo,swapManualOpen,confirmSwapManual,swapBranch,swapChoice,swapToBorrow,swapBorrowDone,swapToSwap,swapSwapAfterReturn,swapSwapDone,swapClose,swapRetry,swapResumeContinue,setBoundCount},auth,sideSetup('换电用户端',toastBus))
+    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,mapType,MAP_TYPES,mapPoints,mapTheme,showMapSheet,pickMapType,openMapPoint,selPoint,selStore,closeSelPoint,closeSelStore,callStore,openStoreDetail,pointStat,openSelDetail,openReservedDetail,onMapClick,isCabReserved,hasReservedOther,bookCab,stationReserved,bookFromStation,goReturnScan,storeNavSheet,storeNavOptions,openStoreNav,closeStoreNav,pickStoreNav,callStation,scanFromCard,bookFromCard,reservedCab,reserveLeft,swapOngoing,bookDisabled,fmtReserve,cancelReserve,askCancelReserve,closeCancelReserve,confirmCancelReserve,showCancelReserve,onBookClick,openReservedCard,goFlowNow,setSwapOngoing,showPrecheck,precheckDesc,closePrecheck,precheckPass,confirmPrecheck,stations,locAppAuth,setLocAppAuth,showLocAppAuth,allowLocAppAuth,denyLocAppAuth,locReady,locAuth,setLocAuth,showLocAuth,allowLocAuth,dismissLocAuth,goEnableLoc,swapAreaSet,areaNoService,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCity,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,areaLabel,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,camAuth,setCamAuth,demoQrOk,demoOnline,demoDist,demoUnfinished,demoLevelLow,demoPlanEnough,demoTakeSlot,demoReturnSlot,planMax,setPlanMax,swapAnomaly,swapStart,swapScan,swapTorch,showSwapManual,swapManualNo,swapManualOpen,confirmSwapManual,swapBranch,swapChoice,swapToBorrow,swapBorrowDone,swapToSwap,swapSwapAfterReturn,swapSwapDone,swapClose,swapRetry,swapResumeContinue,setBoundCount,showOperatorPicker,operatorOptions,pickFirstLoginOperator,closeOperatorPicker,operatorPickerCity,mockCity,pickMockCity,firstLoginRegionFlow},auth,sideSetup('换电用户端',toastBus))
   }})
 registerSheetKit(_ua);_ua.mount(document.getElementById('root-user'));
 
