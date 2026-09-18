@@ -7,7 +7,7 @@
 ## 1. 权威源与构建红线
 
 - `index.html` 是唯一权威源，直接手改。
-- `locales/*.json` 是唯一文案源；禁止在 HTML 内联硬编码新文案。
+- `locales/rent/*.json`（租车）、`locales/swap/*.json`（换电）是唯一文案源；禁止在 HTML 内联硬编码新文案。
 - 版本控制：改完必须自检（见 §6）；`swap.html` 的独立改动与 `index.html` 分开说明。
 
 ## 2. in-DOM 模板铁律
@@ -143,29 +143,29 @@
 
 ## 5. 多语言（i18n）
 
-### 文件与方向
+### 目录与方向
 
-- `locales/` 下 5 个文件：`zh-CN.json`（**唯一权威源**）→ `zh-HK / en / id / th`（单向同步，互不派生、不回写）。
-- 嵌套 JSON、点路径 key、五语言同路径同名；UTF-8 无 BOM、2 空格缩进、结尾换行。
-- 占位符用 vue-i18n `{name}`，五语言名称与数量必须一致。
+- `locales/` 按项目拆分为两个目录：`rent/`（租车 `index.html`）与 `swap/`（换电 `swap.html`）。`rent/` 内 5 个语言文件：`zh-CN.json`（**唯一权威源**）→ `zh-HK / en / id / th`；`swap/` 内 5 个语言文件当前均为内容清空的占位文件 `{}`（待填充，校验脚本自动跳过）。均为单向同步，互不派生、不回写。
+- 嵌套 JSON、点路径 key、各目录内多语言同路径同名；UTF-8 无 BOM、2 空格缩进、结尾换行。
+- 占位符用 vue-i18n `{name}`，各目录内所有语言名称与数量必须一致。
 - **禁止数字后缀 key**（`menu.home0` 类复制粘贴残留），出现即删。
 
 ### 命名空间划分
 
-| 层 | 前缀 | 归属 |
-| --- | --- | --- |
-| 共享 | `common.*` | 两项目共用术语（货币/操作/状态/单位/语种） |
-| 租车 | `rental.user.* / rental.merchant.* / rental.demo.*` | `index.html` |
-| 换电 | `swap.*`（业务页用 `swap.user.* / swap.merchant.*`） | `swap.html` |
+目录代替项目前缀命名空间（`rental.* → rent/`、`swap.* → swap/`），前缀仅剩段级：
 
-两项目共用同一组 5 文件，键集合完全一致。
+| 目录 | 段 | 归属 |
+| --- | --- | --- |
+| 共享 | `common.*` | 两项目共用术语（货币/操作/状态/单位/语种），**须在 `rent/` 与 `swap/` 两目录内保持一致**（校验脚本负责） |
+| `rent/` | `user.* / merchant.* / demo.*` | `index.html` |
+| `swap/` | `user.* / merchant.*`（业务页），外框架键为顶层 key | `swap.html` |
 
 ### 变更流程
 
 ```
-检测（node scripts/i18n_check.mjs，按 shared/rental/swap 分组输出 MISSING/CHANGED/ORPHAN/占位符·数字不一致）
+检测（node scripts/i18n_check.mjs，按 rent/ swap/ 两目录分组输出 MISSING/CHANGED/ORPHAN/占位符·数字不一致，另含 common 段跨目录一致性检查）
 → 新增/变更 key 先写源语言值占位 → 显式翻译（禁止机翻直接入库、禁止中文常驻译文）
-→ 重跑校验：key 集合一致、占位符与数字集合一致、无数字后缀
+→ 重跑校验：各目录 key 集合一致、占位符与数字集合一致、无数字后缀、common 两目录一致
 → 格式归一化后提交（幂等：已译项不覆盖）
 ```
 
