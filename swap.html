@@ -306,7 +306,7 @@ body.host-single-m #root-user{display:none}
 <main id="host-main">
   <div class="host-stage">
     <section id="root-user">
-<div class="od-stage"><div class="w-[393px] h-[852px] bg-black rounded-[55px] p-3 relative shrink-0" style="box-shadow:0 0 0 2px #333,0 30px 60px rgba(0,0,0,.35)"><div class="absolute top-[23px] left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-black rounded-[20px] z-[2000]"></div><div class="w-full h-full bg-[#F6F7F9] rounded-[44px] overflow-hidden flex flex-col relative"><div class="toast-wrap"><transition-group name="toast"><div v-for="t in toasts" :key="t.id" class="toast-item" :class="'toast-'+t.type">{{ t.msg }}</div></transition-group></div><div v-if="!settingsOpen&&tab==='plan'" class="od-head" style="justify-content:center;border-bottom:none;padding-top:52px" data-od-id="plan-head"><span class="tt" style="flex:0 0 auto">购买套餐</span></div><div v-if="!settingsOpen" class="od-body" style="flex:1;position:relative;min-height:0;padding:0;overflow:hidden;background:var(--bg)"><transition name="tab-fade"><div v-if="tab==='home'" class="sw-map" @click="onMapClick"><div class="sw-world" :style="mapWorldStyle"><div class="road-h" style="top:24%"></div><div class="road-h" style="top:58%"></div><div class="road-v" style="left:28%"></div><div class="road-v" style="left:60%"></div><div class="road-v" style="left:84%"></div><div class="sw-maplbl" style="left:57%;top:22%">益州东二路</div><div class="sw-maplbl" style="left:70%;top:39%">创新时代广场</div><div class="sw-maplbl" style="left:9%;top:9%">瑞禧公馆</div><div class="sw-maplbl" style="left:45%;top:79%">天荟</div><div class="sw-maplbl" style="left:72%;top:86%">东方希望中心</div><div class="sw-maplbl" style="left:14%;top:46%">益州东一路</div><template v-for="p in mapPoints" :key="'pt-'+mapType+'-'+p.id"><div class="sw-station" :class="{'sel':selPoint&&selPoint.id===p.id}" :style="{left:p.left,top:p.top}" data-cp :data-od-id="'map-pt-'+mapType+'-'+p.id" @click="openMapPoint(p)"><div v-if="selPoint&&selPoint.id===p.id" class="bubble" data-cp @click.stop="openStoreNav">{{ p.dist }} | 导航</div><div class="pin" :class="{'is-img':mapType==='reCharing'}" :style="{background:mapTheme.color,'--pin-c':mapTheme.color}"><span v-if="mapType==='reCharing'" v-html="luci('inbox','w-5 h-5')"></span><template v-else><span v-if="mapTheme.icon" v-html="luci(mapTheme.icon,'w-4 h-4')"></span><span v-else class="text-[11px] font-bold leading-none">{{ mapTheme.text }}</span></template><span v-if="p.rec" class="num" :style="{borderColor:mapTheme.color,color:mapTheme.color}">推荐</span><span v-else-if="p.badge!=null" class="num" :style="{borderColor:mapTheme.color,color:mapTheme.color}">{{ p.badge }}</span></div><div v-if="selPoint&&selPoint.id===p.id" class="dot"></div><div v-if="p.cap" class="cap">{{ p.cap }}</div></div></template></div><div v-if="searchCenter" class="sw-poi" data-cp @click.stop="clearSearchCenter()" data-od-id="map-poi-pin"><span class="pdot"></span><span class="pnm">{{ searchCenter.name }}</span></div><div class="sw-top"><div class="sw-search" data-cp @click="openSearch()"><span v-html="luci('search','w-4 h-4 text-[#8A9999]')"></span><span class="text-[13px] text-[#8A9999]">请输入目的地</span></div><div v-if="swapOngoing" class="sw-flow" data-od-id="home-flow-banner"><span class="tx">您有一个进行中的流程</span><button class="go" data-cp @click="goFlowNow">立即前往</button></div><div v-else-if="reservedCab" class="sw-reserve" data-cp @click="openReservedCard" data-od-id="home-reserve-banner"><div class="nm" data-cp @click.stop="openReservedDetail">{{ reservedCab.point.name }} · {{ reservedCab.cabNo }}号柜</div><div class="ad">{{ reservedCab.point.addr }}</div><div class="ft"><span class="cd">预约中 {{ fmtReserve(reserveLeft) }}</span><button class="cancel" data-cp @click.stop="askCancelReserve">取消预约</button></div></div><div v-if="!loggedIn" data-cp @click="openLogin('home')" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#2B3F5F;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-login-banner"><span class="flex-1 min-w-0 text-[13px] text-white font-medium">您还未登录，点我快速登录</span><button data-cp @click.stop="openLogin('home')" class="shrink-0 px-3 py-1.5 rounded-lg text-[12px] font-semibold text-white" style="border:1px solid rgba(255,255,255,.5);background:transparent">去登录</button></div><div v-if="!locReady" data-cp @click="goEnableLoc" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-loc-banner"><span class="flex-1 min-w-0 flex flex-col gap-1"><span class="text-[15px] font-semibold leading-tight" style="color:#111">定位服务未开启</span><span class="text-[12px] leading-snug" style="color:#999">开启后才能获取附近换电站点</span></span><button data-cp @click.stop="goEnableLoc" class="shrink-0 flex items-center gap-0.5 px-3 py-1.5 text-[12px] font-semibold whitespace-nowrap" style="border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;border-radius:10px"><span>去开启</span></button></div><div v-if="loggedIn&&!swapAreaSet" data-cp @click="goSetSwapArea" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-area-banner"><span class="flex-1 min-w-0 text-[13px] font-medium" style="color:#111">您尚未设置换电区域</span><button data-cp @click.stop="goSetSwapArea" class="shrink-0 flex items-center gap-0.5 px-3 py-1.5 text-[12px] font-semibold" style="border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;border-radius:10px">去设置</button></div><div v-if="areaNoService" data-cp @click="goSetSwapArea" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-noservice-banner"><span class="flex-1 min-w-0 text-[13px] font-medium" style="color:#111">当前区域未开通服务</span></div></div><div class="sw-map-ctrl"><button data-cp @click="goLayer" v-html="luci('layers','w-4 h-4')"></button><button data-cp @click="goLocate" v-html="luci('crosshair','w-4 h-4')"></button><button data-cp @click="goRefresh" v-html="luci('refresh-cw','w-4 h-4')"></button></div><div v-if="!selPoint" class="sw-scan"><button data-cp @click="goScan"><span v-html="luci('scan-line','w-5 h-5')"></span>扫码换电</button></div></div></transition>
+<div class="od-stage"><div class="w-[393px] h-[852px] bg-black rounded-[55px] p-3 relative shrink-0" style="box-shadow:0 0 0 2px #333,0 30px 60px rgba(0,0,0,.35)"><div class="absolute top-[23px] left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-black rounded-[20px] z-[2000]"></div><div class="w-full h-full bg-[#F6F7F9] rounded-[44px] overflow-hidden flex flex-col relative"><div class="toast-wrap"><transition-group name="toast"><div v-for="t in toasts" :key="t.id" class="toast-item" :class="'toast-'+t.type">{{ t.msg }}</div></transition-group></div><div v-if="!settingsOpen&&tab==='plan'" class="od-head" style="justify-content:center;border-bottom:none;padding-top:52px" data-od-id="plan-head"><span class="tt" style="flex:0 0 auto">购买套餐</span></div><div v-if="!settingsOpen" class="od-body" style="flex:1;position:relative;min-height:0;padding:0;overflow:hidden;background:var(--bg)"><transition name="tab-fade"><div v-if="tab==='home'" class="sw-map" @click="onMapClick"><div class="sw-world" :style="mapWorldStyle"><div class="road-h" style="top:24%"></div><div class="road-h" style="top:58%"></div><div class="road-v" style="left:28%"></div><div class="road-v" style="left:60%"></div><div class="road-v" style="left:84%"></div><div class="sw-maplbl" style="left:57%;top:22%">益州东二路</div><div class="sw-maplbl" style="left:70%;top:39%">创新时代广场</div><div class="sw-maplbl" style="left:9%;top:9%">瑞禧公馆</div><div class="sw-maplbl" style="left:45%;top:79%">天荟</div><div class="sw-maplbl" style="left:72%;top:86%">东方希望中心</div><div class="sw-maplbl" style="left:14%;top:46%">益州东一路</div><template v-for="p in mapPoints" :key="'pt-'+mapType+'-'+p.id"><div class="sw-station" :class="{'sel':selPoint&&selPoint.id===p.id}" :style="{left:p.left,top:p.top}" data-cp :data-od-id="'map-pt-'+mapType+'-'+p.id" @click="openMapPoint(p)"><div v-if="selPoint&&selPoint.id===p.id" class="bubble" data-cp @click.stop="openStoreNav">{{ p.dist }} | 导航</div><div class="pin" :class="{'is-img':mapType==='reCharing'}" :style="{background:mapTheme.color,'--pin-c':mapTheme.color}"><span v-if="mapType==='reCharing'" v-html="luci('inbox','w-5 h-5')"></span><template v-else><span v-if="mapTheme.icon" v-html="luci(mapTheme.icon,'w-4 h-4')"></span><span v-else class="text-[11px] font-bold leading-none">{{ mapTheme.text }}</span></template><span v-if="p.rec" class="num" :style="{borderColor:mapTheme.color,color:mapTheme.color}">推荐</span><span v-else-if="p.badge!=null" class="num" :style="{borderColor:mapTheme.color,color:mapTheme.color}">{{ p.badge }}</span></div><div v-if="selPoint&&selPoint.id===p.id" class="dot"></div><div v-if="p.cap" class="cap">{{ p.cap }}</div></div></template></div><div v-if="searchCenter" class="sw-poi" data-cp @click.stop="clearSearchCenter()" data-od-id="map-poi-pin"><span class="pdot"></span><span class="pnm">{{ searchCenter.name }}</span></div><div class="sw-top"><div class="sw-search" data-cp @click="openSearch()"><span v-html="luci('search','w-4 h-4 text-[#8A9999]')"></span><span class="text-[13px] text-[#8A9999]">请输入目的地</span></div><div v-if="swapOngoing" class="sw-flow" data-od-id="home-flow-banner"><span class="tx">您有一个进行中的流程</span><button class="go" data-cp @click="goFlowNow">立即前往</button></div><div v-else-if="reservedCab" class="sw-reserve" data-cp @click="openReservedCard" data-od-id="home-reserve-banner"><div class="nm" data-cp @click.stop="openReservedDetail">{{ reservedCab.point.name }} · {{ reservedCab.cabNo }}号柜</div><div class="ad">{{ reservedCab.point.addr }}</div><div class="ft"><span class="cd">预约中 {{ fmtReserve(reserveLeft) }}</span><button class="cancel" data-cp @click.stop="askCancelReserve">取消预约</button></div></div><div v-if="!loggedIn" data-cp @click="openLogin('home')" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#2B3F5F;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-login-banner"><span class="flex-1 min-w-0 text-[13px] text-white font-medium">您还未登录，点我快速登录</span><button data-cp @click.stop="openLogin('home')" class="shrink-0 px-3 py-1.5 rounded-lg text-[12px] font-semibold text-white" style="border:1px solid rgba(255,255,255,.5);background:transparent">去登录</button></div><div v-if="!locReady" data-cp @click="goEnableLoc" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-loc-banner"><span class="flex-1 min-w-0 flex flex-col gap-1"><span class="text-[15px] font-semibold leading-tight" style="color:#111">定位服务未开启</span><span class="text-[12px] leading-snug" style="color:#999">开启后才能获取附近换电站点</span></span><button data-cp @click.stop="goEnableLoc" class="shrink-0 flex items-center gap-0.5 px-3 py-1.5 text-[12px] font-semibold whitespace-nowrap" style="border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;border-radius:10px"><span>去开启</span></button></div><div v-if="loggedIn&&!swapAreaSet" data-cp @click="goSetSwapArea" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-area-banner"><span class="flex-1 min-w-0 text-[13px] font-medium" style="color:#111">您尚未设置换电区域</span><button data-cp @click.stop="goSetSwapArea" class="shrink-0 flex items-center gap-0.5 px-3 py-1.5 text-[12px] font-semibold" style="border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;border-radius:10px">去设置</button></div><div v-if="areaNoService" data-cp @click="goSetSwapArea" class="flex items-center justify-between gap-3 px-3.5 py-3 cursor-pointer active:opacity-90" style="background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="home-noservice-banner"><span class="flex-1 min-w-0 text-[13px] font-medium" style="color:#111">当前区域未开通服务</span></div></div><div class="sw-map-ctrl"><button data-cp @click="goLayer" v-html="luci('layers','w-4 h-4')"></button><button data-cp @click="goLocate" v-html="luci('crosshair','w-4 h-4')"></button><button data-cp @click="goRefresh" v-html="luci('refresh-cw','w-4 h-4')"></button></div><div v-if="!selPoint" class="sw-scan"><button data-cp @click="goScan" data-od-id="home-scan-entry"><span v-html="luci('scan-line','w-5 h-5')"></span>扫码换电</button></div></div></transition>
 <transition name="tab-fade"><div v-if="tab==='plan'" class="absolute left-0 right-0 top-0 bottom-[83px] flex flex-col" data-od-id="plan-page">
 <div class="px-4 pt-3 shrink-0">
 <div v-if="!loggedIn" data-cp @click="openLogin()" class="flex items-center justify-between gap-3 px-3.5 py-3 mb-3 cursor-pointer active:opacity-90" style="background:#2B3F5F;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.12)" data-od-id="plan-login-banner">
@@ -433,7 +433,7 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="sw-card-btns">
 <button class="sw-card-scan" data-cp @click="scanFromCard"><span v-html="luci('scan-line','w-5 h-5')"></span>扫码换电</button>
-<button class="sw-card-book" data-cp @click="goReturnScan"><span v-html="luci('scan-line','w-5 h-5')"></span>扫码还电</button>
+<button class="sw-card-book" data-cp :class="bookDisabled?'is-off':''" :disabled="bookDisabled" @click="onBookClick">{{ stationReserved?'取消预约':'预约换电' }}</button>
 </div>
 </div></transition><transition name="swup"><div v-if="tab==='home'&&!settingsOpen&&selStore" class="sw-store-card" data-od-id="store-card">
 <div class="sw-store-thumb"><span v-html="luci('store','w-9 h-9 text-[#E08A2E]')"></span></div>
@@ -452,7 +452,8 @@ body.host-single-m #root-user{display:none}
 </div></transition><tab-bar :show="!settingsOpen" active-color="#FF6A00" :items="[{key:'home',icon:'map-pin',label:'首页',activeWhen:tab==='home'},{key:'plan',icon:'package',label:'套餐',activeWhen:tab==='plan'},{key:'mine',icon:'user',label:'我的',activeWhen:tab==='mine'}]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
 <confirm-dialog :open="showCancelReserve" z="1700" oid="cancel-reserve-dialog" title="取消预约" desc="确定取消预约？取消预约后，10分钟内不可再次预约" :cancel-text="'取消'" :confirm-text="'确认'" confirm-bg="var(--accent)" @close="closeCancelReserve()" @confirm="confirmCancelReserve()"></confirm-dialog>
 <confirm-dialog :open="showPrecheck" z="1750" oid="swap-precheck-dialog" :title="precheckTitle" :desc="precheckDesc" :cancel-text="'取消'" :confirm-text="precheckConfirmText" confirm-bg="var(--accent)" @close="closePrecheck()" @confirm="confirmPrecheck()"></confirm-dialog>
-<confirm-dialog :open="showQrErr" z="1800" oid="swap-qr-err-dialog" :mask-close="false" title="二维码无效" desc="二维码无效，请重新扫码" cancel-text="" confirm-text="我知道了" confirm-bg="var(--accent)" @close="closeQrErr" @confirm="closeQrErr"></confirm-dialog>
+<confirm-dialog :open="showLevelWarn" z="1800" oid="swap-level-warn-dialog" title="电量偏低" desc="可分配的电池电量偏低（&lt;70%），继续使用可能会影响您的续航里程。" cancel-text="取消" confirm-text="继续" confirm-bg="var(--accent)" @close="swapLevelCancel" @confirm="swapLevelContinue"></confirm-dialog>
+<confirm-dialog :open="showChoice" z="1800" oid="swap-choice-dialog" :mask-close="false" title="选择操作" :desc="choiceDesc" cancel-text="借电" confirm-text="换电" confirm-bg="var(--accent)" @close="swapChoiceBorrow" @confirm="swapChoiceSwap"></confirm-dialog>
 <option-sheet :open="storeNavSheet" title="导航" :options="storeNavOptions" :mask-z="1100" oid="store-nav-mask" panel-oid="store-nav-sheet" @select="pickStoreNav" @close="closeStoreNav"></option-sheet>
 <transition name="fd"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="login-page">
 <div v-show="loginView==='main'" class="flex-1 flex flex-col min-h-0 bg-[#F6F7F9]">
@@ -1022,12 +1023,12 @@ body.host-single-m #root-user{display:none}
 <div class="mt-4 flex items-center gap-2.5">
 <div v-if="isCabReserved(cab.no)" class="flex-1 min-w-0 h-11 rounded-xl flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer active:opacity-90" style="background:#FFF4E8" data-cp @click="askCancelReserve" data-od-id="cab-cancel-reserve"><span class="text-[13px] font-semibold" style="color:#FF7A00">预约中 {{ fmtReserve(reserveLeft) }}</span><span class="text-[13px] font-semibold" style="color:#FF7A00">取消预约</span></div>
 <button v-else-if="!hasReservedOther(cab.no)&&curStation.fromMapType!=='reCharing'" class="flex-1 min-w-0 h-11 rounded-xl text-[15px] font-semibold whitespace-nowrap" style="background:#fff;color:#111;border:1px solid #E0E0E0" data-cp @click="bookFromStation(cab)">预约换电</button>
-<button v-if="curStation.fromMapType==='reCharing'" class="flex-1 min-w-0 h-11 rounded-xl flex items-center justify-center gap-1.5 text-[15px] font-semibold whitespace-nowrap" style="background:#fff;color:#111;border:1px solid #E0E0E0" data-cp @click="goReturnScan" :data-od-id="'cab-return-'+cab.no"><span class="flex items-center" v-html="luci('scan-line','w-5 h-5')"></span>扫码还电</button>
 </div>
 </div>
 </div>
 <confirm-dialog :open="showBorrow" :z="1100" oid="borrow-sheet" title="确认借电" :confirm-text="(cabinetFull&&curCab&&curCab.full>0)?'确认借电':'无法借电'" :confirm-bg="(cabinetFull&&curCab&&curCab.full>0)?'linear-gradient(135deg,#33456B,#22304E)':'#C9CED6'" @close="showBorrow=false" @confirm="confirmBorrow"><div class="text-[13px] mb-4" style="color:#888">将从 <span style="color:#333">{{ curStation.name }} · {{ curCab.no }} 号柜</span> 借出一块满电电池</div><div class="flex items-center justify-between py-2.5" style="border-top:1px solid #F0F0F0;border-bottom:1px solid #F0F0F0"><span class="text-[14px]" style="color:#999">可用满电电池</span><span class="text-[15px] font-bold" :style="(cabinetFull&&curCab&&curCab.full>0)?'color:#17A34A':'color:#FF3B30'">{{ (cabinetFull&&curCab&&curCab.full>0)?(curCab.full+' 块'):'暂无' }}</span></div><div v-if="!(cabinetFull&&curCab&&curCab.full>0)" class="text-[12px] mt-2" style="color:#FF3B30">该柜机暂无可借满电电池，请前往其他柜机或站点</div></confirm-dialog></page>
 <confirm-dialog :open="showReturn" :z="1100" oid="return-sheet" title="还电到此柜" confirm-text="确认还电" :confirm-bg="'linear-gradient(135deg,#33456B,#22304E)'" @close="showReturn=false" @confirm="confirmReturn"><div class="text-[13px] mb-3" style="color:#888">{{ curStation.name }} · {{ curCab.no }} 号柜</div><div class="text-[13px] font-medium mb-2" style="color:#666">选择要归还的电池</div><div class="max-h-[180px] overflow-y-auto hide-scroll"><div v-for="b in batteryList" :key="b.id" data-cp @click="returnBattery=b" class="flex items-center justify-between py-3 px-3 rounded-xl cursor-pointer" :style="returnBattery&&returnBattery.id===b.id?'background:#EEF1F8;border:1px solid #2B3F5F':'border:1px solid #F0F0F0'" :data-od-id="'return-bat-'+b.id"><span class="text-[14px] font-medium" style="color:#111">{{ b.no }}</span><span v-if="returnBattery&&returnBattery.id===b.id" v-html="luci('check','w-4 h-4 text-[#2B3F5F]')"></span></div></div></confirm-dialog>
+<confirm-dialog :open="showFlowEnd" :z="1900" oid="swap-flow-end-dialog" title="网络断开" desc="网络连接已断开，请检查网络状况" cancel-text="" confirm-text="确认" :confirm-bg="'linear-gradient(135deg,#33456B,#22304E)'" @close="flowEndHome" @confirm="flowEndHome"></confirm-dialog>
 <page :open="profileOV==='swap'" :z="700" :bg="'linear-gradient(180deg,#0E1116 0%,#161B22 100%)'" oid="swap-flow">
   <div class="flex items-center pt-14 px-4 pb-3 shrink-0">
     <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-white/90 active:bg-white/10" data-cp @click="swapClose"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
@@ -1054,90 +1055,139 @@ body.host-single-m #root-user{display:none}
         </div>
       </div>
     </div>
-    <div v-else-if="swapStep==='err-offline'" class="flex flex-col items-center pt-16 text-center">
-      <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FDECEA"><span v-html="luci('wifi-off','w-8 h-8 text-[#FF3B30]')"></span></div>
-      <div class="text-[17px] font-bold mt-5" style="color:#fff">设备已离线</div>
-      <div class="text-[13px] mt-2" style="color:#9AA4B2">该换电柜暂无法使用，请更换附近柜机</div>
-      <button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">我知道了</button>
-    </div>
-    <div v-else-if="swapStep==='err-dist'" class="flex flex-col items-center pt-16 text-center">
-      <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FDECEA"><span v-html="luci('map-pin-off','w-8 h-8 text-[#FF3B30]')"></span></div>
-      <div class="text-[17px] font-bold mt-5" style="color:#fff">距离过远无法操作</div>
-      <div class="text-[13px] mt-2" style="color:#9AA4B2">请靠近机柜（30米内）后重新扫码</div>
-      <button data-cp @click="swapRetry" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">重新扫码</button>
-    </div>
-    <div v-else-if="swapStep==='warn-level'" class="flex flex-col items-center pt-16 text-center">
-      <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FFF7E6"><span v-html="luci('battery-warning','w-8 h-8 text-[#E9A23B]')"></span></div>
-      <div class="text-[17px] font-bold mt-5" style="color:#fff">柜机电池电量偏低</div>
-      <div class="text-[13px] mt-2 px-2" style="color:#9AA4B2">当前可分配电池电量低于 70%，继续使用可能影响续航里程</div>
-      <button data-cp @click="swapBranch" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">继续使用</button>
-      <button data-cp @click="swapClose" class="mt-3 w-full h-[48px] rounded-full text-[15px] font-medium cursor-pointer" style="border:1px solid #2A3340;color:#9AA4B2">取消</button>
-    </div>
-    <div v-else-if="swapStep==='choice'" class="pt-10">
-      <div class="text-[16px] font-semibold mb-2" style="color:#fff">请选择操作</div>
-      <div class="text-[13px] mb-5" style="color:#9AA4B2">检测到您已持有 {{ batteryList.length }} 块电池（上限 {{ planMax }} 块）</div>
-      <div data-cp @click="swapChoice('swap')" class="w-full h-[56px] rounded-2xl flex items-center px-5 mb-3 cursor-pointer active:opacity-90" style="background:#1C2430;border:1px solid #2A3340">
-        <span class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#EBF1FD"><span v-html="luci('refresh-cw','w-5 h-5 text-[#2B3F5F]')"></span></span>
-        <div class="ml-3"><div class="text-[15px] font-semibold" style="color:#fff">换电</div><div class="text-[12px]" style="color:#9AA4B2">归还旧电池并取满电电池</div></div>
+    <div v-else-if="isBorrowFlow" class="absolute inset-0 flex flex-col" style="background:#F6F7F9" data-od-id="swap-borrow-page">
+      <nav-bar title="借电" bg="#F6F7F9" :border-color="''" @back="swapClose()"></nav-bar>
+      <div class="px-5 pt-1 pb-5 shrink-0">
+        <div class="flex items-start">
+          <div class="flex flex-col items-center" style="width:92px">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold transition-colors" :style="stepDot(1)">1</div>
+            <div class="text-[12px] mt-1.5 font-medium whitespace-nowrap transition-colors" :style="stepText(1)">打开满电仓</div>
+          </div>
+          <div class="flex-1 h-[2px] rounded-full mt-[13px] transition-colors" :style="stepLine()"></div>
+          <div class="flex flex-col items-center" style="width:92px">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold transition-colors" :style="stepDot(2)">2</div>
+            <div class="text-[12px] mt-1.5 font-medium whitespace-nowrap transition-colors" :style="stepText(2)">取出电池</div>
+          </div>
+        </div>
       </div>
-      <div data-cp @click="swapChoice('borrow')" class="w-full h-[56px] rounded-2xl flex items-center px-5 cursor-pointer active:opacity-90" style="background:#1C2430;border:1px solid #2A3340">
-        <span class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#F0FDF4"><span v-html="luci('battery-charging','w-5 h-5 text-[#17A34A]')"></span></span>
-        <div class="ml-3"><div class="text-[15px] font-semibold" style="color:#fff">新增借电</div><div class="text-[12px]" style="color:#9AA4B2">不归还，再借一块满电电池</div></div>
+      <div class="flex-1 min-h-0 mx-3 mb-3 bg-white rounded-2xl flex flex-col items-center px-6 pt-12 overflow-y-auto hide-scroll">
+        <template v-if="swapStep==='borrow-idle'||swapStep==='borrow-opening'">
+          <img src="images/swap/img_cangmen_open_wait.png" alt="满电仓门打开中" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111">满电仓门打开中（{{ borrowOpenPct }}%）</div>
+          <div class="w-full h-2 rounded-full mt-6 overflow-hidden shrink-0" style="background:#F0F0F0"><div class="h-full rounded-full transition-all duration-200" :style="{width:borrowOpenPct+'%',background:'#FF6A00'}"></div></div>
+        </template>
+        <template v-else-if="swapStep==='borrow-fail'">
+          <img src="images/swap/img_liucheng_fail.png" alt="仓门打开失败" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111">{{ borrowFailTitle }}</div>
+          <div class="text-[13px] mt-2.5 text-center" style="color:#999">流程结束原因说明</div>
+          <button data-cp @click="swapBorrowRetry" class="mt-10 w-[200px] h-12 rounded-full text-[15px] font-semibold text-white cursor-pointer active:opacity-90 shrink-0" style="background:#22304E" data-od-id="swap-borrow-retry">重试</button>
+        </template>
+        <template v-else-if="swapStep==='borrow-door'">
+          <img src="images/swap/img_cangmen_open_success.png" alt="仓门已打开" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111"><span style="color:#FF6A00">{{ borrowSlotNo }}号</span> ｜ 仓门已打开</div>
+          <div class="text-[14px] mt-2.5 text-center" style="color:#111">请取走电池并关闭仓门 ｜ <span style="color:#FF6A00">{{ borrowLeft }}s</span></div>
+        </template>
+        <template v-else>
+          <img src="images/swap/img_liucheng_finish.png" alt="借电完成" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111">电池取出成功，借电完成</div>
+          <button data-cp @click="flowDoneHome" class="mt-10 w-[200px] h-12 rounded-full text-[15px] font-semibold text-white cursor-pointer active:opacity-90 shrink-0" style="background:#22304E" data-od-id="swap-borrow-finish">完成</button>
+        </template>
       </div>
     </div>
-    <div v-else-if="swapStep==='borrow-door'" class="pt-8">
-      <div class="rounded-2xl px-5 py-5" style="background:#1C2430;border:1px solid #2A3340">
-        <div class="flex items-center justify-between"><span class="text-[14px]" style="color:#9AA4B2">机柜</span><span class="text-[14px] font-semibold" style="color:#fff">{{ swapCtx.station.name }} · {{ swapCtx.cab.no }} 号柜</span></div>
-        <div class="flex items-center justify-between mt-3"><span class="text-[14px]" style="color:#9AA4B2">状态</span><span class="text-[14px] font-semibold" style="color:#17A34A">取电仓门已打开</span></div>
+    <div v-else-if="isReturnFlow" class="absolute inset-0 flex flex-col" style="background:#F6F7F9" data-od-id="swap-return-page">
+      <nav-bar title="还电" bg="#F6F7F9" :border-color="''" @back="swapClose()"></nav-bar>
+      <div class="px-5 pt-1 pb-5 shrink-0">
+        <div class="flex items-start">
+          <div class="flex flex-col items-center" style="width:92px">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold transition-colors" :style="stepDot(1)">1</div>
+            <div class="text-[12px] mt-1.5 font-medium whitespace-nowrap transition-colors" :style="stepText(1)">打开空仓</div>
+          </div>
+          <div class="flex-1 h-[2px] rounded-full mt-[13px] transition-colors" :style="stepLine()"></div>
+          <div class="flex flex-col items-center" style="width:92px">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold transition-colors" :style="stepDot(2)">2</div>
+            <div class="text-[12px] mt-1.5 font-medium whitespace-nowrap transition-colors" :style="stepText(2)">放入电池</div>
+          </div>
+        </div>
       </div>
-      <div class="text-[14px] mt-5" style="color:#CBD3DE">请取出满电电池并关闭仓门。系统将自动识别并绑定。</div>
-      <button data-cp @click="swapBorrowDone" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="swap-borrow-take">我已取出并关闭仓门</button>
-      <div class="text-[12px] mt-4 text-center" style="color:#6B7280">（演示：可在右侧开启「借电超时 / 未取出」模拟异常）</div>
+      <div class="flex-1 min-h-0 mx-3 mb-3 bg-white rounded-2xl flex flex-col items-center px-6 pt-12 overflow-y-auto hide-scroll">
+        <template v-if="swapStep==='return-opening'">
+          <img src="images/swap/img_cangmen_open_wait.png" alt="空仓门打开中" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111">空仓门打开中（{{ returnOpenPct }}%）</div>
+          <div class="w-full h-2 rounded-full mt-6 overflow-hidden shrink-0" style="background:#F0F0F0"><div class="h-full rounded-full transition-all duration-200" :style="{width:returnOpenPct+'%',background:'#FF6A00'}"></div></div>
+        </template>
+        <template v-else-if="swapStep==='return-openfail'">
+          <img src="images/swap/img_liucheng_fail.png" alt="仓门打开失败" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111">仓门打开失败</div>
+          <div class="text-[13px] mt-2.5 text-center" style="color:#999">流程结束原因说明</div>
+          <button data-cp @click="returnRetry" class="mt-10 w-[200px] h-12 rounded-full text-[15px] font-semibold text-white cursor-pointer active:opacity-90 shrink-0" style="background:#22304E" data-od-id="swap-return-retry">重试</button>
+        </template>
+        <template v-else-if="swapStep==='return-fail'">
+          <img src="images/swap/img_liucheng_fail.png" alt="电池放入失败" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111">电池放入失败</div>
+          <div class="text-[13px] mt-2.5 text-center" style="color:#999">流程结束原因说明</div>
+          <button data-cp @click="returnFailHome" class="mt-10 w-[200px] h-12 rounded-full text-[15px] font-semibold text-white cursor-pointer active:opacity-90 shrink-0" style="background:#22304E" data-od-id="swap-return-fail-home">返回首页</button>
+        </template>
+        <template v-else-if="swapStep==='return-door'">
+          <img src="images/swap/img_cangmen_open_success.png" alt="仓门已打开" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111"><span style="color:#FF6A00">{{ returnSlotNo }}号</span> ｜ 仓门已打开</div>
+          <div class="text-[14px] mt-2.5 text-center" style="color:#111">请放入旧电池并关闭仓门 ｜ <span style="color:#FF6A00">{{ returnLeft }}s</span></div>
+        </template>
+        <template v-else>
+          <img src="images/swap/img_liucheng_finish.png" alt="还电完成" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111">电池归还成功，还电完成</div>
+          <button data-cp @click="flowDoneHome" class="mt-10 w-[200px] h-12 rounded-full text-[15px] font-semibold text-white cursor-pointer active:opacity-90 shrink-0" style="background:#22304E" data-od-id="swap-return-finish">完成</button>
+        </template>
+      </div>
     </div>
-    <template v-else-if="swapStep==='borrow-timeout'||swapStep==='borrow-notake'">
-      <div class="flex flex-col items-center pt-16 text-center">
-        <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FDECEA"><span v-html="luci('clock','w-8 h-8 text-[#FF3B30]')"></span></div>
-        <div class="text-[17px] font-bold mt-5" style="color:#fff">{{ swapStep==='borrow-timeout'?'操作超时':'未检测到电池取出' }}</div>
-        <div class="text-[13px] mt-2" style="color:#9AA4B2">{{ swapStep==='borrow-timeout'?'订单已取消，请重试':'订单已自动结束' }}</div>
-        <button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">我知道了</button>
+    <div v-else-if="isSwapFlow" class="absolute inset-0 flex flex-col" style="background:#F6F7F9" data-od-id="swap-flow-page">
+      <nav-bar title="换电" bg="#F6F7F9" :border-color="''" @back="swapClose()"></nav-bar>
+      <div class="px-4 pt-1 pb-5 shrink-0">
+        <div class="flex items-start">
+          <div class="flex flex-col items-center" style="width:70px">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold transition-colors" :style="stepDot(1)">1</div>
+            <div class="text-[12px] mt-1.5 font-medium whitespace-nowrap transition-colors" :style="stepText(1)">打开空仓</div>
+          </div>
+          <div class="flex-1 h-[2px] rounded-full mt-[13px] transition-colors" :style="stepLine(1)"></div>
+          <div class="flex flex-col items-center" style="width:70px">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold transition-colors" :style="stepDot(2)">2</div>
+            <div class="text-[12px] mt-1.5 font-medium whitespace-nowrap transition-colors" :style="stepText(2)">放入旧电池</div>
+          </div>
+          <div class="flex-1 h-[2px] rounded-full mt-[13px] transition-colors" :style="stepLine(2)"></div>
+          <div class="flex flex-col items-center" style="width:70px">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold transition-colors" :style="stepDot(3)">3</div>
+            <div class="text-[12px] mt-1.5 font-medium whitespace-nowrap transition-colors" :style="stepText(3)">打开满电仓</div>
+          </div>
+          <div class="flex-1 h-[2px] rounded-full mt-[13px] transition-colors" :style="stepLine(3)"></div>
+          <div class="flex flex-col items-center" style="width:70px">
+            <div class="w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold transition-colors" :style="stepDot(4)">4</div>
+            <div class="text-[12px] mt-1.5 font-medium whitespace-nowrap transition-colors" :style="stepText(4)">取出新电池</div>
+          </div>
+        </div>
       </div>
-    </template>
-    <div v-else-if="swapStep==='borrow-done'" class="flex flex-col items-center pt-14 text-center">
-      <div class="w-20 h-20 rounded-full flex items-center justify-center" style="background:#F0FDF4"><span v-html="luci('check-circle','w-10 h-10 text-[#17A34A]')"></span></div>
-      <div class="text-[18px] font-bold mt-5" style="color:#fff">借电完成</div>
-      <div class="text-[13px] mt-2" style="color:#9AA4B2">电池已存入「我的电池」，可前往使用</div>
-      <button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">完成</button>
-    </div>
-    <div v-else-if="swapStep==='swap-returndoor'" class="pt-8">
-      <div class="rounded-2xl px-5 py-5" style="background:#1C2430;border:1px solid #2A3340">
-        <div class="flex items-center justify-between"><span class="text-[14px]" style="color:#9AA4B2">机柜</span><span class="text-[14px] font-semibold" style="color:#fff">{{ swapCtx.station.name }} · {{ swapCtx.cab.no }} 号柜</span></div>
-        <div class="flex items-center justify-between mt-3"><span class="text-[14px]" style="color:#9AA4B2">状态</span><span class="text-[14px] font-semibold" style="color:#17A34A">归还仓门已打开</span></div>
+      <div class="flex-1 min-h-0 mx-3 mb-3 bg-white rounded-2xl flex flex-col items-center px-6 pt-12 overflow-y-auto hide-scroll">
+        <template v-if="swapStep==='swap-open'||swapStep==='swap-fullopen'">
+          <img src="images/swap/img_cangmen_open_wait.png" alt="仓门打开中" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111">{{ swapStep==='swap-open'?'空仓门打开中':'满电仓门打开中' }}（{{ swapStep==='swap-open'?swapOpenPct:swapFullPct }}%）</div>
+          <div class="w-full h-2 rounded-full mt-6 overflow-hidden shrink-0" style="background:#F0F0F0"><div class="h-full rounded-full transition-all duration-200" :style="{width:(swapStep==='swap-open'?swapOpenPct:swapFullPct)+'%',background:'#FF6A00'}"></div></div>
+        </template>
+        <template v-else-if="swapStep==='swap-put'||swapStep==='swap-take'">
+          <img src="images/swap/img_cangmen_open_success.png" alt="仓门已打开" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111"><span style="color:#FF6A00">{{ swapSlotNo }}号</span> ｜ 仓门已打开</div>
+          <div class="text-[14px] mt-2.5 text-center" style="color:#111">{{ swapStep==='swap-put'?'请放入旧电池并关闭仓门':'请取走电池并关闭仓门' }} ｜ <span style="color:#FF6A00">{{ swapStep==='swap-put'?swapLeft:swapTakeLeft }}s</span></div>
+        </template>
+        <template v-else-if="swapFailTitle">
+          <img src="images/swap/img_liucheng_fail.png" alt="失败" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111">{{ swapFailTitle }}</div>
+          <div class="text-[13px] mt-2.5 text-center" style="color:#999">流程结束原因说明</div>
+          <button v-if="swapStep==='swap-openfail'" data-cp @click="swapFlowRetry" class="mt-10 w-[200px] h-12 rounded-full text-[15px] font-semibold text-white cursor-pointer active:opacity-90 shrink-0" style="background:#22304E" data-od-id="swap-flow-retry">重试</button>
+          <button v-else data-cp @click="swapFailHome" class="mt-10 w-[200px] h-12 rounded-full text-[15px] font-semibold text-white cursor-pointer active:opacity-90 shrink-0" style="background:#22304E" data-od-id="swap-flow-fail-home">返回首页</button>
+        </template>
+        <template v-else>
+          <img src="images/swap/img_liucheng_finish.png" alt="换电完成" class="w-full max-w-[270px] h-auto shrink-0">
+          <div class="text-[18px] font-bold mt-8 text-center" style="color:#111">电池取出成功，换电完成</div>
+          <button data-cp @click="flowDoneHome" class="mt-10 w-[200px] h-12 rounded-full text-[15px] font-semibold text-white cursor-pointer active:opacity-90 shrink-0" style="background:#22304E" data-od-id="swap-flow-finish">完成</button>
+        </template>
       </div>
-      <div class="text-[14px] mt-5" style="color:#CBD3DE">请将旧电池放入仓内并关闭仓门，系统将自动校验并弹开满电仓。</div>
-      <button data-cp @click="swapSwapAfterReturn" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="swap-return-put">我已放入并关闭仓门</button>
-      <div class="text-[12px] mt-4 text-center" style="color:#6B7280">（演示：可在右侧开启「未检测 / 电池异常」模拟）</div>
-    </div>
-    <template v-else-if="swapStep==='swap-nodetect'||swapStep==='swap-invalid'">
-      <div class="flex flex-col items-center pt-16 text-center">
-        <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FDECEA"><span v-html="luci('alert-triangle','w-8 h-8 text-[#FF3B30]')"></span></div>
-        <div class="text-[17px] font-bold mt-5" style="color:#fff">{{ swapStep==='swap-nodetect'?'未检测到电池':'电池校验失败' }}</div>
-        <div class="text-[13px] mt-2 px-2" style="color:#9AA4B2">{{ swapStep==='swap-nodetect'?'请重新放置旧电池':'该电池存在异常，已禁止使用，仓位已锁定' }}</div>
-        <button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">我知道了</button>
-      </div>
-    </template>
-    <div v-else-if="swapStep==='swap-fulldoor'" class="pt-8">
-      <div class="rounded-2xl px-5 py-5" style="background:#1C2430;border:1px solid #2A3340">
-        <div class="flex items-center justify-between"><span class="text-[14px]" style="color:#9AA4B2">机柜</span><span class="text-[14px] font-semibold" style="color:#fff">{{ swapCtx.station.name }} · {{ swapCtx.cab.no }} 号柜</span></div>
-        <div class="flex items-center justify-between mt-3"><span class="text-[14px]" style="color:#9AA4B2">状态</span><span class="text-[14px] font-semibold" style="color:#17A34A">满电仓门已打开</span></div>
-      </div>
-      <div class="text-[14px] mt-5" style="color:#CBD3DE">请取出满电电池，换电即完成。</div>
-      <button data-cp @click="swapSwapDone" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="swap-take-full">我已取出新电池</button>
-    </div>
-    <div v-else-if="swapStep==='swap-done'" class="flex flex-col items-center pt-14 text-center">
-      <div class="w-20 h-20 rounded-full flex items-center justify-center" style="background:#F0FDF4"><span v-html="luci('check-circle','w-10 h-10 text-[#17A34A]')"></span></div>
-      <div class="text-[18px] font-bold mt-5" style="color:#fff">换电完成</div>
-      <div class="text-[13px] mt-2" style="color:#9AA4B2">旧电池已归还，满电电池已存入「我的电池」</div>
-      <button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">完成</button>
     </div>
   </div>
 </page>
@@ -1148,7 +1198,7 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="flex-1 min-h-0 flex flex-col justify-start px-6 pt-[40px] pb-[calc(64px+env(safe-area-inset-bottom,0px))]">
 <div class="text-[22px] font-bold text-[#1A1A1A] text-center">机柜编号</div>
-<div class="text-[14px] text-[#999] text-center mt-2.5">请输入机柜二维码下方编号</div>
+<div class="text-[14px] text-[#999] text-center mt-2.5">请输入机柜编号</div>
 <div class="mt-10 relative">
 <input v-model="swapManualNo" type="text" maxlength="32" class="w-full bg-transparent outline-none text-center text-[17px] font-medium" style="border:0;padding:12px 0;caret-color:#2B3F5F">
 <div class="absolute bottom-0 left-0 right-0" style="height:1px;background:#97A0AB"></div>
@@ -1219,7 +1269,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 <div class="py-4 flex items-center justify-center">
-<span data-cp @click="goScan" class="text-[14px] font-medium cursor-pointer select-none active:opacity-70" style="color:#DC2626" data-od-id="battery-scan-return">扫码还电</span>
+<span data-cp @click="goReturnScan" class="text-[14px] font-medium cursor-pointer select-none active:opacity-70" style="color:#DC2626" data-od-id="battery-scan-return">扫码还电</span>
 </div>
 </div>
 </page>
@@ -1538,6 +1588,9 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" data-cp @click="setSwapOngoing(true)" :class="swapOngoing?'is-on':''">有</div>
 <div class="demo-ops-chip" data-cp @click="setSwapOngoing(false)" :class="!swapOngoing?'is-on':''">无</div>
 </div>
+<div v-if="swapOngoing" class="demo-ops-row" style="margin-top:6px"><span class="text-[12px]">流程场景</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="demoResumeType='borrow'" :class="demoResumeType==='borrow'?'is-on':''">借电中</div>
+<div class="demo-ops-chip" data-cp @click="demoResumeType='swap'" :class="demoResumeType==='swap'?'is-on':''">换电中</div></div></div>
 </div>
 <div v-if="profileOV==='deposit'" class="demo-ops-section" data-od-id="demo-deposit-free">
 <div class="demo-ops-label">免押状态</div>
@@ -1596,25 +1649,21 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" data-cp @click="setCabinetFull(false)" :class="!cabinetFull?'is-on':''">无满电</div>
 </div>
 </div>
-<div class="demo-ops-section" data-od-id="demo-swap-flow" v-if="profileOV==='swap'&&swapStep==='scan'">
-<div class="demo-ops-label">扫码换电主流程</div>
-<div class="demo-ops-row"><span class="text-[12px]">扫码</span><div class="demo-ops-chips">
-<div class="demo-ops-chip" data-cp @click="swapScan">模拟扫码</div></div></div>
+<div class="demo-ops-section" data-od-id="demo-swap-flow" v-if="profileOV==='swap'&&!isBorrowFlow&&!isReturnFlow&&!isSwapFlow">
+<div class="demo-ops-label" style="display:flex;align-items:center;justify-content:space-between"><span>主流程</span><div class="demo-ops-chip" data-cp @click="swapScan" data-od-id="demo-swap-run">模拟</div></div>
 <div class="demo-ops-row"><span class="text-[12px]">二维码</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="demoQrOk=true" :class="demoQrOk?'is-on':''">有效</div>
 <div class="demo-ops-chip" data-cp @click="demoQrOk=false" :class="!demoQrOk?'is-on':''">无效</div></div></div>
+<div class="demo-ops-row"><span class="text-[12px]">同一运营商</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="demoSameOperator=true" :class="demoSameOperator?'is-on':''">是</div>
+<div class="demo-ops-chip" data-cp @click="demoSameOperator=false" :class="!demoSameOperator?'is-on':''">否</div></div></div>
 <div class="demo-ops-row"><span class="text-[12px]">柜机状态</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="demoOnline=true" :class="demoOnline?'is-on':''">在线</div>
 <div class="demo-ops-chip" data-cp @click="demoOnline=false" :class="!demoOnline?'is-on':''">离线</div></div></div>
 <div class="demo-ops-row"><span class="text-[12px]">距离</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="demoDist='near'" :class="demoDist==='near'?'is-on':''">≤30m</div>
 <div class="demo-ops-chip" data-cp @click="demoDist='far'" :class="demoDist==='far'?'is-on':''">>30m</div></div></div>
-<div class="demo-ops-row"><span class="text-[12px]">未完成订单</span><div class="demo-ops-chips">
-<div class="demo-ops-chip" data-cp @click="demoUnfinished=false" :class="!demoUnfinished?'is-on':''">无</div>
-<div class="demo-ops-chip" data-cp @click="demoUnfinished=true" :class="demoUnfinished?'is-on':''">有</div></div></div>
-<div v-if="demoUnfinished" class="demo-ops-row"><span class="text-[12px]">未完成订单场景</span><div class="demo-ops-chips">
-<div class="demo-ops-chip" data-cp @click="demoResumeType='borrow'" :class="demoResumeType==='borrow'?'is-on':''">借电中</div>
-<div class="demo-ops-chip" data-cp @click="demoResumeType='swap'" :class="demoResumeType==='swap'?'is-on':''">换电中</div></div></div>
+<template v-if="swapMode!=='return'">
 <div class="demo-ops-row"><span class="text-[12px]">可分配电池电量</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="demoLevelLow=false" :class="!demoLevelLow?'is-on':''">≥70%</div>
 <div class="demo-ops-chip" data-cp @click="demoLevelLow=true" :class="demoLevelLow?'is-on':''">&lt;70%</div></div></div>
@@ -1625,14 +1674,49 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-row"><span class="text-[12px]">套餐可借上限</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="setPlanMax(1)" :class="planMax===1?'is-on':''">1块</div>
 <div class="demo-ops-chip" data-cp @click="setPlanMax(2)" :class="planMax===2?'is-on':''">2块</div></div></div>
-<div class="demo-ops-label" style="margin-top:12px">物理异常模拟</div>
-<div class="demo-ops-chips">
-<div class="demo-ops-chip" data-cp @click="swapAnomaly=null" :class="!swapAnomaly?'is-on':''">无</div>
-<div class="demo-ops-chip" data-cp @click="swapAnomaly='borrow-timeout'" :class="swapAnomaly==='borrow-timeout'?'is-on':''">借电超时</div>
-<div class="demo-ops-chip" data-cp @click="swapAnomaly='borrow-notake'" :class="swapAnomaly==='borrow-notake'?'is-on':''">借电未取出</div>
-<div class="demo-ops-chip" data-cp @click="swapAnomaly='swap-nodetect'" :class="swapAnomaly==='swap-nodetect'?'is-on':''">换电未检测</div>
-<div class="demo-ops-chip" data-cp @click="swapAnomaly='swap-invalid'" :class="swapAnomaly==='swap-invalid'?'is-on':''">换电电池异常</div>
+</template>
 </div>
+<div v-if="isBorrowFlow" class="demo-ops-section" data-od-id="demo-borrow-flow">
+<div class="demo-ops-label" style="display:flex;align-items:center;justify-content:space-between"><span>借电主流程</span><div class="demo-ops-chip" data-cp @click="borrowRun" data-od-id="demo-borrow-run">模拟</div></div>
+<div class="demo-ops-row"><span class="text-[12px]">仓门开启</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="borrowOpenChoice='ok'" :class="borrowOpenChoice==='ok'?'is-on':''">成功</div>
+<div class="demo-ops-chip" data-cp @click="borrowOpenChoice='fail'" :class="borrowOpenChoice==='fail'?'is-on':''">失败</div></div></div>
+<div v-if="borrowOpenChoice==='ok'" class="demo-ops-row"><span class="text-[12px]">电池取出</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="borrowTakeChoice='ok'" :class="borrowTakeChoice==='ok'?'is-on':''">已取</div>
+<div class="demo-ops-chip" data-cp @click="borrowTakeChoice='fail'" :class="borrowTakeChoice==='fail'?'is-on':''">未取</div></div></div>
+<div class="demo-ops-row"><span class="text-[12px]">网络</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setNetLost(false)" :class="!netLost?'is-on':''">有网</div>
+<div class="demo-ops-chip" data-cp @click="setNetLost(true)" :class="netLost?'is-on':''">断网</div></div></div>
+</div>
+<div v-if="isReturnFlow" class="demo-ops-section" data-od-id="demo-return-flow">
+<div class="demo-ops-label" style="display:flex;align-items:center;justify-content:space-between"><span>还电主流程</span><div class="demo-ops-chip" data-cp @click="returnRun" data-od-id="demo-return-run">模拟</div></div>
+<div class="demo-ops-row"><span class="text-[12px]">打开空仓</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="returnOpenChoice='ok'" :class="returnOpenChoice==='ok'?'is-on':''">成功</div>
+<div class="demo-ops-chip" data-cp @click="returnOpenChoice='fail'" :class="returnOpenChoice==='fail'?'is-on':''">失败</div></div></div>
+<div v-if="returnOpenChoice==='ok'" class="demo-ops-row"><span class="text-[12px]">放入电池</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="returnTakeChoice='ok'" :class="returnTakeChoice==='ok'?'is-on':''">成功</div>
+<div class="demo-ops-chip" data-cp @click="returnTakeChoice='fail'" :class="returnTakeChoice==='fail'?'is-on':''">失败</div></div></div>
+<div class="demo-ops-row"><span class="text-[12px]">网络</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setNetLost(false)" :class="!netLost?'is-on':''">有网</div>
+<div class="demo-ops-chip" data-cp @click="setNetLost(true)" :class="netLost?'is-on':''">断网</div></div></div>
+</div>
+<div v-if="isSwapFlow" class="demo-ops-section" data-od-id="demo-swap-flow-run">
+<div class="demo-ops-label" style="display:flex;align-items:center;justify-content:space-between"><span>换电主流程</span><div class="demo-ops-chip" data-cp @click="swapRun" data-od-id="demo-swap-run-flow">模拟</div></div>
+<div class="demo-ops-row"><span class="text-[12px]">打开空仓</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="swapOpenChoice='ok'" :class="swapOpenChoice==='ok'?'is-on':''">成功</div>
+<div class="demo-ops-chip" data-cp @click="swapOpenChoice='fail'" :class="swapOpenChoice==='fail'?'is-on':''">失败</div></div></div>
+<div v-if="swapOpenChoice==='ok'" class="demo-ops-row"><span class="text-[12px]">放入旧电池</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="swapPutChoice='ok'" :class="swapPutChoice==='ok'?'is-on':''">成功</div>
+<div class="demo-ops-chip" data-cp @click="swapPutChoice='fail'" :class="swapPutChoice==='fail'?'is-on':''">失败</div></div></div>
+<div v-if="swapOpenChoice==='ok'&&swapPutChoice==='ok'" class="demo-ops-row"><span class="text-[12px]">打开满电仓</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="swapFullChoice='ok'" :class="swapFullChoice==='ok'?'is-on':''">成功</div>
+<div class="demo-ops-chip" data-cp @click="swapFullChoice='fail'" :class="swapFullChoice==='fail'?'is-on':''">失败</div></div></div>
+<div v-if="swapOpenChoice==='ok'&&swapPutChoice==='ok'&&swapFullChoice==='ok'" class="demo-ops-row"><span class="text-[12px]">取出新电池</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="swapTakeChoice='ok'" :class="swapTakeChoice==='ok'?'is-on':''">成功</div>
+<div class="demo-ops-chip" data-cp @click="swapTakeChoice='fail'" :class="swapTakeChoice==='fail'?'is-on':''">失败</div></div></div>
+<div class="demo-ops-row"><span class="text-[12px]">网络</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setNetLost(false)" :class="!netLost?'is-on':''">有网</div>
+<div class="demo-ops-chip" data-cp @click="setNetLost(true)" :class="netLost?'is-on':''">断网</div></div></div>
 </div>
 <div v-if="profileSub==='cardPack'||profileSub==='cardExpired'" class="demo-ops-section" data-od-id="demo-card-pack">
 <div class="demo-ops-label">列表数据</div>
@@ -2036,9 +2120,9 @@ function registerSheetKit(app){
   /* ConfirmDialog：居中确认弹窗（遮罩 rgba(0,0,0,.45) + 300px 白卡 + 标题/描述/取消确认双按钮 + loading 遮罩） */
   app.component('confirm-dialog',{
     name:'confirm-dialog',
-    props:{open:{default:false},title:{type:String,default:''},desc:{type:String,default:''},loading:{type:Boolean,default:false},z:{type:Number,default:2000},oid:{type:String,default:''},maskClose:{type:Boolean,default:true},confirmBg:{type:String,default:'#2B3F5F'},confirmText:{type:String,default:'确认'},cancelText:{type:String,default:'取消'}},
+    props:{open:{default:false},title:{type:String,default:''},desc:{type:String,default:''},loading:{type:Boolean,default:false},z:{type:Number,default:2000},oid:{type:String,default:''},maskClose:{type:Boolean,default:true},showX:{type:Boolean,default:true},confirmBg:{type:String,default:'#2B3F5F'},confirmText:{type:String,default:'确认'},cancelText:{type:String,default:'取消'}},
     emits:['close','confirm'],
-    template:'<div class="sheet-root"><transition name="fd"><div v-if="open" data-cp class="absolute inset-0 flex items-center justify-center" :style="{zIndex:z,background:\'rgba(0,0,0,.45)\'}" :data-od-id="oid||undefined" @click.self="maskClose&&!loading&&$emit(\'close\')"><div class="relative bg-white rounded-xl w-[300px] px-5 pt-6 pb-4 flex flex-col gap-3 overflow-hidden" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)"><div class="text-[17px] font-bold text-center">{{ title }}</div><div v-if="desc" class="text-sm text-[#666] text-center leading-relaxed">{{ desc }}</div><slot></slot><div class="flex gap-3 mt-2"><div v-if="cancelText" data-cp :class="[\'flex-1 py-3 rounded-xl text-[15px] font-medium text-center transition-colors\',loading?\'opacity-40 cursor-not-allowed\':\'cursor-pointer active:bg-[#F6F7F9]\']" style="border:1px solid #E5E5E5;background:#fff" @click="!loading&&$emit(\'close\')">{{ cancelText }}</div><div data-cp :class="[\'flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center transition-colors\',loading?\'opacity-40 cursor-not-allowed\':\'active:opacity-90\']" :style="{background:confirmBg}" @click="!loading&&$emit(\'confirm\')">{{ confirmText }}</div></div><div v-if="loading" class="absolute inset-0 flex items-center justify-center" style="background:rgba(255,255,255,.7);backdrop-filter:blur(2px)"><div class="flex flex-col items-center gap-2"><svg class="animate-spin" width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#E5E5E5" stroke-width="3"/><path d="M14 3a11 11 0 0 1 11 11" stroke="#2B3F5F" stroke-width="3" stroke-linecap="round"/></svg><div class="text-[12px] text-[#999]">处理中...</div></div></div></div></div></transition></div>'
+    template:'<div class="sheet-root"><transition name="fd"><div v-if="open" data-cp class="absolute inset-0 flex items-center justify-center" :style="{zIndex:z,background:\'rgba(0,0,0,.45)\'}" :data-od-id="oid||undefined" @click.self="maskClose&&!loading&&$emit(\'close\')"><div class="relative bg-white rounded-xl w-[300px] px-5 pt-6 pb-4 flex flex-col gap-3 overflow-hidden" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)"><div v-if="showX" data-cp class="absolute right-3 top-3 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#999] active:bg-[#F6F7F9]" @click="!loading&&$emit(\'close\')"><span v-html="luci(\'x\',\'w-5 h-5\')"></span></div><div class="text-[17px] font-bold text-center">{{ title }}</div><div v-if="desc" class="text-sm text-[#666] text-center leading-relaxed">{{ desc }}</div><slot></slot><div class="flex gap-3 mt-2"><div v-if="cancelText" data-cp :class="[\'flex-1 py-3 rounded-xl text-[15px] font-medium text-center transition-colors\',loading?\'opacity-40 cursor-not-allowed\':\'cursor-pointer active:bg-[#F6F7F9]\']" style="border:1px solid #E5E5E5;background:#fff" @click="!loading&&$emit(\'close\')">{{ cancelText }}</div><div data-cp :class="[\'flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center transition-colors\',loading?\'opacity-40 cursor-not-allowed\':\'active:opacity-90\']" :style="{background:confirmBg}" @click="!loading&&$emit(\'confirm\')">{{ confirmText }}</div></div><div v-if="loading" class="absolute inset-0 flex items-center justify-center" style="background:rgba(255,255,255,.7);backdrop-filter:blur(2px)"><div class="flex flex-col items-center gap-2"><svg class="animate-spin" width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#E5E5E5" stroke-width="3"/><path d="M14 3a11 11 0 0 1 11 11" stroke="#2B3F5F" stroke-width="3" stroke-linecap="round"/></svg><div class="text-[12px] text-[#999]">处理中...</div></div></div></div></div></transition></div>'
   });
   /* LoadingOverlay：全屏 loading 遮罩（fd 淡入 + 品牌 yadi-loading 或 spinner + 可选文案） */
   app.component('loading-overlay',{
@@ -2379,7 +2463,9 @@ var _ua=Vue.createApp({
     function setTab(t){tab.value=t;settingsOpen.value=false}
     function toast(m){toastBus.push(m)}
     /* 登录校验前移到入口：点击「扫码换电」即校验，未登录先拉起登录页；扫码页内不再做登录拦截 */
-    function goScan(){window.__gc=(window.__gc||0)+1;if(!auth.loggedIn.value){pendingScan.value=true;auth.openLogin();return}if(!precheckPass())return;swapStart()}
+    function goScan(){swapMode.value='swap';window.__gc=(window.__gc||0)+1;if(!auth.loggedIn.value){pendingScan.value=true;auth.openLogin();return}if(!precheckPass())return;swapStart()}
+    /* 电池详情页「扫码还电」：拉起扫码页并置为还电模式（归还操作不校验押金/套餐；未登录先登录，登录后由 pendingScan 续跑） */
+    function goReturnScan(){swapMode.value='return';window.__gc=(window.__gc||0)+1;if(!auth.loggedIn.value){pendingScan.value=true;auth.openLogin();return}swapStart()}
     /* 地图控件（图层 / 定位 / 刷新）：图层打开「切换地图」弹窗；
        定位 / 刷新属定位相关操作：先校验定位授权（未授权拉起授权弹窗），再校验定位服务（未开启拉起「位置权限」弹窗；均已开启时为空实现，不弹提示） */
     function goLocate(){if(!locAppAuth.value){showLocAppAuth.value=true;return}if(!locAuth.value)showLocAuth.value=true}
@@ -2420,47 +2506,194 @@ var _ua=Vue.createApp({
     var showSwapManual=Vue.ref(false),swapManualNo=Vue.ref('');
     var pendingScan=Vue.ref(false);
     var demoQrOk=Vue.ref(true);
+    /* 扫码后第二道判断：机柜是否属于当前用户所在运营商（默认是；否 → 提示不支持跨运营商换电并停留当前页） */
+    var demoSameOperator=Vue.ref(true);
     var demoOnline=Vue.ref(true);
     var demoDist=Vue.ref('near');
-    var demoUnfinished=Vue.ref(false);
     var demoResumeType=Vue.ref('borrow');
     var demoLevelLow=Vue.ref(false);
     var planMax=Vue.ref(2);
-    var swapAnomaly=Vue.ref(null);
     function setPlanMax(n){planMax.value=n}
-    function swapTitleFn(){var s=swapStep.value;if(s.indexOf('borrow')===0)return '借电';if(s.indexOf('swap')===0)return '换电';var m={scan:'扫码换电',choice:'选择操作','warn-level':'电量提醒','err-offline':'设备离线','err-dist':'距离过远'};return m[s]||'扫码换电'}
+    function swapTitleFn(){var s=swapStep.value;if(s.indexOf('return')===0)return '还电';if(s.indexOf('borrow')===0)return '借电';if(s.indexOf('swap')===0)return '换电';if(s==='scan')return swapMode.value==='return'?'扫码还电':'扫码换电';return '扫码换电'}
     var swapTitle=Vue.computed(swapTitleFn);
     function swapPickCab(){var s=stations[0];swapCtx.value={station:s,cab:s.cabinets?s.cabinets[0]:null}}
     function setBoundCount(n){var t=nowStr(),arr=[];for(var i=0;i<n;i++){arr.push({id:i+1,no:'BAT'+(1000+i),location:'成都市双流区',bindTime:t})}batteryList.value=arr}
     function swapStart(){auth.navOpen('swap');swapStep.value='scan';swapShow.value=true;auth.profileOV.value='swap';auth.profileSub.value=null}
-    /* 二维码无效：按流程图以提示弹窗告知，确认后结束本次扫码流程 */
-    var showQrErr=Vue.ref(false);
-    function closeQrErr(){showQrErr.value=false;swapClose()}
     /* 未完成订单恢复：入口校验命中后直接进入「进行中的流程」（流程页暂未实现，先用 toast 占位；
-       后续实现时替换为：按 demoResumeType 落到 borrow-door / swap-returndoor 并打开扫码流程页） */
+       后续实现时替换为：按 demoResumeType 落到 borrow-door / swap-put 并打开扫码流程页） */
     function swapResume(){toastPush('流程恢复')}
+    /* 电量偏低：居中弹窗二次确认（取消 → 结束本次判断并停留在扫码页；继续 → 进入业务类型判断） */
+    var showLevelWarn=Vue.ref(false);
+    function swapLevelCancel(){showLevelWarn.value=false}
+    function swapLevelContinue(){showLevelWarn.value=false;swapBranch()}
     /* 扫码页「键盘」入口：手动输入换电柜编号（与租车「输入车架号/电池编号」同规范），确认后按同一状态机继续 */
     function swapManualOpen(){swapManualNo.value='';auth.navOpen('swapManual');showSwapManual.value=true}
     function confirmSwapManual(){var v=(swapManualNo.value||'').trim();if(!v){toastPush('请输入机柜编号');return}auth.navDrop('swapManual');showSwapManual.value=false;swapManualNo.value='';swapScan()}
     function swapScan(){
       swapPickCab();
-      if(!demoQrOk.value){showQrErr.value=true;return}
-      if(!demoOnline.value){swapStep.value='err-offline';return}
-      if(demoDist.value!=='near'){swapStep.value='err-dist';return}
-      if(demoLevelLow.value){swapStep.value='warn-level';return}
+      /* 三项不通过：仅以 toast 提示并结束本次判断，停留在扫码页（不返回首页），可重新扫码或调整配置 */
+      if(!demoQrOk.value){toastPush('二维码无效，请重新扫码');return}
+      /* 跨运营商：仅 toast 提示并中止本次判断，停留在当前扫码页，不进入后续判断 */
+      if(!demoSameOperator.value){toastPush('不支持跨运营商换电');return}
+      if(!demoOnline.value){toastPush('设备已离线，暂无法使用');return}
+      if(demoDist.value!=='near'){toastPush('距离过远无法操作，请靠近机柜重新扫码');return}
+      /* 还电：不校验「可分配电池电量」；扫码通过后进入还电页初始态（停在「空仓门打开中 0%」，不主动跑进度条） */
+      if(swapMode.value==='return'){swapReturnIdle();return}
+      if(demoLevelLow.value){showLevelWarn.value=true;return}
       swapBranch();
     }
     function swapBranch(){
       var bound=batteryList.value.length,max=planMax.value;
       if(bound===0){swapToBorrow();return}
-      if(bound>=max){swapToSwap();return}
-      swapStep.value='choice';
+      if(bound>=max){swapFlowIdle();return}
+      showChoice.value=true;
     }
-    function swapChoice(t){if(t==='swap')swapToSwap();else swapToBorrow()}
-    function swapToBorrow(){swapStep.value='borrow-door'}
-    function swapBorrowDone(){
-      if(swapAnomaly.value==='borrow-timeout'){swapStep.value='borrow-timeout';return}
-      if(swapAnomaly.value==='borrow-notake'){swapStep.value='borrow-notake';return}
+    /* 选择操作：居中弹窗（借电 / 换电），正文随已绑定电池数与套餐上限动态展示 */
+    var showChoice=Vue.ref(false);
+    var choiceDesc=Vue.computed(function(){return '检测到您已持有 '+batteryList.value.length+' 块电池（上限 '+planMax.value+' 块）'});
+    /* 选择操作 · 借电：进入借电页并直接停在「打开满电仓」这一步（已锁定满电仓，不自动跑流程） */
+    function swapChoiceBorrow(){showChoice.value=false;borrowStopTimers();borrowOpenPct.value=0;borrowSlotNo.value='';borrowOpenChoice.value='ok';borrowTakeChoice.value='ok';borrowPrepareSlots();swapStep.value='borrow-idle'}
+    function swapChoiceSwap(){showChoice.value=false;swapFlowIdle()}
+    /* ── 借电流程：单页框架 4 状态（打开中 → 仓门已打开 → 取出完成 / 打开失败） ── */
+    var borrowOpenPct=Vue.ref(0),borrowLeft=Vue.ref(60),borrowSlotNo=Vue.ref(''),borrowFailType=Vue.ref('timeout');
+    /* 面板「仓门开启 / 电池取出」选择：作为「模拟」按钮推进流程时的结果入参（ok=成功/已取，fail=失败/未取） */
+    var borrowOpenChoice=Vue.ref('ok'),borrowTakeChoice=Vue.ref('ok');
+    /* 进入借电页即锁定满电仓位（不随状态刷新，保证开门页与开门后显示的仓位一致） */
+    function borrowPrepareSlots(){if(!borrowSlotNo.value)borrowSlotNo.value=('0'+(1+Math.floor(Math.random()*12))).slice(-2)}
+    var borrowOpenTimer=null,borrowLeftTimer=null;
+    var isBorrowFlow=Vue.computed(function(){return ['borrow-idle','borrow-opening','borrow-fail','borrow-door','borrow-done'].indexOf(swapStep.value)!==-1});
+    /* ── 还电流程（扫码还电入口）：打开空仓 → 放入电池；面板选择同样作为「模拟」按钮的结果入参 ── */
+    var swapMode=Vue.ref('swap');
+    var returnOpenPct=Vue.ref(0),returnLeft=Vue.ref(60),returnSlotNo=Vue.ref('');
+    var returnOpenChoice=Vue.ref('ok'),returnTakeChoice=Vue.ref('ok');
+    var returnOpenTimer=null,returnLeftTimer=null;
+    var isReturnFlow=Vue.computed(function(){return ['return-opening','return-door','return-openfail','return-fail','return-done'].indexOf(swapStep.value)!==-1});
+    /* ── 换电流程（4 步：打开空仓 → 放入旧电池 → 打开满电仓 → 取出新电池）状态 ── */
+    var swapOpenPct=Vue.ref(0),swapFullPct=Vue.ref(0),swapLeft=Vue.ref(60),swapTakeLeft=Vue.ref(60),swapSlotNo=Vue.ref('');
+    var swapOpenChoice=Vue.ref('ok'),swapPutChoice=Vue.ref('ok'),swapFullChoice=Vue.ref('ok'),swapTakeChoice=Vue.ref('ok');
+    var swapOpenTimer=null,swapFullTimer=null,swapLeftTimer=null,swapTakeTimer=null;
+    var isSwapFlow=Vue.computed(function(){return ['swap-open','swap-openfail','swap-put','swap-putfail','swap-fullopen','swap-fullfail','swap-take','swap-takefail','swap-done'].indexOf(swapStep.value)!==-1});
+    /* 换电步骤节点状态映射：idx 为当前所处步骤（5 = 全部完成），act 为该步骤的进行态（active/fail） */
+    var SWAP_STEP_IDX={'swap-open':1,'swap-openfail':1,'swap-put':2,'swap-putfail':2,'swap-fullopen':3,'swap-fullfail':3,'swap-take':4,'swap-takefail':4,'swap-done':5};
+    /* 步骤节点仅三态：当前步 active（橙）/ 已过步 done（主体深蓝）/ 未到步 pending（灰）；失败步同样按「当前步」显示橙色，不使用红色 */
+    function swapStepState(n){
+      var idx=SWAP_STEP_IDX[swapStep.value];
+      if(!idx)return 'pending';
+      if(idx===5)return 'done';
+      if(n<idx)return 'done';
+      if(n===idx)return 'active';
+      return 'pending';
+    }
+    /* 换电失败页标题（空串 = 非失败态，供模板分支判断）与原因文案 */
+    var swapFailTitle=Vue.computed(function(){
+      var s=swapStep.value;
+      if(s==='swap-openfail'||s==='swap-fullfail')return '仓门打开失败';
+      if(s==='swap-putfail')return '旧电池放入失败';
+      if(s==='swap-takefail')return '新电池取出失败';
+      return '';
+    });
+
+    /* 步骤节点样式随「仓门开启 / 电池取出」的选择变化：
+       idle/opening → 第 1 步进行中；open-fail → 第 1 步失败；
+       door（开门成功）→ 第 1 步完成、第 2 步进行中；take-fail → 第 1 步完成、第 2 步失败；done → 两步均完成 */
+    function borrowStepState(n){
+      var s=swapStep.value;
+      if(s==='borrow-idle'||s==='borrow-opening')return n===1?'active':'pending';
+      if(s==='borrow-fail')return borrowFailType.value==='timeout'?(n===1?'active':'pending'):(n===1?'done':'active');
+      if(s==='borrow-done')return 'done';
+      return n===1?'done':'active';
+    }
+    /* 还电流程步骤节点（打开空仓 → 放入电池）：opening → 第 1 步进行中；openfail → 第 1 步失败；door → 1 完成 2 进行中；fail（放入失败）→ 1 完成 2 失败；done → 两步完成 */
+    function returnStepState(n){
+      var s=swapStep.value;
+      if(s==='return-opening')return n===1?'active':'pending';
+      if(s==='return-openfail')return n===1?'active':'pending';
+      if(s==='return-fail')return n===1?'done':'active';
+      if(s==='return-done')return 'done';
+      return n===1?'done':'active';
+    }
+    /* 步骤节点状态按当前流程（借电 / 还电 / 换电）取对应状态机 */
+    function stepState(n){
+      var s=swapStep.value;
+      if(s.indexOf('return')===0)return returnStepState(n);
+      if(s.indexOf('swap')===0)return swapStepState(n);
+      return borrowStepState(n);
+    }
+    var STEP_COLOR={pending:'#E5E5E5',active:'#FF6A00',done:'#2B3F5F'},STEP_TEXT={pending:'#999999',active:'#FF6A00',done:'#2B3F5F'};
+    function stepDot(n){var st=stepState(n);return {background:STEP_COLOR[st],color:st==='pending'?'#999999':'#FFFFFF'}}
+    function stepText(n){return {color:STEP_TEXT[stepState(n)]}}
+    /* 连接线跟随其后一步：未开始灰 / 其余（进行中）橙；i 为第几条线（1 起，省略按 1） */
+    function stepLine(i){i=i||1;var st=stepState(i+1);return {background:st==='pending'?'#E5E5E5':'#FF6A00'}}
+    var borrowFailTitle=Vue.computed(function(){return borrowFailType.value==='timeout'?'仓门打开失败':'未取出电池'});
+    function borrowStopTimers(){if(borrowOpenTimer){clearInterval(borrowOpenTimer);borrowOpenTimer=null}if(borrowLeftTimer){clearInterval(borrowLeftTimer);borrowLeftTimer=null}}
+    /* 网络状态（原型）：有网时倒计时归零不做任何处理，流程仍由 WebSocket 推送（面板「电池取出」）推进；仅当检测到断网才提示「流程结束」并返回首页 */
+    var netLost=Vue.ref(false),showFlowEnd=Vue.ref(false);
+    function flowEndHome(){showFlowEnd.value=false;flowDoneHome()}
+    /* 60s 倒计时归零回调：断网 → 弹「流程结束」并回首页；有网 → 不做事，等待推送 */
+    function borrowCountdownDone(){if(netLost.value)showFlowEnd.value=true}
+    /* 面板「网络」切换：倒计时已归零时切到断网，视为即时检测到断网 */
+    function setNetLost(v){netLost.value=v;if(v&&swapStep.value==='borrow-door'&&borrowLeft.value<=0)showFlowEnd.value=true}
+    /* 仓门已打开后的 60s 取出倒计时；归零 → 检测网络（断网则流程结束） */
+    function borrowStartCountdown(){if(borrowLeftTimer)clearInterval(borrowLeftTimer);borrowLeft.value=60;borrowLeftTimer=setInterval(function(){borrowLeft.value--;if(borrowLeft.value<=0){clearInterval(borrowLeftTimer);borrowLeftTimer=null;borrowCountdownDone()}},1000)}
+    /* 打开满电仓：进度 0→100%；动画结束后按面板「仓门开启」选择落点（成功 → 仓门已打开并起倒计时；失败 → 开门失败） */
+    function swapToBorrow(){
+      borrowStopTimers();borrowOpenPct.value=0;borrowLeft.value=60;borrowPrepareSlots();swapStep.value='borrow-opening';
+      borrowOpenTimer=setInterval(function(){
+        borrowOpenPct.value=Math.min(100,borrowOpenPct.value+10);
+        if(borrowOpenPct.value<100)return;
+        clearInterval(borrowOpenTimer);borrowOpenTimer=null;
+        if(borrowOpenChoice.value==='fail'){borrowFailType.value='timeout';swapStep.value='borrow-fail';return}
+        swapStep.value='borrow-door';borrowStartCountdown();
+      },120);
+    }
+    /* 重试：返回上一页（扫码页），不关闭流程 */
+    function swapBorrowRetry(){borrowStopTimers();swapStep.value='scan'}
+    /* 流程完成 / 中止：关闭流程并回到首页（借电完成、还电完成、断网结束共用） */
+    function flowDoneHome(){swapClose();tab.value='home'}
+    /* ── 还电流程（打开空仓 → 放入电池）── */
+    function returnStopTimers(){if(returnOpenTimer){clearInterval(returnOpenTimer);returnOpenTimer=null}if(returnLeftTimer){clearInterval(returnLeftTimer);returnLeftTimer=null}}
+    function returnPrepareSlot(){if(!returnSlotNo.value)returnSlotNo.value=('0'+(1+Math.floor(Math.random()*12))).slice(-2)}
+    /* 进入还电页初始态：停在「空仓门打开中（0%）」，不主动跑进度条（与借电一致，点面板「模拟」才开始） */
+    function swapReturnIdle(){
+      returnStopTimers();returnOpenPct.value=0;returnLeft.value=60;returnSlotNo.value='';
+      returnOpenChoice.value='ok';returnTakeChoice.value='ok';returnPrepareSlot();swapStep.value='return-opening';
+    }
+    /* 打开空仓：进度 0→100%，结束后按面板「打开空仓」选择落点（成功 → 仓门已打开并起倒计时；失败 → 打开失败） */
+    function swapReturnStart(){
+      returnStopTimers();returnOpenPct.value=0;returnLeft.value=60;returnSlotNo.value='';returnPrepareSlot();swapStep.value='return-opening';
+      returnOpenTimer=setInterval(function(){
+        returnOpenPct.value=Math.min(100,returnOpenPct.value+10);
+        if(returnOpenPct.value<100)return;
+        clearInterval(returnOpenTimer);returnOpenTimer=null;
+        if(returnOpenChoice.value==='fail'){swapStep.value='return-openfail';return}
+        swapStep.value='return-door';returnStartCountdown();
+      },120);
+    }
+    /* 放入电池 60s 倒计时；归零 → 检测网络（断网 → 流程结束回首页；有网 → 不做事，等 WebSocket 推送即面板「放入电池」） */
+    function returnStartCountdown(){if(returnLeftTimer)clearInterval(returnLeftTimer);returnLeft.value=60;returnLeftTimer=setInterval(function(){returnLeft.value--;if(returnLeft.value<=0){clearInterval(returnLeftTimer);returnLeftTimer=null;if(netLost.value)showFlowEnd.value=true}},1000)}
+    /* 放入电池成功：写还电记录 + 解除电池绑定 + 柜内占用回收 */
+    function returnFinish(){
+      returnStopTimers();
+      var st=swapCtx.value.station,cab=swapCtx.value.cab,t=nowStr(),oid=genOrderNo();
+      var b=batteryList.value.length?batteryList.value[batteryList.value.length-1]:null;
+      swapRecords.value=[{id:(swapRecords.value.length?swapRecords.value[0].id:0)+1,type:'return',title:'还电成功',status:'已完成',batteryId:b?b.no:'-',station:st.name,addr:st.addr,cabinet:st.no+'-'+(cab?cab.no:''),orderNo:oid,time:t}].concat(swapRecords.value);
+      if(b)batteryList.value=batteryList.value.filter(function(x){return x.id!==b.id});
+      if(cab)cab.used=Math.max(0,cab.used-1);
+      swapStep.value='return-done';
+    }
+    /* 电池放入失败：进失败页（不自动返回，由用户点「返回首页」） */
+    function returnFail(){returnStopTimers();swapStep.value='return-fail'}
+    /* 面板「模拟」：未开仓则跑开门动画；已在等放入则执行放入（结果取「放入电池」选择） */
+    function returnRun(){
+      if(swapStep.value==='return-door'){returnStopTimers();if(returnTakeChoice.value==='fail'){returnFail();return}returnFinish();return}
+      swapReturnStart();
+    }
+    /* 打开空仓失败 → 返回上一页（扫码页），不关闭流程 */
+    function returnRetry(){returnStopTimers();swapStep.value='scan'}
+    /* 放入失败页「返回首页」：立即回首页（不等 3s 倒计时） */
+    function returnFailHome(){returnStopTimers();flowDoneHome()}
+    /* 取出成功结算：写借电记录 + 绑定电池 + 释放柜仓位 */
+    function borrowFinish(){
       var st=swapCtx.value.station,cab=swapCtx.value.cab,no=genBatNo(),oid=genOrderNo(),t=nowStr();
       swapRecords.value=[{id:(swapRecords.value.length?swapRecords.value[0].id:0)+1,type:'borrow',title:'借电成功',status:'使用中',batteryId:no,station:st.name,addr:st.addr,cabinet:st.no+'-'+(cab?cab.no:''),orderNo:oid,time:t}].concat(swapRecords.value);
       var maxId=batteryList.value.length?Math.max.apply(null,batteryList.value.map(function(b){return b.id})):0;
@@ -2468,20 +2701,90 @@ var _ua=Vue.createApp({
       if(cab){cab.used=cab.used+1;cab.full=Math.max(0,cab.full-1)}
       swapStep.value='borrow-done';
     }
-    function swapToSwap(){swapStep.value='swap-returndoor'}
-    function swapSwapAfterReturn(){
-      if(swapAnomaly.value==='swap-nodetect'){swapStep.value='swap-nodetect';return}
-      if(swapAnomaly.value==='swap-invalid'){swapStep.value='swap-invalid';return}
-      swapStep.value='swap-fulldoor';
+    function swapBorrowDone(){borrowStopTimers();borrowFinish()}
+    /* 面板「模拟」：按当前阶段推进——尚未开门则跑开门动画（结果取「仓门开启」选择）；已在等取出则执行取出（结果取「电池取出」选择） */
+    function borrowRun(){
+      if(swapStep.value==='borrow-door'){
+        borrowStopTimers();
+        if(borrowTakeChoice.value==='fail'){borrowFailType.value='notake';swapStep.value='borrow-fail';return}
+        borrowFinish();return;
+      }
+      swapToBorrow();
     }
-    function swapSwapDone(){
+    /* ── 换电流程（4 步）实现 ── */
+    function swapFlowStopTimers(){
+      if(swapOpenTimer){clearInterval(swapOpenTimer);swapOpenTimer=null}
+      if(swapFullTimer){clearInterval(swapFullTimer);swapFullTimer=null}
+      if(swapLeftTimer){clearInterval(swapLeftTimer);swapLeftTimer=null}
+      if(swapTakeTimer){clearInterval(swapTakeTimer);swapTakeTimer=null}
+    }
+    function swapPrepareSlot(){if(!swapSlotNo.value)swapSlotNo.value=('0'+(1+Math.floor(Math.random()*12))).slice(-2)}
+    /* 进入换电页初始态：停在「空仓门打开中（0%）」，不主动跑进度条（与借电/还电一致，点面板「模拟」才开始） */
+    function swapFlowIdle(){
+      swapFlowStopTimers();swapOpenPct.value=0;swapFullPct.value=0;swapLeft.value=60;swapTakeLeft.value=60;swapSlotNo.value='';
+      swapOpenChoice.value='ok';swapPutChoice.value='ok';swapFullChoice.value='ok';swapTakeChoice.value='ok';
+      swapPrepareSlot();swapStep.value='swap-open';
+    }
+    /* 打开空仓：进度 0→100%，结束后按面板「打开空仓」选择落点（成功 → 等待放入旧电池并起倒计时；失败 → 空仓打开失败） */
+    function swapOpenStart(){
+      swapFlowStopTimers();swapOpenPct.value=0;swapStep.value='swap-open';
+      swapOpenTimer=setInterval(function(){
+        swapOpenPct.value=Math.min(100,swapOpenPct.value+10);
+        if(swapOpenPct.value<100)return;
+        clearInterval(swapOpenTimer);swapOpenTimer=null;
+        if(swapOpenChoice.value==='fail'){swapStep.value='swap-openfail';return}
+        swapStep.value='swap-put';swapLeftStart();
+      },120);
+    }
+    /* 放入旧电池 60s 倒计时；归零 → 检测网络（断网 → 流程结束回首页；有网 → 不做事，等推送即面板「放入旧电池」） */
+    function swapLeftStart(){if(swapLeftTimer)clearInterval(swapLeftTimer);swapLeft.value=60;swapLeftTimer=setInterval(function(){swapLeft.value--;if(swapLeft.value<=0){clearInterval(swapLeftTimer);swapLeftTimer=null;if(netLost.value)showFlowEnd.value=true}},1000)}
+    /* 放入旧电池完成：按面板「放入旧电池」选择 → 打开满电仓 / 旧电池放入失败 */
+    function swapPutNext(){
+      swapFlowStopTimers();
+      if(swapPutChoice.value==='fail'){swapStep.value='swap-putfail';return}
+      swapStep.value='swap-fullopen';swapFullPct.value=0;
+    }
+    /* 打开满电仓：进度 0→100%，结束后按面板「打开满电仓」选择落点 */
+    function swapFullStart(){
+      swapFlowStopTimers();swapFullPct.value=0;swapStep.value='swap-fullopen';
+      swapFullTimer=setInterval(function(){
+        swapFullPct.value=Math.min(100,swapFullPct.value+10);
+        if(swapFullPct.value<100)return;
+        clearInterval(swapFullTimer);swapFullTimer=null;
+        if(swapFullChoice.value==='fail'){swapStep.value='swap-fullfail';return}
+        swapStep.value='swap-take';swapTakeLeftStart();
+      },120);
+    }
+    /* 取出新电池 60s 倒计时；归零 → 检测网络（同放入旧电池） */
+    function swapTakeLeftStart(){if(swapTakeTimer)clearInterval(swapTakeTimer);swapTakeLeft.value=60;swapTakeTimer=setInterval(function(){swapTakeLeft.value--;if(swapTakeLeft.value<=0){clearInterval(swapTakeTimer);swapTakeTimer=null;if(netLost.value)showFlowEnd.value=true}},1000)}
+    /* 取出新电池完成：按面板「取出新电池」选择 → 换电完成 / 新电池取出失败 */
+    function swapTakeNext(){
+      swapFlowStopTimers();
+      if(swapTakeChoice.value==='fail'){swapStep.value='swap-takefail';return}
+      swapDone();
+    }
+    /* 换电完成结算：写换电记录 + 归还旧电池释放柜内占用 + 取出满电电池 */
+    function swapDone(){
+      swapFlowStopTimers();
       var st=swapCtx.value.station,cab=swapCtx.value.cab,t=nowStr(),oid=genOrderNo(),oldBat=batteryList.value.length?batteryList.value[0].no:'-';
       swapRecords.value=[{id:(swapRecords.value.length?swapRecords.value[0].id:0)+1,type:'swap',title:'换电成功',status:'已完成',batteryId:oldBat,station:st.name,addr:st.addr,cabinet:st.no+'-'+(cab?cab.no:''),orderNo:oid,time:t}].concat(swapRecords.value);
       if(cab){cab.used=Math.max(0,cab.used-1);cab.full=Math.max(0,cab.full-1)}
       swapStep.value='swap-done';
     }
-    function swapClose(){swapShow.value=false;swapStep.value='scan';swapCtx.value={};auth.navDrop('swap');auth.profileOV.value=null;auth.profileSub.value=null}
-    function swapRetry(){swapStep.value='scan'}
+    /* 面板「模拟」：按当前阶段推进（未开始 / 失败态 / 完成态 → 重跑「打开空仓」） */
+    function swapRun(){
+      var s=swapStep.value;
+      if(s==='swap-open'){swapOpenStart();return}
+      if(s==='swap-put'){swapPutNext();return}
+      if(s==='swap-fullopen'){swapFullStart();return}
+      if(s==='swap-take'){swapTakeNext();return}
+      swapFlowIdle();swapOpenStart();
+    }
+    /* 空仓打开失败 → 重试：返回上一页（扫码页），不关闭流程 */
+    function swapFlowRetry(){swapFlowStopTimers();swapStep.value='scan'}
+    /* 失败页（旧电池放入失败 / 满电仓打开失败 / 新电池取出失败）→ 返回首页 */
+    function swapFailHome(){swapFlowStopTimers();flowDoneHome()}
+    function swapClose(){borrowStopTimers();returnStopTimers();swapFlowStopTimers();swapShow.value=false;swapStep.value='scan';swapMode.value='swap';swapCtx.value={};borrowSlotNo.value='';returnSlotNo.value='';swapSlotNo.value='';showFlowEnd.value=false;netLost.value=false;auth.navDrop('swap');auth.profileOV.value=null;auth.profileSub.value=null}
     function genBatNo(){var s='';for(var i=0;i<13;i++)s+=Math.floor(Math.random()*10);return s}
     function genOrderNo(){var d=new Date(),p=function(n){return (n<10?'0':'')+n};return 'SW'+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+p(d.getHours())+p(d.getMinutes())+p(d.getSeconds())+Math.floor(Math.random()*1000)}
     function nowStr(){var d=new Date(),p=function(n){return (n<10?'0':'')+n};return d.getFullYear()+'.'+p(d.getMonth()+1)+'.'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())}
@@ -2541,8 +2844,8 @@ var _ua=Vue.createApp({
       if(!swapAreaSet.value){openSwapArea();return false}
       if(!depositFree.value&&depositState.value!=='paid'){precheckType.value='deposit';showPrecheck.value=true;return false}
       if(!planBought.value){precheckType.value='plan';showPrecheck.value=true;return false}
-      /* 未完成订单与押金/套餐同属入口校验（套餐之后）；命中则直接恢复到对应业务节点 */
-      if(demoUnfinished.value){swapResume();return false}
+      /* 进行中的流程（未完成订单）与押金/套餐同属入口校验（套餐之后）；命中则进入进行中的流程 */
+      if(swapOngoing.value){swapResume();return false}
       return true
     }
     var depositAgree=Vue.ref(false);
@@ -2718,8 +3021,6 @@ var _ua=Vue.createApp({
       selPoint.value=null;selStore.value=null;searchCenter.value=null;
     }
     function scanFromCard(){selPoint.value=null;goScan()}
-    /* 还电：直接拉起扫码页（归还操作不校验押金/套餐；未登录先登录） */
-    function goReturnScan(){window.__gc=(window.__gc||0)+1;if(!auth.loggedIn.value){pendingScan.value=true;auth.openLogin();return}swapStart()}
     function bookFromCard(){
       var p=selPoint.value;if(!p||reservedCab.value)return;
       var cabs=p.cabinets||[];
@@ -2999,8 +3300,8 @@ var _ua=Vue.createApp({
       planDetail.value=null;planBought.value=true;toastPush('支付成功');
     }
     /* 页面级状态注册进导航快照（Tab / 换电流程 / 站点 / 电池详情 / 订单详情 / 记录范围） */
-    auth.addNavRefs([tab,swapShow,swapStep,showSwapManual,showQrErr,curStation,curCab,batteryDetailRec,planOrderDetail,swapRecordsScope]);
-    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,mapType,MAP_TYPES,mapPoints,mapTheme,showMapSheet,pickMapType,openMapPoint,showSearch,searchQ,searchCenter,searchHistory,locNearby,searchList,poiList,openSearch,closeSearch,clearSearchQ,doSearch,pickHistory,pickPoi,clearSearchCenter,mapWorldStyle,clearSearchHistory,setSearchHistory,relocate,pickSearchStation,selPoint,selStore,closeSelPoint,closeSelStore,callStore,openStoreDetail,pointStat,openSelDetail,openReservedDetail,onMapClick,isCabReserved,hasReservedOther,bookCab,stationReserved,bookFromStation,goReturnScan,storeNavSheet,storeNavOptions,openStoreNav,closeStoreNav,pickStoreNav,callStation,scanFromCard,bookFromCard,reservedCab,reserveLeft,swapOngoing,bookDisabled,fmtReserve,cancelReserve,askCancelReserve,closeCancelReserve,confirmCancelReserve,showCancelReserve,onBookClick,openReservedCard,goFlowNow,setSwapOngoing,showPrecheck,precheckDesc,precheckTitle,precheckConfirmText,closePrecheck,precheckPass,confirmPrecheck,stations,locAppAuth,setLocAppAuth,showLocAppAuth,allowLocAppAuth,denyLocAppAuth,locReady,locAuth,setLocAuth,showLocAuth,allowLocAuth,dismissLocAuth,goEnableLoc,swapAreaSet,areaNoService,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCity,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,areaLabel,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,demoQrOk,demoOnline,demoDist,demoUnfinished,demoResumeType,demoLevelLow,planMax,setPlanMax,swapAnomaly,swapStart,swapScan,swapTorch,showSwapManual,swapManualNo,swapManualOpen,confirmSwapManual,swapBranch,swapChoice,swapToBorrow,swapBorrowDone,swapToSwap,swapSwapAfterReturn,swapSwapDone,swapClose,swapRetry,showQrErr,closeQrErr,swapResume,setBoundCount,showOperatorPicker,operatorOptions,pickFirstLoginOperator,closeOperatorPicker,operatorPickerCity,mockCity,pickMockCity,firstLoginRegionFlow},auth,sideSetup('换电用户端',toastBus))
+    auth.addNavRefs([tab,swapShow,swapStep,swapMode,showSwapManual,showLevelWarn,showChoice,showFlowEnd,curStation,curCab,batteryDetailRec,planOrderDetail,swapRecordsScope]);
+    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,mapType,MAP_TYPES,mapPoints,mapTheme,showMapSheet,pickMapType,openMapPoint,showSearch,searchQ,searchCenter,searchHistory,locNearby,searchList,poiList,openSearch,closeSearch,clearSearchQ,doSearch,pickHistory,pickPoi,clearSearchCenter,mapWorldStyle,clearSearchHistory,setSearchHistory,relocate,pickSearchStation,selPoint,selStore,closeSelPoint,closeSelStore,callStore,openStoreDetail,pointStat,openSelDetail,openReservedDetail,onMapClick,isCabReserved,hasReservedOther,bookCab,stationReserved,bookFromStation,storeNavSheet,storeNavOptions,openStoreNav,closeStoreNav,pickStoreNav,callStation,scanFromCard,goReturnScan,bookFromCard,reservedCab,reserveLeft,swapOngoing,bookDisabled,fmtReserve,cancelReserve,askCancelReserve,closeCancelReserve,confirmCancelReserve,showCancelReserve,onBookClick,openReservedCard,goFlowNow,setSwapOngoing,showPrecheck,precheckDesc,precheckTitle,precheckConfirmText,closePrecheck,precheckPass,confirmPrecheck,stations,locAppAuth,setLocAppAuth,showLocAppAuth,allowLocAppAuth,denyLocAppAuth,locReady,locAuth,setLocAuth,showLocAuth,allowLocAuth,dismissLocAuth,goEnableLoc,swapAreaSet,areaNoService,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCity,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,areaLabel,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,demoQrOk,demoSameOperator,demoOnline,demoDist,demoResumeType,demoLevelLow,planMax,setPlanMax,swapStart,swapScan,swapTorch,showSwapManual,swapManualNo,swapManualOpen,confirmSwapManual,swapBranch,showChoice,choiceDesc,swapChoiceBorrow,swapChoiceSwap,swapToBorrow,isBorrowFlow,borrowOpenPct,borrowLeft,borrowSlotNo,borrowFailType,borrowFailTitle,stepDot,stepText,stepLine,swapBorrowRetry,swapBorrowDone,flowDoneHome,isReturnFlow,swapMode,returnOpenPct,returnLeft,returnSlotNo,returnOpenChoice,returnTakeChoice,returnRun,returnRetry,returnFailHome,borrowRun,borrowOpenChoice,borrowTakeChoice,netLost,setNetLost,showFlowEnd,flowEndHome,isSwapFlow,swapOpenPct,swapFullPct,swapLeft,swapTakeLeft,swapSlotNo,swapOpenChoice,swapPutChoice,swapFullChoice,swapTakeChoice,swapFailTitle,swapRun,swapFlowRetry,swapFailHome,swapClose,swapResume,showLevelWarn,swapLevelCancel,swapLevelContinue,setBoundCount,showOperatorPicker,operatorOptions,pickFirstLoginOperator,closeOperatorPicker,operatorPickerCity,mockCity,pickMockCity,firstLoginRegionFlow},auth,sideSetup('换电用户端',toastBus))
   }})
 registerSheetKit(_ua);_ua.mount(document.getElementById('root-user'));
 
