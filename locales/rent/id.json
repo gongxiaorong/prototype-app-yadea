@@ -1093,7 +1093,7 @@
     "common": {
       "confirmBind": "Konfirmasi Hubungkan",
       "searchEmpty": "Tidak ada hasil, silakan sesuaikan kata kunci dan coba lagi",
-      "uploadSpecLarge": "Ukuran: 454px × 454px, format: PNG latar transparan, maksimal 1MB",
+      "uploadSpec": "Ukuran",
       "pleaseSelect": "Pilih terlebih dahulu",
       "searchUserPlaceholder": "Cari berdasarkan akun / telepon / email",
       "copyEmpty": "Tidak ada yang dapat disalin",
@@ -1101,7 +1101,6 @@
       "pleaseSelectUser": "Pilih pengguna terlebih dahulu",
       "thumbnail": "Gambar Mini",
       "preRange": "Masukkan bilangan bulat antara 1 dan 365",
-      "uploadSpecSmall": "Ukuran: 170px × 170px, format: PNG latar transparan, maksimal 512KB",
       "clickUpload": "Ketuk untuk unggah",
       "moreOps": "Aksi Lainnya",
       "renewalAutoDeduct": "Biaya perpanjangan dipotong otomatis dari dompet"

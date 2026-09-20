@@ -1093,7 +1093,7 @@
     "common": {
       "confirmBind": "Confirm Bind",
       "searchEmpty": "No results found, please adjust keywords and try again",
-      "uploadSpecLarge": "Size: 454px × 454px, format: PNG with transparent background, max 1MB",
+      "uploadSpec": "Size",
       "pleaseSelect": "Please select first",
       "searchUserPlaceholder": "Search by account / phone / email",
       "copyEmpty": "Nothing to copy",
@@ -1101,7 +1101,6 @@
       "pleaseSelectUser": "Please select a user first",
       "thumbnail": "Thumbnail",
       "preRange": "Please enter an integer between 1 and 365",
-      "uploadSpecSmall": "Size: 170px × 170px, format: PNG with transparent background, max 512KB",
       "clickUpload": "Tap to upload",
       "moreOps": "More Actions",
       "renewalAutoDeduct": "Renewal fee auto-deducted from wallet"

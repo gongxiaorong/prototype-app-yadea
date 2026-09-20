@@ -103,7 +103,7 @@ body.host-single-m #root-user{display:none}
 .sw-store-body{flex:1;min-width:0}
 .swup-enter-active,.swup-leave-active{transition:transform .28s ease,opacity .28s ease}
 .swup-enter-from,.swup-leave-to{transform:translateY(100%);opacity:.5}
-/* ── 首页「进行中的换电流程」横幅 ── */
+/* ── 首页「进行中的流程」横幅 ── */
 .sw-flow{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:12px 14px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
 .sw-flow .tx{flex:1;min-width:0;font-size:13px;font-weight:500;color:#111}
 .sw-flow .go{flex-shrink:0;display:flex;align-items:center;gap:2px;padding:7px 12px;border-radius:10px;border:1px solid #2B3F5F;color:#2B3F5F;background:#fff;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer}
@@ -451,7 +451,8 @@ body.host-single-m #root-user{display:none}
 </div>
 </div></transition><tab-bar :show="!settingsOpen" active-color="#FF6A00" :items="[{key:'home',icon:'map-pin',label:'首页',activeWhen:tab==='home'},{key:'plan',icon:'package',label:'套餐',activeWhen:tab==='plan'},{key:'mine',icon:'user',label:'我的',activeWhen:tab==='mine'}]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
 <confirm-dialog :open="showCancelReserve" z="1700" oid="cancel-reserve-dialog" title="取消预约" desc="确定取消预约？取消预约后，10分钟内不可再次预约" :cancel-text="'取消'" :confirm-text="'确认'" confirm-bg="var(--accent)" @close="closeCancelReserve()" @confirm="confirmCancelReserve()"></confirm-dialog>
-<confirm-dialog :open="showPrecheck" z="1750" oid="swap-precheck-dialog" title="温馨提示" :desc="precheckDesc" :cancel-text="'取消'" :confirm-text="'确认'" confirm-bg="var(--accent)" @close="closePrecheck()" @confirm="confirmPrecheck()"></confirm-dialog>
+<confirm-dialog :open="showPrecheck" z="1750" oid="swap-precheck-dialog" :title="precheckTitle" :desc="precheckDesc" :cancel-text="'取消'" :confirm-text="precheckConfirmText" confirm-bg="var(--accent)" @close="closePrecheck()" @confirm="confirmPrecheck()"></confirm-dialog>
+<confirm-dialog :open="showQrErr" z="1800" oid="swap-qr-err-dialog" :mask-close="false" title="二维码无效" desc="二维码无效，请重新扫码" cancel-text="" confirm-text="我知道了" confirm-bg="var(--accent)" @close="closeQrErr" @confirm="closeQrErr"></confirm-dialog>
 <option-sheet :open="storeNavSheet" title="导航" :options="storeNavOptions" :mask-z="1100" oid="store-nav-mask" panel-oid="store-nav-sheet" @select="pickStoreNav" @close="closeStoreNav"></option-sheet>
 <transition name="fd"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="login-page">
 <div v-show="loginView==='main'" class="flex-1 flex flex-col min-h-0 bg-[#F6F7F9]">
@@ -1041,7 +1042,7 @@ body.host-single-m #root-user{display:none}
         <div class="absolute inset-0 flex flex-col">
           <div class="flex-1 flex flex-col items-center justify-center">
             <div class="scan-frame cursor-pointer" data-cp @click="swapScan" data-od-id="swap-scan-frame"><div class="scan-line"></div><div class="absolute inset-0 flex items-center justify-center"><span v-html="luci('scan','w-10 h-10 text-white/20')"></span></div></div>
-            <div class="text-white/50 text-[13px] mt-5">请将换电柜二维码对准取景框</div>
+            <div class="text-white/50 text-[13px] mt-5">请将二维码对准取景框</div>
           </div>
           <div class="px-6 pb-[calc(60px+env(safe-area-inset-bottom,0px))] flex items-end justify-between shrink-0">
             <div data-cp @click="swapManualOpen" class="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer active:opacity-80" style="background:rgba(255,255,255,.16)" data-od-id="swap-scan-manual"><span v-html="luci('keyboard','w-5 h-5 text-white')"></span></div>
@@ -1052,19 +1053,6 @@ body.host-single-m #root-user{display:none}
           </div>
         </div>
       </div>
-    </div>
-    <div v-else-if="swapStep==='gate-perm'" class="flex flex-col items-center pt-16 text-center">
-      <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#EBF1FD"><span v-html="luci('shield','w-8 h-8 text-[#2B3F5F]')"></span></div>
-      <div class="text-[17px] font-bold mt-5" style="color:#fff">需要定位与相机权限</div>
-      <div class="text-[13px] mt-2 px-2" style="color:#9AA4B2">请在右侧「原型操作」开启定位与相机权限后重试</div>
-      <button data-cp @click="swapScan" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">重新检测权限</button>
-      <button data-cp @click="swapClose" class="mt-3 w-full h-[48px] rounded-full text-[15px] font-medium cursor-pointer" style="border:1px solid #2A3340;color:#9AA4B2">退出</button>
-    </div>
-    <div v-else-if="swapStep==='err-qr'" class="flex flex-col items-center pt-16 text-center">
-      <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FDECEA"><span v-html="luci('scan-x','w-8 h-8 text-[#FF3B30]')"></span></div>
-      <div class="text-[17px] font-bold mt-5" style="color:#fff">二维码无效</div>
-      <div class="text-[13px] mt-2" style="color:#9AA4B2">请重新扫描换电柜上的二维码</div>
-      <button data-cp @click="swapRetry" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">重新扫码</button>
     </div>
     <div v-else-if="swapStep==='err-offline'" class="flex flex-col items-center pt-16 text-center">
       <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FDECEA"><span v-html="luci('wifi-off','w-8 h-8 text-[#FF3B30]')"></span></div>
@@ -1077,13 +1065,6 @@ body.host-single-m #root-user{display:none}
       <div class="text-[17px] font-bold mt-5" style="color:#fff">距离过远无法操作</div>
       <div class="text-[13px] mt-2" style="color:#9AA4B2">请靠近机柜（30米内）后重新扫码</div>
       <button data-cp @click="swapRetry" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">重新扫码</button>
-    </div>
-    <div v-else-if="swapStep==='resume'" class="flex flex-col items-center pt-16 text-center">
-      <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#EEF4FF"><span v-html="luci('rotate-ccw','w-8 h-8 text-[#2F6FEB]')"></span></div>
-      <div class="text-[17px] font-bold mt-5" style="color:#fff">检测到未完成订单</div>
-      <div class="text-[13px] mt-2" style="color:#9AA4B2">是否恢复上次未完成的换电操作？</div>
-      <button data-cp @click="swapResumeContinue" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">恢复订单</button>
-      <button data-cp @click="swapClose" class="mt-3 w-full h-[48px] rounded-full text-[15px] font-medium cursor-pointer" style="border:1px solid #2A3340;color:#9AA4B2">退出</button>
     </div>
     <div v-else-if="swapStep==='warn-level'" class="flex flex-col items-center pt-16 text-center">
       <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FFF7E6"><span v-html="luci('battery-warning','w-8 h-8 text-[#E9A23B]')"></span></div>
@@ -1104,7 +1085,6 @@ body.host-single-m #root-user{display:none}
         <div class="ml-3"><div class="text-[15px] font-semibold" style="color:#fff">新增借电</div><div class="text-[12px]" style="color:#9AA4B2">不归还，再借一块满电电池</div></div>
       </div>
     </div>
-    <empty-state v-else-if="swapStep==='borrow-noslot'" icon="x-circle" text="暂无可用仓位" sub="请稍后再试或更换附近柜机" root-class="flex flex-col items-center pt-16 text-center" circle-class="w-16 h-16 rounded-full flex items-center justify-center bg-[#FDECEA]" icon-class="w-8 h-8 text-[#FF3B30]" text-class="text-[17px] font-bold text-white mt-5" sub-class="text-[13px] text-[#9AA4B2] mt-2"><button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">我知道了</button></empty-state>
     <div v-else-if="swapStep==='borrow-door'" class="pt-8">
       <div class="rounded-2xl px-5 py-5" style="background:#1C2430;border:1px solid #2A3340">
         <div class="flex items-center justify-between"><span class="text-[14px]" style="color:#9AA4B2">机柜</span><span class="text-[14px] font-semibold" style="color:#fff">{{ swapCtx.station.name }} · {{ swapCtx.cab.no }} 号柜</span></div>
@@ -1128,15 +1108,6 @@ body.host-single-m #root-user{display:none}
       <div class="text-[13px] mt-2" style="color:#9AA4B2">电池已存入「我的电池」，可前往使用</div>
       <button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">完成</button>
     </div>
-    <template v-else-if="swapStep==='swap-noplan'||swapStep==='swap-noslot'">
-      <div v-if="swapStep==='swap-noplan'" class="flex flex-col items-center pt-16 text-center">
-        <div class="w-16 h-16 rounded-full flex items-center justify-center" style="background:#FDECEA"><span v-html="luci('x-circle','w-8 h-8 text-[#FF3B30]')"></span></div>
-        <div class="text-[17px] font-bold mt-5" style="color:#fff">换电资格不足</div>
-        <div class="text-[13px] mt-2" style="color:#9AA4B2">请先购买换电套餐</div>
-        <button data-cp @click="swapClose();setTab('plan')" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">去购买套餐</button>
-      </div>
-      <empty-state v-else icon="x-circle" text="暂无可用归还仓" sub="请稍后再试或更换附近柜机" root-class="flex flex-col items-center pt-16 text-center" circle-class="w-16 h-16 rounded-full flex items-center justify-center bg-[#FDECEA]" icon-class="w-8 h-8 text-[#FF3B30]" text-class="text-[17px] font-bold text-white mt-5" sub-class="text-[13px] text-[#9AA4B2] mt-2"><button data-cp @click="swapClose" class="mt-10 w-full h-[52px] rounded-full text-[16px] font-bold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">我知道了</button></empty-state>
-    </template>
     <div v-else-if="swapStep==='swap-returndoor'" class="pt-8">
       <div class="rounded-2xl px-5 py-5" style="background:#1C2430;border:1px solid #2A3340">
         <div class="flex items-center justify-between"><span class="text-[14px]" style="color:#9AA4B2">机柜</span><span class="text-[14px] font-semibold" style="color:#fff">{{ swapCtx.station.name }} · {{ swapCtx.cab.no }} 号柜</span></div>
@@ -1533,7 +1504,7 @@ body.host-single-m #root-user{display:none}
   <div class="demo-ops-chip" data-cp @click="pickMockCity('乐山市')" :class="mockCity==='乐山市'?'is-on':''">乐山市·未开通</div>
 </div>
 </div>
-<div v-if="tab==='home'&&!profileOV" class="demo-ops-section" data-od-id="demo-search-history">
+<div v-if="showSearch" class="demo-ops-section" data-od-id="demo-search-history">
 <div class="demo-ops-label">搜索历史</div>
 <div class="demo-ops-chips">
   <div class="demo-ops-chip" data-cp @click="setSearchHistory(true)" :class="searchHistory.length?'is-on':''">有</div>
@@ -1545,13 +1516,6 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chips">
   <div class="demo-ops-chip" data-cp @click="setSwapArea(true)" :class="swapAreaSet?'is-on':''">已设置</div>
 <div class="demo-ops-chip" data-cp @click="setSwapArea(false)" :class="!swapAreaSet?'is-on':''">未设置</div>
-</div>
-</div>
-<div v-if="tab==='home'&&!profileOV&&!showSearch" class="demo-ops-section" data-od-id="demo-swap-flow">
-<div class="demo-ops-label">进行中的换电流程</div>
-<div class="demo-ops-chips">
-<div class="demo-ops-chip" data-cp @click="setSwapOngoing(true)" :class="swapOngoing?'is-on':''">有</div>
-<div class="demo-ops-chip" data-cp @click="setSwapOngoing(false)" :class="!swapOngoing?'is-on':''">无</div>
 </div>
 </div>
 <div v-if="tab==='home'&&!profileOV&&!showSearch" class="demo-ops-section" data-od-id="demo-pay-deposit">
@@ -1566,6 +1530,13 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="setPlanBought(true)" :class="planBought?'is-on':''">已购买</div>
 <div class="demo-ops-chip" data-cp @click="setPlanBought(false)" :class="!planBought?'is-on':''">未购买</div>
+</div>
+</div>
+<div v-if="tab==='home'&&!profileOV&&!showSearch" class="demo-ops-section" data-od-id="demo-swap-flow">
+<div class="demo-ops-label">进行中的流程</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setSwapOngoing(true)" :class="swapOngoing?'is-on':''">有</div>
+<div class="demo-ops-chip" data-cp @click="setSwapOngoing(false)" :class="!swapOngoing?'is-on':''">无</div>
 </div>
 </div>
 <div v-if="profileOV==='deposit'" class="demo-ops-section" data-od-id="demo-deposit-free">
@@ -1629,9 +1600,6 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-label">扫码换电主流程</div>
 <div class="demo-ops-row"><span class="text-[12px]">扫码</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="swapScan">模拟扫码</div></div></div>
-<div class="demo-ops-row"><span class="text-[12px]">相机权限</span><div class="demo-ops-chips">
-<div class="demo-ops-chip" data-cp @click="setCamAuth(true)" :class="camAuth?'is-on':''">已开启</div>
-<div class="demo-ops-chip" data-cp @click="setCamAuth(false)" :class="!camAuth?'is-on':''">未开启</div></div></div>
 <div class="demo-ops-row"><span class="text-[12px]">二维码</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="demoQrOk=true" :class="demoQrOk?'is-on':''">有效</div>
 <div class="demo-ops-chip" data-cp @click="demoQrOk=false" :class="!demoQrOk?'is-on':''">无效</div></div></div>
@@ -1640,23 +1608,16 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" data-cp @click="demoOnline=false" :class="!demoOnline?'is-on':''">离线</div></div></div>
 <div class="demo-ops-row"><span class="text-[12px]">距离</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="demoDist='near'" :class="demoDist==='near'?'is-on':''">≤30m</div>
-<div class="demo-ops-chip" data-cp @click="demoDist='mid'" :class="demoDist==='mid'?'is-on':''">30-50m</div>
-<div class="demo-ops-chip" data-cp @click="demoDist='far'" :class="demoDist==='far'?'is-on':''">>50m</div></div></div>
+<div class="demo-ops-chip" data-cp @click="demoDist='far'" :class="demoDist==='far'?'is-on':''">>30m</div></div></div>
 <div class="demo-ops-row"><span class="text-[12px]">未完成订单</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="demoUnfinished=false" :class="!demoUnfinished?'is-on':''">无</div>
 <div class="demo-ops-chip" data-cp @click="demoUnfinished=true" :class="demoUnfinished?'is-on':''">有</div></div></div>
-<div class="demo-ops-row"><span class="text-[12px]">柜机电量</span><div class="demo-ops-chips">
+<div v-if="demoUnfinished" class="demo-ops-row"><span class="text-[12px]">未完成订单场景</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="demoResumeType='borrow'" :class="demoResumeType==='borrow'?'is-on':''">借电中</div>
+<div class="demo-ops-chip" data-cp @click="demoResumeType='swap'" :class="demoResumeType==='swap'?'is-on':''">换电中</div></div></div>
+<div class="demo-ops-row"><span class="text-[12px]">可分配电池电量</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="demoLevelLow=false" :class="!demoLevelLow?'is-on':''">≥70%</div>
 <div class="demo-ops-chip" data-cp @click="demoLevelLow=true" :class="demoLevelLow?'is-on':''">&lt;70%</div></div></div>
-<div class="demo-ops-row"><span class="text-[12px]">套餐资格</span><div class="demo-ops-chips">
-<div class="demo-ops-chip" data-cp @click="demoPlanEnough=true" :class="demoPlanEnough?'is-on':''">充足</div>
-<div class="demo-ops-chip" data-cp @click="demoPlanEnough=false" :class="!demoPlanEnough?'is-on':''">不足</div></div></div>
-<div class="demo-ops-row"><span class="text-[12px]">借电仓位</span><div class="demo-ops-chips">
-<div class="demo-ops-chip" data-cp @click="demoTakeSlot=true" :class="demoTakeSlot?'is-on':''">有</div>
-<div class="demo-ops-chip" data-cp @click="demoTakeSlot=false" :class="!demoTakeSlot?'is-on':''">无</div></div></div>
-<div class="demo-ops-row"><span class="text-[12px]">归还仓位</span><div class="demo-ops-chips">
-<div class="demo-ops-chip" data-cp @click="demoReturnSlot=true" :class="demoReturnSlot?'is-on':''">有</div>
-<div class="demo-ops-chip" data-cp @click="demoReturnSlot=false" :class="!demoReturnSlot?'is-on':''">无</div></div></div>
 <div class="demo-ops-row"><span class="text-[12px]">已绑定电池</span><div class="demo-ops-chips">
 <div class="demo-ops-chip" data-cp @click="setBoundCount(0)" :class="batteryList.length===0?'is-on':''">0块</div>
 <div class="demo-ops-chip" data-cp @click="setBoundCount(1)" :class="batteryList.length===1?'is-on':''">1块</div>
@@ -1711,7 +1672,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div><tab-bar :show="!settingsOpen" active-color="#2B3F5F" :items="[{key:'home',icon:'bar-chart-3',label:'首页',activeWhen:tab==='home'},{key:'cab',icon:'box',label:'换电柜',activeWhen:tab==='cab'},{key:'batt',icon:'battery-charging',label:'电池',activeWhen:tab==='batt'},{key:'board',icon:'bar-chart-2',label:'看板',activeWhen:tab==='board'}]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
+</div><tab-bar :show="!settingsOpen" active-color="#2B3F5F" :items="[{key:'home',icon:'bar-chart-3',label:'首页',activeWhen:tab==='home'},{key:'cab',icon:'box',label:'换电柜',activeWhen:tab==='cab'},{key:'batt',icon:'battery-charging',label:'电池',activeWhen:tab==='batt'},{key:'mine',icon:'user',label:'我的',activeWhen:tab==='mine'}]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
 <transition name="fd"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="login-page">
 <div v-show="loginView==='main'" class="flex-1 flex flex-col min-h-0 bg-[#F6F7F9]">
 <div class="pt-14 px-5 pb-1 flex items-center justify-end shrink-0">
@@ -2458,34 +2419,34 @@ var _ua=Vue.createApp({
     var swapTorch=Vue.ref(false);
     var showSwapManual=Vue.ref(false),swapManualNo=Vue.ref('');
     var pendingScan=Vue.ref(false);
-    var camAuth=Vue.ref(true);
     var demoQrOk=Vue.ref(true);
     var demoOnline=Vue.ref(true);
     var demoDist=Vue.ref('near');
     var demoUnfinished=Vue.ref(false);
+    var demoResumeType=Vue.ref('borrow');
     var demoLevelLow=Vue.ref(false);
-    var demoPlanEnough=Vue.ref(true);
-    var demoTakeSlot=Vue.ref(true);
-    var demoReturnSlot=Vue.ref(true);
     var planMax=Vue.ref(2);
     var swapAnomaly=Vue.ref(null);
-    function setCamAuth(on){camAuth.value=on}
     function setPlanMax(n){planMax.value=n}
-    function swapTitleFn(){var s=swapStep.value;if(s.indexOf('borrow')===0)return '借电';if(s.indexOf('swap')===0)return '换电';var m={scan:'扫码换电',resume:'未完成订单',choice:'选择操作','warn-level':'电量提醒','gate-perm':'权限申请','err-qr':'扫码失败','err-offline':'设备离线','err-dist':'距离过远'};return m[s]||'扫码换电'}
+    function swapTitleFn(){var s=swapStep.value;if(s.indexOf('borrow')===0)return '借电';if(s.indexOf('swap')===0)return '换电';var m={scan:'扫码换电',choice:'选择操作','warn-level':'电量提醒','err-offline':'设备离线','err-dist':'距离过远'};return m[s]||'扫码换电'}
     var swapTitle=Vue.computed(swapTitleFn);
     function swapPickCab(){var s=stations[0];swapCtx.value={station:s,cab:s.cabinets?s.cabinets[0]:null}}
     function setBoundCount(n){var t=nowStr(),arr=[];for(var i=0;i<n;i++){arr.push({id:i+1,no:'BAT'+(1000+i),location:'成都市双流区',bindTime:t})}batteryList.value=arr}
     function swapStart(){auth.navOpen('swap');swapStep.value='scan';swapShow.value=true;auth.profileOV.value='swap';auth.profileSub.value=null}
+    /* 二维码无效：按流程图以提示弹窗告知，确认后结束本次扫码流程 */
+    var showQrErr=Vue.ref(false);
+    function closeQrErr(){showQrErr.value=false;swapClose()}
+    /* 未完成订单恢复：入口校验命中后直接进入「进行中的流程」（流程页暂未实现，先用 toast 占位；
+       后续实现时替换为：按 demoResumeType 落到 borrow-door / swap-returndoor 并打开扫码流程页） */
+    function swapResume(){toastPush('流程恢复')}
     /* 扫码页「键盘」入口：手动输入换电柜编号（与租车「输入车架号/电池编号」同规范），确认后按同一状态机继续 */
     function swapManualOpen(){swapManualNo.value='';auth.navOpen('swapManual');showSwapManual.value=true}
     function confirmSwapManual(){var v=(swapManualNo.value||'').trim();if(!v){toastPush('请输入机柜编号');return}auth.navDrop('swapManual');showSwapManual.value=false;swapManualNo.value='';swapScan()}
     function swapScan(){
       swapPickCab();
-      if(!locAuth.value||!camAuth.value){swapStep.value='gate-perm';return}
-      if(!demoQrOk.value){swapStep.value='err-qr';return}
+      if(!demoQrOk.value){showQrErr.value=true;return}
       if(!demoOnline.value){swapStep.value='err-offline';return}
       if(demoDist.value!=='near'){swapStep.value='err-dist';return}
-      if(demoUnfinished.value){swapStep.value='resume';return}
       if(demoLevelLow.value){swapStep.value='warn-level';return}
       swapBranch();
     }
@@ -2495,12 +2456,8 @@ var _ua=Vue.createApp({
       if(bound>=max){swapToSwap();return}
       swapStep.value='choice';
     }
-    function swapResumeContinue(){swapBranch()}
     function swapChoice(t){if(t==='swap')swapToSwap();else swapToBorrow()}
-    function swapToBorrow(){
-      if(!demoTakeSlot.value){swapStep.value='borrow-noslot';return}
-      swapStep.value='borrow-door';
-    }
+    function swapToBorrow(){swapStep.value='borrow-door'}
     function swapBorrowDone(){
       if(swapAnomaly.value==='borrow-timeout'){swapStep.value='borrow-timeout';return}
       if(swapAnomaly.value==='borrow-notake'){swapStep.value='borrow-notake';return}
@@ -2511,11 +2468,7 @@ var _ua=Vue.createApp({
       if(cab){cab.used=cab.used+1;cab.full=Math.max(0,cab.full-1)}
       swapStep.value='borrow-done';
     }
-    function swapToSwap(){
-      if(!demoPlanEnough.value){swapStep.value='swap-noplan';return}
-      if(!demoReturnSlot.value){swapStep.value='swap-noslot';return}
-      swapStep.value='swap-returndoor';
-    }
+    function swapToSwap(){swapStep.value='swap-returndoor'}
     function swapSwapAfterReturn(){
       if(swapAnomaly.value==='swap-nodetect'){swapStep.value='swap-nodetect';return}
       if(swapAnomaly.value==='swap-invalid'){swapStep.value='swap-invalid';return}
@@ -2576,14 +2529,20 @@ var _ua=Vue.createApp({
     /* ── 扫码换电前置校验：先押金后套餐（免押用户跳过押金） ── */
     var showPrecheck=Vue.ref(false),precheckType=Vue.ref('deposit');
     var precheckDesc=Vue.computed(function(){return precheckType.value==='deposit'?'请先缴纳押金，方可使用换电服务':'请您先购买套餐，再使用换电服务。'});
+    /* 前置校验弹窗标题：押金未缴场景标题明确为「未缴纳押金」，套餐未购保持通用提示 */
+    var precheckTitle=Vue.computed(function(){return precheckType.value==='deposit'?'未缴纳押金':'未购买套餐'});
+    /* 前置校验弹窗确认按钮：押金未缴 → 前往缴纳；套餐未购 → 立即购买 */
+    var precheckConfirmText=Vue.computed(function(){return precheckType.value==='deposit'?'前往缴纳':'立即购买'});
     function closePrecheck(){showPrecheck.value=false}
     /* 确认 → 按类型跳转：押金未缴去押金页；套餐未购去套餐页 */
     function confirmPrecheck(){var t=precheckType.value;showPrecheck.value=false;if(t==='deposit'){openDeposit();return}setTab('plan')}
-    /* 扫码换电前置校验链：未设置加盟商(换电区域) → 先跳换电区域页；已设置 → 押金 → 套餐（免押跳过押金）；全部通过返回 true */
+    /* 扫码换电前置校验链（点击扫码入口即校验）：未设置加盟商(换电区域) → 押金 → 套餐 → 未完成订单；全部通过返回 true */
     function precheckPass(){
       if(!swapAreaSet.value){openSwapArea();return false}
       if(!depositFree.value&&depositState.value!=='paid'){precheckType.value='deposit';showPrecheck.value=true;return false}
       if(!planBought.value){precheckType.value='plan';showPrecheck.value=true;return false}
+      /* 未完成订单与押金/套餐同属入口校验（套餐之后）；命中则直接恢复到对应业务节点 */
+      if(demoUnfinished.value){swapResume();return false}
       return true
     }
     var depositAgree=Vue.ref(false);
@@ -2794,7 +2753,7 @@ var _ua=Vue.createApp({
     function confirmCancelReserve(){showCancelReserve.value=false;cancelReserve()}
     function onBookClick(){if(stationReserved.value){askCancelReserve();return}bookFromCard()}
     function openReservedCard(){if(reservedCab.value)selPoint.value=reservedCab.value.point}
-    function goFlowNow(){selPoint.value=null;swapStart()}
+    function goFlowNow(){selPoint.value=null;toastPush('流程恢复')}
     function setSwapOngoing(v){swapOngoing.value=v}
     /* 首次登录：定位授权后按定位信息匹配当前区域运营商；同区域存在多个运营商则弹窗选择 */
     var mockCity=Vue.ref('成都市');
@@ -3040,22 +2999,303 @@ var _ua=Vue.createApp({
       planDetail.value=null;planBought.value=true;toastPush('支付成功');
     }
     /* 页面级状态注册进导航快照（Tab / 换电流程 / 站点 / 电池详情 / 订单详情 / 记录范围） */
-    auth.addNavRefs([tab,swapShow,swapStep,showSwapManual,curStation,curCab,batteryDetailRec,planOrderDetail,swapRecordsScope]);
-    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,mapType,MAP_TYPES,mapPoints,mapTheme,showMapSheet,pickMapType,openMapPoint,showSearch,searchQ,searchCenter,searchHistory,locNearby,searchList,poiList,openSearch,closeSearch,clearSearchQ,doSearch,pickHistory,pickPoi,clearSearchCenter,mapWorldStyle,clearSearchHistory,setSearchHistory,relocate,pickSearchStation,selPoint,selStore,closeSelPoint,closeSelStore,callStore,openStoreDetail,pointStat,openSelDetail,openReservedDetail,onMapClick,isCabReserved,hasReservedOther,bookCab,stationReserved,bookFromStation,goReturnScan,storeNavSheet,storeNavOptions,openStoreNav,closeStoreNav,pickStoreNav,callStation,scanFromCard,bookFromCard,reservedCab,reserveLeft,swapOngoing,bookDisabled,fmtReserve,cancelReserve,askCancelReserve,closeCancelReserve,confirmCancelReserve,showCancelReserve,onBookClick,openReservedCard,goFlowNow,setSwapOngoing,showPrecheck,precheckDesc,closePrecheck,precheckPass,confirmPrecheck,stations,locAppAuth,setLocAppAuth,showLocAppAuth,allowLocAppAuth,denyLocAppAuth,locReady,locAuth,setLocAuth,showLocAuth,allowLocAuth,dismissLocAuth,goEnableLoc,swapAreaSet,areaNoService,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCity,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,areaLabel,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,camAuth,setCamAuth,demoQrOk,demoOnline,demoDist,demoUnfinished,demoLevelLow,demoPlanEnough,demoTakeSlot,demoReturnSlot,planMax,setPlanMax,swapAnomaly,swapStart,swapScan,swapTorch,showSwapManual,swapManualNo,swapManualOpen,confirmSwapManual,swapBranch,swapChoice,swapToBorrow,swapBorrowDone,swapToSwap,swapSwapAfterReturn,swapSwapDone,swapClose,swapRetry,swapResumeContinue,setBoundCount,showOperatorPicker,operatorOptions,pickFirstLoginOperator,closeOperatorPicker,operatorPickerCity,mockCity,pickMockCity,firstLoginRegionFlow},auth,sideSetup('换电用户端',toastBus))
+    auth.addNavRefs([tab,swapShow,swapStep,showSwapManual,showQrErr,curStation,curCab,batteryDetailRec,planOrderDetail,swapRecordsScope]);
+    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,mapType,MAP_TYPES,mapPoints,mapTheme,showMapSheet,pickMapType,openMapPoint,showSearch,searchQ,searchCenter,searchHistory,locNearby,searchList,poiList,openSearch,closeSearch,clearSearchQ,doSearch,pickHistory,pickPoi,clearSearchCenter,mapWorldStyle,clearSearchHistory,setSearchHistory,relocate,pickSearchStation,selPoint,selStore,closeSelPoint,closeSelStore,callStore,openStoreDetail,pointStat,openSelDetail,openReservedDetail,onMapClick,isCabReserved,hasReservedOther,bookCab,stationReserved,bookFromStation,goReturnScan,storeNavSheet,storeNavOptions,openStoreNav,closeStoreNav,pickStoreNav,callStation,scanFromCard,bookFromCard,reservedCab,reserveLeft,swapOngoing,bookDisabled,fmtReserve,cancelReserve,askCancelReserve,closeCancelReserve,confirmCancelReserve,showCancelReserve,onBookClick,openReservedCard,goFlowNow,setSwapOngoing,showPrecheck,precheckDesc,precheckTitle,precheckConfirmText,closePrecheck,precheckPass,confirmPrecheck,stations,locAppAuth,setLocAppAuth,showLocAppAuth,allowLocAppAuth,denyLocAppAuth,locReady,locAuth,setLocAuth,showLocAuth,allowLocAuth,dismissLocAuth,goEnableLoc,swapAreaSet,areaNoService,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCity,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,areaLabel,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,demoQrOk,demoOnline,demoDist,demoUnfinished,demoResumeType,demoLevelLow,planMax,setPlanMax,swapAnomaly,swapStart,swapScan,swapTorch,showSwapManual,swapManualNo,swapManualOpen,confirmSwapManual,swapBranch,swapChoice,swapToBorrow,swapBorrowDone,swapToSwap,swapSwapAfterReturn,swapSwapDone,swapClose,swapRetry,showQrErr,closeQrErr,swapResume,setBoundCount,showOperatorPicker,operatorOptions,pickFirstLoginOperator,closeOperatorPicker,operatorPickerCity,mockCity,pickMockCity,firstLoginRegionFlow},auth,sideSetup('换电用户端',toastBus))
   }})
 registerSheetKit(_ua);_ua.mount(document.getElementById('root-user'));
 
 /* ===== 换电商户端 ===== */
+/* 商户端领域 Mock：门店 1:1 站点 → 站点 1:N 换电柜 → 柜 0:N 电池；电池 3 维状态（在柜 / 租用 / 电池联网） */
+/* mSlots：仓位明细（total 仓门数为机柜固有属性，与状态无关；occupiedNos 有电池仓号；faultNos 故障仓号） */
+function mSlots(total,occupiedNos,faultNos){var a=[],occ=occupiedNos||[],flt=faultNos||[];for(var i=1;i<=total;i++){a.push({no:(i<10?'0':'')+i,occupied:occ.indexOf(i)!==-1,fault:flt.indexOf(i)!==-1})}return a}
+function mRec(time,type,note){return {time:time,type:type,note:note}}
+var M_STORES=[
+  {id:'S01',name:'雅迪换电·双流旗舰店',addr:'成都市双流区航空港街道黄河中路 88 号',phone:'028-8888 6666',hours:'08:00-22:00',stationId:'ST01'},
+  {id:'S02',name:'雅迪换电·金牛万达店',addr:'成都市金牛区金牛万达广场 B1 层',phone:'028-8666 1234',hours:'09:00-21:30',stationId:'ST02'},
+  {id:'S03',name:'雅迪换电·武侯吾悦店',addr:'成都市武侯区吾悦广场 1F 东侧',phone:'028-8777 5566',hours:'10:00-22:00',stationId:'ST03'},
+  {id:'S04',name:'雅迪换电·高新天府店',addr:'成都市高新区天府三街 199 号',phone:'028-8555 7788',hours:'08:30-21:00',stationId:''}
+];
+var M_STATIONS=[
+  {id:'ST01',name:'双流航空港站',addr:'成都市双流区黄河中路 88 号 1F 门口'},
+  {id:'ST02',name:'金牛万达站',addr:'成都市金牛区金牛万达 B1 停车场 P2 区'},
+  {id:'ST03',name:'武侯吾悦站',addr:'成都市武侯区吾悦广场东侧广场'},
+  {id:'ST04',name:'高新天府站',addr:'成都市高新区天府三街 199 号 1F'}
+];
+var M_CABINETS=[
+  {no:'A01',stationId:'ST01',model:'YD-C12',doors:12,bizOnline:true,netOnline:true,fault:false,alarm:false,enabled:true,slots:mSlots(12,[1,2,5,8])},
+  {no:'A02',stationId:'ST01',model:'YD-C08',doors:8,bizOnline:true,netOnline:false,fault:false,alarm:true,enabled:true,slots:mSlots(8,[1])},
+  {no:'B01',stationId:'ST02',model:'YD-C12',doors:12,bizOnline:true,netOnline:true,fault:true,alarm:true,enabled:true,slots:mSlots(12,[2],[7])},
+  {no:'B02',stationId:'ST02',model:'YD-C06',doors:6,bizOnline:false,netOnline:false,fault:false,alarm:false,enabled:true,slots:mSlots(6,[])},
+  {no:'C01',stationId:'ST03',model:'YD-C16',doors:16,bizOnline:true,netOnline:true,fault:false,alarm:false,enabled:true,slots:mSlots(16,[4,9,11])},
+  {no:'D01',stationId:'ST04',model:'YD-C10',doors:10,bizOnline:true,netOnline:true,fault:false,alarm:false,enabled:false,slots:mSlots(10,[])}
+];
+var M_BATTERIES=[
+  {no:'BT-2026-0001',soc:86,cycles:126,health:96,cabState:'inCab',rentState:'unrented',netOnline:true,charging:false,at:'A01-01',records:[mRec('2026-09-16 14:05','charge','入柜充电，SOC 12% → 86%'),mRec('2026-09-16 09:20','return','由用户 U8812 归还至 A01-01 仓位')]},
+  {no:'BT-2026-0002',soc:42,cycles:98,health:94,cabState:'inCab',rentState:'unrented',netOnline:true,charging:true,at:'A01-02',records:[mRec('2026-09-18 21:10','return','由用户 U6521 归还至 A01-02 仓位，开始充电'),mRec('2026-09-18 08:32','borrow','用户 U6521 于 A01-02 借出')]},
+  {no:'BT-2026-0003',soc:95,cycles:154,health:91,cabState:'inCab',rentState:'unrented',netOnline:true,charging:false,at:'A01-05',records:[mRec('2026-09-15 18:40','charge','入柜充电，SOC 20% → 95%'),mRec('2026-09-15 12:05','return','由用户 U3390 归还至 A01-05 仓位')]},
+  {no:'BT-2026-0004',soc:67,cycles:212,health:88,cabState:'inCab',rentState:'unrented',netOnline:true,charging:true,at:'A01-08',records:[mRec('2026-09-19 07:15','charge','入柜充电，SOC 33% → 67%'),mRec('2026-09-18 19:50','return','由用户 U7712 归还至 A01-08 仓位')]},
+  {no:'BT-2026-0005',soc:74,cycles:88,health:95,cabState:'inCab',rentState:'unrented',netOnline:false,charging:false,at:'A02-01',records:[mRec('2026-09-19 09:02','alarm','与 A02 柜通讯中断，状态待同步'),mRec('2026-09-17 16:20','return','由用户 U2188 归还至 A02-01 仓位')]},
+  {no:'BT-2026-0006',soc:55,cycles:176,health:90,cabState:'inCab',rentState:'unrented',netOnline:true,charging:true,at:'B01-02',records:[mRec('2026-09-19 06:48','charge','入柜充电，SOC 21% → 55%'),mRec('2026-09-18 22:14','return','由用户 U4402 归还至 B01-02 仓位')]},
+  {no:'BT-2026-0007',soc:99,cycles:64,health:98,cabState:'inCab',rentState:'unrented',netOnline:true,charging:false,at:'C01-04',records:[mRec('2026-09-14 10:30','charge','入柜充电，SOC 40% → 99%'),mRec('2026-09-14 08:12','return','由用户 U9001 归还至 C01-04 仓位')]},
+  {no:'BT-2026-0008',soc:31,cycles:243,health:84,cabState:'inCab',rentState:'unrented',netOnline:true,charging:true,at:'C01-09',records:[mRec('2026-09-19 08:20','charge','入柜充电，SOC 9% → 31%'),mRec('2026-09-19 07:02','return','由用户 U5567 归还至 C01-09 仓位')]},
+  {no:'BT-2026-0009',soc:8,cycles:301,health:76,cabState:'inCab',rentState:'unrented',netOnline:false,charging:false,at:'C01-11',records:[mRec('2026-09-19 05:40','alarm','电量过低且通讯异常，建议下架检修'),mRec('2026-09-18 23:55','return','由用户 U1234 归还至 C01-11 仓位')]},
+  {no:'BT-2026-0010',soc:72,cycles:132,health:93,cabState:'outCab',rentState:'rented',netOnline:true,charging:false,at:'用户 王** · +62 812-8821',records:[mRec('2026-09-18 08:35','borrow','用户 王** 于 A01-06 借出'),mRec('2026-09-16 20:10','return','由用户 王** 归还至 A01-06 仓位')]},
+  {no:'BT-2026-0011',soc:45,cycles:187,health:89,cabState:'outCab',rentState:'rented',netOnline:true,charging:false,at:'用户 李** · +62 813-1043',records:[mRec('2026-09-19 07:20','borrow','用户 李** 于 C01-02 借出'),mRec('2026-09-17 19:40','return','由用户 李** 归还至 C01-02 仓位')]},
+  {no:'BT-2026-0012',soc:61,cycles:145,health:92,cabState:'outCab',rentState:'rented',netOnline:true,charging:false,at:'用户 陈** · +62 811-5566',records:[mRec('2026-09-17 12:08','borrow','用户 陈** 于 B01-05 借出'),mRec('2026-09-15 08:22','return','由用户 陈** 归还至 B01-05 仓位')]},
+  {no:'BT-2026-0013',soc:5,cycles:412,health:68,cabState:'outCab',rentState:'unrented',netOnline:false,charging:false,at:'维修中 · 双流仓',records:[mRec('2026-09-12 15:30','repair','送修双流仓，SOC 极低需检测电芯')]},
+  {no:'BT-2026-0014',soc:12,cycles:356,health:72,cabState:'outCab',rentState:'unrented',netOnline:false,charging:false,at:'维修中 · 武侯仓',records:[mRec('2026-09-10 09:14','repair','送修武侯仓，外壳破损待更换')]}
+];
 var _ma=Vue.createApp({
   setup:function(){
     var tab=Vue.ref('home'),settingsOpen=Vue.ref(false);
     var toastBus=createToastBus();
     function toastPush(msg){toastBus.push(msg)}
-    function setTab(t){tab.value=t;auth.navReset()}
     function toast(m){toastBus.push(m)}
     var auth=authState(toastBus);
-    auth.addNavRefs([tab]);
-    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast},auth,sideSetup('换电商户端',toastBus))
+    var navOpen=auth.navOpen,navBack=auth.navBack;
+    var OK_C='#16A34A',BAD_C='#DC2626',WARN_C='#FF8A00',OFF_C='#999999';
+
+    /* ── 业务数据（数据类 ref 不注册进导航快照，避免返回时被回滚） ── */
+    var stores=Vue.ref(M_STORES.map(function(o){return Object.assign({},o)}));
+    var stations=Vue.ref(M_STATIONS.map(function(o){return Object.assign({},o)}));
+    var cabinets=Vue.ref(JSON.parse(JSON.stringify(M_CABINETS)));
+    var batteries=Vue.ref(JSON.parse(JSON.stringify(M_BATTERIES)));
+
+    /* ── 页面级状态（注册进导航快照） ── */
+    var mPage=Vue.ref('');
+    var mStoreId=Vue.ref(''),mStationId=Vue.ref(''),mCabNo=Vue.ref(''),mBattNo=Vue.ref('');
+    var showCabFilter=Vue.ref(false),showBattFilter=Vue.ref(false);
+    var showStoreForm=Vue.ref(false),showStationForm=Vue.ref(false),showBindCab=Vue.ref(false);
+    var mConfirm=Vue.ref(null),mConfirmLoading=Vue.ref(false);
+
+    /* ── 筛选（快捷 chips 与筛选弹窗共享同一份；弹窗内改 draft，确认后写回） ── */
+    var CAB_EMPTY={bizState:'',stationId:'',netState:'',fault:'',alarm:'',enabled:''};
+    var BATT_EMPTY={cabState:'',battNet:'',rentState:''};
+    var cabFilter=Vue.reactive(Object.assign({},CAB_EMPTY));
+    var cabDraft=Vue.reactive(Object.assign({},CAB_EMPTY));
+    var battFilter=Vue.reactive(Object.assign({},BATT_EMPTY));
+    var battDraft=Vue.reactive(Object.assign({},BATT_EMPTY));
+
+    /* ── 状态文案与色标映射（机柜 7 维 / 电池 3 维） ── */
+    var CAB_TEXT={
+      biz:function(c){return c.bizOnline?'上线':'下线'},
+      net:function(c){return c.netOnline?'在线':'离线'},
+      fault:function(c){return c.fault?'有故障':'无故障'},
+      alarm:function(c){return c.alarm?'有告警':'无告警'},
+      enabled:function(c){return c.enabled?'已启用':'未启用'}
+    };
+    var CAB_DOT={
+      biz:function(c){return c.bizOnline?'ok':'bad'},
+      net:function(c){return c.netOnline?'ok':'bad'},
+      fault:function(c){return c.fault?'warn':'ok'},
+      alarm:function(c){return c.alarm?'warn':'ok'},
+      enabled:function(c){return c.enabled?'ok':'off'}
+    };
+    var BATT_TEXT={
+      cab:function(b){return b.cabState==='inCab'?'柜内':'柜外'},
+      rent:function(b){return b.rentState==='rented'?'已租用':'未租用'},
+      net:function(b){return b.netOnline?'在线':'离线'}
+    };
+    var BATT_DOT={
+      cab:function(b){return b.cabState==='inCab'?'ok':'warn'},
+      rent:function(b){return b.rentState==='rented'?'ok':'warn'},
+      net:function(b){return b.netOnline?'ok':'bad'}
+    };
+    function dotColor(k){return k==='ok'?OK_C:k==='bad'?BAD_C:k==='warn'?WARN_C:OFF_C}
+    function socColor(s){return s>=60?OK_C:s>=20?WARN_C:BAD_C}
+
+    /* ── 查询辅助 ── */
+    function storeOf(id){var r=stores.value.filter(function(s){return s.id===id})[0];return r||null}
+    function stationOf(id){var r=stations.value.filter(function(s){return s.id===id})[0];return r||null}
+    function cabOf(no){var r=cabinets.value.filter(function(c){return c.no===no})[0];return r||null}
+    function battOf(no){var r=batteries.value.filter(function(b){return b.no===no})[0];return r||null}
+    function stationNameOf(id){var s=stationOf(id);return s?s.name:'未绑定站点'}
+    function storeNameOf(id){var s=storeOf(id);return s?s.name:'—'}
+    /* 门店 1:1 站点：单一真相为 store.stationId，站点侧所属门店由门店反查得出 */
+    function storeOfStation(stationId){var r=stores.value.filter(function(s){return s.stationId===stationId})[0];return r||null}
+    function cabsOfStation(stationId){return cabinets.value.filter(function(c){return c.stationId===stationId})}
+    function stationsOfStore(storeId){var st=storeOf(storeId);return st&&st.stationId?stations.value.filter(function(s){return s.id===st.stationId}):[]}
+    function battCountOf(cab){return (cab.slots||[]).filter(function(s){return s.occupied}).length}
+    function slotOf(cab,slotNo){var r=(cab.slots||[]).filter(function(s){return s.no===slotNo})[0];return r||null}
+    function freeSlotOf(cab){var r=(cab.slots||[]).filter(function(s){return !s.occupied&&!s.fault})[0];return r||null}
+    function nowStr(){var d=new Date();function p(n){return (n<10?'0':'')+n}return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())}
+    function alarmsOfCab(c){var a=[];if(c.fault)a.push({level:'bad',text:'仓门故障：'+(c.slots||[]).filter(function(s){return s.fault}).map(function(s){return s.no}).join('、')+' 号仓门异常'});if(c.alarm)a.push({level:'warn',text:'温度告警：柜内温度超过阈值 55℃'});if(!c.netOnline)a.push({level:'bad',text:'通讯异常：设备离线，数据为最后同步值'});if(!c.bizOnline)a.push({level:'warn',text:'运营下线：该柜已停止对外服务'});if(!c.enabled)a.push({level:'off',text:'未启用：该柜处于停用状态'});return a}
+
+    /* ── 机柜列表筛选（快捷=运营状态；弹窗=站点/联网/故障/告警/启用） ── */
+    var cabList=Vue.computed(function(){
+      return cabinets.value.filter(function(c){
+        if(cabFilter.bizState==='online'&&!c.bizOnline)return false;
+        if(cabFilter.bizState==='offline'&&c.bizOnline)return false;
+        if(cabFilter.stationId&&c.stationId!==cabFilter.stationId)return false;
+        if(cabFilter.netState==='on'&&!c.netOnline)return false;
+        if(cabFilter.netState==='off'&&c.netOnline)return false;
+        if(cabFilter.fault==='yes'&&!c.fault)return false;
+        if(cabFilter.fault==='no'&&c.fault)return false;
+        if(cabFilter.alarm==='yes'&&!c.alarm)return false;
+        if(cabFilter.alarm==='no'&&c.alarm)return false;
+        if(cabFilter.enabled==='yes'&&!c.enabled)return false;
+        if(cabFilter.enabled==='no'&&c.enabled)return false;
+        return true
+      })
+    });
+    var cabFilterCount=Vue.computed(function(){var n=0;['stationId','netState','fault','alarm','enabled'].forEach(function(k){if(cabFilter[k])n++});return n});
+    var cabFilterActive=Vue.computed(function(){return cabFilterCount.value>0||!!cabFilter.bizState});
+
+    /* ── 电池列表筛选（快捷=在柜状态；弹窗=电池状态/租用状态） ── */
+    var battList=Vue.computed(function(){
+      return batteries.value.filter(function(b){
+        if(battFilter.cabState&&b.cabState!==battFilter.cabState)return false;
+        if(battFilter.battNet==='on'&&!b.netOnline)return false;
+        if(battFilter.battNet==='off'&&b.netOnline)return false;
+        if(battFilter.rentState&&b.rentState!==battFilter.rentState)return false;
+        return true
+      })
+    });
+    var battFilterCount=Vue.computed(function(){var n=0;['battNet','rentState'].forEach(function(k){if(battFilter[k])n++});return n});
+    var battFilterActive=Vue.computed(function(){return battFilterCount.value>0||!!battFilter.cabState});
+
+    /* ── 经营统计与看板数据 ── */
+    var cabOnlineRate=Vue.computed(function(){if(!cabinets.value.length)return 0;var on=cabinets.value.filter(function(c){return c.bizOnline&&c.netOnline}).length;return Math.round(on/cabinets.value.length*100)});
+    var inCabCount=Vue.computed(function(){return batteries.value.filter(function(b){return b.cabState==='inCab'}).length});
+    var rentedCount=Vue.computed(function(){return batteries.value.filter(function(b){return b.rentState==='rented'}).length});
+    var todaySwapCount=Vue.ref(128),todayRevenue=Vue.ref(1860);
+    var alarmList=Vue.computed(function(){
+      var arr=[];
+      cabinets.value.forEach(function(c){
+        if(c.fault)arr.push({no:c.no,type:'柜故障',level:'bad',text:c.no+' 柜 · '+stationNameOf(c.stationId)+' 仓门故障',time:'09-19 14:22'});
+        if(c.alarm)arr.push({no:c.no,type:'温度告警',level:'warn',text:c.no+' 柜 · '+stationNameOf(c.stationId)+' 柜内温度超阈值',time:'09-19 13:05'});
+        if(!c.bizOnline)arr.push({no:c.no,type:'运营下线',level:'warn',text:c.no+' 柜 · '+stationNameOf(c.stationId)+' 已下线停服',time:'09-19 11:40'});
+        if(!c.netOnline&&c.bizOnline)arr.push({no:c.no,type:'通讯异常',level:'bad',text:c.no+' 柜 · '+stationNameOf(c.stationId)+' 设备离线',time:'09-19 10:52'});
+      });
+      batteries.value.forEach(function(b){
+        if(!b.netOnline&&b.cabState==='inCab')arr.push({no:b.no,type:'电池离线',level:'bad',text:b.no+' · '+b.at+' 通讯中断',time:'09-19 10:18'});
+      });
+      return arr
+    });
+    var cabStats=Vue.computed(function(){
+      return {
+        total:cabinets.value.length,
+        online:cabinets.value.filter(function(c){return c.bizOnline}).length,
+        offline:cabinets.value.filter(function(c){return !c.bizOnline}).length,
+        fault:cabinets.value.filter(function(c){return c.fault}).length,
+        alarm:cabinets.value.filter(function(c){return c.alarm}).length,
+        doors:cabinets.value.reduce(function(s,c){return s+(c.doors||0)},0),
+        inCabBatt:cabinets.value.reduce(function(s,c){return s+battCountOf(c)},0)
+      }
+    });
+    var dashTrend=Vue.ref([{d:'09-13',v:96},{d:'09-14',v:132},{d:'09-15',v:118},{d:'09-16',v:145},{d:'09-17',v:127},{d:'09-18',v:158},{d:'09-19',v:128}]);
+    var dashTrendMax=Vue.computed(function(){var m=1;dashTrend.value.forEach(function(x){if(x.v>m)m=x.v});return m});
+    var dashCabDist=Vue.computed(function(){return [
+      {label:'上线',v:cabinets.value.filter(function(c){return c.bizOnline}).length,color:OK_C},
+      {label:'下线',v:cabinets.value.filter(function(c){return !c.bizOnline}).length,color:BAD_C},
+      {label:'有故障',v:cabinets.value.filter(function(c){return c.fault}).length,color:WARN_C}
+    ]});
+    var dashBattDist=Vue.computed(function(){return [
+      {label:'柜内',v:inCabCount.value,color:OK_C},
+      {label:'柜外',v:batteries.value.length-inCabCount.value,color:WARN_C},
+      {label:'离线',v:batteries.value.filter(function(b){return !b.netOnline}).length,color:BAD_C}
+    ]});
+    function donut(items){var total=0;items.forEach(function(i){total+=i.v});if(!total)return 'conic-gradient(#E5E5E5 0deg 360deg)';var acc=0,parts=[];items.forEach(function(i){var deg=i.v/total*360;parts.push(i.color+' '+acc+'deg '+(acc+deg)+'deg');acc+=deg});return 'conic-gradient('+parts.join(',')+')'}
+
+    /* ── 页面打开（先 navOpen 再改状态，保证快照=来源页） ── */
+    function openPage(name){navOpen();mPage.value=name}
+    function closePage(){navBack()}
+    function openDashboard(){openPage('dashboard')}
+    function openStoreList(){openPage('stores')}
+    function openStationList(){openPage('stations')}
+    function openStoreDetail(id){navOpen();mStoreId.value=id;mPage.value='storeDetail'}
+    function openStationDetail(id){navOpen();mStationId.value=id;mPage.value='stationDetail'}
+    function openCabDetail(no){navOpen();mCabNo.value=no;mPage.value='cabDetail'}
+    function openBattDetail(no){navOpen();mBattNo.value=no;mPage.value='battDetail'}
+    var curStore=Vue.computed(function(){return storeOf(mStoreId.value)});
+    var curStation=Vue.computed(function(){return stationOf(mStationId.value)});
+    var curCab=Vue.computed(function(){return cabOf(mCabNo.value)});
+    var curBatt=Vue.computed(function(){return battOf(mBattNo.value)});
+
+    /* ── 机柜筛选弹窗 ── */
+    function openCabFilter(){Object.assign(cabDraft,cabFilter);showCabFilter.value=true}
+    function closeCabFilter(){showCabFilter.value=false}
+    function cabDraftSet(k,v){cabDraft[k]=(cabDraft[k]===v?'':v)}
+    function cabFilterReset(){Object.assign(cabDraft,CAB_EMPTY)}
+    function cabFilterConfirm(){Object.assign(cabFilter,cabDraft);showCabFilter.value=false}
+    function setCabQuick(v){cabFilter.bizState=(cabFilter.bizState===v?'':v)}
+
+    /* ── 电池筛选弹窗 ── */
+    function openBattFilter(){Object.assign(battDraft,battFilter);showBattFilter.value=true}
+    function closeBattFilter(){showBattFilter.value=false}
+    function battDraftSet(k,v){battDraft[k]=(battDraft[k]===v?'':v)}
+    function battFilterReset(){Object.assign(battDraft,BATT_EMPTY)}
+    function battFilterConfirm(){Object.assign(battFilter,battDraft);showBattFilter.value=false}
+    function setBattQuick(v){battFilter.cabState=(battFilter.cabState===v?'':v)}
+
+    /* ── 确认弹窗（统一下线/故障/开仓等远程操作） ── */
+    function mAsk(title,desc,ok){mConfirm.value={title:title,desc:desc,ok:ok}}
+    function mConfirmClose(){if(!mConfirmLoading.value)mConfirm.value=null}
+    function mConfirmOk(){var c=mConfirm.value;if(!c||mConfirmLoading.value)return;mConfirmLoading.value=true;setTimeout(function(){mConfirmLoading.value=false;mConfirm.value=null;if(typeof c.ok==='function')c.ok()},500)}
+    function cabAskBiz(no){var c=cabOf(no);if(!c)return;mAsk(c.bizOnline?'下线换电柜':'上线换电柜',c.bizOnline?('下线后 '+c.no+' 将停止对外换电服务，确认下线？'):('上线后 '+c.no+' 将恢复对外换电服务，确认上线？'),function(){c.bizOnline=!c.bizOnline;toastPush(c.no+(c.bizOnline?' 已上线':' 已下线'))})}
+    function cabAskFault(no){var c=cabOf(no);if(!c)return;mAsk(c.fault?'清除故障标记':'标记为故障',c.fault?('确认 '+c.no+' 已完成检修并清除故障？'):('确认将 '+c.no+' 标记为故障状态？'),function(){c.fault=!c.fault;toastPush(c.no+(c.fault?' 已标记故障':' 故障已清除'))})}
+    function cabAskAlarm(no){var c=cabOf(no);if(!c)return;mAsk(c.alarm?'清除告警':'触发告警',c.alarm?('确认 '+c.no+' 告警已处理并清除？'):('确认模拟触发 '+c.no+' 告警？'),function(){c.alarm=!c.alarm;toastPush(c.no+(c.alarm?' 已触发告警':' 告警已清除'))})}
+    function cabAskEnabled(no){var c=cabOf(no);if(!c)return;mAsk(c.enabled?'停用换电柜':'启用换电柜',c.enabled?('停用后 '+c.no+' 将不再参与调度，确认停用？'):('确认启用 '+c.no+'？'),function(){c.enabled=!c.enabled;toastPush(c.no+(c.enabled?' 已启用':' 已停用'))})}
+    function cabAskOpen(no,slotNo){var c=cabOf(no);if(!c)return;if(!c.bizOnline){toastPush('该柜已下线，无法远程开仓');return}mAsk('远程开仓','确认远程打开 '+c.no+'-'+slotNo+' 仓门？',function(){toastPush(c.no+'-'+slotNo+' 开仓指令已下发')})}
+
+    /* ── 电池借出 / 归还联动（柜仓位 ↔ 电池状态） ── */
+    function borrowBattery(no){var b=battOf(no);if(!b)return;if(b.rentState==='rented'){toastPush('该电池已租用，无法重复借出');return}if(b.cabState!=='inCab'){toastPush('该电池不在柜内，无法借出');return}var parts=String(b.at||'').split('-'),cab=cabOf(parts[0]);if(cab&&parts[1]){var sl=slotOf(cab,parts[1]);if(sl)sl.occupied=false}var user='用户 演示'+String(b.no).slice(-4);b.cabState='outCab';b.rentState='rented';b.charging=false;b.at=user;b.records.unshift(mRec(nowStr(),'borrow','用户 '+user+' 于 '+(parts[0]||'柜')+'-'+(parts[1]||'')+' 借出'));toastPush('已借出 '+b.no+'（仓位已释放）')}
+    function returnBattery(no){var b=battOf(no);if(!b)return;if(b.cabState==='inCab'){toastPush('该电池已在柜内，无需归还');return}var cab=null,slot=null,online=cabinets.value.filter(function(c){return c.bizOnline&&c.enabled});for(var i=0;i<online.length;i++){var f=freeSlotOf(online[i]);if(f){cab=online[i];slot=f;break}}if(!cab){toastPush('暂无可用空闲仓位，无法归还');return}slot.occupied=true;b.cabState='inCab';b.rentState='unrented';b.at=cab.no+'-'+slot.no;b.charging=(b.soc<90);b.records.unshift(mRec(nowStr(),'return','归还至 '+cab.no+'-'+slot.no+' 仓位'+(b.charging?'，开始充电':'')));toastPush('已归还 '+b.no+' → '+cab.no+'-'+slot.no)}
+
+    /* ── 门店 / 站点表单（门店 1:1 站点；已被其他门店占用的站点禁用） ── */
+    var storeForm=Vue.reactive({id:'',name:'',addr:'',phone:'',hours:'',stationId:''});
+    var storeFormErr=Vue.ref('');
+    var stationForm=Vue.reactive({id:'',name:'',addr:''});
+    var stationFormErr=Vue.ref('');
+    var bindStationId=Vue.ref('');
+    function stationTaken(stationId,storeId){var owner=stores.value.filter(function(s){return s.stationId===stationId})[0];return !!(owner&&owner.id!==storeId)}
+    function openStoreForm(id){var s=id?storeOf(id):null;storeForm.id=s?s.id:'';storeForm.name=s?s.name:'';storeForm.addr=s?s.addr:'';storeForm.phone=s?s.phone:'';storeForm.hours=s?s.hours:'';storeForm.stationId=s?(s.stationId||''):'';storeFormErr.value='';showStoreForm.value=true}
+    function pickStoreStation(stationId){var owner=stores.value.filter(function(s){return s.stationId===stationId})[0];if(owner&&owner.id!==storeForm.id){toastPush('该站点已被「'+owner.name+'」关联');return}storeForm.stationId=(storeForm.stationId===stationId?'':stationId)}
+    function saveStore(){
+      var f=storeForm;
+      if(!String(f.name||'').trim()){storeFormErr.value='请输入门店名称';toastPush('请输入门店名称');return}
+      if(!String(f.addr||'').trim()){storeFormErr.value='请输入门店地址';toastPush('请输入门店地址');return}
+      storeFormErr.value='';
+      if(f.stationId&&stationTaken(f.stationId,f.id)){toastPush('该站点已被其他门店关联');return}
+      if(f.id){var s=storeOf(f.id);if(s){s.name=f.name.trim();s.addr=f.addr.trim();s.phone=f.phone;s.hours=f.hours;s.stationId=f.stationId}}
+      else{var nid='S'+String(stores.value.length+1).padStart(2,'0');stores.value.push({id:nid,name:f.name.trim(),addr:f.addr.trim(),phone:f.phone,hours:f.hours,stationId:f.stationId})}
+      showStoreForm.value=false;toastPush(f.id?'门店信息已保存':'门店已新增')
+    }
+    function openStationForm(id){var s=id?stationOf(id):null;stationForm.id=s?s.id:'';stationForm.name=s?s.name:'';stationForm.addr=s?s.addr:'';stationFormErr.value='';showStationForm.value=true}
+    function saveStation(){
+      var f=stationForm;
+      if(!String(f.name||'').trim()){stationFormErr.value='请输入站点名称';toastPush('请输入站点名称');return}
+      if(!String(f.addr||'').trim()){stationFormErr.value='请输入站点地址';toastPush('请输入站点地址');return}
+      stationFormErr.value='';
+      if(f.id){var s=stationOf(f.id);if(s){s.name=f.name.trim();s.addr=f.addr.trim()}}
+      else{var nid='ST'+String(stations.value.length+1).padStart(2,'0');stations.value.push({id:nid,name:f.name.trim(),addr:f.addr.trim()})}
+      showStationForm.value=false;toastPush(f.id?'站点信息已保存':'站点已新增')
+    }
+    function openBindCab(stationId){bindStationId.value=stationId;showBindCab.value=true}
+    function cabBindStation(no){var c=cabOf(no);if(!c)return;c.stationId=(c.stationId===bindStationId.value?'':bindStationId.value);toastPush(c.stationId?('已绑定至 '+stationNameOf(c.stationId)):'已解绑站点')}
+    function storeStationOptions(storeId){return stations.value.map(function(s){return {value:s.id,label:s.name,disabled:stationTaken(s.id,storeId)}})}
+
+    /* ── Tab 切换：清栈并复位二级页与弹窗 ── */
+    function setTab(t){tab.value=t;settingsOpen.value=false;mPage.value='';showCabFilter.value=false;showBattFilter.value=false;showStoreForm.value=false;showStationForm.value=false;showBindCab.value=false;auth.navReset()}
+
+    /* 页面级 ref 注册进导航快照（数据类 ref 不注册） */
+    auth.addNavRefs([tab,mPage,mStoreId,mStationId,mCabNo,mBattNo,showCabFilter,showBattFilter,showStoreForm,showStationForm,showBindCab,mConfirm]);
+    return Object.assign({
+      tab,setTab,settingsOpen,toasts:toastBus.list,toast,
+      stores,stations,cabinets,batteries,
+      mPage,mStoreId,mStationId,mCabNo,mBattNo,showCabFilter,showBattFilter,showStoreForm,showStationForm,showBindCab,mConfirm,mConfirmLoading,
+      cabFilter,battFilter,cabDraft,battDraft,cabFilterCount,cabFilterActive,battFilterCount,battFilterActive,
+      cabList,battList,curStore,curStation,curCab,curBatt,
+      stationNameOf,storeNameOf,storeOfStation,cabsOfStation,stationsOfStore,battCountOf,alarmsOfCab,
+      openPage,closePage,openDashboard,openStoreList,openStationList,openStoreDetail,openStationDetail,openCabDetail,openBattDetail,
+      openCabFilter,closeCabFilter,cabDraftSet,cabFilterReset,cabFilterConfirm,setCabQuick,
+      openBattFilter,closeBattFilter,battDraftSet,battFilterReset,battFilterConfirm,setBattQuick,
+      mAsk,mConfirmClose,mConfirmOk,cabAskBiz,cabAskFault,cabAskAlarm,cabAskEnabled,cabAskOpen,
+      borrowBattery,returnBattery,
+      storeForm,storeFormErr,stationForm,stationFormErr,bindStationId,openStoreForm,pickStoreStation,saveStore,openStationForm,saveStation,openBindCab,cabBindStation,storeStationOptions,
+      cabOnlineRate,inCabCount,rentedCount,todaySwapCount,todayRevenue,alarmList,cabStats,
+      dashTrend,dashTrendMax,dashCabDist,dashBattDist,donut,dotColor,socColor,CAB_TEXT,CAB_DOT,BATT_TEXT,BATT_DOT
+    },auth,sideSetup('换电商户端',toastBus))
   }})
 registerSheetKit(_ma);_ma.mount(document.getElementById('root-merchant'));
 

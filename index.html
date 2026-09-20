@@ -5078,14 +5078,14 @@ body.host-single-m #root-user{display:none}
 <template v-if="fpk.mainImg"><div class="w-20 h-20 rounded-xl flex items-center justify-center" style="background:linear-gradient(145deg,var(--accent) 0%,#22324A 100%)"><span v-html="luci('image','w-9 h-9 text-white')"></span></div></template>
 <template v-else><span v-html="luci('camera','w-6 h-6 text-[#999]')"></span><span class="text-[13px] text-[#999] mt-1">点击上传</span></template>
 </div>
-<div class="form-hint text-[#999] leading-relaxed">尺寸：454px × 454px 格式：PNG 透明底，大小：不超过 1MB</div>
+<div class="form-hint text-[#999] leading-relaxed">尺寸：454px × 454px</div>
 </div>
 <div class="form-row"><div class="form-label">缩略图</div>
 <div data-cp @click="fpk.thumbImg=!fpk.thumbImg" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:2px dashed #E5E5E5">
 <template v-if="fpk.thumbImg"><div class="w-16 h-16 rounded-xl flex items-center justify-center" style="background:linear-gradient(145deg,var(--accent) 0%,#22324A 100%)"><span v-html="luci('image','w-7 h-7 text-white')"></span></div></template>
 <template v-else><span v-html="luci('image','w-6 h-6 text-[#999]')"></span><span class="text-[13px] text-[#999] mt-1">点击上传</span></template>
 </div>
-<div class="form-hint text-[#999] leading-relaxed">尺寸：170px × 170px 格式：PNG 透明底，大小：不超过 512KB</div>
+<div class="form-hint text-[#999] leading-relaxed">尺寸：170px × 170px</div>
 </div>
 <div class="form-row"><div class="form-label">租赁方案</div>
 <div class="flex flex-wrap gap-2"><div v-for="p in modelPlanOpts" :key="p.v" data-cp @click="fpk.plans[p.v]=!fpk.plans[p.v]" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.plans[p.v]?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid '+(fE[p.v]?'#DC2626':'#EBEDF0')}">{{ {planHour:'时租',planDay:'日租',planWeek:'周租',planMonth:'月租'}[p.l] }}</div></div></div>
@@ -5126,14 +5126,14 @@ body.host-single-m #root-user{display:none}
 <template v-if="fpk.mainImg"><div class="w-20 h-20 rounded-xl flex items-center justify-center" style="background:linear-gradient(145deg,var(--accent) 0%,#22324A 100%)"><span v-html="luci('image','w-9 h-9 text-white')"></span></div></template>
 <template v-else><span v-html="luci('camera','w-6 h-6 text-[#999]')"></span><span class="text-[13px] text-[#999] mt-1">点击上传</span></template>
 </div>
-<div class="form-hint text-[#999] leading-relaxed">尺寸：454px × 454px 格式：PNG 透明底，大小：不超过 1MB</div>
+<div class="form-hint text-[#999] leading-relaxed">尺寸：454px × 454px</div>
 </div>
 <div class="form-row"><div class="form-label">缩略图</div>
 <div data-cp @click="fpk.thumbImg=!fpk.thumbImg" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:2px dashed #E5E5E5">
 <template v-if="fpk.thumbImg"><div class="w-16 h-16 rounded-xl flex items-center justify-center" style="background:linear-gradient(145deg,var(--accent) 0%,#22324A 100%)"><span v-html="luci('image','w-7 h-7 text-white')"></span></div></template>
 <template v-else><span v-html="luci('image','w-6 h-6 text-[#999]')"></span><span class="text-[13px] text-[#999] mt-1">点击上传</span></template>
 </div>
-<div class="form-hint text-[#999] leading-relaxed">尺寸：170px × 170px 格式：PNG 透明底，大小：不超过 512KB</div>
+<div class="form-hint text-[#999] leading-relaxed">尺寸：170px × 170px</div>
 </div>
 <div class="form-row"><div class="form-label">租赁方案</div>
 <div class="flex flex-wrap gap-2"><div v-for="p in modelPlanOpts" :key="p.v" data-cp @click="fpk.plans[p.v]=!fpk.plans[p.v]" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.plans[p.v]?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid '+(fE[p.v]?'#DC2626':'#EBEDF0')}">{{ {planHour:'时租',planDay:'日租',planWeek:'周租',planMonth:'月租'}[p.l] }}</div></div></div>

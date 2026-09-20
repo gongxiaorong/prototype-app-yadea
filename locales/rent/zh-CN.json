@@ -1093,7 +1093,7 @@
     "common": {
       "confirmBind": "确认绑定",
       "searchEmpty": "请调整关键词后重试",
-      "uploadSpecLarge": "尺寸：454px × 454px 格式：PNG 透明底，大小：不超过 1MB",
+      "uploadSpec": "尺寸",
       "pleaseSelect": "请先选择",
       "searchUserPlaceholder": "输入账号 / 手机号 / 邮箱搜索",
       "copyEmpty": "无内容可复制",
@@ -1101,7 +1101,6 @@
       "pleaseSelectUser": "请先选择用户",
       "thumbnail": "缩略图",
       "preRange": "请输入 1–365 之间的整数",
-      "uploadSpecSmall": "尺寸：170px × 170px 格式：PNG 透明底，大小：不超过 512KB",
       "clickUpload": "点击上传",
       "moreOps": "更多操作",
       "renewalAutoDeduct": "续租费用从钱包自动扣除"

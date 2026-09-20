@@ -1093,7 +1093,7 @@
     "common": {
       "confirmBind": "確認綁定",
       "searchEmpty": "請調整關鍵詞後重試",
-      "uploadSpecLarge": "尺寸：454px × 454px 格式：PNG 透明底，大小：不超過 1MB",
+      "uploadSpec": "尺寸",
       "pleaseSelect": "請先選擇",
       "searchUserPlaceholder": "輸入帳號 / 手機號碼 / 電子郵件搜尋",
       "copyEmpty": "無內容可複製",
@@ -1101,7 +1101,6 @@
       "pleaseSelectUser": "請先選擇用戶",
       "thumbnail": "縮圖",
       "preRange": "請輸入 1–365 之間的整數",
-      "uploadSpecSmall": "尺寸：170px × 170px 格式：PNG 透明底，大小：不超過 512KB",
       "clickUpload": "點擊上傳",
       "moreOps": "更多操作",
       "renewalAutoDeduct": "續租費用從錢包自動扣除"
