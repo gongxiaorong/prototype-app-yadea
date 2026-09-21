@@ -370,27 +370,6 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="navOpen('ovSettings')" class="w-9 h-9 flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] rounded-full shrink-0" data-od-id="profile-settings"><span v-html="luci('settings','w-5 h-5 text-[#666]')"></span></div>
 </div>
 <div class="flex-1 overflow-y-auto hide-scroll px-4">
-<div v-if="!planBought" data-cp @click="setTab('plan')" class="bg-white rounded-2xl px-4 py-4 mb-3 flex items-center justify-between cursor-pointer active:opacity-90" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="profile-plan-empty">
-<span class="text-[16px] font-medium" style="color:#111">未购买套餐</span>
-<span class="flex items-center gap-0.5 px-3 py-1.5 rounded-full text-white text-[13px] font-semibold shrink-0" style="background:linear-gradient(135deg,#33456B,#22304E)">立即购买<span class="flex items-center" style="color:rgba(255,255,255,.9)"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></span>
-</div>
-<div v-else class="bg-white rounded-2xl px-4 py-3.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="profile-plan-active">
-<div class="flex items-center justify-between">
-<span class="text-[16px] font-semibold" style="color:#111">换电套餐</span>
-<span data-cp @click="toast('查看套餐详情')" class="flex items-center gap-0.5 px-3 py-1.5 rounded-full text-white text-[13px] font-semibold cursor-pointer shrink-0 active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)">去查看<span class="flex items-center" style="color:rgba(255,255,255,.9)"><span v-html="luci('chevron-right','w-4 h-4')"></span></span></span>
-</div>
-<div class="flex items-center mt-3">
-<div class="flex-1 text-center">
-<div class="text-[16px] font-semibold" style="color:#111">{{ MY_PLAN.expire }}</div>
-<div class="text-[12px] mt-1" style="color:#999">有效期</div>
-</div>
-<div class="w-px h-8 shrink-0" style="background:#EEE"></div>
-<div class="flex-1 text-center">
-<div class="text-[16px] font-semibold" style="color:#111">{{ MY_PLAN.remain }}</div>
-<div class="text-[12px] mt-1" style="color:#999">剩余次数</div>
-</div>
-</div>
-</div>
 <div class="bg-white rounded-2xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="profile-menu-card">
 <div data-cp @click="openMyOrders" class="px-4 py-3 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #F0F0F0" data-od-id="profile-order">
 <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background:#EBF1FD"><span v-html="luci('clipboard-list','w-[18px] h-[18px] text-[#2B3F5F]')"></span></div>
@@ -1614,13 +1593,6 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" data-cp @click="setDepositEnabled(false)" :class="!depositEnabled?'is-on':''">关闭</div>
 </div>
 </div>
-<div v-if="tab==='mine'&&!profileOV&&!profileSub" class="demo-ops-section" data-od-id="demo-plan-state">
-<div class="demo-ops-label">套餐状态</div>
-<div class="demo-ops-chips">
-<div class="demo-ops-chip" data-cp @click="setPlanBought(false)" :class="!planBought?'is-on':''">未购买</div>
-<div class="demo-ops-chip" data-cp @click="setPlanBought(true)" :class="planBought?'is-on':''">已购买</div>
-</div>
-</div>
 <div v-if="profileSub==='batteryRecords'" class="demo-ops-section" data-od-id="demo-swap-records">
 <div class="demo-ops-label">列表数据</div>
 <div class="demo-ops-chips">
@@ -1749,7 +1721,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 rounded-full flex items-center py-1.5 gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px">
 <span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span>
 <input v-model="battQ" type="text" placeholder="请输入电池编号" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]" data-od-id="batt-search-input">
-<button v-if="battQ" type="button" data-cp @click="battQ=''" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-none cursor-pointer" style="background:#fff" data-od-id="batt-search-clear"><span v-html="luci('x','w-4 h-4 text-[#999]')"></span></button>
+<button type="button" data-cp @click="battQ=''" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 cursor-pointer transition-colors active:bg-[#E8EBF1]" :style="{border:'none',background:'transparent',visibility:battQ?'visible':'hidden'}" data-od-id="batt-search-clear"><span v-html="luci('x','w-4 h-4 text-[#999]')"></span></button>
 </div>
 <div data-cp @click="openBattFilter()" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shrink-0" :style="battFilterActive?{background:'#FFF3E0',border:'1px solid var(--accent-2)',color:'var(--accent-2)'}:{background:'#fff',border:'1px solid #E5E5E5',color:'#666'}" data-od-id="batt-filter-btn">
 <span v-html="luci('sliders-horizontal','w-4 h-4')"></span>
@@ -1758,11 +1730,10 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="bg-white shrink-0" style="padding:12px 20px;border-bottom:1px solid #E5E5E5">
 <div class="filter-tabs" id="battPillRow">
-<div v-for="p in battPills" :key="'battpill'+p.v" class="filter-pill" data-cp @click="setBattQuick(p.v)" :style="battFilter.cabState===p.v?{background:'var(--accent)',color:'#fff'}:{}" :data-od-id="'batt-pill-'+(p.v||'all')">{{ p.l }} ({{ battPillCnt[p.v] }})</div>
+<div v-for="p in battPills" :key="'battpill'+p.v" class="filter-pill" data-cp @click="setBattQuick(p.v)" :style="battFilter.cabState===p.v?{background:'var(--accent)',color:'#fff',border:'1px solid var(--accent)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}" :data-od-id="'batt-pill-'+(p.v||'all')">{{ p.l }} ({{ battPillCnt[p.v] }})</div>
 </div>
 </div>
 <div class="flex-1 overflow-y-auto min-h-0 px-5 pt-3 pb-24 hide-scroll" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
-<div class="text-[12px] mb-2.5" style="color:#999">共 {{ battList.length }} 块电池</div>
 <empty-state v-if="!battList.length" icon="battery-charging" text="暂无电池" sub="没有符合筛选条件的电池" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1">
 <div data-cp @click="battQ='';battFilterReset();battFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="batt-empty-reset">清空筛选</div>
 </empty-state>
@@ -1792,7 +1763,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 rounded-full flex items-center py-1.5 gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px">
 <span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span>
 <input v-model="cabQ" type="text" placeholder="请输入柜号或站点名称" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]" data-od-id="cab-search-input">
-<button v-if="cabQ" type="button" data-cp @click="cabQ=''" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-none cursor-pointer" style="background:#fff" data-od-id="cab-search-clear"><span v-html="luci('x','w-4 h-4 text-[#999]')"></span></button>
+<button type="button" data-cp @click="cabQ=''" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 cursor-pointer transition-colors active:bg-[#E8EBF1]" :style="{border:'none',background:'transparent',visibility:cabQ?'visible':'hidden'}" data-od-id="cab-search-clear"><span v-html="luci('x','w-4 h-4 text-[#999]')"></span></button>
 </div>
 <div data-cp @click="openCabFilter()" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shrink-0" :style="cabFilterActive?{background:'#FFF3E0',border:'1px solid var(--accent-2)',color:'var(--accent-2)'}:{background:'#fff',border:'1px solid #E5E5E5',color:'#666'}" data-od-id="cab-filter-btn">
 <span v-html="luci('sliders-horizontal','w-4 h-4')"></span>
@@ -1801,11 +1772,10 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="bg-white shrink-0" style="padding:12px 20px;border-bottom:1px solid #E5E5E5">
 <div class="filter-tabs" id="cabPillRow">
-<div v-for="p in cabPills" :key="'cabpill'+p.v" class="filter-pill" data-cp @click="setCabQuick(p.v)" :style="cabFilter.bizState===p.v?{background:'var(--accent)',color:'#fff'}:{}" :data-od-id="'cab-pill-'+(p.v||'all')">{{ p.l }} ({{ cabPillCnt[p.v] }})</div>
+<div v-for="p in cabPills" :key="'cabpill'+p.v" class="filter-pill" data-cp @click="setCabQuick(p.v)" :style="cabFilter.bizState===p.v?{background:'var(--accent)',color:'#fff',border:'1px solid var(--accent)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}" :data-od-id="'cab-pill-'+(p.v||'all')">{{ p.l }} ({{ cabPillCnt[p.v] }})</div>
 </div>
 </div>
 <div class="flex-1 overflow-y-auto min-h-0 px-5 pt-3 pb-24 hide-scroll" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
-<div class="text-[12px] mb-2.5" style="color:#999">共 {{ cabList.length }} 台换电柜</div>
 <empty-state v-if="!cabList.length" icon="box" text="暂无换电柜" sub="没有符合筛选条件的换电柜" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1">
 <div data-cp @click="cabQ='';cabFilterReset();cabFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="cab-empty-reset">清空筛选</div>
 </empty-state>
@@ -1910,22 +1880,24 @@ body.host-single-m #root-user{display:none}
 </div>
 <div data-cp @click="navOpen();profileOV='settings'" class="w-9 h-9 flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] rounded-full shrink-0" data-od-id="profile-settings"><span v-html="luci('settings','w-5 h-5 text-[#666]')"></span></div>
 </div>
-<div class="rounded-2xl bg-white overflow-hidden mb-4" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="px-4 pt-3.5 pb-1.5 text-[12px] font-semibold" style="color:#999">常用功能</div>
-<div data-cp @click="openStoreList()" class="flex items-center gap-3 px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-top:1px solid #F0F0F0" data-od-id="mine-store-entry">
-<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#EEF1F8,#E1E8F4)"><span v-html="luci('store','w-5 h-5 text-[#2B3F5F]')"></span></div>
-<div class="flex-1 min-w-0"><div class="text-[14px] font-medium" style="color:#111">门店管理</div><div class="text-[12px] mt-0.5 truncate" style="color:#999">共 {{ stores.length }} 家门店 · 门店关联站点</div></div>
-<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
+<div class="mb-3">
+<div class="text-[13px] font-semibold text-[#999] px-1 mb-1.5">常用功能</div>
+<div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5">
+<div data-cp @click="openStoreList()" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border-bottom:1px solid #EDEDED" data-od-id="mine-store-entry">
+<div class="w-7 h-7 flex items-center justify-center mr-3 text-[#666]"><span v-html="luci('store','w-5 h-5')"></span></div>
+<span class="flex-1 text-[15px] font-medium" style="color:#111">门店管理</span>
+<div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">共 {{ stores.length }} 家</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
 </div>
-<div data-cp @click="openStationList()" class="flex items-center gap-3 px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-top:1px solid #F0F0F0" data-od-id="mine-station-entry">
-<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#FFF4E6,#FFE9CC)"><span v-html="luci('map-pin','w-5 h-5 text-[#FF8A00]')"></span></div>
-<div class="flex-1 min-w-0"><div class="text-[14px] font-medium" style="color:#111">站点管理</div><div class="text-[12px] mt-0.5 truncate" style="color:#999">共 {{ stations.length }} 个站点 · 绑定换电柜</div></div>
-<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
+<div data-cp @click="openStationList()" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border-bottom:1px solid #EDEDED" data-od-id="mine-station-entry">
+<div class="w-7 h-7 flex items-center justify-center mr-3 text-[#666]"><span v-html="luci('map-pin','w-5 h-5')"></span></div>
+<span class="flex-1 text-[15px] font-medium" style="color:#111">站点管理</span>
+<div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">共 {{ stations.length }} 个</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
 </div>
-<div data-cp @click="openDashboard()" class="flex items-center gap-3 px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-top:1px solid #F0F0F0" data-od-id="mine-dashboard-entry">
-<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#E9F7EF,#DCF3E6)"><span v-html="luci('bar-chart-3','w-5 h-5 text-[#16A34A]')"></span></div>
-<div class="flex-1 min-w-0"><div class="text-[14px] font-medium" style="color:#111">数据看板</div><div class="text-[12px] mt-0.5 truncate" style="color:#999">换电趋势 · 柜机与电池状态分布</div></div>
-<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
+<div data-cp @click="openDashboard()" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9] transition-colors" data-od-id="mine-dashboard-entry">
+<div class="w-7 h-7 flex items-center justify-center mr-3 text-[#666]"><span v-html="luci('bar-chart-3','w-5 h-5')"></span></div>
+<span class="flex-1 text-[15px] font-medium" style="color:#111">数据看板</span>
+<div class="flex items-center gap-1"><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
+</div>
 </div>
 </div>
 </div>
@@ -3491,9 +3463,8 @@ var _ua=Vue.createApp({
       {id:3,name:'换电服务30天100次卡',price:4567990,origin:5500000,days:30,times:'100次',batteries:'10块',desc:'这是一段套餐描述，请完善套餐描述这是一段套餐描述，请完善套餐描述这是一段套餐描述，请完善套餐描述。'}
     ];
     var planList=Vue.ref(PLAN_ALL.slice());
-    /* 我的页套餐卡片：planBought 是否已购；MY_PLAN 已购后的展示数据 */
+    /* planBought：是否已购套餐（驱动扫码前置校验的套餐分支；套餐详情走「我的套餐」入口） */
     var planBought=Vue.ref(false);
-    var MY_PLAN={expire:'08-09 12:00',remain:'不限次'};
     function setPlanBought(on){planBought.value=on}
     /* 押金：depositState = unpaid 未缴纳 / paid 已缴纳 / refunding 退押中；depositFree = 免押状态（true 已免押 / false 未免押） */
     var depositState=Vue.ref('unpaid');
@@ -3967,7 +3938,7 @@ var _ua=Vue.createApp({
     }
     /* 页面级状态注册进导航快照（Tab / 换电流程 / 站点 / 电池详情 / 订单详情 / 记录范围） */
     auth.addNavRefs([tab,swapShow,swapStep,swapMode,showSwapManual,showLevelWarn,showChoice,showFlowEnd,curStation,curCab,batteryDetailRec,planOrderDetail,swapRecordsScope]);
-    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,mapType,MAP_TYPES,mapPoints,mapTheme,showMapSheet,pickMapType,openMapPoint,showSearch,searchQ,searchCenter,searchHistory,locNearby,searchList,poiList,openSearch,closeSearch,clearSearchQ,doSearch,pickHistory,pickPoi,clearSearchCenter,mapWorldStyle,clearSearchHistory,setSearchHistory,relocate,pickSearchStation,selPoint,selStore,closeSelPoint,closeSelStore,callStore,openStoreDetail,pointStat,openSelDetail,openReservedDetail,onMapClick,isCabReserved,hasReservedOther,bookCab,stationReserved,bookFromStation,storeNavSheet,storeNavOptions,openStoreNav,closeStoreNav,pickStoreNav,callStation,scanFromCard,goReturnScan,bookFromCard,reservedCab,reserveLeft,swapOngoing,bookDisabled,fmtReserve,cancelReserve,askCancelReserve,closeCancelReserve,confirmCancelReserve,showCancelReserve,onBookClick,openReservedCard,goFlowNow,setSwapOngoing,showPrecheck,precheckDesc,precheckTitle,precheckConfirmText,closePrecheck,precheckPass,confirmPrecheck,stations,locAppAuth,setLocAppAuth,showLocAppAuth,allowLocAppAuth,denyLocAppAuth,locReady,locAuth,setLocAuth,showLocAuth,allowLocAuth,dismissLocAuth,goEnableLoc,swapAreaSet,areaNoService,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCity,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,areaLabel,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,demoQrOk,demoSameOperator,demoOnline,demoDist,demoResumeType,demoLevelLow,planMax,setPlanMax,swapStart,swapScan,swapTorch,showSwapManual,swapManualNo,swapManualOpen,confirmSwapManual,swapBranch,showChoice,choiceDesc,swapChoiceBorrow,swapChoiceSwap,swapToBorrow,isBorrowFlow,borrowOpenPct,borrowLeft,borrowSlotNo,borrowFailType,borrowFailTitle,stepDot,stepText,stepLine,swapBorrowRetry,swapBorrowDone,flowDoneHome,isReturnFlow,swapMode,returnOpenPct,returnLeft,returnSlotNo,returnOpenChoice,returnTakeChoice,returnRun,returnRetry,returnFailHome,borrowRun,borrowOpenChoice,borrowTakeChoice,netLost,setNetLost,showFlowEnd,flowEndHome,isSwapFlow,swapOpenPct,swapFullPct,swapLeft,swapTakeLeft,swapSlotNo,swapOpenChoice,swapPutChoice,swapFullChoice,swapTakeChoice,swapFailTitle,swapRun,swapFlowRetry,swapFailHome,swapClose,swapResume,showLevelWarn,swapLevelCancel,swapLevelContinue,setBoundCount,showOperatorPicker,operatorOptions,pickFirstLoginOperator,closeOperatorPicker,operatorPickerCity,mockCity,pickMockCity,firstLoginRegionFlow},auth,sideSetup('换电用户端',toastBus))
+    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,mapType,MAP_TYPES,mapPoints,mapTheme,showMapSheet,pickMapType,openMapPoint,showSearch,searchQ,searchCenter,searchHistory,locNearby,searchList,poiList,openSearch,closeSearch,clearSearchQ,doSearch,pickHistory,pickPoi,clearSearchCenter,mapWorldStyle,clearSearchHistory,setSearchHistory,relocate,pickSearchStation,selPoint,selStore,closeSelPoint,closeSelStore,callStore,openStoreDetail,pointStat,openSelDetail,openReservedDetail,onMapClick,isCabReserved,hasReservedOther,bookCab,stationReserved,bookFromStation,storeNavSheet,storeNavOptions,openStoreNav,closeStoreNav,pickStoreNav,callStation,scanFromCard,goReturnScan,bookFromCard,reservedCab,reserveLeft,swapOngoing,bookDisabled,fmtReserve,cancelReserve,askCancelReserve,closeCancelReserve,confirmCancelReserve,showCancelReserve,onBookClick,openReservedCard,goFlowNow,setSwapOngoing,showPrecheck,precheckDesc,precheckTitle,precheckConfirmText,closePrecheck,precheckPass,confirmPrecheck,stations,locAppAuth,setLocAppAuth,showLocAppAuth,allowLocAppAuth,denyLocAppAuth,locReady,locAuth,setLocAuth,showLocAuth,allowLocAuth,dismissLocAuth,goEnableLoc,swapAreaSet,areaNoService,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCity,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,areaLabel,planList,planBought,setPlanBought,depositState,setDepositState,depositFree,setDepositFree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,demoQrOk,demoSameOperator,demoOnline,demoDist,demoResumeType,demoLevelLow,planMax,setPlanMax,swapStart,swapScan,swapTorch,showSwapManual,swapManualNo,swapManualOpen,confirmSwapManual,swapBranch,showChoice,choiceDesc,swapChoiceBorrow,swapChoiceSwap,swapToBorrow,isBorrowFlow,borrowOpenPct,borrowLeft,borrowSlotNo,borrowFailType,borrowFailTitle,stepDot,stepText,stepLine,swapBorrowRetry,swapBorrowDone,flowDoneHome,isReturnFlow,swapMode,returnOpenPct,returnLeft,returnSlotNo,returnOpenChoice,returnTakeChoice,returnRun,returnRetry,returnFailHome,borrowRun,borrowOpenChoice,borrowTakeChoice,netLost,setNetLost,showFlowEnd,flowEndHome,isSwapFlow,swapOpenPct,swapFullPct,swapLeft,swapTakeLeft,swapSlotNo,swapOpenChoice,swapPutChoice,swapFullChoice,swapTakeChoice,swapFailTitle,swapRun,swapFlowRetry,swapFailHome,swapClose,swapResume,showLevelWarn,swapLevelCancel,swapLevelContinue,setBoundCount,showOperatorPicker,operatorOptions,pickFirstLoginOperator,closeOperatorPicker,operatorPickerCity,mockCity,pickMockCity,firstLoginRegionFlow},auth,sideSetup('换电用户端',toastBus))
   }})
 registerSheetKit(_ua);_ua.mount(document.getElementById('root-user'));
 
