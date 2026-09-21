@@ -946,7 +946,7 @@ body.host-single-m #root-user{display:none}
 <span class="text-[11px] px-1.5 py-0.5 rounded whitespace-nowrap" style="border:1px solid rgba(245,208,140,.55);color:#F5D08C">{{ (depositState==='paid'||depositState==='refunding')?'已缴纳':'未缴纳' }}</span>
 </div>
 <div class="relative flex items-end justify-between mt-6" style="min-height:28px">
-<span class="text-[13px]" style="color:rgba(255,255,255,.85)">生效范围：{{ curArea?areaLabel(curArea):'请选择运营商' }}</span>
+<span class="text-[13px]" style="color:rgba(255,255,255,.85)">{{ curArea?areaLabel(curArea):'请选择运营商' }}</span>
 <span v-if="depositFree" class="text-[20px] font-bold text-white leading-[28px]">已免押</span>
 <span v-else class="text-[20px] font-bold text-white leading-[28px]">{{ fmtRp(4599) }}</span>
 </div>
@@ -969,18 +969,13 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 <div class="absolute left-4 right-4" style="bottom:34px">
-<div v-if="depositState==='unpaid'" data-cp @click="toggleDepositAgree" class="flex items-center gap-2 mb-3 cursor-pointer" data-od-id="deposit-agree">
-<span class="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0" :style="depositAgree?'background:#E9A23B':'border:1.5px solid #CCC'"><span v-if="depositAgree" v-html="luci('check','w-3 h-3 text-white')"></span></span>
-<span class="text-[13px]" style="color:#666">已阅读并同意</span>
-<span class="text-[13px]" style="color:#E9A23B">《押金协议》</span>
-</div>
 <div v-if="depositState==='refunding'" class="w-full h-[52px] rounded-full flex items-center justify-center text-[16px] font-bold" style="background:linear-gradient(135deg,#33456B,#22304E);color:#fff;opacity:.5" data-od-id="deposit-refunding-btn">退款审核中</div>
-<div v-else-if="depositState==='paid'||(depositState==='unpaid'&&!depositFree)" data-cp @click="depositState==='unpaid'?payDeposit():askRefund()" class="w-full h-[52px] rounded-full flex items-center justify-center gap-2 text-[16px] font-bold cursor-pointer active:opacity-90 transition-opacity" :style="(depositState==='unpaid'&&!depositAgree)?'opacity:.55;':''" style="background:linear-gradient(135deg,#33456B,#22304E);color:#fff" :data-od-id="depositState==='unpaid'?'deposit-pay-btn':'deposit-refund-btn'">
+<div v-else-if="depositState==='paid'||(depositState==='unpaid'&&!depositFree)" data-cp @click="depositState==='unpaid'?payDeposit():askRefund()" class="w-full h-[52px] rounded-full flex items-center justify-center gap-2 text-[16px] font-bold cursor-pointer active:opacity-90 transition-opacity" style="background:linear-gradient(135deg,#33456B,#22304E);color:#fff" :data-od-id="depositState==='unpaid'?'deposit-pay-btn':'deposit-refund-btn'">
 <span>{{ depositState==='unpaid'?'立即支付':'申请退款' }}</span>
 </div>
 </div>
 <confirm-dialog :open="showRefundTip" :z="1100" oid="refund-tip-modal" title="温馨提示" desc="您当前持有生效中的换电套餐，押金退还后，换电权益将暂停。确认申请退还押金吗？" cancel-text="我再想想" confirm-text="申请退款" :confirm-bg="'linear-gradient(135deg,#33456B,#22304E)'" @close="showRefundTip=false" @confirm="confirmRefundTip"></confirm-dialog></page>
-<confirm-dialog :open="showRefundOk" :z="1100" oid="refund-ok-modal" title="申请成功" desc="押金会在 7 个工作日内原路退回至您原支付账户，请您耐心等候。" cancel-text="" confirm-text="知道了" :confirm-bg="'linear-gradient(135deg,#33456B,#22304E)'" @close="refundOkDone"></confirm-dialog>
+<confirm-dialog :open="showRefundOk" :z="1100" oid="refund-ok-modal" title="申请成功" desc="押金会在 7 个工作日内原路退回至您原支付账户，请您耐心等候。" cancel-text="" confirm-text="知道了" :confirm-bg="'linear-gradient(135deg,#33456B,#22304E)'" @close="refundOkDone" @confirm="refundOkDone"></confirm-dialog>
 <page :open="profileOV==='battery'" :z="600" oid="battery-page">
 <nav-bar title="我的电池" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
@@ -2848,7 +2843,6 @@ var _ua=Vue.createApp({
       if(swapOngoing.value){swapResume();return false}
       return true
     }
-    var depositAgree=Vue.ref(false);
     var showRefundTip=Vue.ref(false),showRefundOk=Vue.ref(false);
     var DEPOSIT_TIPS=[
       {no:'01',tag:'先缴后享',items:['需缴纳押金后','方可享受换电服务']},
@@ -3181,8 +3175,8 @@ var _ua=Vue.createApp({
       setTimeout(function(){areaReloading.value=false},700);
     }
     /* ── 套餐 ── */
-    function setDepositState(s){depositState.value=s;depositAgree.value=false;showRefundTip.value=false;showRefundOk.value=false}
-    function setDepositFree(on){depositFree.value=on;depositAgree.value=false;showRefundTip.value=false;showRefundOk.value=false}
+    function setDepositState(s){depositState.value=s;showRefundTip.value=false;showRefundOk.value=false}
+    function setDepositFree(on){depositFree.value=on;showRefundTip.value=false;showRefundOk.value=false}
     /* ── 我的电池：列表 + 详情 ── */
     var BATTERY_LIST=[
       {id:1,no:'2345676543223',location:'双流区中和街道雅和北路博雅城市广场1号换电柜',bindTime:'2026.02.10 15:00:00',trackStart:'2026-02-09 08:00',trackEnd:'2026-02-10 18:00'},
@@ -3277,9 +3271,7 @@ var _ua=Vue.createApp({
     function goPlanRenew(){auth.navReset();auth.profileSub.value=null;auth.profileOV.value=null;setTab('plan')}
     /* ── 押金详情页 ── */
     function openDeposit(){auth.navOpen('deposit');auth.profileOV.value='deposit';auth.profileSub.value=null}
-    function toggleDepositAgree(){depositAgree.value=!depositAgree.value}
     function payDeposit(){
-      if(!depositAgree.value){toastPush('请先阅读并同意《押金协议》');return}
       depositState.value='paid';toastPush('支付成功');
     }
     function askRefund(){showRefundTip.value=true}
@@ -3301,7 +3293,7 @@ var _ua=Vue.createApp({
     }
     /* 页面级状态注册进导航快照（Tab / 换电流程 / 站点 / 电池详情 / 订单详情 / 记录范围） */
     auth.addNavRefs([tab,swapShow,swapStep,swapMode,showSwapManual,showLevelWarn,showChoice,showFlowEnd,curStation,curCab,batteryDetailRec,planOrderDetail,swapRecordsScope]);
-    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,mapType,MAP_TYPES,mapPoints,mapTheme,showMapSheet,pickMapType,openMapPoint,showSearch,searchQ,searchCenter,searchHistory,locNearby,searchList,poiList,openSearch,closeSearch,clearSearchQ,doSearch,pickHistory,pickPoi,clearSearchCenter,mapWorldStyle,clearSearchHistory,setSearchHistory,relocate,pickSearchStation,selPoint,selStore,closeSelPoint,closeSelStore,callStore,openStoreDetail,pointStat,openSelDetail,openReservedDetail,onMapClick,isCabReserved,hasReservedOther,bookCab,stationReserved,bookFromStation,storeNavSheet,storeNavOptions,openStoreNav,closeStoreNav,pickStoreNav,callStation,scanFromCard,goReturnScan,bookFromCard,reservedCab,reserveLeft,swapOngoing,bookDisabled,fmtReserve,cancelReserve,askCancelReserve,closeCancelReserve,confirmCancelReserve,showCancelReserve,onBookClick,openReservedCard,goFlowNow,setSwapOngoing,showPrecheck,precheckDesc,precheckTitle,precheckConfirmText,closePrecheck,precheckPass,confirmPrecheck,stations,locAppAuth,setLocAppAuth,showLocAppAuth,allowLocAppAuth,denyLocAppAuth,locReady,locAuth,setLocAuth,showLocAuth,allowLocAuth,dismissLocAuth,goEnableLoc,swapAreaSet,areaNoService,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCity,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,areaLabel,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,depositAgree,toggleDepositAgree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,demoQrOk,demoSameOperator,demoOnline,demoDist,demoResumeType,demoLevelLow,planMax,setPlanMax,swapStart,swapScan,swapTorch,showSwapManual,swapManualNo,swapManualOpen,confirmSwapManual,swapBranch,showChoice,choiceDesc,swapChoiceBorrow,swapChoiceSwap,swapToBorrow,isBorrowFlow,borrowOpenPct,borrowLeft,borrowSlotNo,borrowFailType,borrowFailTitle,stepDot,stepText,stepLine,swapBorrowRetry,swapBorrowDone,flowDoneHome,isReturnFlow,swapMode,returnOpenPct,returnLeft,returnSlotNo,returnOpenChoice,returnTakeChoice,returnRun,returnRetry,returnFailHome,borrowRun,borrowOpenChoice,borrowTakeChoice,netLost,setNetLost,showFlowEnd,flowEndHome,isSwapFlow,swapOpenPct,swapFullPct,swapLeft,swapTakeLeft,swapSlotNo,swapOpenChoice,swapPutChoice,swapFullChoice,swapTakeChoice,swapFailTitle,swapRun,swapFlowRetry,swapFailHome,swapClose,swapResume,showLevelWarn,swapLevelCancel,swapLevelContinue,setBoundCount,showOperatorPicker,operatorOptions,pickFirstLoginOperator,closeOperatorPicker,operatorPickerCity,mockCity,pickMockCity,firstLoginRegionFlow},auth,sideSetup('换电用户端',toastBus))
+    return Object.assign({tab,setTab,settingsOpen,toasts:toastBus.list,toast,goScan,goLocate,goRefresh,goLayer,mapType,MAP_TYPES,mapPoints,mapTheme,showMapSheet,pickMapType,openMapPoint,showSearch,searchQ,searchCenter,searchHistory,locNearby,searchList,poiList,openSearch,closeSearch,clearSearchQ,doSearch,pickHistory,pickPoi,clearSearchCenter,mapWorldStyle,clearSearchHistory,setSearchHistory,relocate,pickSearchStation,selPoint,selStore,closeSelPoint,closeSelStore,callStore,openStoreDetail,pointStat,openSelDetail,openReservedDetail,onMapClick,isCabReserved,hasReservedOther,bookCab,stationReserved,bookFromStation,storeNavSheet,storeNavOptions,openStoreNav,closeStoreNav,pickStoreNav,callStation,scanFromCard,goReturnScan,bookFromCard,reservedCab,reserveLeft,swapOngoing,bookDisabled,fmtReserve,cancelReserve,askCancelReserve,closeCancelReserve,confirmCancelReserve,showCancelReserve,onBookClick,openReservedCard,goFlowNow,setSwapOngoing,showPrecheck,precheckDesc,precheckTitle,precheckConfirmText,closePrecheck,precheckPass,confirmPrecheck,stations,locAppAuth,setLocAppAuth,showLocAppAuth,allowLocAppAuth,denyLocAppAuth,locReady,locAuth,setLocAuth,showLocAuth,allowLocAuth,dismissLocAuth,goEnableLoc,swapAreaSet,areaNoService,setSwapArea,goSetSwapArea,swapAreas,setSwapAreasEmpty,showAreaSheet,addedOperators,areaCity,areaCrumbs,areaLevel,areaList,areaGoto,pickAreaItem,openSwapArea,pickSwapArea,openAreaSheet,closeAreaSheet,curArea,areaReloading,areaLabel,planList,planBought,setPlanBought,MY_PLAN,depositState,setDepositState,depositFree,setDepositFree,payDeposit,askRefund,confirmRefundTip,refundOkDone,showRefundTip,showRefundOk,openDeposit,DEPOSIT_TIPS,batteryList,batteryDetailRec,setBatteryEmpty,curStation,curCab,showBorrow,showReturn,returnBattery,cabinetFull,setCabinetFull,openBorrow,confirmBorrow,openReturn,confirmReturn,BATTERY_STAT,GAUGE_TICKS,TRACK_POIS,openMyBattery,openBatteryDetail,openBatteryFind,openBatteryTrack,swapRecords,swapRecordsView,setSwapRecordsEmpty,openSwapRecords,openSwapRecordsAll,copyText,cards,activeCards,expiredCards,setCardPackEmpty,openCardPack,openCardExpired,goPlanRenew,planOrders,planOrdersView,PLAN_ORDER_FILTERS,planOrderFilter,setPlanOrderFilter,setPlanOrdersEmpty,openPlanOrders,planOrderDetail,openPlanOrder,payPlanOrder,planOrderLeft,fmtCountdown,cancelPlanOrder,showCancelPlanTip,depositEnabled,setDepositEnabled,setPlanEmpty,showDepositModal,planDetail,openPlanDetail,closePlanDetail,goPayDeposit,payPlan,swapShow,swapStep,swapCtx,swapTitle,demoQrOk,demoSameOperator,demoOnline,demoDist,demoResumeType,demoLevelLow,planMax,setPlanMax,swapStart,swapScan,swapTorch,showSwapManual,swapManualNo,swapManualOpen,confirmSwapManual,swapBranch,showChoice,choiceDesc,swapChoiceBorrow,swapChoiceSwap,swapToBorrow,isBorrowFlow,borrowOpenPct,borrowLeft,borrowSlotNo,borrowFailType,borrowFailTitle,stepDot,stepText,stepLine,swapBorrowRetry,swapBorrowDone,flowDoneHome,isReturnFlow,swapMode,returnOpenPct,returnLeft,returnSlotNo,returnOpenChoice,returnTakeChoice,returnRun,returnRetry,returnFailHome,borrowRun,borrowOpenChoice,borrowTakeChoice,netLost,setNetLost,showFlowEnd,flowEndHome,isSwapFlow,swapOpenPct,swapFullPct,swapLeft,swapTakeLeft,swapSlotNo,swapOpenChoice,swapPutChoice,swapFullChoice,swapTakeChoice,swapFailTitle,swapRun,swapFlowRetry,swapFailHome,swapClose,swapResume,showLevelWarn,swapLevelCancel,swapLevelContinue,setBoundCount,showOperatorPicker,operatorOptions,pickFirstLoginOperator,closeOperatorPicker,operatorPickerCity,mockCity,pickMockCity,firstLoginRegionFlow},auth,sideSetup('换电用户端',toastBus))
   }})
 registerSheetKit(_ua);_ua.mount(document.getElementById('root-user'));
 
