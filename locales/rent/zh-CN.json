@@ -978,7 +978,7 @@
       "unselected": "未选门店",
       "selectFirst": "请先选择门店",
       "selectedToast": "已选择门店",
-      "splitHint": "各门店钱包独立结算，充值 / 余额仅对应所选门店"
+      "splitHint": "各门店钱包独立结算，充值余额仅对应所选门店"
     },
     "orders": {
       "vehicleBound": "车辆已绑定",

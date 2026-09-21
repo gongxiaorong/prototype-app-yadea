@@ -278,6 +278,11 @@ body.host-single-m #root-user{display:none}
 .sheet-x:active{background:#F6F7F9}
 .sheet-scroll{flex:1;overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .sheet-scroll::-webkit-scrollbar{display:none}
+/* 内容行 token：搜索框（与租车 index.html 同款） */
+.sheet-search{position:relative;margin:0 20px 12px;display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:9999px;background:#F6F7F9;border:1px solid #E5E5E5;flex-shrink:0;box-sizing:border-box}
+/* 商户端列表筛选 chips（与租车 index.html 同款） */
+#root-merchant .filter-tabs{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;padding-bottom:4px;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain;user-select:none;width:100%;flex-wrap:nowrap;white-space:nowrap;cursor:grab}
+#root-merchant .filter-pill{padding:6px 16px;border-radius:20px;font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;flex-shrink:0}
 .sheet-opt-list{flex:1;overflow-y:auto;min-height:0;padding:0 16px 4px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .sheet-opt-list::-webkit-scrollbar{display:none}
 .sheet-opt{width:100%;padding:14px 0;border-radius:12px;text-align:center;font-size:15px;cursor:pointer;transition:background .15s,color .15s;box-sizing:border-box}
@@ -1738,7 +1743,163 @@ body.host-single-m #root-user{display:none}
 </section>
     <section id="root-merchant">
 <div class="od-stage"><div class="w-[393px] h-[852px] bg-black rounded-[55px] p-3 relative shrink-0" style="box-shadow:0 0 0 2px #333,0 30px 60px rgba(0,0,0,.35)"><div class="absolute top-[23px] left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-black rounded-[20px] z-[2000]"></div><div class="w-full h-full bg-[#F6F7F9] rounded-[44px] overflow-hidden flex flex-col relative"><div class="toast-wrap"><transition-group name="toast"><div v-for="t in toasts" :key="t.id" class="toast-item" :class="'toast-'+t.type">{{ t.msg }}</div></transition-group></div><div v-if="!settingsOpen" class="od-body" style="flex:1;position:relative;min-height:0;padding:0;overflow:hidden;background:var(--bg)">
-<div v-if="!profileOV&&!profileSub" class="absolute inset-0 overflow-y-auto hide-scroll">
+<div v-if="tab==='batt'&&!profileOV&&!profileSub" class="absolute inset-0 flex flex-col" data-od-id="merchant-batt">
+<div class="pt-14 px-5 pb-2 bg-white shrink-0">
+<div class="flex gap-2 items-center">
+<div class="flex-1 rounded-full flex items-center py-1.5 gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px">
+<span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span>
+<input v-model="battQ" type="text" placeholder="请输入电池编号" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]" data-od-id="batt-search-input">
+<button v-if="battQ" type="button" data-cp @click="battQ=''" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-none cursor-pointer" style="background:#fff" data-od-id="batt-search-clear"><span v-html="luci('x','w-4 h-4 text-[#999]')"></span></button>
+</div>
+<div data-cp @click="openBattFilter()" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shrink-0" :style="battFilterActive?{background:'#FFF3E0',border:'1px solid var(--accent-2)',color:'var(--accent-2)'}:{background:'#fff',border:'1px solid #E5E5E5',color:'#666'}" data-od-id="batt-filter-btn">
+<span v-html="luci('sliders-horizontal','w-4 h-4')"></span>
+</div>
+</div>
+</div>
+<div class="bg-white shrink-0" style="padding:12px 20px;border-bottom:1px solid #E5E5E5">
+<div class="filter-tabs" id="battPillRow">
+<div v-for="p in battPills" :key="'battpill'+p.v" class="filter-pill" data-cp @click="setBattQuick(p.v)" :style="battFilter.cabState===p.v?{background:'var(--accent)',color:'#fff'}:{}" :data-od-id="'batt-pill-'+(p.v||'all')">{{ p.l }} ({{ battPillCnt[p.v] }})</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto min-h-0 px-5 pt-3 pb-24 hide-scroll" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
+<div class="text-[12px] mb-2.5" style="color:#999">共 {{ battList.length }} 块电池</div>
+<empty-state v-if="!battList.length" icon="battery-charging" text="暂无电池" sub="没有符合筛选条件的电池" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1">
+<div data-cp @click="battQ='';battFilterReset();battFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="batt-empty-reset">清空筛选</div>
+</empty-state>
+<div v-for="b in battList" :key="b.no" data-cp @click="openBattDetail(b.no)" class="bg-white rounded-xl p-4 mb-2.5 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :data-od-id="'batt-item-'+b.no">
+<div class="text-[15px] font-semibold mb-1.5">电池编号：{{ b.no }}</div>
+<div class="flex justify-between items-center text-[13px] mb-1.5">
+<span class="truncate min-w-0 pr-2">所在：{{ b.at||'—' }}</span>
+<div class="flex gap-3 shrink-0">
+<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.cab(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.cab(b))}"></span>{{ BATT_TEXT.cab(b) }}</span>
+<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.rent(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.rent(b))}"></span>{{ BATT_TEXT.rent(b) }}</span>
+<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.net(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.net(b))}"></span>{{ BATT_TEXT.net(b) }}</span>
+</div>
+</div>
+<div class="flex justify-between items-center text-[13px]">
+<span class="truncate min-w-0 pr-2">电量 {{ b.soc }}%<span v-if="b.charging"> · 充电中</span></span>
+<div class="flex gap-3 shrink-0">
+<span class="text-[12px]" style="color:#666">健康度 {{ b.health }}%</span>
+<span class="text-[12px]" style="color:#666">循环 {{ b.cycles }} 次</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div v-if="tab==='cab'&&!profileOV&&!profileSub" class="absolute inset-0 flex flex-col" data-od-id="merchant-cab">
+<div class="pt-14 px-5 pb-2 bg-white shrink-0">
+<div class="flex gap-2 items-center">
+<div class="flex-1 rounded-full flex items-center py-1.5 gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px">
+<span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span>
+<input v-model="cabQ" type="text" placeholder="请输入柜号或站点名称" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]" data-od-id="cab-search-input">
+<button v-if="cabQ" type="button" data-cp @click="cabQ=''" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 border-none cursor-pointer" style="background:#fff" data-od-id="cab-search-clear"><span v-html="luci('x','w-4 h-4 text-[#999]')"></span></button>
+</div>
+<div data-cp @click="openCabFilter()" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shrink-0" :style="cabFilterActive?{background:'#FFF3E0',border:'1px solid var(--accent-2)',color:'var(--accent-2)'}:{background:'#fff',border:'1px solid #E5E5E5',color:'#666'}" data-od-id="cab-filter-btn">
+<span v-html="luci('sliders-horizontal','w-4 h-4')"></span>
+</div>
+</div>
+</div>
+<div class="bg-white shrink-0" style="padding:12px 20px;border-bottom:1px solid #E5E5E5">
+<div class="filter-tabs" id="cabPillRow">
+<div v-for="p in cabPills" :key="'cabpill'+p.v" class="filter-pill" data-cp @click="setCabQuick(p.v)" :style="cabFilter.bizState===p.v?{background:'var(--accent)',color:'#fff'}:{}" :data-od-id="'cab-pill-'+(p.v||'all')">{{ p.l }} ({{ cabPillCnt[p.v] }})</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto min-h-0 px-5 pt-3 pb-24 hide-scroll" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
+<div class="text-[12px] mb-2.5" style="color:#999">共 {{ cabList.length }} 台换电柜</div>
+<empty-state v-if="!cabList.length" icon="box" text="暂无换电柜" sub="没有符合筛选条件的换电柜" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1">
+<div data-cp @click="cabQ='';cabFilterReset();cabFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="cab-empty-reset">清空筛选</div>
+</empty-state>
+<div v-for="c in cabList" :key="c.no" data-cp @click="openCabDetail(c.no)" class="bg-white rounded-xl p-4 mb-2.5 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :data-od-id="'cab-item-'+c.no">
+<div class="text-[15px] font-semibold mb-1.5">柜号：{{ c.no }}</div>
+<div class="flex justify-between items-center text-[13px] mb-1.5">
+<span class="truncate min-w-0 pr-2">站点：{{ stationNameOf(c.stationId) }}</span>
+<div class="flex gap-3 shrink-0">
+<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.biz(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.biz(c))}"></span>{{ CAB_TEXT.biz(c) }}</span>
+<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.net(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.net(c))}"></span>{{ CAB_TEXT.net(c) }}</span>
+</div>
+</div>
+<div class="flex justify-between items-center text-[13px]">
+<span class="truncate min-w-0 pr-2">仓门 {{ c.doors }} · 电池 {{ battCountOf(c) }}</span>
+<div class="flex gap-3 shrink-0">
+<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.fault(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.fault(c))}"></span>{{ CAB_TEXT.fault(c) }}</span>
+<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.alarm(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.alarm(c))}"></span>{{ CAB_TEXT.alarm(c) }}</span>
+<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.enabled(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.enabled(c))}"></span>{{ CAB_TEXT.enabled(c) }}</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div v-if="tab==='home'&&!profileOV&&!profileSub" class="absolute inset-0 overflow-y-auto hide-scroll" data-od-id="merchant-home">
+<div style="padding-top:60px" class="px-5 shrink-0"></div>
+<div class="px-5 pb-24" style="padding-top:0">
+<div class="rounded-2xl px-5 pt-4.5 pb-5 mb-4 relative overflow-hidden" style="background:linear-gradient(135deg,#33456B 0%,#22304E 100%);box-shadow:0 10px 26px rgba(34,48,78,.26)">
+<div class="absolute w-[150px] h-[150px] rounded-full" style="right:-46px;top:-58px;background:radial-gradient(circle,rgba(255,255,255,.12),rgba(255,255,255,0) 70%)"></div>
+<div class="absolute w-[110px] h-[110px] rounded-full" style="left:-40px;bottom:-56px;background:radial-gradient(circle,rgba(127,224,160,.18),rgba(127,224,160,0) 70%)"></div>
+<div class="relative flex items-center justify-between">
+<div class="flex items-center gap-1.5"><span v-html="luci('activity','w-4 h-4')" style="color:#9FC0F5"></span><span class="text-[13px] font-semibold" style="color:rgba(255,255,255,.92)">今日经营概览</span></div>
+<span class="text-[11px] px-2 py-0.5 rounded-full" style="color:#BFE9CE;background:rgba(127,224,160,.14)">实时</span>
+</div>
+<div class="relative flex items-end gap-4 mt-4">
+<div><div class="text-[26px] font-bold text-white leading-none">{{ todaySwapCount }}</div><div class="text-[12px] mt-1.5" style="color:rgba(255,255,255,.6)">今日换电次数</div></div>
+<div class="w-[1px] h-8 shrink-0" style="background:rgba(255,255,255,.16)"></div>
+<div><div class="text-[20px] font-bold text-white leading-none">{{ fmtRp(todayRevenue) }}</div><div class="text-[12px] mt-1.5" style="color:rgba(255,255,255,.6)">今日营收</div></div>
+<div class="flex-1"></div>
+<div class="text-right"><div class="text-[20px] font-bold leading-none" style="color:#7FE0A0">{{ cabOnlineRate }}%</div><div class="text-[12px] mt-1.5" style="color:rgba(255,255,255,.6)">柜在线率</div></div>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-2.5 mb-4">
+<div class="bg-white rounded-2xl px-3 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[18px] font-bold" style="color:#2B3F5F">{{ stores.length }}</div>
+<div class="text-[11px] mt-1" style="color:#999">门店</div>
+</div>
+<div class="bg-white rounded-2xl px-3 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[18px] font-bold" style="color:#2B3F5F">{{ stations.length }}</div>
+<div class="text-[11px] mt-1" style="color:#999">站点</div>
+</div>
+<div class="bg-white rounded-2xl px-3 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[18px] font-bold" style="color:#2B3F5F">{{ cabinets.length }}</div>
+<div class="text-[11px] mt-1" style="color:#999">换电柜</div>
+</div>
+<div class="bg-white rounded-2xl px-3 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[18px] font-bold" style="color:#2B3F5F">{{ batteries.length }}</div>
+<div class="text-[11px] mt-1" style="color:#999">电池</div>
+</div>
+</div>
+<div class="rounded-2xl bg-white overflow-hidden mb-4" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="px-4 pt-3.5 pb-1.5 text-[12px] font-semibold" style="color:#999">快捷入口</div>
+<div class="flex px-2 py-3">
+<div data-cp @click="openStoreList()" class="flex-1 flex flex-col items-center gap-2 cursor-pointer active:opacity-70" data-od-id="home-store-entry">
+<div class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background:linear-gradient(145deg,#EEF1F8,#E1E8F4)"><span v-html="luci('store','w-5 h-5 text-[#2B3F5F]')"></span></div>
+<div class="text-[12px] font-medium" style="color:#333">门店管理</div>
+</div>
+<div data-cp @click="openStationList()" class="flex-1 flex flex-col items-center gap-2 cursor-pointer active:opacity-70" data-od-id="home-station-entry">
+<div class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background:linear-gradient(145deg,#FFF4E6,#FFE9CC)"><span v-html="luci('map-pin','w-5 h-5 text-[#FF8A00]')"></span></div>
+<div class="text-[12px] font-medium" style="color:#333">站点管理</div>
+</div>
+<div data-cp @click="openDashboard()" class="flex-1 flex flex-col items-center gap-2 cursor-pointer active:opacity-70" data-od-id="home-dashboard-entry">
+<div class="w-11 h-11 rounded-2xl flex items-center justify-center" style="background:linear-gradient(145deg,#E9F7EF,#DCF3E6)"><span v-html="luci('bar-chart-3','w-5 h-5 text-[#16A34A]')"></span></div>
+<div class="text-[12px] font-medium" style="color:#333">数据看板</div>
+</div>
+</div>
+</div>
+<div class="rounded-2xl bg-white overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="px-4 pt-3.5 pb-2.5 flex items-center justify-between" style="border-bottom:1px solid #F0F0F0">
+<span class="text-[12px] font-semibold" style="color:#999">设备告警</span>
+<span class="text-[12px]" style="color:#999">共 {{ alarmList.length }} 条</span>
+</div>
+<empty-state v-if="!alarmList.length" icon="shield-check" text="暂无设备告警" sub="柜机与电池运行正常" root-class="flex flex-col items-center justify-center py-10" circle-class="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-[#E9F7EF]" icon-class="w-6 h-6 text-[#16A34A]" text-class="text-[13px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
+<div v-for="(a,i) in alarmList" :key="a.type+a.no" data-cp @click="a.no.indexOf('BT')===0?openBattDetail(a.no):openCabDetail(a.no)" class="flex items-start gap-3 px-4 py-3 cursor-pointer active:bg-[#F6F7F9]" :style="i?'border-top:1px solid #F0F0F0':''" :data-od-id="'home-alarm-'+i">
+<span class="w-2 h-2 rounded-full mt-1.5 shrink-0" :style="{background:dotColor(a.level)}"></span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2"><span class="text-[13px] font-semibold" style="color:#111">{{ a.type }}</span><span class="text-[11px] px-1.5 py-0.5 rounded" style="color:#666;background:#F6F7F9">{{ a.no }}</span></div>
+<div class="text-[12px] mt-1 truncate" style="color:#666">{{ a.text }}</div>
+</div>
+<div class="text-[11px] shrink-0" style="color:#BBB">{{ a.time }}</div>
+</div>
+</div>
+</div>
+</div>
+<div v-if="tab==='mine'&&!profileOV&&!profileSub" class="absolute inset-0 overflow-y-auto hide-scroll" data-od-id="merchant-mine">
 <div style="padding-top:60px" class="px-5 shrink-0"></div>
 <div class="flex-1 overflow-y-auto px-5 pb-24 hid" style="touch-action:pan-y;-webkit-overflow-scrolling:touch;padding-top:0">
 <div class="mb-6 flex items-center gap-3">
@@ -1749,8 +1910,481 @@ body.host-single-m #root-user{display:none}
 </div>
 <div data-cp @click="navOpen();profileOV='settings'" class="w-9 h-9 flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] rounded-full shrink-0" data-od-id="profile-settings"><span v-html="luci('settings','w-5 h-5 text-[#666]')"></span></div>
 </div>
+<div class="rounded-2xl bg-white overflow-hidden mb-4" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="px-4 pt-3.5 pb-1.5 text-[12px] font-semibold" style="color:#999">常用功能</div>
+<div data-cp @click="openStoreList()" class="flex items-center gap-3 px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-top:1px solid #F0F0F0" data-od-id="mine-store-entry">
+<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#EEF1F8,#E1E8F4)"><span v-html="luci('store','w-5 h-5 text-[#2B3F5F]')"></span></div>
+<div class="flex-1 min-w-0"><div class="text-[14px] font-medium" style="color:#111">门店管理</div><div class="text-[12px] mt-0.5 truncate" style="color:#999">共 {{ stores.length }} 家门店 · 门店关联站点</div></div>
+<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
+</div>
+<div data-cp @click="openStationList()" class="flex items-center gap-3 px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-top:1px solid #F0F0F0" data-od-id="mine-station-entry">
+<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#FFF4E6,#FFE9CC)"><span v-html="luci('map-pin','w-5 h-5 text-[#FF8A00]')"></span></div>
+<div class="flex-1 min-w-0"><div class="text-[14px] font-medium" style="color:#111">站点管理</div><div class="text-[12px] mt-0.5 truncate" style="color:#999">共 {{ stations.length }} 个站点 · 绑定换电柜</div></div>
+<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
+</div>
+<div data-cp @click="openDashboard()" class="flex items-center gap-3 px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-top:1px solid #F0F0F0" data-od-id="mine-dashboard-entry">
+<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#E9F7EF,#DCF3E6)"><span v-html="luci('bar-chart-3','w-5 h-5 text-[#16A34A]')"></span></div>
+<div class="flex-1 min-w-0"><div class="text-[14px] font-medium" style="color:#111">数据看板</div><div class="text-[12px] mt-0.5 truncate" style="color:#999">换电趋势 · 柜机与电池状态分布</div></div>
+<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
 </div>
 </div>
+</div>
+</div>
+<page :open="mPage==='cabDetail'" :z="600" oid="mcab-detail-page">
+<nav-bar :title="curCab?(curCab.no+' 号柜'):'换电柜详情'" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll">
+<empty-state v-if="!curCab" icon="box" text="换电柜不存在" sub="该换电柜可能已被移除" root-class="flex flex-col items-center justify-center py-16" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
+<template v-if="curCab">
+<div class="bg-white rounded-2xl px-4 pt-4 pb-1 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center gap-3 pb-4" style="border-bottom:1px solid #F0F0F0">
+<div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#EEF1F8,#E1E8F4)"><span v-html="luci('box','w-5 h-5 text-[#2B3F5F]')"></span></div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2"><span class="text-[16px] font-bold" style="color:#111">{{ curCab.no }} 号柜</span><span class="text-[11px] px-1.5 py-0.5 rounded-full font-medium" :style="{color:dotColor(CAB_DOT.biz(curCab)),background:dotColor(CAB_DOT.biz(curCab))+'1A'}">{{ CAB_TEXT.biz(curCab) }}</span></div>
+<div class="text-[12px] mt-1 truncate" style="color:#999">{{ stationNameOf(curCab.stationId) }} · {{ curCab.model }}</div>
+</div>
+</div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">运营状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.biz(curCab))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ CAB_TEXT.biz(curCab) }}</span></span></div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">联网状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.net(curCab))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ CAB_TEXT.net(curCab) }}</span></span></div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">仓门数</span><span class="text-[13px] font-semibold" style="color:#2B3F5F">{{ curCab.doors }} 个</span></div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">电池数量</span><span class="text-[13px] font-semibold" style="color:#2B3F5F">{{ battCountOf(curCab) }} 块</span></div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">故障状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.fault(curCab))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ CAB_TEXT.fault(curCab) }}</span></span></div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">告警状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.alarm(curCab))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ CAB_TEXT.alarm(curCab) }}</span></span></div>
+<div class="flex items-center justify-between py-3"><span class="text-[13px]" style="color:#999">启用状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.enabled(curCab))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ CAB_TEXT.enabled(curCab) }}</span></span></div>
+</div>
+<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center justify-between mb-3.5">
+<span class="text-[13px] font-semibold" style="color:#111">仓位明细</span>
+<span class="text-[12px]" style="color:#999">占用 {{ battCountOf(curCab) }} / {{ curCab.doors }}</span>
+</div>
+<div class="grid grid-cols-4 gap-2">
+<div v-for="s in curCab.slots" :key="s.no" data-cp @click="cabAskOpen(curCab.no,s.no)" class="h-14 rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors" :style="s.fault?'background:#FDECEA;border:1px solid #F3C9C5':(s.occupied?'background:#2B3F5F;border:1px solid #2B3F5F':'background:#fff;border:1px dashed #D5DBE5')" :data-od-id="'cab-slot-'+curCab.no+'-'+s.no">
+<span class="text-[12px] font-semibold" :style="{color:s.fault?'#DC2626':(s.occupied?'#FFFFFF':'#999')}">{{ s.no }}</span>
+<span class="text-[10px]" :style="{color:s.fault?'#DC2626':(s.occupied?'rgba(255,255,255,.72)':'#BBB')}">{{ s.fault?'故障':(s.occupied?'有电池':'空闲') }}</span>
+</div>
+</div>
+<div class="flex items-center gap-4 mt-3.5 pt-3 text-[11px]" style="border-top:1px solid #F0F0F0;color:#999">
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded" style="background:#2B3F5F"></span>有电池</span>
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded" style="background:#fff;border:1px dashed #D5DBE5"></span>空闲</span>
+<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded" style="background:#FDECEA;border:1px solid #F3C9C5"></span>故障</span>
+</div>
+</div>
+<div class="bg-white rounded-2xl px-4 pt-4 pb-2 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[13px] font-semibold mb-1" style="color:#111">当前告警</div>
+<empty-state v-if="!alarmsOfCab(curCab).length" icon="shield-check" text="暂无告警" root-class="flex flex-col items-center justify-center py-8" circle-class="w-11 h-11 rounded-full flex items-center justify-center mb-3 bg-[#E9F7EF]" icon-class="w-5 h-5 text-[#16A34A]" text-class="text-[13px] font-semibold text-[#333]"></empty-state>
+<div v-for="(a,i) in alarmsOfCab(curCab)" :key="i" class="flex items-start gap-2.5 py-2.5" :style="i?'border-top:1px solid #F0F0F0':''">
+<span class="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" :style="{background:dotColor(a.level)}"></span>
+<span class="text-[12px] flex-1" style="color:#666;line-height:1.5">{{ a.text }}</span>
+</div>
+</div>
+</template>
+</div>
+<div v-if="curCab" class="absolute left-0 right-0 bottom-0 px-4 pb-6 pt-3 flex gap-2" style="background:rgba(255,255,255,.96);border-top:1px solid #F0F0F0;backdrop-filter:blur(10px)">
+<div data-cp @click="freeSlotOf(curCab)?cabAskOpen(curCab.no,freeSlotOf(curCab).no):toastPush('暂无空闲仓位可开仓')" class="flex-1 h-14 rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer active:opacity-70" style="background:#EEF1F8" data-od-id="cab-op-open">
+<span v-html="luci('door-open','w-4 h-4 text-[#2B3F5F]')"></span>
+<span class="text-[11px] font-medium" style="color:#2B3F5F">远程开仓</span>
+</div>
+<div data-cp @click="cabAskBiz(curCab.no)" class="flex-1 h-14 rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer active:opacity-70" style="background:#F6F7F9" data-od-id="cab-op-biz">
+<span v-html="luci('power','w-4 h-4 text-[#666]')"></span>
+<span class="text-[11px] font-medium" style="color:#666">{{ curCab.bizOnline?'下线':'上线' }}</span>
+</div>
+<div data-cp @click="cabAskFault(curCab.no)" class="flex-1 h-14 rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer active:opacity-70" style="background:#F6F7F9" data-od-id="cab-op-fault">
+<span v-html="luci('wrench','w-4 h-4 text-[#666]')"></span>
+<span class="text-[11px] font-medium" style="color:#666">{{ curCab.fault?'清除故障':'标记故障' }}</span>
+</div>
+<div data-cp @click="cabAskAlarm(curCab.no)" class="flex-1 h-14 rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer active:opacity-70" style="background:#F6F7F9" data-od-id="cab-op-alarm">
+<span v-html="luci('alert-triangle','w-4 h-4 text-[#666]')"></span>
+<span class="text-[11px] font-medium" style="color:#666">{{ curCab.alarm?'清除告警':'触发告警' }}</span>
+</div>
+<div data-cp @click="cabAskEnabled(curCab.no)" class="flex-1 h-14 rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer active:opacity-70" style="background:#F6F7F9" data-od-id="cab-op-enabled">
+<span v-html="luci('toggle-right','w-4 h-4 text-[#666]')"></span>
+<span class="text-[11px] font-medium" style="color:#666">{{ curCab.enabled?'停用':'启用' }}</span>
+</div>
+</div>
+</page>
+<page :open="mPage==='battDetail'" :z="600" oid="mbatt-detail-page">
+<nav-bar :title="curBatt?curBatt.no:'电池详情'" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll">
+<empty-state v-if="!curBatt" icon="battery-charging" text="电池不存在" sub="该电池可能已被移除" root-class="flex flex-col items-center justify-center py-16" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
+<template v-if="curBatt">
+<div class="bg-white rounded-2xl px-4 py-5 mb-3 flex flex-col items-center" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="w-[132px] h-[132px] rounded-full flex items-center justify-center" :style="{background:'conic-gradient('+socColor(curBatt.soc)+' 0deg '+(curBatt.soc*3.6)+'deg,#EEF0F3 '+(curBatt.soc*3.6)+'deg 360deg)'}">
+<div class="w-[104px] h-[104px] rounded-full bg-white flex flex-col items-center justify-center" style="box-shadow:0 1px 4px rgba(0,0,0,.05)">
+<span class="text-[28px] font-bold leading-none" :style="{color:socColor(curBatt.soc)}">{{ curBatt.soc }}%</span>
+<span class="text-[11px] mt-1.5" style="color:#999">当前电量</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 mt-4">
+<span v-if="curBatt.charging" class="text-[11px] px-2 py-1 rounded-full font-medium" style="color:#FF8A00;background:#FF8A001A">充电中</span>
+<span class="text-[11px] px-2 py-1 rounded-full font-medium" :style="{color:dotColor(BATT_DOT.cab(curBatt)),background:dotColor(BATT_DOT.cab(curBatt))+'1A'}">{{ BATT_TEXT.cab(curBatt) }}</span>
+<span class="text-[11px] px-2 py-1 rounded-full font-medium" :style="{color:dotColor(BATT_DOT.rent(curBatt)),background:dotColor(BATT_DOT.rent(curBatt))+'1A'}">{{ BATT_TEXT.rent(curBatt) }}</span>
+<span class="text-[11px] px-2 py-1 rounded-full font-medium" :style="{color:dotColor(BATT_DOT.net(curBatt)),background:dotColor(BATT_DOT.net(curBatt))+'1A'}">电池{{ BATT_TEXT.net(curBatt) }}</span>
+</div>
+</div>
+<div class="bg-white rounded-2xl overflow-hidden mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">在柜状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.cab(curBatt))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ BATT_TEXT.cab(curBatt) }}</span></span></div>
+<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">租用状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.rent(curBatt))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ BATT_TEXT.rent(curBatt) }}</span></span></div>
+<div class="flex items-center justify-between px-4 py-3.5"><span class="text-[13px]" style="color:#999">电池状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.net(curBatt))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ BATT_TEXT.net(curBatt) }}</span></span></div>
+</div>
+<div class="bg-white rounded-2xl overflow-hidden mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">电池编号</span><span class="text-[13px] font-medium" style="color:#111">{{ curBatt.no }}</span></div>
+<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">当前所在</span><span class="text-[13px] font-medium" style="color:#111">{{ curBatt.at||'—' }}</span></div>
+<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">循环次数</span><span class="text-[13px] font-medium" style="color:#111">{{ curBatt.cycles }} 次</span></div>
+<div class="flex items-center justify-between px-4 py-3.5"><span class="text-[13px]" style="color:#999">健康度</span><span class="text-[13px] font-semibold" :style="{color:socColor(curBatt.health)}">{{ curBatt.health }}%</span></div>
+</div>
+<div class="bg-white rounded-2xl px-4 pt-4 pb-2" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[13px] font-semibold" style="color:#111">流转记录</div>
+<empty-state v-if="!curBatt.records||!curBatt.records.length" icon="clock" text="暂无流转记录" root-class="flex flex-col items-center justify-center py-8" circle-class="w-11 h-11 rounded-full flex items-center justify-center mb-3 bg-[#F0F0F0]" icon-class="w-5 h-5 text-[#BBB]" text-class="text-[13px] font-semibold text-[#333]"></empty-state>
+<div class="mt-3.5">
+<div v-for="(r,i) in curBatt.records" :key="i" class="flex gap-3">
+<div class="flex flex-col items-center shrink-0">
+<div class="w-7 h-7 rounded-full flex items-center justify-center" style="background:#EEF1F8"><span v-html="luci(r.type==='borrow'?'arrow-up-right':r.type==='return'?'arrow-down-left':r.type==='charge'?'zap':r.type==='repair'?'wrench':'alert-circle','w-3.5 h-3.5 text-[#2B3F5F]')"></span></div>
+<div v-if="i<curBatt.records.length-1" class="flex-1 w-[1px] my-1.5" style="background:#E5E5E5"></div>
+</div>
+<div class="flex-1 min-w-0 pb-4">
+<div class="text-[11px]" style="color:#999">{{ r.time }}</div>
+<div class="text-[13px] mt-1" style="color:#333;line-height:1.5">{{ r.note }}</div>
+</div>
+</div>
+</div>
+</div>
+</template>
+</div>
+<div v-if="curBatt" class="absolute left-0 right-0 bottom-0 px-5 pb-6 pt-3" style="background:rgba(255,255,255,.96);border-top:1px solid #F0F0F0;backdrop-filter:blur(10px)">
+<div data-cp @click="curBatt.cabState==='inCab'?borrowBattery(curBatt.no):returnBattery(curBatt.no)" class="h-12 rounded-full flex items-center justify-center gap-2 text-[15px] font-semibold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="batt-op-borrow">
+<span v-html="luci(curBatt.cabState==='inCab'?'arrow-up-right':'arrow-down-left','w-4 h-4')"></span>
+<span>{{ curBatt.cabState==='inCab'?'模拟借出电池':'模拟归还电池' }}</span>
+</div>
+</div>
+</page>
+<page :open="mPage==='dashboard'" :z="600" oid="mdashboard-page">
+<nav-bar title="数据看板" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-12 hide-scroll">
+<div class="grid grid-cols-2 gap-2.5 mb-3">
+<div class="bg-white rounded-2xl px-4 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center gap-1.5"><span v-html="luci('box','w-3.5 h-3.5 text-[#2B3F5F]')"></span><span class="text-[12px]" style="color:#999">换电柜总数</span></div>
+<div class="text-[22px] font-bold mt-1.5 leading-none" style="color:#111">{{ cabStats.total }}</div>
+<div class="text-[11px] mt-1.5" style="color:#999">上线 {{ cabStats.online }} · 下线 {{ cabStats.offline }}</div>
+</div>
+<div class="bg-white rounded-2xl px-4 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center gap-1.5"><span v-html="luci('wifi','w-3.5 h-3.5 text-[#16A34A]')"></span><span class="text-[12px]" style="color:#999">柜在线率</span></div>
+<div class="text-[22px] font-bold mt-1.5 leading-none" style="color:#16A34A">{{ cabOnlineRate }}%</div>
+<div class="text-[11px] mt-1.5" style="color:#999">故障 {{ cabStats.fault }} · 告警 {{ cabStats.alarm }}</div>
+</div>
+<div class="bg-white rounded-2xl px-4 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center gap-1.5"><span v-html="luci('battery-charging','w-3.5 h-3.5 text-[#2B3F5F]')"></span><span class="text-[12px]" style="color:#999">柜内电池</span></div>
+<div class="text-[22px] font-bold mt-1.5 leading-none" style="color:#111">{{ inCabCount }}</div>
+<div class="text-[11px] mt-1.5" style="color:#999">仓位 {{ cabStats.inCabBatt }} / {{ cabStats.doors }}</div>
+</div>
+<div class="bg-white rounded-2xl px-4 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center gap-1.5"><span v-html="luci('repeat','w-3.5 h-3.5 text-[#FF8A00]')"></span><span class="text-[12px]" style="color:#999">租用中</span></div>
+<div class="text-[22px] font-bold mt-1.5 leading-none" style="color:#FF8A00">{{ rentedCount }}</div>
+<div class="text-[11px] mt-1.5" style="color:#999">共 {{ batteries.length }} 块电池</div>
+</div>
+</div>
+<div class="bg-white rounded-2xl px-4 pt-4 pb-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[13px] font-semibold" style="color:#111">近 7 日换电趋势</span>
+<span class="text-[11px]" style="color:#999">峰值 {{ dashTrendMax }} 次</span>
+</div>
+<div class="flex items-end gap-2.5">
+<div v-for="t in dashTrend" :key="t.d" class="flex-1 flex flex-col items-center">
+<span class="text-[10px] mb-1.5" style="color:#666">{{ t.v }}</span>
+<div class="w-full h-[92px] flex items-end">
+<div class="w-full rounded-t-lg" :style="{height:Math.max(6,Math.round(t.v/dashTrendMax*92))+'px',background:'linear-gradient(180deg,#5A74A8,#22304E)'}"></div>
+</div>
+<span class="text-[10px] mt-1.5" style="color:#999">{{ t.d.slice(3) }}</span>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-2xl px-4 pt-4 pb-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[13px] font-semibold mb-4" style="color:#111">机柜状态分布</div>
+<div class="flex items-center gap-5">
+<div class="w-[92px] h-[92px] rounded-full shrink-0" :style="{background:donut(dashCabDist)}"></div>
+<div class="flex-1">
+<div v-for="d in dashCabDist" :key="d.label" class="flex items-center justify-between py-1.5">
+<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full shrink-0" :style="{background:d.color}"></span><span class="text-[12px]" style="color:#666">{{ d.label }}</span></span>
+<span class="text-[12px] font-semibold" style="color:#111">{{ d.v }} 台</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-2xl px-4 pt-4 pb-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[13px] font-semibold mb-4" style="color:#111">电池状态分布</div>
+<div class="flex items-center gap-5">
+<div class="w-[92px] h-[92px] rounded-full shrink-0" :style="{background:donut(dashBattDist)}"></div>
+<div class="flex-1">
+<div v-for="d in dashBattDist" :key="d.label" class="flex items-center justify-between py-1.5">
+<span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full shrink-0" :style="{background:d.color}"></span><span class="text-[12px]" style="color:#666">{{ d.label }}</span></span>
+<span class="text-[12px] font-semibold" style="color:#111">{{ d.v }} 块</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-white rounded-2xl px-4 pt-4 pb-2" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center justify-between"><span class="text-[13px] font-semibold" style="color:#111">告警统计</span><span class="text-[11px]" style="color:#999">共 {{ alarmList.length }} 条</span></div>
+<empty-state v-if="!alarmList.length" icon="shield-check" text="暂无告警" root-class="flex flex-col items-center justify-center py-8" circle-class="w-11 h-11 rounded-full flex items-center justify-center mb-3 bg-[#E9F7EF]" icon-class="w-5 h-5 text-[#16A34A]" text-class="text-[13px] font-semibold text-[#333]"></empty-state>
+<div v-for="(a,i) in alarmList" :key="a.type+a.no" data-cp @click="a.no.indexOf('BT')===0?openBattDetail(a.no):openCabDetail(a.no)" class="flex items-start gap-2.5 py-3 cursor-pointer active:opacity-70" :style="i?'border-top:1px solid #F0F0F0':''">
+<span class="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" :style="{background:dotColor(a.level)}"></span>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2"><span class="text-[12px] font-semibold" style="color:#111">{{ a.type }}</span><span class="text-[11px]" style="color:#999">{{ a.no }}</span></div>
+<div class="text-[11px] mt-1 truncate" style="color:#999">{{ a.text }}</div>
+</div>
+<span class="text-[11px] shrink-0" style="color:#BBB">{{ a.time }}</span>
+</div>
+</div>
+</div>
+</page>
+<page :open="mPage==='stores'" :z="600" oid="mstore-list-page">
+<nav-bar title="门店管理" border-color="#E5E5E5" @back="closePage()">
+<span slot="right" data-cp @click="openStoreForm('')" class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F0F0F0]" data-od-id="store-add"><span v-html="luci('plus','w-5 h-5 text-[#2B3F5F]')"></span></span>
+</nav-bar>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
+<div class="flex items-center gap-2 h-10 rounded-xl px-3 mb-3" style="background:#fff;border:1px solid #E5E5E5">
+<span v-html="luci('search','w-4 h-4 text-[#BBB]')"></span>
+<input v-model="storeQ" type="text" placeholder="搜索门店名称 / 地址" class="flex-1 h-full bg-transparent text-[13px] outline-none" style="color:#111">
+<span v-if="storeQ" data-cp @click="storeQ=''" class="cursor-pointer shrink-0"><span v-html="luci('x','w-4 h-4 text-[#CCC]')"></span></span>
+</div>
+<div class="text-[12px] mb-2.5" style="color:#999">共 {{ storeView.length }} 家门店</div>
+<empty-state v-if="!storeView.length" icon="store" text="暂无门店" sub="可点击右上角新增门店" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
+<div v-for="s in storeView" :key="s.id" data-cp @click="openStoreDetail(s.id)" class="bg-white rounded-2xl px-4 pt-3.5 pb-3 mb-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'store-item-'+s.id">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#EEF1F8,#E1E8F4)"><span v-html="luci('store','w-5 h-5 text-[#2B3F5F]')"></span></div>
+<div class="flex-1 min-w-0">
+<div class="text-[15px] font-bold truncate" style="color:#111">{{ s.name }}</div>
+<div class="text-[12px] mt-1 truncate" style="color:#999">{{ s.addr }}</div>
+</div>
+<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
+</div>
+<div class="flex items-center gap-2 mt-3 pt-2.5" style="border-top:1px solid #F0F0F0">
+<span class="text-[11px]" style="color:#999">关联站点</span>
+<span class="text-[12px] font-medium" :style="{color:s.stationId?'#2B3F5F':'#BBB'}">{{ s.stationId?stationNameOf(s.stationId):'未关联' }}</span>
+<div class="flex-1"></div>
+<span class="text-[11px]" style="color:#999">{{ s.hours||'—' }}</span>
+</div>
+</div>
+</div>
+</page>
+<page :open="mPage==='storeDetail'" :z="600" oid="mstore-detail-page">
+<nav-bar title="门店详情" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll">
+<empty-state v-if="!curStore" icon="store" text="门店不存在" sub="该门店可能已被移除" root-class="flex flex-col items-center justify-center py-16" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
+<template v-if="curStore">
+<div class="bg-white rounded-2xl px-4 pt-4 pb-1 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center gap-3 pb-4" style="border-bottom:1px solid #F0F0F0">
+<div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#EEF1F8,#E1E8F4)"><span v-html="luci('store','w-5 h-5 text-[#2B3F5F]')"></span></div>
+<div class="flex-1 min-w-0"><div class="text-[16px] font-bold truncate" style="color:#111">{{ curStore.name }}</div><div class="text-[12px] mt-1 truncate" style="color:#999">{{ curStore.addr }}</div></div>
+</div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">门店名称</span><span class="text-[13px] font-medium" style="color:#111">{{ curStore.name }}</span></div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">联系电话</span><span class="text-[13px] font-medium" style="color:#111">{{ curStore.phone||'—' }}</span></div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">营业时间</span><span class="text-[13px] font-medium" style="color:#111">{{ curStore.hours||'—' }}</span></div>
+<div class="flex items-center justify-between py-3"><span class="text-[13px]" style="color:#999">关联站点</span><span class="text-[13px] font-medium" :style="{color:curStore.stationId?'#2B3F5F':'#BBB'}">{{ curStore.stationId?stationNameOf(curStore.stationId):'未关联' }}</span></div>
+</div>
+<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center justify-between mb-3">
+<span class="text-[13px] font-semibold" style="color:#111">关联站点</span>
+<span class="text-[11px]" style="color:#999">门店与站点 1:1</span>
+</div>
+<div v-if="curStore.stationId" data-cp @click="openStationDetail(curStore.stationId)" class="rounded-xl px-4 py-3.5 flex items-center gap-3 cursor-pointer active:opacity-80" style="background:#F6F7F9" data-od-id="store-linked-station">
+<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#FFF4E6,#FFE9CC)"><span v-html="luci('map-pin','w-4 h-4 text-[#FF8A00]')"></span></div>
+<div class="flex-1 min-w-0"><div class="text-[14px] font-semibold truncate" style="color:#111">{{ stationNameOf(curStore.stationId) }}</div><div class="text-[12px] mt-0.5 truncate" style="color:#999">绑定换电柜 {{ cabsOfStation(curStore.stationId).length }} 台</div></div>
+<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
+</div>
+<div v-else class="rounded-xl px-4 py-4 text-center" style="background:#FFF8EC;border:1px dashed #F3D9B0">
+<div class="text-[12px]" style="color:#B8791F">该门店暂未关联站点，请先关联站点</div>
+<div data-cp @click="openStoreForm(curStore.id)" class="mt-3 h-9 px-4 inline-flex items-center rounded-full text-[12px] font-semibold cursor-pointer" style="background:#FF8A00;color:#fff" data-od-id="store-link-now">去关联站点</div>
+</div>
+</div>
+</template>
+</div>
+<div v-if="curStore" class="absolute left-0 right-0 bottom-0 px-5 pb-6 pt-3" style="background:rgba(255,255,255,.96);border-top:1px solid #F0F0F0;backdrop-filter:blur(10px)">
+<div data-cp @click="openStoreForm(curStore.id)" class="h-12 rounded-full flex items-center justify-center text-[15px] font-semibold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="store-edit-btn">编辑门店</div>
+</div>
+</page>
+<page :open="mPage==='stations'" :z="600" oid="mstation-list-page">
+<nav-bar title="站点管理" border-color="#E5E5E5" @back="closePage()">
+<span slot="right" data-cp @click="openStationForm('')" class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F0F0F0]" data-od-id="station-add"><span v-html="luci('plus','w-5 h-5 text-[#2B3F5F]')"></span></span>
+</nav-bar>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
+<div class="flex items-center gap-2 h-10 rounded-xl px-3 mb-3" style="background:#fff;border:1px solid #E5E5E5">
+<span v-html="luci('search','w-4 h-4 text-[#BBB]')"></span>
+<input v-model="stationQ" type="text" placeholder="搜索站点名称 / 地址" class="flex-1 h-full bg-transparent text-[13px] outline-none" style="color:#111">
+<span v-if="stationQ" data-cp @click="stationQ=''" class="cursor-pointer shrink-0"><span v-html="luci('x','w-4 h-4 text-[#CCC]')"></span></span>
+</div>
+<div class="text-[12px] mb-2.5" style="color:#999">共 {{ stationView.length }} 个站点</div>
+<empty-state v-if="!stationView.length" icon="map-pin" text="暂无站点" sub="可点击右上角新增站点" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
+<div v-for="s in stationView" :key="s.id" data-cp @click="openStationDetail(s.id)" class="bg-white rounded-2xl px-4 pt-3.5 pb-3 mb-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'station-item-'+s.id">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#FFF4E6,#FFE9CC)"><span v-html="luci('map-pin','w-5 h-5 text-[#FF8A00]')"></span></div>
+<div class="flex-1 min-w-0">
+<div class="text-[15px] font-bold truncate" style="color:#111">{{ s.name }}</div>
+<div class="text-[12px] mt-1 truncate" style="color:#999">{{ s.addr }}</div>
+</div>
+<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
+</div>
+<div class="flex items-center gap-2 mt-3 pt-2.5" style="border-top:1px solid #F0F0F0">
+<span class="text-[11px]" style="color:#999">所属门店</span>
+<span class="text-[12px] font-medium" :style="{color:storeOfStation(s.id)?'#2B3F5F':'#BBB'}">{{ storeOfStation(s.id)?storeOfStation(s.id).name:'未关联' }}</span>
+<div class="flex-1"></div>
+<span class="text-[11px]" style="color:#999">绑定柜 {{ cabsOfStation(s.id).length }} 台</span>
+</div>
+</div>
+</div>
+</page>
+<page :open="mPage==='stationDetail'" :z="600" oid="mstation-detail-page">
+<nav-bar :title="curStation?curStation.name:'站点详情'" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll">
+<empty-state v-if="!curStation" icon="map-pin" text="站点不存在" sub="该站点可能已被移除" root-class="flex flex-col items-center justify-center py-16" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
+<template v-if="curStation">
+<div class="bg-white rounded-2xl px-4 pt-4 pb-1 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center gap-3 pb-4" style="border-bottom:1px solid #F0F0F0">
+<div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#FFF4E6,#FFE9CC)"><span v-html="luci('map-pin','w-5 h-5 text-[#FF8A00]')"></span></div>
+<div class="flex-1 min-w-0"><div class="text-[16px] font-bold truncate" style="color:#111">{{ curStation.name }}</div><div class="text-[12px] mt-1 truncate" style="color:#999">{{ curStation.addr }}</div></div>
+</div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">站点编号</span><span class="text-[13px] font-medium" style="color:#111">{{ curStation.id }}</span></div>
+<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">所属门店</span><span class="text-[13px] font-medium" :style="{color:storeOfStation(curStation.id)?'#2B3F5F':'#BBB'}">{{ storeOfStation(curStation.id)?storeOfStation(curStation.id).name:'未关联门店' }}</span></div>
+<div class="flex items-center justify-between py-3"><span class="text-[13px]" style="color:#999">绑定换电柜</span><span class="text-[13px] font-semibold" style="color:#2B3F5F">{{ cabsOfStation(curStation.id).length }} 台</span></div>
+</div>
+<div class="bg-white rounded-2xl px-4 pt-4 pb-2" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[13px] font-semibold" style="color:#111">绑定换电柜</span>
+<span data-cp @click="openBindCab(curStation.id)" class="text-[12px] font-medium cursor-pointer" style="color:#2F6FEB" data-od-id="station-bind-entry">管理绑定</span>
+</div>
+<empty-state v-if="!cabsOfStation(curStation.id).length" icon="box" text="暂未绑定换电柜" sub="点击「管理绑定」为该站点绑定换电柜" root-class="flex flex-col items-center justify-center py-8" circle-class="w-11 h-11 rounded-full flex items-center justify-center mb-3 bg-[#F0F0F0]" icon-class="w-5 h-5 text-[#BBB]" text-class="text-[13px] font-semibold text-[#333]" sub-class="text-[11px] text-[#999] mt-1"></empty-state>
+<div v-for="(c,ci) in cabsOfStation(curStation.id)" :key="c.no" data-cp @click="openCabDetail(c.no)" class="flex items-center gap-3 py-3 cursor-pointer active:opacity-70" :style="ci?'border-top:1px solid #F0F0F0':''" :data-od-id="'station-cab-'+c.no">
+<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:#EEF1F8"><span v-html="luci('box','w-4 h-4 text-[#2B3F5F]')"></span></div>
+<div class="flex-1 min-w-0">
+<div class="text-[13px] font-semibold" style="color:#111">{{ c.no }} 号柜</div>
+<div class="text-[11px] mt-0.5 truncate" style="color:#999">{{ c.model }} · 电池 {{ battCountOf(c) }} / {{ c.doors }}</div>
+</div>
+<span class="flex items-center gap-1.5 shrink-0"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.biz(c))}"></span><span class="text-[11px]" :style="{color:dotColor(CAB_DOT.biz(c))}">{{ CAB_TEXT.biz(c) }}</span></span>
+<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
+</div>
+</div>
+</template>
+</div>
+<div v-if="curStation" class="absolute left-0 right-0 bottom-0 px-5 pb-6 pt-3 flex gap-2.5" style="background:rgba(255,255,255,.96);border-top:1px solid #F0F0F0;backdrop-filter:blur(10px)">
+<div data-cp @click="openStationForm(curStation.id)" class="flex-1 h-12 rounded-full flex items-center justify-center text-[15px] font-semibold cursor-pointer active:opacity-80" style="background:#EEF1F8;color:#2B3F5F" data-od-id="station-edit-btn">编辑站点</div>
+<div data-cp @click="openBindCab(curStation.id)" class="flex-1 h-12 rounded-full flex items-center justify-center text-[15px] font-semibold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="station-bind-btn">绑定换电柜</div>
+</div>
+</page>
+<bottom-sheet :open="showCabFilter" title="全部筛选" :mask-z="600" max-h="65%" oid="cab-filter-sheet" panel-oid="cab-filter-panel" @close="closeCabFilter()">
+<div class="sheet-search">
+<span v-html="luci('search','w-4 h-4 text-[#999]')"></span>
+<input v-model="cabSiteQ" type="text" placeholder="搜索站点" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]" data-od-id="cab-site-search">
+</div>
+<div class="flex-1 overflow-y-auto px-5 pb-3">
+<div class="mb-5">
+<div class="text-[14px] font-semibold mb-2">站点</div>
+<div class="flex flex-wrap gap-2">
+<div data-cp @click="cabDraft.stationId=''" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="!cabDraft.stationId?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">全部站点</div>
+<div v-for="s in cabSiteOptions" :key="s.id" data-cp @click="cabDraftSet('stationId',s.id)" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="cabDraft.stationId===s.id?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">{{ s.name }}</div>
+</div>
+<div v-if="!cabSiteOptions.length" class="text-[13px] mt-2" style="color:#999">没有匹配的站点</div>
+</div>
+<div class="mb-5">
+<div class="text-[14px] font-semibold mb-2">联网状态</div>
+<div class="flex flex-wrap gap-2">
+<div data-cp @click="cabDraft.netState=''" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="!cabDraft.netState?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">全部</div>
+<div data-cp @click="cabDraftSet('netState','on')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="cabDraft.netState==='on'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">在线</div>
+<div data-cp @click="cabDraftSet('netState','off')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="cabDraft.netState==='off'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">离线</div>
+</div>
+</div>
+<div class="mb-5">
+<div class="text-[14px] font-semibold mb-2">故障状态</div>
+<div class="flex flex-wrap gap-2">
+<div data-cp @click="cabDraft.fault=''" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="!cabDraft.fault?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">全部</div>
+<div data-cp @click="cabDraftSet('fault','no')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="cabDraft.fault==='no'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">无故障</div>
+<div data-cp @click="cabDraftSet('fault','yes')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="cabDraft.fault==='yes'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">有故障</div>
+</div>
+</div>
+<div class="mb-5">
+<div class="text-[14px] font-semibold mb-2">告警状态</div>
+<div class="flex flex-wrap gap-2">
+<div data-cp @click="cabDraft.alarm=''" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="!cabDraft.alarm?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">全部</div>
+<div data-cp @click="cabDraftSet('alarm','no')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="cabDraft.alarm==='no'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">无告警</div>
+<div data-cp @click="cabDraftSet('alarm','yes')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="cabDraft.alarm==='yes'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">有告警</div>
+</div>
+</div>
+<div class="mb-4">
+<div class="text-[14px] font-semibold mb-2">启用状态</div>
+<div class="flex flex-wrap gap-2">
+<div data-cp @click="cabDraft.enabled=''" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="!cabDraft.enabled?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">全部</div>
+<div data-cp @click="cabDraftSet('enabled','yes')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="cabDraft.enabled==='yes'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">已启用</div>
+<div data-cp @click="cabDraftSet('enabled','no')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="cabDraft.enabled==='no'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">未启用</div>
+</div>
+</div>
+</div>
+<div class="flex gap-3 px-5 shrink-0">
+<button data-cp @click="cabFilterReset()" class="flex-1 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer transition-colors" style="background:#fff;color:#111;border:1px solid #E5E5E5;box-shadow:none" data-od-id="cab-filter-reset">重置</button>
+<button data-cp @click="cabFilterConfirm()" class="flex-1 py-3.5 rounded-xl text-white text-[15px] font-semibold cursor-pointer border-none transition-colors" style="background:var(--accent)" data-od-id="cab-filter-confirm">确定</button>
+</div>
+</bottom-sheet>
+<bottom-sheet :open="showBattFilter" title="全部筛选" :mask-z="600" max-h="65%" oid="batt-filter-sheet" panel-oid="batt-filter-panel" @close="closeBattFilter()">
+<div class="flex-1 overflow-y-auto px-5 pb-3">
+<div class="mb-5">
+<div class="text-[14px] font-semibold mb-2">电池状态</div>
+<div class="flex flex-wrap gap-2">
+<div data-cp @click="battDraft.battNet=''" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="!battDraft.battNet?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">全部</div>
+<div data-cp @click="battDraftSet('battNet','on')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.battNet==='on'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">在线</div>
+<div data-cp @click="battDraftSet('battNet','off')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.battNet==='off'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">离线</div>
+</div>
+</div>
+<div class="mb-4">
+<div class="text-[14px] font-semibold mb-2">租用状态</div>
+<div class="flex flex-wrap gap-2">
+<div data-cp @click="battDraft.rentState=''" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="!battDraft.rentState?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">全部</div>
+<div data-cp @click="battDraftSet('rentState','unrented')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.rentState==='unrented'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">未租用</div>
+<div data-cp @click="battDraftSet('rentState','rented')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.rentState==='rented'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">已租用</div>
+</div>
+</div>
+</div>
+<div class="flex gap-3 px-5 shrink-0">
+<button data-cp @click="battFilterReset()" class="flex-1 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer transition-colors" style="background:#fff;color:#111;border:1px solid #E5E5E5;box-shadow:none" data-od-id="batt-filter-reset">重置</button>
+<button data-cp @click="battFilterConfirm()" class="flex-1 py-3.5 rounded-xl text-white text-[15px] font-semibold cursor-pointer border-none transition-colors" style="background:var(--accent)" data-od-id="batt-filter-confirm">确定</button>
+</div>
+</bottom-sheet>
+<confirm-dialog :open="!!mConfirm" :z="1100" oid="m-confirm-dialog" :title="mConfirm?mConfirm.title:''" :desc="mConfirm?mConfirm.desc:''" :loading="mConfirmLoading" :confirm-bg="'linear-gradient(135deg,#33456B,#22304E)'" @close="mConfirmClose()" @confirm="mConfirmOk()"></confirm-dialog>
+<bottom-sheet :open="showStoreForm" type="B" title="门店信息" oid="store-form-sheet" panel-oid="store-form-panel" @close="showStoreForm=false" @confirm="saveStore()">
+<div class="px-5 pb-5">
+<div class="text-[13px] font-semibold mb-2" style="color:#111">门店名称</div>
+<input v-model="storeForm.name" type="text" placeholder="请输入门店名称" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
+<div class="text-[13px] font-semibold mb-2" style="color:#111">门店地址</div>
+<input v-model="storeForm.addr" type="text" placeholder="请输入门店地址" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
+<div class="text-[13px] font-semibold mb-2" style="color:#111">联系电话</div>
+<input v-model="storeForm.phone" type="text" placeholder="请输入联系电话" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
+<div class="text-[13px] font-semibold mb-2" style="color:#111">营业时间</div>
+<input v-model="storeForm.hours" type="text" placeholder="如 08:00 - 20:00" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
+<div class="text-[13px] font-semibold mb-1" style="color:#111">关联站点</div>
+<div class="text-[11px] mb-2.5" style="color:#999">门店与站点 1:1，已被其他门店关联的站点不可选</div>
+<div class="flex flex-wrap gap-2">
+<div data-cp @click="storeForm.stationId=''" class="h-8 px-3 rounded-full text-[12px] font-medium flex items-center cursor-pointer" :style="!storeForm.stationId?'background:#2B3F5F;color:#fff':'background:#F6F7F9;color:#666;border:1px solid #E5E5E5'">不关联</div>
+<div v-for="o in storeStationOptions(storeForm.id)" :key="o.value" data-cp @click="pickStoreStation(o.value)" class="h-8 px-3 rounded-full text-[12px] font-medium flex items-center cursor-pointer" :style="storeForm.stationId===o.value?'background:#2B3F5F;color:#fff':(o.disabled?'background:#F6F7F9;color:#BBB;border:1px dashed #E5E5E5':'background:#F6F7F9;color:#666;border:1px solid #E5E5E5')" :data-od-id="'store-station-'+o.value">{{ o.label }}</div>
+</div>
+<div v-if="storeFormErr" class="text-[12px] mt-3" style="color:#DC2626">{{ storeFormErr }}</div>
+</div>
+</bottom-sheet>
+<bottom-sheet :open="showStationForm" type="B" title="站点信息" oid="station-form-sheet" panel-oid="station-form-panel" @close="showStationForm=false" @confirm="saveStation()">
+<div class="px-5 pb-5">
+<div class="text-[13px] font-semibold mb-2" style="color:#111">站点名称</div>
+<input v-model="stationForm.name" type="text" placeholder="请输入站点名称" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
+<div class="text-[13px] font-semibold mb-2" style="color:#111">站点地址</div>
+<input v-model="stationForm.addr" type="text" placeholder="请输入站点地址" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
+<div v-if="stationFormErr" class="text-[12px]" style="color:#DC2626">{{ stationFormErr }}</div>
+</div>
+</bottom-sheet>
+<bottom-sheet :open="showBindCab" type="B" title="绑定换电柜" oid="bind-cab-sheet" panel-oid="bind-cab-panel" @close="showBindCab=false" @confirm="showBindCab=false">
+<div class="px-5 pb-5">
+<div class="text-[12px] mb-3.5" style="color:#999">当前站点：{{ stationNameOf(bindStationId) }} · 点击切换绑定 / 解绑</div>
+<div v-for="c in cabinets" :key="c.no" data-cp @click="cabBindStation(c.no)" class="flex items-center gap-3 px-3.5 py-3 rounded-xl mb-2 cursor-pointer transition-colors" :style="c.stationId===bindStationId?'background:#EEF1F8;border:1px solid #C9D4E6':'background:#fff;border:1px solid #E5E5E5'" :data-od-id="'bind-cab-'+c.no">
+<div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="c.stationId===bindStationId?'background:#2B3F5F':'background:#F6F7F9'"><span v-html="luci('box','w-4 h-4 '+(c.stationId===bindStationId?'text-white':'text-[#666]'))"></span></div>
+<div class="flex-1 min-w-0">
+<div class="text-[13px] font-semibold" style="color:#111">{{ c.no }} 号柜</div>
+<div class="text-[11px] mt-0.5 truncate" style="color:#999">{{ c.stationId?stationNameOf(c.stationId):'未绑定站点' }} · 电池 {{ battCountOf(c) }} / {{ c.doors }}</div>
+</div>
+<span v-if="c.stationId===bindStationId" v-html="luci('check','w-4 h-4 text-[#2B3F5F]')"></span>
+</div>
+</div>
+</bottom-sheet>
 </div><tab-bar :show="!settingsOpen" active-color="#2B3F5F" :items="[{key:'home',icon:'bar-chart-3',label:'首页',activeWhen:tab==='home'},{key:'cab',icon:'box',label:'换电柜',activeWhen:tab==='cab'},{key:'batt',icon:'battery-charging',label:'电池',activeWhen:tab==='batt'},{key:'mine',icon:'user',label:'我的',activeWhen:tab==='mine'}]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
 <transition name="fd"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="login-page">
 <div v-show="loginView==='main'" class="flex-1 flex flex-col min-h-0 bg-[#F6F7F9]">
@@ -2037,6 +2671,46 @@ body.host-single-m #root-user{display:none}
 <confirm-dialog :open="profileMod" :z="800" oid="profile-modal" :title="profileMdT" :desc="profileMdD" :loading="profileModLoading" @close="profileMod=null" @confirm="profileMdOk"></confirm-dialog>
 <confirm-dialog :open="showVersionCheck" :z="900" oid="version-check-modal" :mask-close="false" :title="hasNewVersion?'发现新版本':'已是最新版本'" :cancel-text="hasNewVersion?(protoForceUpdate==='force'?'退出应用':'稍后提醒'):''" :confirm-text="hasNewVersion?(updating?'下载中…':'立即更新'):'知道了'" confirm-bg="var(--accent)" @close="hasNewVersion&&protoForceUpdate==='force'?exitApp():(showVersionCheck=false)" @confirm="hasNewVersion?goUpdate():(showVersionCheck=false)"><template v-if="hasNewVersion"><div class="text-[13px] text-[#666] text-center">{{ '最新版本 ' + (latestVersion) }}</div><div class="bg-[#F6F7F9] rounded-lg px-4 py-3 text-[13px] text-[#555] leading-relaxed">{{ updateDesc }}</div></template><template v-else><div class="w-14 h-14 rounded-full flex items-center justify-center mb-3" style="background:#EBF1FD"><span v-html="luci('check','w-7 h-7 text-[var(--accent)]')"></span></div><div class="text-[13px] text-[#666]">{{ latestVersion }}</div></template></confirm-dialog>
 </div></div><div class="demo-ops-stack"><div class="demo-ops is-active"><div class="demo-ops-title">原型操作</div>
+<div class="demo-ops-section" data-od-id="demo-business-jump">
+<div class="demo-ops-label">页面跳转</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="setTab('home')" :class="tab==='home'?'is-on':''">首页</div>
+<div class="demo-ops-chip" data-cp @click="setTab('cab')" :class="tab==='cab'?'is-on':''">换电柜</div>
+<div class="demo-ops-chip" data-cp @click="setTab('batt')" :class="tab==='batt'?'is-on':''">电池</div>
+<div class="demo-ops-chip" data-cp @click="setTab('mine')" :class="tab==='mine'?'is-on':''">我的</div>
+</div>
+<div class="demo-ops-chips" style="margin-top:6px">
+<div class="demo-ops-chip" data-cp @click="openDashboard()">数据看板</div>
+<div class="demo-ops-chip" data-cp @click="openStoreList()">门店管理</div>
+<div class="demo-ops-chip" data-cp @click="openStationList()">站点管理</div>
+</div>
+<div class="demo-ops-chips" style="margin-top:6px">
+<div class="demo-ops-chip" data-cp @click="openCabFilter()">柜筛选弹窗</div>
+<div class="demo-ops-chip" data-cp @click="openBattFilter()">电池筛选弹窗</div>
+</div>
+</div>
+<div class="demo-ops-section" data-od-id="demo-cab-ops">
+<div class="demo-ops-label">机柜远程操作</div>
+<div class="demo-ops-row"><span class="text-[12px]">目标机柜</span><div class="demo-ops-chips">
+<div v-for="c in cabinets" :key="c.no" class="demo-ops-chip" data-cp @click="demoCabNo=c.no" :class="demoCabNo===c.no?'is-on':''">{{ c.no }}</div>
+</div></div>
+<div class="demo-ops-row"><span class="text-[12px]">操作</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="cabAskBiz(demoCabNo)">上/下线</div>
+<div class="demo-ops-chip" data-cp @click="cabAskFault(demoCabNo)">故障</div>
+<div class="demo-ops-chip" data-cp @click="cabAskAlarm(demoCabNo)">告警</div>
+<div class="demo-ops-chip" data-cp @click="cabAskEnabled(demoCabNo)">启用</div>
+</div></div>
+</div>
+<div class="demo-ops-section" data-od-id="demo-batt-ops">
+<div class="demo-ops-label">电池借还流转</div>
+<div class="demo-ops-row"><span class="text-[12px]">目标电池</span><div class="demo-ops-chips">
+<div v-for="b in batteries.slice(0,6)" :key="b.no" class="demo-ops-chip" data-cp @click="demoBattNo=b.no" :class="demoBattNo===b.no?'is-on':''">{{ b.no.slice(-4) }}</div>
+</div></div>
+<div class="demo-ops-row"><span class="text-[12px]">流转</span><div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="borrowBattery(demoBattNo)">借出</div>
+<div class="demo-ops-chip" data-cp @click="returnBattery(demoBattNo)">归还</div>
+</div></div>
+</div>
 <div class="demo-ops-section" data-od-id="demo-login-state">
 <div class="demo-ops-label">登录状态</div>
 <div class="demo-ops-chips">
@@ -3360,6 +4034,20 @@ var _ma=Vue.createApp({
     var showCabFilter=Vue.ref(false),showBattFilter=Vue.ref(false);
     var showStoreForm=Vue.ref(false),showStationForm=Vue.ref(false),showBindCab=Vue.ref(false);
     var mConfirm=Vue.ref(null),mConfirmLoading=Vue.ref(false);
+    var storeQ=Vue.ref(''),stationQ=Vue.ref('');
+    /* ── 列表顶部搜索（与租车车辆/电池列表同款：行内搜索胶囊，实时过滤） ── */
+    var cabQ=Vue.ref(''),battQ=Vue.ref('');
+    var cabPills=[{v:'',l:'全部'},{v:'online',l:'上线'},{v:'offline',l:'下线'}];
+    var battPills=[{v:'',l:'全部'},{v:'inCab',l:'柜内'},{v:'outCab',l:'柜外'}];
+    var cabPillCnt=Vue.computed(function(){var a=cabinets.value;return {'':a.length,online:a.filter(function(c){return c.bizOnline}).length,offline:a.filter(function(c){return !c.bizOnline}).length}});
+    var battPillCnt=Vue.computed(function(){var a=batteries.value;return {'':a.length,inCab:a.filter(function(b){return b.cabState==='inCab'}).length,outCab:a.filter(function(b){return b.cabState==='outCab'}).length}});
+    /* 筛选弹窗内搜索（租车 .sheet-search 形态）：机柜筛选的「站点」选项可按站点名过滤 */
+    var cabSiteQ=Vue.ref('');
+    var cabSiteOptions=Vue.computed(function(){var q=(cabSiteQ.value||'').trim().toLowerCase();return q?stations.value.filter(function(s){return (s.name+s.addr).toLowerCase().indexOf(q)!==-1}):stations.value});
+    /* demo-ops 演示目标（演示态，不入导航快照） */
+    var demoCabNo=Vue.ref(cabinets.value.length?cabinets.value[0].no:''),demoBattNo=Vue.ref(batteries.value.length?batteries.value[0].no:'');
+    var storeView=Vue.computed(function(){var q=(storeQ.value||'').trim();if(!q)return stores.value;return stores.value.filter(function(s){return (s.name+s.addr+(s.phone||'')).indexOf(q)!==-1})});
+    var stationView=Vue.computed(function(){var q=(stationQ.value||'').trim();if(!q)return stations.value;return stations.value.filter(function(s){return (s.name+s.addr).indexOf(q)!==-1})});
 
     /* ── 筛选（快捷 chips 与筛选弹窗共享同一份；弹窗内改 draft，确认后写回） ── */
     var CAB_EMPTY={bizState:'',stationId:'',netState:'',fault:'',alarm:'',enabled:''};
@@ -3416,7 +4104,9 @@ var _ma=Vue.createApp({
 
     /* ── 机柜列表筛选（快捷=运营状态；弹窗=站点/联网/故障/告警/启用） ── */
     var cabList=Vue.computed(function(){
+      var q=(cabQ.value||'').trim().toLowerCase();
       return cabinets.value.filter(function(c){
+        if(q&&(c.no+stationNameOf(c.stationId)+(c.model||'')).toLowerCase().indexOf(q)===-1)return false;
         if(cabFilter.bizState==='online'&&!c.bizOnline)return false;
         if(cabFilter.bizState==='offline'&&c.bizOnline)return false;
         if(cabFilter.stationId&&c.stationId!==cabFilter.stationId)return false;
@@ -3436,7 +4126,9 @@ var _ma=Vue.createApp({
 
     /* ── 电池列表筛选（快捷=在柜状态；弹窗=电池状态/租用状态） ── */
     var battList=Vue.computed(function(){
+      var q=(battQ.value||'').trim().toLowerCase();
       return batteries.value.filter(function(b){
+        if(q&&(b.no+(b.at||'')+(b.rentState||'')).toLowerCase().indexOf(q)===-1)return false;
         if(battFilter.cabState&&b.cabState!==battFilter.cabState)return false;
         if(battFilter.battNet==='on'&&!b.netOnline)return false;
         if(battFilter.battNet==='off'&&b.netOnline)return false;
@@ -3506,7 +4198,7 @@ var _ma=Vue.createApp({
     var curBatt=Vue.computed(function(){return battOf(mBattNo.value)});
 
     /* ── 机柜筛选弹窗 ── */
-    function openCabFilter(){Object.assign(cabDraft,cabFilter);showCabFilter.value=true}
+    function openCabFilter(){Object.assign(cabDraft,cabFilter);cabSiteQ.value='';showCabFilter.value=true}
     function closeCabFilter(){showCabFilter.value=false}
     function cabDraftSet(k,v){cabDraft[k]=(cabDraft[k]===v?'':v)}
     function cabFilterReset(){Object.assign(cabDraft,CAB_EMPTY)}
@@ -3569,17 +4261,21 @@ var _ma=Vue.createApp({
     function storeStationOptions(storeId){return stations.value.map(function(s){return {value:s.id,label:s.name,disabled:stationTaken(s.id,storeId)}})}
 
     /* ── Tab 切换：清栈并复位二级页与弹窗 ── */
-    function setTab(t){tab.value=t;settingsOpen.value=false;mPage.value='';showCabFilter.value=false;showBattFilter.value=false;showStoreForm.value=false;showStationForm.value=false;showBindCab.value=false;auth.navReset()}
+    function setTab(t){tab.value=t;settingsOpen.value=false;mPage.value='';storeQ.value='';stationQ.value='';cabQ.value='';battQ.value='';showCabFilter.value=false;showBattFilter.value=false;showStoreForm.value=false;showStationForm.value=false;showBindCab.value=false;auth.navReset()}
 
     /* 页面级 ref 注册进导航快照（数据类 ref 不注册） */
-    auth.addNavRefs([tab,mPage,mStoreId,mStationId,mCabNo,mBattNo,showCabFilter,showBattFilter,showStoreForm,showStationForm,showBindCab,mConfirm]);
-    return Object.assign({
+    auth.addNavRefs([tab,mPage,mStoreId,mStationId,mCabNo,mBattNo,showCabFilter,showBattFilter,showStoreForm,showStationForm,showBindCab,mConfirm,storeQ,stationQ,cabQ,battQ]);
+    /* 注意：auth 与 sideSetup 的键先铺底，业务键最后覆盖——
+       共享内核里已有 curStore（用户端地图选中门店），若业务键在前会被其空值覆盖，
+       导致门店详情页 curStore 恒为 ''（页面永远显示「门店不存在」）。 */
+    return Object.assign({},auth,sideSetup('换电商户端',toastBus),{
       tab,setTab,settingsOpen,toasts:toastBus.list,toast,
       stores,stations,cabinets,batteries,
       mPage,mStoreId,mStationId,mCabNo,mBattNo,showCabFilter,showBattFilter,showStoreForm,showStationForm,showBindCab,mConfirm,mConfirmLoading,
       cabFilter,battFilter,cabDraft,battDraft,cabFilterCount,cabFilterActive,battFilterCount,battFilterActive,
-      cabList,battList,curStore,curStation,curCab,curBatt,
-      stationNameOf,storeNameOf,storeOfStation,cabsOfStation,stationsOfStore,battCountOf,alarmsOfCab,
+      cabList,battList,curStore,curStation,curCab,curBatt,storeQ,stationQ,storeView,stationView,demoCabNo,demoBattNo,
+      cabQ,battQ,cabPills,battPills,cabPillCnt,battPillCnt,cabSiteQ,cabSiteOptions,
+      stationNameOf,storeNameOf,storeOfStation,cabsOfStation,stationsOfStore,battCountOf,alarmsOfCab,cabOf,battOf,slotOf,freeSlotOf,
       openPage,closePage,openDashboard,openStoreList,openStationList,openStoreDetail,openStationDetail,openCabDetail,openBattDetail,
       openCabFilter,closeCabFilter,cabDraftSet,cabFilterReset,cabFilterConfirm,setCabQuick,
       openBattFilter,closeBattFilter,battDraftSet,battFilterReset,battFilterConfirm,setBattQuick,
@@ -3588,7 +4284,7 @@ var _ma=Vue.createApp({
       storeForm,storeFormErr,stationForm,stationFormErr,bindStationId,openStoreForm,pickStoreStation,saveStore,openStationForm,saveStation,openBindCab,cabBindStation,storeStationOptions,
       cabOnlineRate,inCabCount,rentedCount,todaySwapCount,todayRevenue,alarmList,cabStats,
       dashTrend,dashTrendMax,dashCabDist,dashBattDist,donut,dotColor,socColor,CAB_TEXT,CAB_DOT,BATT_TEXT,BATT_DOT
-    },auth,sideSetup('换电商户端',toastBus))
+    })
   }})
 registerSheetKit(_ma);_ma.mount(document.getElementById('root-merchant'));
 
