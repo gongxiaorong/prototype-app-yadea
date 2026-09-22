@@ -132,7 +132,14 @@
       "settingsGeneral": "Pengaturan Umum",
       "settingsVersion": "Versi Saat Ini",
       "total": "Total",
-      "verifyByEmail": "Verifikasi Email"
+      "verifyByEmail": "Verifikasi Email",
+      "editNickname": "Ubah Nama Panggilan",
+      "editAccount": "Ubah Akun",
+      "nicknamePlaceholder": "Masukkan nama panggilan",
+      "nicknameHint": "Panjang 2–20 karakter; huruf, angka, dan simbol diperbolehkan",
+      "nicknameSaved": "Nama panggilan disimpan",
+      "accountFormatHint": "Harus dimulai dengan huruf; hanya huruf, angka, dan garis bawah; 4–20 karakter",
+      "confirmDeactivateDesc": "Yakin ingin menonaktifkan akun ini? Semua data akan dihapus dan tidak dapat dipulihkan."
     },
     "tab": {
       "home": "Beranda",
@@ -313,9 +320,22 @@
     "promo": {
       "slogan": "Naik Yadea lebih hemat",
       "safety": "Keselamatan Anda adalah prioritas utama kami!",
-      "features": "Lokasi · Kunci jarak jauh · Klakson"
+      "features": "Lokasi · Kunci jarak jauh · Klakson",
+      "bannerBattery": "Baterai Litium Graphene TTFAR · Jarak Tempuh 100 km",
+      "bannerWarranty": "Garansi 5 Tahun · Berkuda Tanpa Khawatir",
+      "bannerPromo": "Garansi 5 Tahun · Event 17–19 Juli",
+      "bannerSafety": "Berkualitas · Aman & Andal",
+      "bannerDeal": "DE2 Edisi Warna · Hanya Rp 3.499"
     },
-    "createTime": "Waktu Dibuat"
+    "createTime": "Waktu Dibuat",
+    "systemSwitch": {
+      "title": "Tukar Sistem",
+      "rent": "Sistem Sewa",
+      "swap": "Sistem Tukar Baterai",
+      "charge": "Sistem Pengisian Daya",
+      "enter": "Masuk",
+      "selectToast": "Silakan pilih sistem"
+    }
   },
   "user": {
     "orders": {
@@ -473,7 +493,12 @@
       "vehicleName": "Nama Kendaraan",
       "distanceInfo": "{m} m dari Anda",
       "goHome": "Beranda",
-      "confirmBindBattery": "Konfirmasi mengikat baterai ini ke akun Anda?"
+      "confirmBindBattery": "Konfirmasi mengikat baterai ini ke akun Anda?",
+      "powerOn": "Nyalakan",
+      "powerOff": "Matikan",
+      "powerOnToast": "Sudah menyala",
+      "powerOffToast": "Sudah mati",
+      "unnamedVehicle": "Kendaraan tanpa nama"
     },
     "battery": {
       "dischargeOn": "Izinkan Pelepasan",
@@ -521,14 +546,18 @@
       "photoLimitExceeded": "Jumlah foto melebihi batas",
       "photoMaxTwo": "Maksimal 2 foto",
       "licenseShort": "SIM",
-      "detail": "Detail KYC"
+      "detail": "Detail KYC",
+      "photoSelected": "{source}: 1 gambar dipilih",
+      "photoReplaced": "{source}: gambar saat ini diganti"
     },
     "plan": {
       "selectPlan": "Pilih Paket",
       "rentNow": "Sewa Sekarang",
       "empty": "Tidak ada paket",
       "noService": "Tidak ada layanan tersedia untuk jenis sewa dan paket ini",
-      "rentalType": "Jenis Sewa"
+      "rentalType": "Jenis Sewa",
+      "renewalType": "Jenis Perpanjangan",
+      "renewalPlan": "Paket Perpanjangan"
     },
     "wallet": {
       "topupCustom": "Jumlah Kustom",
@@ -556,7 +585,11 @@
       "navToStore": "Navigasi ke Toko",
       "empty": "Tidak ada toko",
       "businessHours": "Jam operasional {hours}",
-      "selectStore": "Pilih Toko"
+      "selectStore": "Pilih Toko",
+      "navTitle": "Navigasi",
+      "mapAmap": "Amap",
+      "mapBaidu": "Baidu Maps",
+      "mapGoogle": "Google Maps"
     },
     "tab": {
       "vehicles": "Kendaraan"
@@ -600,7 +633,8 @@
       "needOrderStatus": "Pilih minimal satu status pesanan yang boleh diperpanjang",
       "needOrderType": "Pilih minimal satu tipe pesanan untuk perpanjangan otomatis",
       "cancelSuccess": "Perpanjangan dibatalkan",
-      "beforeDueAuto": "Perpanjang otomatis {n} hari sebelum jatuh tempo"
+      "beforeDueAuto": "Perpanjang otomatis {n} hari sebelum jatuh tempo",
+      "realNameTip": "Saat diaktifkan, pengguna harus memilih informasi identitas terverifikasi saat checkout, atau pesanan tidak dapat dikirim."
     },
     "profile": {
       "modelSort": "Urutan",
@@ -758,7 +792,11 @@
       "searchPosition": "Cari nama posisi",
       "parentPosition": "Posisi Atasan",
       "configPreSuffix": "hari, status berubah ke Menunggu Pengembalian",
-      "unbindUser": "Lepas ikatan pengguna"
+      "unbindUser": "Lepas ikatan pengguna",
+      "unbindVehicleDesc": "Lepas ikatan kendaraan ini dari pengguna saat ini? Kendaraan akan menjadi idle dan dapat diikat kembali.",
+      "unbindBatteryDesc": "Lepas ikatan baterai ini dari pengguna saat ini? Baterai akan menjadi idle dan dapat diikat kembali.",
+      "vehicleUnbound": "Kendaraan telah dilepas ikatannya",
+      "batteryUnbound": "Baterai telah dilepas ikatannya"
     },
     "home": {
       "view": "Ikhtisar",
@@ -880,7 +918,8 @@
       "batterySelectModel": "Pilih Model Baterai",
       "batteryNoData": "Tidak ada baterai",
       "batteryNoPosition": "Belum ada lokasi baterai",
-      "unbindSuccess": "Berhasil dilepas"
+      "unbindSuccess": "Berhasil dilepas",
+      "confirmUnbindVehicle": "Lepas ikatan kendaraan ini dari pengguna? Kendaraan akan menjadi idle dan dapat diikat ke pengguna lagi."
     },
     "alert": {
       "timelineReopened": "Dibuka kembali ke menunggu",
@@ -1124,7 +1163,8 @@
       "replace": "Ganti Baterai",
       "dischargeForbidden": "Pengosongan dilarang",
       "replaced": "Baterai diganti",
-      "cabinet": "Kabinet Tukar Baterai"
+      "cabinet": "Kabinet Tukar Baterai",
+      "confirmUnbindBattery": "Lepas ikatan baterai ini dari pengguna? Baterai akan menjadi idle dan dapat diikat ke pengguna lagi."
     },
     "order": {
       "refund": {

@@ -132,7 +132,14 @@
       "settingsGeneral": "General Settings",
       "settingsVersion": "Current Version",
       "total": "Total",
-      "verifyByEmail": "Email Verification"
+      "verifyByEmail": "Email Verification",
+      "editNickname": "Edit Nickname",
+      "editAccount": "Edit Account",
+      "nicknamePlaceholder": "Enter a nickname",
+      "nicknameHint": "Length 2–20; Chinese, letters, numbers and symbols are all allowed",
+      "nicknameSaved": "Nickname saved",
+      "accountFormatHint": "Must start with a letter; letters, numbers and underscores only; 4–20 characters",
+      "confirmDeactivateDesc": "Are you sure you want to deactivate this account? All data will be erased and cannot be recovered."
     },
     "tab": {
       "home": "Home",
@@ -313,9 +320,22 @@
     "promo": {
       "slogan": "Ride Yadea for less",
       "safety": "Your safety is our top priority!",
-      "features": "Locate · Remote lock · Horn"
+      "features": "Locate · Remote lock · Horn",
+      "bannerBattery": "TTFAR Graphene Lithium Battery · 100 km Range",
+      "bannerWarranty": "5-Year Warranty · Worry-Free Riding",
+      "bannerPromo": "5-Year Warranty · Event Jul 17–19",
+      "bannerSafety": "Quality Riding · Safe & Reliable",
+      "bannerDeal": "DE2 Color Edition · Only Rp 3,499"
     },
-    "createTime": "Created At"
+    "createTime": "Created At",
+    "systemSwitch": {
+      "title": "Switch System",
+      "rent": "Rental System",
+      "swap": "Battery-Swap System",
+      "charge": "Charging System",
+      "enter": "Enter",
+      "selectToast": "Please select a system"
+    }
   },
   "user": {
     "orders": {
@@ -473,7 +493,12 @@
       "vehicleName": "Vehicle Name",
       "distanceInfo": "{m} m from you",
       "goHome": "Home",
-      "confirmBindBattery": "Confirm binding this battery to your account?"
+      "confirmBindBattery": "Confirm binding this battery to your account?",
+      "powerOn": "Start",
+      "powerOff": "Power Off",
+      "powerOnToast": "Started",
+      "powerOffToast": "Powered off",
+      "unnamedVehicle": "Unnamed vehicle"
     },
     "battery": {
       "dischargeOn": "Allow Discharge",
@@ -521,14 +546,18 @@
       "photoLimitExceeded": "Photo count exceeds the limit",
       "photoMaxTwo": "Up to 2 photos",
       "licenseShort": "License",
-      "detail": "KYC Details"
+      "detail": "KYC Details",
+      "photoSelected": "{source}: 1 image selected",
+      "photoReplaced": "{source}: current image replaced"
     },
     "plan": {
       "selectPlan": "Select Plan",
       "rentNow": "Rent Now",
       "empty": "No Plans",
       "noService": "No available service for this rental type and plan",
-      "rentalType": "Rental Type"
+      "rentalType": "Rental Type",
+      "renewalType": "Renewal Type",
+      "renewalPlan": "Renewal Plan"
     },
     "wallet": {
       "topupCustom": "Custom Amount",
@@ -556,7 +585,11 @@
       "navToStore": "Navigate to Store",
       "empty": "No Stores",
       "businessHours": "Business hours {hours}",
-      "selectStore": "Select Store"
+      "selectStore": "Select Store",
+      "navTitle": "Navigate",
+      "mapAmap": "Amap",
+      "mapBaidu": "Baidu Maps",
+      "mapGoogle": "Google Maps"
     },
     "tab": {
       "vehicles": "Vehicles"
@@ -600,7 +633,8 @@
       "needOrderStatus": "Select at least one order status allowed to renew",
       "needOrderType": "Select at least one order type for auto renewal",
       "cancelSuccess": "Renewal cancelled",
-      "beforeDueAuto": "Auto renew {n} days before due date"
+      "beforeDueAuto": "Auto renew {n} days before due date",
+      "realNameTip": "When enabled, users must select verified identity info at checkout, or the order cannot be submitted."
     },
     "profile": {
       "modelSort": "Sort",
@@ -758,7 +792,11 @@
       "searchPosition": "Search position name",
       "parentPosition": "Parent Position",
       "configPreSuffix": "day(s), status changes to Pending Return",
-      "unbindUser": "Unbind user"
+      "unbindUser": "Unbind user",
+      "unbindVehicleDesc": "Unbind this vehicle from the current user? The vehicle will become idle and can be bound again.",
+      "unbindBatteryDesc": "Unbind this battery from the current user? The battery will become idle and can be bound again.",
+      "vehicleUnbound": "Vehicle unbound",
+      "batteryUnbound": "Battery unbound"
     },
     "home": {
       "view": "Overview",
@@ -880,7 +918,8 @@
       "batterySelectModel": "Select Battery Model",
       "batteryNoData": "No Batteries",
       "batteryNoPosition": "No battery location",
-      "unbindSuccess": "Unbound successfully"
+      "unbindSuccess": "Unbound successfully",
+      "confirmUnbindVehicle": "Unbind this vehicle from the user? It will become idle and can be bound to a user again."
     },
     "alert": {
       "timelineReopened": "Reopened as Pending",
@@ -1124,7 +1163,8 @@
       "replace": "Replace Battery",
       "dischargeForbidden": "Discharge forbidden",
       "replaced": "Battery changed",
-      "cabinet": "Swap Cabinet"
+      "cabinet": "Swap Cabinet",
+      "confirmUnbindBattery": "Unbind this battery from the user? It will become idle and can be bound to a user again."
     },
     "order": {
       "refund": {

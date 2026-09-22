@@ -132,7 +132,14 @@
       "settingsGeneral": "通用設定",
       "settingsVersion": "當前版本",
       "total": "合計",
-      "verifyByEmail": "電郵驗證"
+      "verifyByEmail": "電郵驗證",
+      "editNickname": "修改暱稱",
+      "editAccount": "修改帳號",
+      "nicknamePlaceholder": "請輸入暱稱",
+      "nicknameHint": "支持輸入2-20個字符，不限中文、數字、字母、符號",
+      "nicknameSaved": "暱稱已儲存",
+      "accountFormatHint": "必須字母開頭，僅支持字母、數字、底線，長度4～20位",
+      "confirmDeactivateDesc": "確定要註銷當前帳號嗎？註銷後所有數據將被清除，且無法恢復。"
     },
     "tab": {
       "home": "首頁",
@@ -313,9 +320,22 @@
     "promo": {
       "slogan": "花小錢 騎雅迪",
       "safety": "您的安全是我們最關心的事！",
-      "features": "定位 · 遠端鎖定 · 鳴笛"
+      "features": "定位 · 遠端鎖定 · 鳴笛",
+      "bannerBattery": "TTFAR石墨烯鋰電 · 百公里續航",
+      "bannerWarranty": "5年質保 · 品質保障出行無憂",
+      "bannerPromo": "5年質保 · 活動時間7月17日-19日",
+      "bannerSafety": "品質出行 · 安全可靠",
+      "bannerDeal": "DE2 炫彩版 · 到手價Rp 3,499"
     },
-    "createTime": "建立時間"
+    "createTime": "建立時間",
+    "systemSwitch": {
+      "title": "切換系統",
+      "rent": "租車系統",
+      "swap": "換電系統",
+      "charge": "充電系統",
+      "enter": "進入系統",
+      "selectToast": "請選擇系統"
+    }
   },
   "user": {
     "orders": {
@@ -473,7 +493,12 @@
       "vehicleName": "車輛名稱",
       "distanceInfo": "距您 {m} 米",
       "goHome": "前往主頁",
-      "confirmBindBattery": "確認將該電池綁定到你的帳號？"
+      "confirmBindBattery": "確認將該電池綁定到你的帳號？",
+      "powerOn": "啟動",
+      "powerOff": "斷電",
+      "powerOnToast": "已啟動",
+      "powerOffToast": "已斷電",
+      "unnamedVehicle": "未命名車輛"
     },
     "battery": {
       "dischargeOn": "允許放電",
@@ -521,14 +546,18 @@
       "photoLimitExceeded": "圖片數量超出上限",
       "photoMaxTwo": "最多上傳2張",
       "licenseShort": "駕照",
-      "detail": "實名詳情"
+      "detail": "實名詳情",
+      "photoSelected": "{source}：已選中一張圖片",
+      "photoReplaced": "{source}：已替換當前圖片"
     },
     "plan": {
       "selectPlan": "選擇方案",
       "rentNow": "立即租",
       "empty": "暫無方案",
       "noService": "該租賃類型與方案暫無可選服務",
-      "rentalType": "租賃類型"
+      "rentalType": "租賃類型",
+      "renewalType": "續租類型",
+      "renewalPlan": "續租方案"
     },
     "wallet": {
       "topupCustom": "自訂金額",
@@ -556,7 +585,11 @@
       "navToStore": "導航到店",
       "empty": "暫無門店",
       "businessHours": "營業時間 {hours}",
-      "selectStore": "選擇門店"
+      "selectStore": "選擇門店",
+      "navTitle": "導航",
+      "mapAmap": "高德地圖",
+      "mapBaidu": "百度地圖",
+      "mapGoogle": "谷歌地圖"
     },
     "tab": {
       "vehicles": "我的車輛"
@@ -600,7 +633,8 @@
       "needOrderStatus": "請至少選擇一種允許續租的訂單狀態",
       "needOrderType": "請至少選擇一種自動續租訂單類型",
       "cancelSuccess": "續租已取消",
-      "beforeDueAuto": "到期前 {n} 天自動續租"
+      "beforeDueAuto": "到期前 {n} 天自動續租",
+      "realNameTip": "開啟後，用戶在下單時必須選擇實名信息，否則無法提交訂單。"
     },
     "profile": {
       "modelSort": "排序",
@@ -758,7 +792,11 @@
       "searchPosition": "搜尋職位名稱",
       "parentPosition": "上級職位",
       "configPreSuffix": "天狀態變更至待歸還",
-      "unbindUser": "解綁用戶"
+      "unbindUser": "解綁用戶",
+      "unbindVehicleDesc": "確認將該車輛與當前用戶解綁？解綁後該車輛將變為空閒，可重新綁定車輛",
+      "unbindBatteryDesc": "確認將該電池與當前用戶解綁？解綁後該電池將變為空閒，可重新綁定電池",
+      "vehicleUnbound": "車輛已解綁",
+      "batteryUnbound": "電池已解綁"
     },
     "home": {
       "view": "首頁總覽",
@@ -880,7 +918,8 @@
       "batterySelectModel": "選擇電池型號",
       "batteryNoData": "暫無電池",
       "batteryNoPosition": "暫無電池位置",
-      "unbindSuccess": "解綁成功"
+      "unbindSuccess": "解綁成功",
+      "confirmUnbindVehicle": "確認將該車輛與用戶解綁？解綁後將變為空閒車輛，可重新綁定用戶"
     },
     "alert": {
       "timelineReopened": "重新打開為待處理",
@@ -1124,7 +1163,8 @@
       "replace": "更換電池",
       "dischargeForbidden": "已禁止放電",
       "replaced": "電池已更換",
-      "cabinet": "換電櫃"
+      "cabinet": "換電櫃",
+      "confirmUnbindBattery": "確認將該電池與用戶解綁？解綁後將變為空閒電池，可重新綁定用戶"
     },
     "order": {
       "refund": {

@@ -132,7 +132,14 @@
       "settingsGeneral": "通用设置",
       "settingsVersion": "当前版本",
       "total": "合计",
-      "verifyByEmail": "邮箱验证"
+      "verifyByEmail": "邮箱验证",
+      "editNickname": "修改昵称",
+      "editAccount": "修改账号",
+      "nicknamePlaceholder": "请输入昵称",
+      "nicknameHint": "支持输入2-20个字符，不限中文、数字、字母、符号",
+      "nicknameSaved": "昵称已保存",
+      "accountFormatHint": "必须字母开头，仅支持字母、数字、下划线，长度4～20位",
+      "confirmDeactivateDesc": "确定要注销当前账号吗？注销后所有数据将被清除，且无法恢复。"
     },
     "tab": {
       "home": "首页",
@@ -313,9 +320,22 @@
     "promo": {
       "slogan": "花小钱 骑雅迪",
       "safety": "您的安全是我们最关心的事！",
-      "features": "定位 · 远程锁定 · 鸣笛"
+      "features": "定位 · 远程锁定 · 鸣笛",
+      "bannerBattery": "TTFAR石墨烯锂电 · 百公里续航",
+      "bannerWarranty": "5年质保 · 品质保障出行无忧",
+      "bannerPromo": "5年质保 · 活动时间7月17日-19日",
+      "bannerSafety": "品质出行 · 安全可靠",
+      "bannerDeal": "DE2 炫彩版 · 到手价Rp 3,499"
     },
-    "createTime": "创建时间"
+    "createTime": "创建时间",
+    "systemSwitch": {
+      "title": "切换系统",
+      "rent": "租车系统",
+      "swap": "换电系统",
+      "charge": "充电系统",
+      "enter": "进入系统",
+      "selectToast": "请选择系统"
+    }
   },
   "user": {
     "orders": {
@@ -473,7 +493,12 @@
       "vehicleName": "车辆名称",
       "distanceInfo": "距您 {m} 米",
       "goHome": "前往首页",
-      "confirmBindBattery": "确认将该电池绑定到你的账号？"
+      "confirmBindBattery": "确认将该电池绑定到你的账号？",
+      "powerOn": "启动",
+      "powerOff": "断电",
+      "powerOnToast": "已启动",
+      "powerOffToast": "已断电",
+      "unnamedVehicle": "未命名车辆"
     },
     "battery": {
       "dischargeOn": "允许放电",
@@ -521,14 +546,18 @@
       "photoLimitExceeded": "图片数量超出上限",
       "photoMaxTwo": "最多上传2张",
       "licenseShort": "驾照",
-      "detail": "实名详情"
+      "detail": "实名详情",
+      "photoSelected": "{source}：已选中一张图片",
+      "photoReplaced": "{source}：已替换当前图片"
     },
     "plan": {
       "selectPlan": "选择方案",
       "rentNow": "立即租",
       "empty": "暂无方案",
       "noService": "该租赁类型与方案暂无可选服务",
-      "rentalType": "租赁类型"
+      "rentalType": "租赁类型",
+      "renewalType": "续租类型",
+      "renewalPlan": "续租方案"
     },
     "wallet": {
       "topupCustom": "自定义金额",
@@ -556,7 +585,11 @@
       "navToStore": "导航到店",
       "empty": "暂无门店",
       "businessHours": "营业时间 {hours}",
-      "selectStore": "选择门店"
+      "selectStore": "选择门店",
+      "navTitle": "导航",
+      "mapAmap": "高德地图",
+      "mapBaidu": "百度地图",
+      "mapGoogle": "谷歌地图"
     },
     "tab": {
       "vehicles": "我的爱车"
@@ -600,7 +633,8 @@
       "needOrderStatus": "请至少选择一种允许续租的订单状态",
       "needOrderType": "请至少选择一种自动续租订单类型",
       "cancelSuccess": "续租已取消",
-      "beforeDueAuto": "到期前 {n} 天自动续租"
+      "beforeDueAuto": "到期前 {n} 天自动续租",
+      "realNameTip": "开启后，用户在下单时必须选择实名信息，否则无法提交订单。"
     },
     "profile": {
       "modelSort": "排序",
@@ -758,7 +792,11 @@
       "searchPosition": "搜索职位名称",
       "parentPosition": "上级职位",
       "configPreSuffix": "天状态变更至待归还",
-      "unbindUser": "解绑用户"
+      "unbindUser": "解绑用户",
+      "unbindVehicleDesc": "确认将该车辆与当前用户解绑？解绑后该车辆将变为空闲，可重新绑定车辆",
+      "unbindBatteryDesc": "确认将该电池与当前用户解绑？解绑后该电池将变为空闲，可重新绑定电池",
+      "vehicleUnbound": "车辆已解绑",
+      "batteryUnbound": "电池已解绑"
     },
     "home": {
       "view": "首页总览",
@@ -880,7 +918,8 @@
       "batterySelectModel": "选择电池型号",
       "batteryNoData": "暂无电池",
       "batteryNoPosition": "暂无电池位置",
-      "unbindSuccess": "解绑成功"
+      "unbindSuccess": "解绑成功",
+      "confirmUnbindVehicle": "确认将该车辆与用户解绑？解绑后将变为空闲车辆，可重新绑定用户"
     },
     "alert": {
       "timelineReopened": "重新打开为待处理",
@@ -1124,7 +1163,8 @@
       "replace": "更换电池",
       "dischargeForbidden": "已禁止放电",
       "replaced": "电池已更换",
-      "cabinet": "换电柜"
+      "cabinet": "换电柜",
+      "confirmUnbindBattery": "确认将该电池与用户解绑？解绑后将变为空闲电池，可重新绑定用户"
     },
     "order": {
       "refund": {
