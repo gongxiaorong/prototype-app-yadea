@@ -247,7 +247,8 @@ body.host-single-m #root-user{display:none}
 /* ── Toast（与 index.html 一致：手机内毛玻璃圆角提示） ── */
 .toast-wrap{position:absolute;top:50px;left:16px;right:16px;z-index:99999;display:flex;flex-direction:column;align-items:center;pointer-events:none}
 .toast-item{padding:10px 20px;border-radius:12px;font-size:14px;font-weight:500;color:#fff;pointer-events:auto;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);text-align:center;max-width:80%;line-height:1.4}
-.toast-success,.toast-error,.toast-info,.toast-warn{background:rgba(23,163,74,.9)}
+.toast-success,.toast-info{background:rgba(23,163,74,.9)}
+.toast-error,.toast-warn{background:rgba(255,59,48,.9)}
 .toast-enter-active{transition:all .3s cubic-bezier(.32,.72,0,1)}
 .toast-leave-active{transition:all .25s ease-in}
 .toast-enter-from{opacity:0;transform:translateY(-20px) scale(.9)}
@@ -1180,9 +1181,9 @@ body.host-single-m #root-user{display:none}
 <div class="text-[22px] font-bold text-[#1A1A1A] text-center">机柜编号</div>
 <div class="text-[14px] text-[#999] text-center mt-2.5">请输入机柜编号</div>
 <div class="mt-10 relative">
-<input v-model="swapManualNo" type="text" maxlength="32" class="w-full bg-transparent outline-none text-center text-[17px] font-medium" style="border:0;padding:12px 0;caret-color:#2B3F5F">
+<input v-model="swapManualNo" type="text" maxlength="64" class="w-full bg-transparent outline-none text-center text-[17px] font-medium" style="border:0;padding:12px 0;caret-color:#2B3F5F">
 <div class="absolute bottom-0 left-0 right-0" style="height:1px;background:#97A0AB"></div>
-<div class="absolute right-0 text-[12px] text-[#999] tabular-nums pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ swapManualNo.length }}/32</div>
+<div class="absolute right-0 text-[12px] text-[#999] tabular-nums pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ swapManualNo.length }}/64</div>
 </div>
 <button data-cp @click="confirmSwapManual" class="h-12 w-full mt-10 rounded-xl text-white text-[15px] font-semibold cursor-pointer active:opacity-90 transition-opacity flex items-center justify-center" :style="swapManualNo.trim()?{background:'var(--accent)',border:0}:{background:'#E0E0E0',color:'#999',pointerEvents:'none',border:0}" data-od-id="swap-manual-submit">确定</button>
 </div>
@@ -1234,7 +1235,7 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="flex-1 bg-white relative -mt-5" style="border-radius:28px 28px 0 0">
 <div class="px-5 pt-6">
-<div class="flex items-start py-2"><span class="shrink-0 text-[15px]" style="color:#999">编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[15px]" style="color:#111">{{ batteryDetailRec.no }}</span></div>
+<div class="flex items-start py-2"><span class="shrink-0 text-[15px]" style="color:#999">电池编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[15px]" style="color:#111">{{ batteryDetailRec.no }}</span></div>
 <div class="flex items-start py-2"><span class="shrink-0 text-[15px]" style="color:#999">电池位置</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[15px]" style="color:#111">{{ batteryDetailRec.location }}</span></div>
 <div class="flex items-start py-2"><span class="shrink-0 text-[15px]" style="color:#999">绑定时间</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[15px]" style="color:#111">{{ batteryDetailRec.bindTime }}</span></div>
 </div>
@@ -1736,7 +1737,7 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="battQ='';battFilterReset();battFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="batt-empty-reset">清空筛选</div>
 </empty-state>
 <div v-for="b in battList" :key="b.no" data-cp @click="openBattDetail(b.no)" class="bg-white rounded-xl p-4 mb-2.5 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :data-od-id="'batt-item-'+b.no">
-<div class="text-[15px] font-semibold mb-1.5">编号：{{ b.no }}</div>
+<div class="text-[15px] font-semibold mb-1.5">电池编号：{{ b.no }}</div>
 <div class="flex justify-end items-center text-[13px] mb-1.5">
 <div class="flex gap-3 shrink-0">
 <span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.cab(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.cab(b))}"></span>{{ BATT_TEXT.cab(b) }}</span>
@@ -1775,7 +1776,7 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="cabQ='';cabFilterReset();cabFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="cab-empty-reset">清空筛选</div>
 </empty-state>
 <div v-for="c in cabList" :key="c.no" data-cp @click="openCabDetail(c.no)" class="bg-white rounded-xl p-4 mb-2.5 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :data-od-id="'cab-item-'+c.no">
-<div class="text-[15px] font-semibold mb-1.5">编号：{{ c.no }}</div>
+<div class="text-[15px] font-semibold mb-1.5">机柜编号：{{ c.no }}</div>
 <div class="flex justify-between items-center text-[13px] mb-1.5">
 <span class="truncate min-w-0 pr-2">站点：{{ stationNameOf(c.stationId) }}</span>
 <div class="flex gap-3 shrink-0">
@@ -1901,19 +1902,19 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 <page :open="mPage==='cabDetail'" :z="600" oid="mcab-detail-page">
-<nav-bar :title="curCab?curCab.no:'换电柜详情'" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<nav-bar :title="curCab?curCab.no:'换电柜详情'" border-color="#E5E5E5" @back="closePage()"><template #right><span v-if="curCab" class="text-sm font-medium text-[#2F6FEB] cursor-pointer active:opacity-70 whitespace-nowrap" data-cp @click="openCabEdit()" data-od-id="cab-detail-edit">编辑</span></template></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-36 hide-scroll">
 <empty-state v-if="!curCab" icon="box" text="换电柜不存在" sub="该换电柜可能已被移除" root-class="flex flex-col items-center justify-center py-16" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
 <template v-if="curCab">
 <div class="bg-white rounded-2xl px-4 py-3.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
 <div class="text-[13px] font-semibold mb-1.5" style="color:#111">机柜信息</div>
 <div class="flex items-center py-2">
-<span class="text-[13px] shrink-0" style="color:#999">编号</span>
+<span class="text-[13px] shrink-0" style="color:#999">机柜编号</span>
 <span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ curCab.no }}</span>
 <span v-if="curCab.no" class="shrink-0 pl-1.5" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyCabNo()" data-od-id="cab-code-copy"></span>
 </div>
 <div class="flex items-center py-2">
-<span class="text-[13px] shrink-0" style="color:#999">站点</span>
+<span class="text-[13px] shrink-0" style="color:#999">名称</span>
 <span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ curCab.name }}</span>
 </div>
 <div class="flex items-center py-2">
@@ -1942,7 +1943,7 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
 <div class="text-[13px] font-semibold mb-3" style="color:#111">机柜服务</div>
-<div class="grid grid-cols-3 gap-2">
+<div class="grid grid-cols-4 gap-2">
 <div data-cp @click="openCabRec('cabAlarm')" class="flex flex-col items-center gap-2 py-1 cursor-pointer active:opacity-70" data-od-id="cab-entry-alarm">
 <span v-html="luci('siren','w-7 h-7 text-[#FF8A00]')"></span>
 <span class="text-[13px] font-medium" style="color:#111">机柜告警</span>
@@ -1954,6 +1955,10 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="openCabUsage()" class="flex flex-col items-center gap-2 py-1 cursor-pointer active:opacity-70" data-od-id="cab-entry-usage">
 <span v-html="luci('file-text','w-7 h-7 text-[#2F6FEB]')"></span>
 <span class="text-[13px] font-medium" style="color:#111">使用记录</span>
+</div>
+<div data-cp @click="openCabImgs()" class="flex flex-col items-center gap-2 py-1 cursor-pointer active:opacity-70" data-od-id="cab-entry-imgs">
+<span v-html="luci('images','w-7 h-7 text-[#7C5CFC]')"></span>
+<span class="text-[13px] font-medium" style="color:#111">机柜图片</span>
 </div>
 </div>
 </div>
@@ -1979,6 +1984,58 @@ body.host-single-m #root-user{display:none}
 <span class="text-[11px] font-medium" style="color:#666">空仓全开</span>
 </div>
 </div>
+</div>
+</page>
+<!-- 机柜图片（机柜服务次级页：列表排列 + 点击大图预览；数据源 curCab.imgs，原型操作「列表数据」置空走空态） -->
+<page :open="mPage==='cabImgs'" :z="600" oid="mcab-imgs-page">
+<nav-bar title="机柜图片" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-8" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
+<empty-state v-if="!cabImgView.length" icon="image" text="暂无图片" sub="该换电柜还没有上传机柜图片" root-class="flex flex-col items-center justify-center py-16" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1" data-od-id="cab-imgs-empty"></empty-state>
+<div v-else class="grid grid-cols-2 gap-2.5">
+<div v-for="(p,i) in cabImgView" :key="p.id" data-cp @click="openCabImgsPreview(i)" class="relative h-[124px] rounded-2xl overflow-hidden cursor-pointer active:opacity-90" :data-od-id="'cab-img-'+i">
+<div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
+<div class="absolute bottom-0 left-0 right-0 px-2.5 py-1.5 text-[11px] text-white truncate" style="background:rgba(0,0,0,.45)">{{ p.time }}</div>
+</div>
+</div>
+</div>
+</page>
+<!-- 编辑换电柜（对标租车商户端「编辑车辆」：编号只读，名称与机柜图片可编辑） -->
+<page :open="mPage==='cabEdit'" :z="600" :swipe-close="closeCabEdit" oid="mcab-edit-page">
+<nav-bar title="编辑换电柜" border-color="#E5E5E5" @back="closeCabEdit()"></nav-bar>
+<div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
+<template v-if="curCab">
+<div class="form-card">
+<div class="form-row">
+<div class="form-label">机柜编号</div>
+<div class="text-[15px] font-semibold py-1" style="color:#111">{{ curCab.no }}</div>
+</div>
+<div class="form-row">
+<div class="form-label">机柜名称</div>
+<div class="login-field relative flex items-center">
+<input v-model="cabEditName" type="text" maxlength="64" placeholder="请输入机柜名称" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
+<span class="absolute right-2.5 text-[12px] text-[#999]">{{ cabEditName ? cabEditName.length : 0 }}/64</span>
+</div>
+</div>
+<div class="form-row">
+<div class="form-label">机柜图片</div>
+<div class="text-[11px] text-[#999] mb-2">最多上传10张</div>
+<div class="grid grid-cols-3 gap-2.5">
+<div v-for="(p,pi) in cabImgList" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" data-cp @click="openCabImgPreview(pi)">
+<div class="absolute inset-0 flex items-center justify-center" :style="{background:'linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)'}"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
+<div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openCabImgMore(pi)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
+</div>
+<div v-if="cabImgList.length<10" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#F6F7F9;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="cab-edit-img">
+<span v-html="luci('plus','w-6 h-6')"></span>
+<span class="text-[12px] mt-1">添加图片</span>
+<span class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabImgList.length }}/10</span>
+</div>
+</div>
+</div>
+</div>
+</template>
+</div>
+<div class="absolute bottom-7 left-5 right-5 z-[20]">
+<button data-cp @click="saveCabEdit()" class="w-full h-[50px] flex items-center justify-center rounded-xl text-[16px] font-semibold border-none cursor-pointer transition-colors active:opacity-90" style="background:#2B3F5F;color:#fff" data-od-id="cab-edit-submit">保存</button>
 </div>
 </page>
 <page :open="mPage==='cabAlarm'||mPage==='cabFault'" :z="600" oid="mcab-rec-page">
@@ -2066,7 +2123,7 @@ body.host-single-m #root-user{display:none}
 <empty-state v-else icon="file-text" text="暂无使用记录" :sub="useQ?'没有符合搜索条件的记录':'该柜暂无操作记录'" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1" data-od-id="cab-use-empty"></empty-state>
 </div>
 </page>
-<!-- 新增换电柜（对标租车「新增车辆」：编号可输入/扫码、名称选填、场景图最多10张） -->
+<!-- 新增换电柜（对标租车「新增车辆」：编号可输入/扫码、名称选填、机柜图片最多10张） -->
 <page :open="mPage==='cabAdd'" :z="600" :swipe-close="closeCabAdd" oid="mcab-add-page">
 <nav-bar title="新增换电柜" border-color="#E5E5E5" @back="closeCabAdd()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
@@ -2074,7 +2131,7 @@ body.host-single-m #root-user{display:none}
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>机柜编号</div>
 <div class="login-field relative flex items-center">
-<input v-model="cabAddNo" @input="cabAddNoErr=''" type="text" maxlength="32" placeholder="请输入机柜编号，可扫码录入" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="cabAddNoErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null">
+<input v-model="cabAddNo" @input="cabAddNoErr=''" type="text" maxlength="64" placeholder="请输入机柜编号" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="cabAddNoErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null">
 <button type="button" data-cp @click="openCabScan()" class="absolute right-2.5 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent" title="扫码录入"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button>
 </div>
 <div v-if="cabAddNoErr" class="form-hint">{{ cabAddNoErr }}</div>
@@ -2082,24 +2139,21 @@ body.host-single-m #root-user{display:none}
 <div class="form-row">
 <div class="form-label">机柜名称</div>
 <div class="login-field relative flex items-center">
-<input v-model="cabAddName" type="text" maxlength="64" placeholder="请输入机柜名称（选填）" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
+<input v-model="cabAddName" type="text" maxlength="64" placeholder="请输入机柜名称" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
 <span class="absolute right-2.5 text-[12px] text-[#999]">{{ cabAddName ? cabAddName.length : 0 }}/64</span>
 </div>
 </div>
-</div>
-<div class="form-card mt-3">
 <div class="form-row">
-<div class="form-label">场景图</div>
-<div class="text-[11px] text-[#999] mb-2">非必填，最多上传10张</div>
+<div class="form-label">机柜图片</div>
 <div class="grid grid-cols-3 gap-2.5">
-<div v-for="(p,pi) in cabAddImgs" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" data-cp @click="openCabImgPreview(pi)">
+<div v-for="(p,pi) in cabImgList" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" data-cp @click="openCabImgPreview(pi)">
 <div class="absolute inset-0 flex items-center justify-center" :style="{background:'linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)'}"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
 <div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openCabImgMore(pi)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
 </div>
-<div v-if="cabAddImgs.length<10" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#F6F7F9;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="cab-add-img">
+<div v-if="cabImgList.length<10" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#F6F7F9;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="cab-add-img">
 <span v-html="luci('plus','w-6 h-6')"></span>
 <span class="text-[12px] mt-1">添加图片</span>
-<span class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabAddImgs.length }}/10</span>
+<span class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabImgList.length }}/10</span>
 </div>
 </div>
 </div>
@@ -2109,18 +2163,39 @@ body.host-single-m #root-user{display:none}
 <button data-cp @click="submitCabAdd()" class="w-full h-[50px] flex items-center justify-center rounded-xl text-[16px] font-semibold border-none cursor-pointer transition-colors active:opacity-90" style="background:#2B3F5F;color:#fff" data-od-id="cab-add-submit">保存</button>
 </div>
 </page>
-<!-- 扫码录入机柜编号 -->
-<bottom-sheet :open="showCabScan" title="扫码录入" :mask-z="750" oid="cab-scan-mask" panel-oid="cab-scan-sheet" @close="()=>showCabScan=false">
-<div class="px-5 pt-1">
-<div class="text-[13px] text-[#999] mb-3">请将摄像头对准机柜机身二维码进行扫描</div>
-<div data-cp @click="mockCabScan()" class="flex flex-col items-center justify-center py-8 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1.5px solid #E5E5E5">
-<div class="w-12 h-12 rounded-full flex items-center justify-center mb-2" style="background:#EBF1FD"><span v-html="luci('scan','w-6 h-6 text-[#2B3F5F]')"></span></div>
-<span class="text-[13px] font-medium">开始扫码</span>
+<!-- 扫码录入机柜编号（对标租车商户端「新增车辆」扫码页：全屏取景 + 键盘/相册/手电筒） -->
+<page :open="showCabScan" :z="1890" :swipe-close="closeCabScan" oid="cab-scan-page">
+<div class="pt-14 px-4 py-3 flex items-center shrink-0" style="background:rgba(0,0,0,.85)">
+<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-white" data-cp @click="closeCabScan()"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
+</div>
+<div class="flex-1 min-h-0 relative overflow-hidden" style="background:rgba(0,0,0,.85)">
+<div class="absolute inset-0 flex flex-col">
+<div class="flex-1 flex flex-col items-center justify-center">
+<div class="scan-frame cursor-pointer" data-cp @click="mockCabScan()" data-od-id="cab-scan-frame"><div class="scan-line"></div><div class="absolute inset-0 flex items-center justify-center"><span v-html="luci('scan','w-10 h-10 text-white/20')"></span></div></div>
+<div class="text-white/50 text-[13px] mt-5">请将二维码对准取景框</div>
+</div>
+<div class="px-6 pb-[calc(60px+env(safe-area-inset-bottom,0px))] flex items-end justify-end shrink-0">
+<div class="flex flex-col items-center gap-3">
+<div class="w-12 h-12 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,.16)" data-od-id="cab-scan-album"><span v-html="luci('images','w-5 h-5 text-white')"></span></div>
+<div data-cp @click="cabScanTorch=!cabScanTorch" class="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-all" :style="cabScanTorch?{background:'#fff',boxShadow:'0 0 22px rgba(255,255,255,.45)'}:{background:'rgba(255,255,255,.16)'}" data-od-id="cab-scan-torch"><span v-html="luci(cabScanTorch?'flashlight':'flashlight-off','w-5 h-5 '+(cabScanTorch?'text-[#1A1A1A]':'text-white'))"></span></div>
+</div>
+</div>
+</div>
+</div>
+</page>
+<!-- 扫码：手动输入机柜编号（对标租车商户端「输入车辆编号」弹窗） -->
+<bottom-sheet :open="showCabManual" title="输入机柜编号" :mask-z="1891" oid="cab-manual-mask" panel-oid="cab-manual-sheet" @close="()=>showCabManual=false">
+<div class="px-5 pb-2">
+<div class="text-[12px] text-[#999] text-center mb-4">请输入机柜铭牌上的机柜编号</div>
+<div class="login-field relative"><input v-model="cabManualNo" type="text" maxlength="64" placeholder="请输入机柜编号" class="w-full pl-4 pr-3 py-3.5 text-[15px]"></div>
+<div class="flex gap-3 mt-4">
+<div data-cp @click="showCabManual=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;background:#fff">取消</div>
+<div data-cp @click="confirmCabManual" class="flex-1 py-3 rounded-xl text-[15px] font-semibold text-center" :style="cabManualNo.trim()?{background:'var(--accent)',color:'#fff',cursor:'pointer'}:{background:'#E0E0E0',color:'#999',pointerEvents:'none'}">确认</div>
 </div>
 </div>
 </bottom-sheet>
-<!-- 场景图拍照/相册选择器 -->
-<bottom-sheet :open="showCabImgPicker" title="添加场景图" :mask-z="750" oid="cab-img-picker-mask" panel-oid="cab-img-picker-sheet" @close="()=>showCabImgPicker=false">
+<!-- 机柜图片拍照/相册选择器 -->
+<bottom-sheet :open="showCabImgPicker" title="添加机柜图片" :mask-z="750" oid="cab-img-picker-mask" panel-oid="cab-img-picker-sheet" @close="()=>showCabImgPicker=false">
 <div class="px-5 pt-1">
 <div class="grid grid-cols-2 gap-2.5">
 <div data-cp @click="pickCabImgSource('camera')" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1.5px solid #E5E5E5">
@@ -2134,16 +2209,16 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </bottom-sheet>
-<!-- 场景图更多 ActionSheet -->
+<!-- 机柜图片更多 ActionSheet -->
 <bottom-sheet :open="showCabImgAction" title="更多操作" :mask-z="750" oid="cab-img-action-mask" panel-oid="cab-img-action-sheet" @close="()=>showCabImgAction=false">
 <div class="px-5 pt-1">
 <div data-cp @click="cabImgActionReupload()" class="py-3.5 text-center text-[15px] text-[#1A1A1A] cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #F5F5F5">重新上传</div>
 <div data-cp @click="cabImgActionDelete()" class="py-3.5 text-center text-[15px] text-[#FF4343] cursor-pointer active:bg-[#F6F7F9]">删除图片</div>
 </div>
 </bottom-sheet>
-<!-- 场景图大图预览 -->
+<!-- 机柜图片大图预览 -->
 <page :open="showCabImgPreview" :z="2500" trans="fd" bg="#000" oid="cab-img-preview" @close="showCabImgPreview=false">
-<image-viewer :src="cabImgPreviewItem?{color:'#2B3F5F',label:'场景图',time:cabImgPreviewItem.time}:null" tip="点击空白处关闭" @close="showCabImgPreview=false"></image-viewer>
+<image-viewer :src="cabImgPreviewItem?{color:'#2B3F5F',label:'机柜图片',time:cabImgPreviewItem.time}:null" tip="点击空白处关闭" @close="showCabImgPreview=false"></image-viewer>
 </page>
 <page :open="mPage==='battDetail'" :z="600" oid="mbatt-detail-page">
 <nav-bar :title="curBatt?curBatt.no:'电池详情'" border-color="#E5E5E5" @back="closePage()"></nav-bar>
@@ -2170,7 +2245,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex items-center justify-between px-4 py-3.5"><span class="text-[13px]" style="color:#999">联网状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.net(curBatt))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ BATT_TEXT.net(curBatt) }}</span></span></div>
 </div>
 <div class="bg-white rounded-2xl overflow-hidden mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">编号</span><span class="text-[13px] font-medium" style="color:#111">{{ curBatt.no }}</span></div>
+<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">电池编号</span><span class="text-[13px] font-medium" style="color:#111">{{ curBatt.no }}</span></div>
 <div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">当前所在</span><span class="text-[13px] font-medium" style="color:#111">{{ battAtLabel(curBatt) }}</span></div>
 <div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">循环次数</span><span class="text-[13px] font-medium" style="color:#111">{{ curBatt.cycles }} 次</span></div>
 <div class="flex items-center justify-between px-4 py-3.5"><span class="text-[13px]" style="color:#999">健康度</span><span class="text-[13px] font-semibold" :style="{color:socColor(curBatt.health)}">{{ curBatt.health }}%</span></div>
@@ -2870,7 +2945,7 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" data-cp @click="firstLogin=false" :class="!firstLogin?'is-on':''">否</div>
 </div>
 </div>
-<template v-if="!showLogin&&((tab==='cab'&&!mPage)||(tab==='batt'&&!mPage)||(tab==='home'&&!mPage)||mPage==='stores'||mPage==='stations'||mPage==='cabAlarm'||mPage==='cabFault'||mPage==='cabUsage')">
+<template v-if="!showLogin&&((tab==='cab'&&!mPage)||(tab==='batt'&&!mPage)||(tab==='home'&&!mPage)||mPage==='stores'||mPage==='stations'||mPage==='cabAlarm'||mPage==='cabFault'||mPage==='cabUsage'||mPage==='cabImgs')">
 <div class="demo-ops-section" data-od-id="demo-list-data">
 <div class="demo-ops-label">列表数据</div>
 <div class="demo-ops-chips">
@@ -2916,6 +2991,14 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" data-cp @click="setCabDim('fault',false)" :class="!curCab.fault?'is-on':''">无故障</div>
 <div class="demo-ops-chip" data-cp @click="setCabDim('fault',true)" :class="curCab.fault?'is-on':''">有故障</div>
 </div></div>
+</div>
+<div v-if="mPage==='cabAdd'" class="demo-ops-section" data-od-id="demo-cab-add">
+<div class="demo-ops-label">保存结果</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="demoCabAddResult='ok'" :class="demoCabAddResult==='ok'?'is-on':''" data-od-id="demo-cab-add-ok">新增成功</div>
+<div class="demo-ops-chip" data-cp @click="demoCabAddResult='notFound'" :class="demoCabAddResult==='notFound'?'is-on':''" data-od-id="demo-cab-add-notfound">机柜编码不存在</div>
+<div class="demo-ops-chip" data-cp @click="demoCabAddResult='used'" :class="demoCabAddResult==='used'?'is-on':''" data-od-id="demo-cab-add-used">机柜编码已被使用</div>
+</div>
 </div>
 </div></div></div>
 </section>
@@ -3320,7 +3403,7 @@ var _ua=Vue.createApp({
   setup:function(){
     var tab=Vue.ref('home'),settingsOpen=Vue.ref(false);
     var toastBus=createToastBus();
-    function toastPush(msg){toastBus.push(msg)}
+    function toastPush(msg,type){toastBus.push(msg,type)}
     function setTab(t){tab.value=t;settingsOpen.value=false}
     function toast(m){toastBus.push(m)}
     /* 登录校验前移到入口：点击「扫码换电」即校验，未登录先拉起登录页；扫码页内不再做登录拦截 */
@@ -4240,6 +4323,14 @@ M_CABINETS.forEach(function(c,i){
     return r
   })
 });
+/* 各柜补一组机柜图片（新增/编辑页「机柜图片」上传结果；机柜详情「机柜图片」次级页与预览读取该字段） */
+M_CABINETS.forEach(function(c,i){
+  var n=[3,5,2,1,4,2][i]||3;
+  c.imgs=[];
+  for(var k=0;k<n;k++){
+    c.imgs.push({id:c.no+'-IMG-'+String(k+1),time:fmtRecTime(new Date(2026,8,10+(k%5)+i,9+k*3,12+k*7,5+k*11))})
+  }
+});
 var M_BATTERIES=[
   {no:'BT-2026-0001',soc:86,cycles:126,health:96,cabState:'inCab',rentState:'unrented',netOnline:true,charging:false,at:'K7A3F9D2M5Q8T1B4-01',records:[mRec('2026-09-16 14:05','charge','入柜充电，SOC 12% → 86%'),mRec('2026-09-16 09:20','return','由用户 U8812 归还至 K7A3F9D2M5Q8T1B4-01 仓位')]},
   {no:'BT-2026-0002',soc:9,cycles:98,health:94,cabState:'inCab',rentState:'unrented',netOnline:true,charging:true,at:'K7A3F9D2M5Q8T1B4-02',records:[mRec('2026-09-18 21:10','return','由用户 U6521 归还至 K7A3F9D2M5Q8T1B4-02 仓位，开始充电'),mRec('2026-09-18 08:32','borrow','用户 U6521 于 K7A3F9D2M5Q8T1B4-02 借出')]},
@@ -4260,7 +4351,7 @@ var _ma=Vue.createApp({
   setup:function(){
     var tab=Vue.ref('home'),settingsOpen=Vue.ref(false);
     var toastBus=createToastBus();
-    function toastPush(msg){toastBus.push(msg)}
+    function toastPush(msg,type){toastBus.push(msg,type)}
     function toast(m){toastBus.push(m)}
     var auth=authState(toastBus);
     var navOpen=auth.navOpen,navBack=auth.navBack;
@@ -4439,26 +4530,50 @@ var _ma=Vue.createApp({
     /* ── 页面打开（先 navOpen 再改状态，保证快照=来源页） ── */
     function openPage(name){navOpen();mPage.value=name}
     function closePage(){navBack()}
-    /* ── 新增换电柜（对标租车「新增车辆」：编号可输入/扫码、名称选填、场景图最多10张） ── */
+    /* ── 新增换电柜（对标租车「新增车辆」：编号可输入/扫码、名称选填、机柜图片最多10张） ── */
     var cabAddNo=Vue.ref(''),cabAddName=Vue.ref(''),cabAddNoErr=Vue.ref('');
     var cabAddImgs=Vue.ref([]);
+    /* 图片列表作用域：新增页 / 编辑页共用同一套「添加图片 / 更多操作 / 预览」弹窗，按作用域读写成对应列表 */
+    var cabImgScope=Vue.ref('add'),cabEditImgs=Vue.ref([]);
+    var cabImgList=Vue.computed(function(){return cabImgScope.value==='edit'?cabEditImgs.value:cabAddImgs.value});
+    function cabImgSet(arr){if(cabImgScope.value==='edit'){cabEditImgs.value=arr}else{cabAddImgs.value=arr}}
+    /* ── 编辑换电柜（对标租车商户端「编辑车辆」：编号只读，名称与机柜图片可改） ── */
+    var cabEditName=Vue.ref('');
+    function openCabEdit(){var c=curCab.value;if(!c)return;cabImgScope.value='edit';cabEditName.value=c.name||'';cabEditImgs.value=(c.imgs||[]).slice();openPage('cabEdit')}
+    function closeCabEdit(){if(mPage.value==='cabEdit')closePage()}
+    function saveCabEdit(){var c=curCab.value;if(!c)return;c.name=(cabEditName.value||'').trim();c.imgs=cabEditImgs.value.slice();c.updatedAt=nowRecStr();toastPush('保存成功','success');closeCabEdit()}
+    /* ── 机柜图片（机柜服务次级页）：列表排列 + 点击预览；原型操作「列表数据」置空走空态 ── */
+    var cabImgView=Vue.computed(function(){if(demoListEmpty.value)return [];var c=curCab.value;return (c&&c.imgs)?c.imgs:[]});
+    function openCabImgs(){openPage('cabImgs')}
+    function openCabImgsPreview(i){cabImgPreviewItem.value=cabImgView.value[i];showCabImgPreview.value=true}
     var showCabScan=Vue.ref(false);
+    var cabScanTorch=Vue.ref(false);
+    var showCabManual=Vue.ref(false),cabManualNo=Vue.ref('');
+    /* 原型操作「保存结果」：控制保存触发的三分支（ok 新增成功 / notFound 机柜编码不存在 / used 机柜编码已被使用） */
+    var demoCabAddResult=Vue.ref('ok');
     var showCabImgPicker=Vue.ref(false),cabImgPickerSH=Vue.ref('');
     var showCabImgAction=Vue.ref(false),cabImgActionTarget=Vue.ref(null);
     var showCabImgPreview=Vue.ref(false),cabImgPreviewItem=Vue.ref(null);
-    function openCabAdd(){cabAddNo.value='';cabAddName.value='';cabAddNoErr.value='';cabAddImgs.value=[];openPage('cabAdd')}
+    function openCabAdd(){cabAddNo.value='';cabAddName.value='';cabAddNoErr.value='';cabAddImgs.value=[];cabImgScope.value='add';openPage('cabAdd')}
     function closeCabAdd(){if(mPage.value==='cabAdd')closePage()}
     function openCabScan(){showCabScan.value=true}
+    function closeCabScan(){showCabScan.value=false}
     function mockCabScan(){cabAddNo.value='CAB-'+Math.floor(Math.random()*900000000+100000000);cabAddNoErr.value='';showCabScan.value=false;toastPush('扫码成功，编号已录入')}
+    function openCabManual(){cabManualNo.value='';showCabManual.value=true}
+    function confirmCabManual(){var v=(cabManualNo.value||'').trim();if(!v)return;cabAddNo.value=v;cabAddNoErr.value='';showCabManual.value=false;showCabScan.value=false}
     function openCabImgPicker(sh){cabImgPickerSH.value=sh||'add';showCabImgPicker.value=true}
     function pickCabImgSource(src){var label=src==='camera'?'拍照':'相册';if(cabImgPickerSH.value==='reupload'){toastPush(label+'：已替换当前图片');doCabImgReupload()}else{toastPush(label+'：已选中一张图片');commitCabImg()}showCabImgPicker.value=false}
-    function commitCabImg(){var arr=cabAddImgs.value.slice();if(arr.length>=10){toastPush('最多上传10张');return}arr.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,7),time:new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-')});cabAddImgs.value=arr}
-    function openCabImgPreview(i){cabImgPreviewItem.value=cabAddImgs.value[i];showCabImgPreview.value=true}
+    function commitCabImg(){var arr=cabImgList.value.slice();if(arr.length>=10){toastPush('最多上传10张');return}arr.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,7),time:new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-')});cabImgSet(arr)}
+    function openCabImgPreview(i){cabImgPreviewItem.value=cabImgList.value[i];showCabImgPreview.value=true}
     function openCabImgMore(i){cabImgActionTarget.value=i;showCabImgAction.value=true}
     function cabImgActionReupload(){if(cabImgActionTarget.value==null)return;showCabImgAction.value=false;openCabImgPicker('reupload')}
-    function doCabImgReupload(){var i=cabImgActionTarget.value;if(i==null)return;var arr=cabAddImgs.value.slice();if(arr[i])arr[i]={id:Date.now()+'-'+Math.random().toString(36).slice(2,7),time:new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-')};cabAddImgs.value=arr;cabImgActionTarget.value=null}
-    function cabImgActionDelete(){var i=cabImgActionTarget.value;if(i==null)return;var arr=cabAddImgs.value.slice();arr.splice(i,1);cabAddImgs.value=arr;showCabImgAction.value=false;cabImgActionTarget.value=null;toastPush('图片已删除')}
-    function submitCabAdd(){var no=(cabAddNo.value||'').trim();if(!no){cabAddNoErr.value='请输入机柜编号';toastPush('请输入机柜编号');return}if(cabOf(no)){cabAddNoErr.value='机柜编号已存在';toastPush('机柜编号已存在');return}var now=nowRecStr();var rec={no:no,name:(cabAddName.value||'').trim(),stationId:'',model:'',doors:0,bizOnline:false,netOnline:false,fault:false,alarm:false,enabled:true,slots:[],imgs:cabAddImgs.value.slice(),createdAt:now,updatedAt:now,flow:'0 M',power:'0 kw.h'};cabinets.value.unshift(rec);toastPush('新增成功');closeCabAdd()}
+    function doCabImgReupload(){var i=cabImgActionTarget.value;if(i==null)return;var arr=cabImgList.value.slice();if(arr[i])arr[i]={id:Date.now()+'-'+Math.random().toString(36).slice(2,7),time:new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-')};cabImgSet(arr);cabImgActionTarget.value=null}
+    function cabImgActionDelete(){var i=cabImgActionTarget.value;if(i==null)return;var arr=cabImgList.value.slice();arr.splice(i,1);cabImgSet(arr);showCabImgAction.value=false;cabImgActionTarget.value=null;toastPush('图片已删除')}
+    function submitCabAdd(){var no=(cabAddNo.value||'').trim();if(!no){cabAddNoErr.value='请输入机柜编号';return}
+      /* 保存结果三分支由原型操作「保存结果」控制：失败两分支仅 toast 提示并停留当前页，不写入数据 */
+      if(demoCabAddResult.value==='notFound'){toastPush('机柜编码不存在','error');return}
+      if(demoCabAddResult.value==='used'){toastPush('机柜编码已被使用','error');return}
+      var now=nowRecStr();var rec={no:no,name:(cabAddName.value||'').trim(),stationId:'',model:'',doors:0,bizOnline:false,netOnline:false,fault:false,alarm:false,enabled:true,slots:[],imgs:cabAddImgs.value.slice(),createdAt:now,updatedAt:now,flow:'0 M',power:'0 kw.h'};cabinets.value.unshift(rec);toastPush('新增成功','success');closeCabAdd()}
     function openDashboard(){openPage('dashboard')}
     function openStoreList(){openPage('stores')}
     function openStationList(){openPage('stations')}
@@ -4674,7 +4789,8 @@ var _ma=Vue.createApp({
       cabQ,battQ,
       stationNameOf,stationAddrOf,storeNameOf,battAtLabel,storeOfStation,cabsOfStation,stationsOfStore,battCountOf,cabOf,battOf,slotOf,freeSlotOf,
       openPage,closePage,openDashboard,openStoreList,openStationList,openStoreDetail,openStationDetail,openCabDetail,openBattDetail,openCabRec,
-      openCabAdd,closeCabAdd,openCabScan,mockCabScan,submitCabAdd,cabAddNo,cabAddName,cabAddNoErr,cabAddImgs,showCabScan,showCabImgPicker,openCabImgPicker,pickCabImgSource,openCabImgPreview,openCabImgMore,showCabImgAction,cabImgActionReupload,cabImgActionDelete,showCabImgPreview,cabImgPreviewItem,
+      openCabAdd,closeCabAdd,openCabScan,closeCabScan,mockCabScan,openCabManual,confirmCabManual,cabScanTorch,showCabScan,showCabManual,cabManualNo,submitCabAdd,demoCabAddResult,cabAddNo,cabAddName,cabAddNoErr,cabAddImgs,
+      cabImgList,cabEditImgs,cabEditName,openCabEdit,closeCabEdit,saveCabEdit,openCabImgs,cabImgView,openCabImgsPreview,showCabImgPicker,openCabImgPicker,pickCabImgSource,openCabImgPreview,openCabImgMore,showCabImgAction,cabImgActionReupload,cabImgActionDelete,showCabImgPreview,cabImgPreviewItem,
       openCabFilter,closeCabFilter,cabDraftSet,cabFilterReset,cabFilterConfirm,openDoorInfo,closeDoorInfo,doorAskEnable,doorAskOpen,toBattDetail,copyCabNo,demoLogin,demoLogout,demoListEmpty,demoSetListEmpty,battSlot,setBattDoorOpen,anyDoorOpen,setAllDoorsOpen,setCabDim,
       openBattFilter,closeBattFilter,battDraftSet,battFilterReset,battFilterConfirm,
       mAsk,mConfirmClose,mConfirmOk,cabAskBiz,cabAskFault,cabAskAlarm,cabAskEnabled,cabAskOpenAll,cabAskOpenEmpty,
