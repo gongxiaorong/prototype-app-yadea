@@ -1234,7 +1234,7 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="flex-1 bg-white relative -mt-5" style="border-radius:28px 28px 0 0">
 <div class="px-5 pt-6">
-<div class="flex items-start py-2"><span class="shrink-0 text-[15px]" style="color:#999">电池编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[15px]" style="color:#111">{{ batteryDetailRec.no }}</span></div>
+<div class="flex items-start py-2"><span class="shrink-0 text-[15px]" style="color:#999">编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[15px]" style="color:#111">{{ batteryDetailRec.no }}</span></div>
 <div class="flex items-start py-2"><span class="shrink-0 text-[15px]" style="color:#999">电池位置</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[15px]" style="color:#111">{{ batteryDetailRec.location }}</span></div>
 <div class="flex items-start py-2"><span class="shrink-0 text-[15px]" style="color:#999">绑定时间</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[15px]" style="color:#111">{{ batteryDetailRec.bindTime }}</span></div>
 </div>
@@ -1736,7 +1736,7 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="battQ='';battFilterReset();battFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="batt-empty-reset">清空筛选</div>
 </empty-state>
 <div v-for="b in battList" :key="b.no" data-cp @click="openBattDetail(b.no)" class="bg-white rounded-xl p-4 mb-2.5 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :data-od-id="'batt-item-'+b.no">
-<div class="text-[15px] font-semibold mb-1.5">电池编号：{{ b.no }}</div>
+<div class="text-[15px] font-semibold mb-1.5">编号：{{ b.no }}</div>
 <div class="flex justify-end items-center text-[13px] mb-1.5">
 <div class="flex gap-3 shrink-0">
 <span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.cab(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.cab(b))}"></span>{{ BATT_TEXT.cab(b) }}</span>
@@ -1775,7 +1775,7 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="cabQ='';cabFilterReset();cabFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="cab-empty-reset">清空筛选</div>
 </empty-state>
 <div v-for="c in cabList" :key="c.no" data-cp @click="openCabDetail(c.no)" class="bg-white rounded-xl p-4 mb-2.5 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :data-od-id="'cab-item-'+c.no">
-<div class="text-[15px] font-semibold mb-1.5">机柜编号：{{ c.no }}</div>
+<div class="text-[15px] font-semibold mb-1.5">编号：{{ c.no }}</div>
 <div class="flex justify-between items-center text-[13px] mb-1.5">
 <span class="truncate min-w-0 pr-2">站点：{{ stationNameOf(c.stationId) }}</span>
 <div class="flex gap-3 shrink-0">
@@ -1792,6 +1792,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
+</div>
+<div class="absolute right-5 z-[80] flex flex-col items-center gap-3" style="bottom:105px">
+<div data-cp @click="openCabAdd()" class="w-14 h-14 bg-[#2B3F5F] text-white rounded-full flex items-center justify-center cursor-pointer active:scale-95 transition-transform" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)" data-od-id="cab-add-fab"><span v-html="luci('plus','w-5 h-5')"></span></div>
 </div>
 </div>
 <div v-if="tab==='home'&&!profileOV&&!profileSub" class="absolute inset-0 overflow-y-auto hide-scroll" data-od-id="merchant-home">
@@ -1905,7 +1908,7 @@ body.host-single-m #root-user{display:none}
 <div class="bg-white rounded-2xl px-4 py-3.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
 <div class="text-[13px] font-semibold mb-1.5" style="color:#111">机柜信息</div>
 <div class="flex items-center py-2">
-<span class="text-[13px] shrink-0" style="color:#999">机柜编号</span>
+<span class="text-[13px] shrink-0" style="color:#999">编号</span>
 <span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ curCab.no }}</span>
 <span v-if="curCab.no" class="shrink-0 pl-1.5" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyCabNo()" data-od-id="cab-code-copy"></span>
 </div>
@@ -2063,6 +2066,85 @@ body.host-single-m #root-user{display:none}
 <empty-state v-else icon="file-text" text="暂无使用记录" :sub="useQ?'没有符合搜索条件的记录':'该柜暂无操作记录'" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1" data-od-id="cab-use-empty"></empty-state>
 </div>
 </page>
+<!-- 新增换电柜（对标租车「新增车辆」：编号可输入/扫码、名称选填、场景图最多10张） -->
+<page :open="mPage==='cabAdd'" :z="600" :swipe-close="closeCabAdd" oid="mcab-add-page">
+<nav-bar title="新增换电柜" border-color="#E5E5E5" @back="closeCabAdd()"></nav-bar>
+<div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
+<div class="form-card">
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>机柜编号</div>
+<div class="login-field relative flex items-center">
+<input v-model="cabAddNo" @input="cabAddNoErr=''" type="text" maxlength="32" placeholder="请输入机柜编号，可扫码录入" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="cabAddNoErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null">
+<button type="button" data-cp @click="openCabScan()" class="absolute right-2.5 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent" title="扫码录入"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button>
+</div>
+<div v-if="cabAddNoErr" class="form-hint">{{ cabAddNoErr }}</div>
+</div>
+<div class="form-row">
+<div class="form-label">机柜名称</div>
+<div class="login-field relative flex items-center">
+<input v-model="cabAddName" type="text" maxlength="64" placeholder="请输入机柜名称（选填）" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
+<span class="absolute right-2.5 text-[12px] text-[#999]">{{ cabAddName ? cabAddName.length : 0 }}/64</span>
+</div>
+</div>
+</div>
+<div class="form-card mt-3">
+<div class="form-row">
+<div class="form-label">场景图</div>
+<div class="text-[11px] text-[#999] mb-2">非必填，最多上传10张</div>
+<div class="grid grid-cols-3 gap-2.5">
+<div v-for="(p,pi) in cabAddImgs" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" data-cp @click="openCabImgPreview(pi)">
+<div class="absolute inset-0 flex items-center justify-center" :style="{background:'linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)'}"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
+<div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openCabImgMore(pi)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
+</div>
+<div v-if="cabAddImgs.length<10" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#F6F7F9;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="cab-add-img">
+<span v-html="luci('plus','w-6 h-6')"></span>
+<span class="text-[12px] mt-1">添加图片</span>
+<span class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabAddImgs.length }}/10</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-7 left-5 right-5 z-[20]">
+<button data-cp @click="submitCabAdd()" class="w-full h-[50px] flex items-center justify-center rounded-xl text-[16px] font-semibold border-none cursor-pointer transition-colors active:opacity-90" style="background:#2B3F5F;color:#fff" data-od-id="cab-add-submit">保存</button>
+</div>
+</page>
+<!-- 扫码录入机柜编号 -->
+<bottom-sheet :open="showCabScan" title="扫码录入" :mask-z="750" oid="cab-scan-mask" panel-oid="cab-scan-sheet" @close="()=>showCabScan=false">
+<div class="px-5 pt-1">
+<div class="text-[13px] text-[#999] mb-3">请将摄像头对准机柜机身二维码进行扫描</div>
+<div data-cp @click="mockCabScan()" class="flex flex-col items-center justify-center py-8 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1.5px solid #E5E5E5">
+<div class="w-12 h-12 rounded-full flex items-center justify-center mb-2" style="background:#EBF1FD"><span v-html="luci('scan','w-6 h-6 text-[#2B3F5F]')"></span></div>
+<span class="text-[13px] font-medium">开始扫码</span>
+</div>
+</div>
+</bottom-sheet>
+<!-- 场景图拍照/相册选择器 -->
+<bottom-sheet :open="showCabImgPicker" title="添加场景图" :mask-z="750" oid="cab-img-picker-mask" panel-oid="cab-img-picker-sheet" @close="()=>showCabImgPicker=false">
+<div class="px-5 pt-1">
+<div class="grid grid-cols-2 gap-2.5">
+<div data-cp @click="pickCabImgSource('camera')" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1.5px solid #E5E5E5">
+<div class="w-10 h-10 rounded-full flex items-center justify-center mb-2" style="background:#EBF1FD"><span v-html="luci('camera','w-5 h-5 text-[#2B3F5F]')"></span></div>
+<span class="text-[13px] font-medium">拍照</span>
+</div>
+<div data-cp @click="pickCabImgSource('album')" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1.5px solid #E5E5E5">
+<div class="w-10 h-10 rounded-full flex items-center justify-center mb-2" style="background:#EBF1FD"><span v-html="luci('image','w-5 h-5 text-[#2B3F5F]')"></span></div>
+<span class="text-[13px] font-medium">相册</span>
+</div>
+</div>
+</div>
+</bottom-sheet>
+<!-- 场景图更多 ActionSheet -->
+<bottom-sheet :open="showCabImgAction" title="更多操作" :mask-z="750" oid="cab-img-action-mask" panel-oid="cab-img-action-sheet" @close="()=>showCabImgAction=false">
+<div class="px-5 pt-1">
+<div data-cp @click="cabImgActionReupload()" class="py-3.5 text-center text-[15px] text-[#1A1A1A] cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #F5F5F5">重新上传</div>
+<div data-cp @click="cabImgActionDelete()" class="py-3.5 text-center text-[15px] text-[#FF4343] cursor-pointer active:bg-[#F6F7F9]">删除图片</div>
+</div>
+</bottom-sheet>
+<!-- 场景图大图预览 -->
+<page :open="showCabImgPreview" :z="2500" trans="fd" bg="#000" oid="cab-img-preview" @close="showCabImgPreview=false">
+<image-viewer :src="cabImgPreviewItem?{color:'#2B3F5F',label:'场景图',time:cabImgPreviewItem.time}:null" tip="点击空白处关闭" @close="showCabImgPreview=false"></image-viewer>
+</page>
 <page :open="mPage==='battDetail'" :z="600" oid="mbatt-detail-page">
 <nav-bar :title="curBatt?curBatt.no:'电池详情'" border-color="#E5E5E5" @back="closePage()"></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll">
@@ -2088,7 +2170,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex items-center justify-between px-4 py-3.5"><span class="text-[13px]" style="color:#999">联网状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.net(curBatt))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ BATT_TEXT.net(curBatt) }}</span></span></div>
 </div>
 <div class="bg-white rounded-2xl overflow-hidden mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">电池编号</span><span class="text-[13px] font-medium" style="color:#111">{{ curBatt.no }}</span></div>
+<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">编号</span><span class="text-[13px] font-medium" style="color:#111">{{ curBatt.no }}</span></div>
 <div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">当前所在</span><span class="text-[13px] font-medium" style="color:#111">{{ battAtLabel(curBatt) }}</span></div>
 <div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">循环次数</span><span class="text-[13px] font-medium" style="color:#111">{{ curBatt.cycles }} 次</span></div>
 <div class="flex items-center justify-between px-4 py-3.5"><span class="text-[13px]" style="color:#999">健康度</span><span class="text-[13px] font-semibold" :style="{color:socColor(curBatt.health)}">{{ curBatt.health }}%</span></div>
@@ -2414,7 +2496,7 @@ body.host-single-m #root-user{display:none}
 <template v-if="curSlot">
 <div>
 <div class="flex items-center gap-2 flex-wrap px-4 pt-3.5">
-<span v-if="curSlotBatt" class="text-[10px] truncate" style="color:#999" data-od-id="door-sn">{{ curSlotBatt.no }}</span>
+<span v-if="curSlotBatt" class="text-[13px] font-semibold truncate" style="color:#111" data-od-id="door-sn">{{ curSlotBatt.no }}</span>
 <div class="flex items-center gap-2 flex-wrap justify-end flex-1 min-w-0">
 <span class="text-[11px] font-semibold px-2 py-0.5 rounded" :style="{color:doorEnableTag.color,background:doorEnableTag.color+'1A'}">{{ doorEnableTag.label }}</span>
 <span v-if="doorBattTag" class="text-[11px] font-semibold px-2 py-0.5 rounded" :style="{color:doorBattTag.color,background:doorBattTag.color+'1A'}">{{ doorBattTag.label }}</span>
@@ -2432,7 +2514,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 min-w-0">
 <div class="flex items-center justify-between gap-2">
 <span class="text-[12px] truncate" style="color:#666">电压: {{ doorVolt }}　电流: {{ doorAmp }}</span>
-<span data-cp @click="toBattDetail()" class="flex items-center gap-0.5 text-[12px] shrink-0 cursor-pointer active:opacity-70" style="color:#2F6FEB" data-od-id="door-batt-detail">电池详情<span v-html="luci('chevron-right','w-3.5 h-3.5')"></span></span>
+<span data-cp @click="toBattDetail()" class="flex items-center gap-0.5 text-[12px] shrink-0 cursor-pointer active:opacity-70" style="color:#2F6FEB" data-od-id="door-batt-detail">详情<span v-html="luci('chevron-right','w-3.5 h-3.5')"></span></span>
 </div>
 </div>
 </div>
@@ -3766,7 +3848,7 @@ var _ua=Vue.createApp({
       if(!p)return;
       /* 站点详情数据：补齐营业时间/客服电话（原型固定值） */
       var cabs=(p.cabinets||[]).map(function(c,i){return {no:c.no,total:c.total,used:c.used,full:c.full,code:'CHZD06KX0123060112'+(i+1)}});
-      curStation.value={name:p.name,addr:p.addr,dist:p.dist,no:p.id,hours:'09:00-19:00',phone:'1528****8288',point:p,cabinets:cabs,fromMapType:mapType.value};
+      curStation.value={name:p.name,addr:p.addr,dist:p.dist,no:p.id,hours:'09:00-19:00',phone:'+86 1528****8288',point:p,cabinets:cabs,fromMapType:mapType.value};
       curCab.value=cabs[0]||null;
       auth.navOpen('station');auth.profileOV.value='station';auth.profileSub.value=null;
     }
@@ -3774,7 +3856,7 @@ var _ua=Vue.createApp({
     function openStoreDetail(s){
       if(!s)return;
       var cabs=(s.cabinets||[]).map(function(c,i){return {no:c.no,total:c.total,used:c.used,full:c.full,code:'CHZD06KX0123060113'+(i+1)}});
-      curStation.value={name:s.name,addr:s.addr,dist:s.dist,no:s.id,hours:s.hours||'9:00-19:00',phone:'1528****8288',point:s,cabinets:cabs,fromMapType:mapType.value,isStore:true};
+      curStation.value={name:s.name,addr:s.addr,dist:s.dist,no:s.id,hours:s.hours||'9:00-19:00',phone:'+86 1528****8288',point:s,cabinets:cabs,fromMapType:mapType.value,isStore:true};
       curCab.value=cabs[0]||null;
       auth.navOpen('station');auth.profileOV.value='station';auth.profileSub.value=null;
     }
@@ -4122,7 +4204,7 @@ function mAbnRecs(types,opt){
   return out
 }
 /* 机柜使用记录（文档 §八 机柜使用记录 / ark_operation_record）：记录运维、商家对柜子的操作行为 + 系统自动操作
-   操作人展示口径（对齐租车商户端）：姓名 + 手机号 > 邮箱 > 账号，手机号带区号；无权限账号或系统自动操作显示「系统」
+   操作人展示口径：仅显示手机号 > 邮箱 > 账号（不显示姓名），手机号带区号；无权限账号或系统自动操作显示「系统」
    content = 操作内容、sourceType = 操作平台（MAINTAIN 平台端 / MERCHANT 商家端 / SYSTEM 平台端）、
    result = 1 成功 / 0 失败、createTime = 操作时间 */
 function mUse(name,phone,email,account,content,sourceType,result,createTime,system){
@@ -4357,6 +4439,26 @@ var _ma=Vue.createApp({
     /* ── 页面打开（先 navOpen 再改状态，保证快照=来源页） ── */
     function openPage(name){navOpen();mPage.value=name}
     function closePage(){navBack()}
+    /* ── 新增换电柜（对标租车「新增车辆」：编号可输入/扫码、名称选填、场景图最多10张） ── */
+    var cabAddNo=Vue.ref(''),cabAddName=Vue.ref(''),cabAddNoErr=Vue.ref('');
+    var cabAddImgs=Vue.ref([]);
+    var showCabScan=Vue.ref(false);
+    var showCabImgPicker=Vue.ref(false),cabImgPickerSH=Vue.ref('');
+    var showCabImgAction=Vue.ref(false),cabImgActionTarget=Vue.ref(null);
+    var showCabImgPreview=Vue.ref(false),cabImgPreviewItem=Vue.ref(null);
+    function openCabAdd(){cabAddNo.value='';cabAddName.value='';cabAddNoErr.value='';cabAddImgs.value=[];openPage('cabAdd')}
+    function closeCabAdd(){if(mPage.value==='cabAdd')closePage()}
+    function openCabScan(){showCabScan.value=true}
+    function mockCabScan(){cabAddNo.value='CAB-'+Math.floor(Math.random()*900000000+100000000);cabAddNoErr.value='';showCabScan.value=false;toastPush('扫码成功，编号已录入')}
+    function openCabImgPicker(sh){cabImgPickerSH.value=sh||'add';showCabImgPicker.value=true}
+    function pickCabImgSource(src){var label=src==='camera'?'拍照':'相册';if(cabImgPickerSH.value==='reupload'){toastPush(label+'：已替换当前图片');doCabImgReupload()}else{toastPush(label+'：已选中一张图片');commitCabImg()}showCabImgPicker.value=false}
+    function commitCabImg(){var arr=cabAddImgs.value.slice();if(arr.length>=10){toastPush('最多上传10张');return}arr.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,7),time:new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-')});cabAddImgs.value=arr}
+    function openCabImgPreview(i){cabImgPreviewItem.value=cabAddImgs.value[i];showCabImgPreview.value=true}
+    function openCabImgMore(i){cabImgActionTarget.value=i;showCabImgAction.value=true}
+    function cabImgActionReupload(){if(cabImgActionTarget.value==null)return;showCabImgAction.value=false;openCabImgPicker('reupload')}
+    function doCabImgReupload(){var i=cabImgActionTarget.value;if(i==null)return;var arr=cabAddImgs.value.slice();if(arr[i])arr[i]={id:Date.now()+'-'+Math.random().toString(36).slice(2,7),time:new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-')};cabAddImgs.value=arr;cabImgActionTarget.value=null}
+    function cabImgActionDelete(){var i=cabImgActionTarget.value;if(i==null)return;var arr=cabAddImgs.value.slice();arr.splice(i,1);cabAddImgs.value=arr;showCabImgAction.value=false;cabImgActionTarget.value=null;toastPush('图片已删除')}
+    function submitCabAdd(){var no=(cabAddNo.value||'').trim();if(!no){cabAddNoErr.value='请输入机柜编号';toastPush('请输入机柜编号');return}if(cabOf(no)){cabAddNoErr.value='机柜编号已存在';toastPush('机柜编号已存在');return}var now=nowRecStr();var rec={no:no,name:(cabAddName.value||'').trim(),stationId:'',model:'',doors:0,bizOnline:false,netOnline:false,fault:false,alarm:false,enabled:true,slots:[],imgs:cabAddImgs.value.slice(),createdAt:now,updatedAt:now,flow:'0 M',power:'0 kw.h'};cabinets.value.unshift(rec);toastPush('新增成功');closeCabAdd()}
     function openDashboard(){openPage('dashboard')}
     function openStoreList(){openPage('stores')}
     function openStationList(){openPage('stations')}
@@ -4416,13 +4518,12 @@ var _ma=Vue.createApp({
     /* 从机柜详情进入列表时重置筛选（keyWord 清空、status 回默认 0） */
     function openCabRec(kind){recQ.value='';recStatus.value=0;openPage(kind)}
     /* 机柜使用记录（文档 §八）：该柜的操作记录；useQ 按账号/手机号/邮箱（含姓名）模糊搜索（请求参数 search）
-       操作人展示：姓名 + 手机号 > 邮箱 > 账号（手机号带区号）；无权限账号 / 系统自动操作 = 系统 */
+       操作人展示：仅显示手机号 > 邮箱 > 账号（不显示姓名，手机号带区号）；系统自动操作 = 系统 */
     var useQ=Vue.ref('');
     function cabUseOperator(r){
       if(!r)return '—';
       if(r.system)return '系统';
-      var id=r.phone||r.email||r.account||'';
-      return id?(r.name||'')+'-'+id:((r.name||'')||'系统')
+      return r.phone||r.email||r.account||'系统'
     }
     function cabUseSourceLabel(t){return {MAINTAIN:'平台端',MERCHANT:'商家端',SYSTEM:'平台端'}[t]||t||'—'}
     function cabUseResultLabel(r){return (r&&r.result===0)?'失败':'成功'}
@@ -4573,6 +4674,7 @@ var _ma=Vue.createApp({
       cabQ,battQ,
       stationNameOf,stationAddrOf,storeNameOf,battAtLabel,storeOfStation,cabsOfStation,stationsOfStore,battCountOf,cabOf,battOf,slotOf,freeSlotOf,
       openPage,closePage,openDashboard,openStoreList,openStationList,openStoreDetail,openStationDetail,openCabDetail,openBattDetail,openCabRec,
+      openCabAdd,closeCabAdd,openCabScan,mockCabScan,submitCabAdd,cabAddNo,cabAddName,cabAddNoErr,cabAddImgs,showCabScan,showCabImgPicker,openCabImgPicker,pickCabImgSource,openCabImgPreview,openCabImgMore,showCabImgAction,cabImgActionReupload,cabImgActionDelete,showCabImgPreview,cabImgPreviewItem,
       openCabFilter,closeCabFilter,cabDraftSet,cabFilterReset,cabFilterConfirm,openDoorInfo,closeDoorInfo,doorAskEnable,doorAskOpen,toBattDetail,copyCabNo,demoLogin,demoLogout,demoListEmpty,demoSetListEmpty,battSlot,setBattDoorOpen,anyDoorOpen,setAllDoorsOpen,setCabDim,
       openBattFilter,closeBattFilter,battDraftSet,battFilterReset,battFilterConfirm,
       mAsk,mConfirmClose,mConfirmOk,cabAskBiz,cabAskFault,cabAskAlarm,cabAskEnabled,cabAskOpenAll,cabAskOpenEmpty,
