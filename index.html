@@ -1750,7 +1750,7 @@ body.host-single-m #root-user{display:none}
 <div v-if="totalOpen" class="space-y-1 pb-1 pl-1" data-page-node-id="kJUVIvjNkIpSKhJuRyD6DT">
 <div v-for="c in feeStatChannels.total" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="VHaoEsgnXNyI1yRVFu9WFg"><span class="text-[#999]" data-page-node-id="D5dSL8Hb3FW42BokZbklew">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="tsyuDLTCmjNM65hvFCWFw2">{{ fmtRp(c.amount,2) }}</span></div>
 </div>
-<div v-if="['手动续租','自动续租'].includes(feeCardRow.kind)&&feeCardRow.payStatus!=='已支付'" class="mt-2 flex gap-2" data-page-node-id="4yMHtvIBBnun0TfAB81gQH"><div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-center cursor-pointer active:opacity-90" style="border:1px solid var(--accent);color:var(--accent)" data-cp @click="requestCancelRenew(feeCardRow.no)" data-page-node-id="0AhwhMjBh3CiD37M7RTtHj">取消续租</div><div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-white text-center cursor-pointer active:opacity-90" style="background:var(--accent)" data-cp @click="payRenewDirect(feeCardRow.no)" data-page-node-id="UiyIXGTTQqNFum2CvTiPKk">立即支付</div></div>
+<div v-if="['手动续租','自动续租'].includes(feeCardRow.kind)&&feeCardRow.payStatus!=='已支付'" class="mt-2 flex gap-2" data-page-node-id="4yMHtvIBBnun0TfAB81gQH"><div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-center cursor-pointer active:opacity-90" style="border:1px solid var(--accent);color:var(--accent)" data-cp @click="requestCancelRenew(feeCardRow.no)" data-page-node-id="0AhwhMjBh3CiD37M7RTtHj">取消续租</div><div v-if="feeCardRow.payStatus==='待支付'&&feeCardRow.payMethod!=='线下支付'" class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-white text-center cursor-pointer active:opacity-90" style="background:var(--accent)" data-cp @click="payRenewDirect(feeCardRow.no)" data-page-node-id="UiyIXGTTQqNFum2CvTiPKk">立即支付</div></div>
 </div>
 </div>
 
@@ -1932,7 +1932,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex items-center gap-2" data-page-node-id="odFeeChannel"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="odFeeChannelL">支付渠道</span><span class="flex-1 text-right text-[#333]" data-page-node-id="odFeeChannelV">{{ r.payMethod }}</span></div>
 <div class="flex items-center gap-2" data-page-node-id="WsHoLlcKazZIV0Kl3LFn2E"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="obqaaTfv6GEEqk7KJjTGfZ">支付状态</span><span class="flex-1 text-right text-[#333]" data-page-node-id="SrTUyqPGVyFK3BkdWaZdXW">{{ r.payStatus }}</span></div>
 <div v-if="r.payTime&&!r.canceled" class="flex items-center gap-2" data-page-node-id="K1XumjCOVrpZ2wrKOjiiXB"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="oWWZp20b4noO32DEMURPbG">支付时间</span><span class="flex-1 text-right text-[#333]" data-page-node-id="jvkqCPCoScxUWOjge3SGrZ">{{ r.payTime }}</span></div>
-<div v-if="['手动续租','自动续租'].includes(r.kind)&&r.payStatus!=='已支付'&&!r.canceled" class="mt-2 flex gap-2" data-page-node-id="QZlErNijw4n04lKL6yH8g6"><div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-center cursor-pointer active:opacity-90" style="border:1px solid var(--accent);color:var(--accent)" data-cp @click="requestCancelRenew(r.no)" data-page-node-id="1spqj2CPWy9cbpe8KC57g0">取消续租</div><div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-white text-center cursor-pointer active:opacity-90" style="background:var(--accent)" data-cp @click="payRenewDirect(r.no)" data-page-node-id="7ASzCfY2bxujqQL2dYWybL">立即支付</div></div>
+<div v-if="['手动续租','自动续租'].includes(r.kind)&&r.payStatus!=='已支付'&&!r.canceled" class="mt-2 flex gap-2" data-page-node-id="QZlErNijw4n04lKL6yH8g6"><div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-center cursor-pointer active:opacity-90" style="border:1px solid var(--accent);color:var(--accent)" data-cp @click="requestCancelRenew(r.no)" data-page-node-id="1spqj2CPWy9cbpe8KC57g0">取消续租</div><div v-if="r.payStatus==='待支付'&&r.payMethod!=='线下支付'" class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-white text-center cursor-pointer active:opacity-90" style="background:var(--accent)" data-cp @click="payRenewDirect(r.no)" data-page-node-id="7ASzCfY2bxujqQL2dYWybL">立即支付</div></div>
 </div>
 </div>
 </div>
@@ -6120,10 +6120,10 @@ const orders=Vue.ref([]);
 const stores=Vue.ref([]);
 const uWallet=Vue.ref({total:0,rechargeBalance:0,rechargeFrozen:0,bonusBalance:0,bonusFrozen:0});
 const csList=Vue.ref([]);
-const cfg=Vue.ref({pre:1,breach:3,renewEnabled:false,renewTypes:[],renewManual:false,renewStatuses:[],renewAuto:false,renewAdvanceDays:1,renewRemindDays:1,renewFailThreshold:3,requireRealName:false,autoLockVehicle:false,autoLockBattery:false});
-const rechargeList=Vue.ref([{id:1,amount:100,giftAmount:10,status:1,remark:'新用户首充优惠'},{id:2,amount:200,giftAmount:30,status:1,remark:'常规定制套餐'},{id:3,amount:500,giftAmount:80,status:0,remark:''}]);
+const cfg=Vue.ref({pre:1,breach:3,renewEnabled:true,renewTypes:['VEHICLE','BATTERY','PACKAGE'],renewManual:true,renewStatuses:['IN_USE','TO_RETURN','OVERDUE','BREACH'],renewAuto:true,renewAdvanceDays:1,renewRemindDays:1,renewFailThreshold:3,requireRealName:true,autoLockVehicle:true,autoLockBattery:true});
+const rechargeList=Vue.ref([{id:1,amount:100,giftAmount:10,status:1,remark:'新用户首充优惠'},{id:2,amount:200,giftAmount:30,status:1,remark:'常规定制套餐'},{id:3,amount:500,giftAmount:80,status:1,remark:''}]);
 const rechargeEnabled=Vue.ref(true);
-const rechargeCustom=Vue.ref(false);
+const rechargeCustom=Vue.ref(true);
 const csReceptionEnabled=Vue.ref(true);
 
 /* 共享库存别名：用户端局部 vehicles/batteries（我的车辆/电池）会遮蔽共享库存，目录统一走此别名 */
@@ -6998,7 +6998,7 @@ const feeSummary=computed(()=>{const o=orderInfo.value;if(!o)return{rent:0,depos
 const refundRentOpen=ref(false),refundDepositOpen=ref(false),refundTotalOpen=ref(false);
 const refundChannels=computed(()=>{const rows=feeRows.value;const rm={},dm={},tm={};rows.forEach(r=>{if(r.payStatus!=='已支付')return;const ch=r.payMethod==='线下支付'?'线下支付':r.payMethod==='钱包'?'钱包':'2C2P';if(r.rent>0)rm[ch]=(rm[ch]||0)+r.rent;if(r.deposit>0)dm[ch]=(dm[ch]||0)+r.deposit});const toArr=m=>Object.keys(m).map(k=>({channel:k,amount:m[k]}));const ra=toArr(rm),da=toArr(dm);ra.concat(da).forEach(x=>{tm[x.channel]=(tm[x.channel]||0)+x.amount});return{rent:ra,deposit:da,total:toArr(tm)}});
 
-const feeRows=computed(()=>{if(demoListEmpty.value)return[];const o=orderInfo.value;if(!o)return[];const rows=[{kind:'主订单',plan:o.plan||'—',periodStart:confPickupISO.value,periodEnd:confReturnISO.value,rent:parseRp(o.amount),deposit:parseRp(o.deposit),total:parseRp(o.amount)+parseRp(o.deposit),payStatus:(o.status==='created')?'待支付':(o.payStatus==='PAID'?'已支付':'待支付'),payMethod:o.payee||'—',payTime:(o.status==='created')?'':(o.payStatus==='PAID'?o.payTime:'')}];(o.renewOrders||[]).forEach(r=>{const cancelled=!!r.canceled;rows.push({kind:(r.renewType==='auto'?'自动续租':'手动续租'),plan:r.plan,periodStart:r.newRentStart,periodEnd:r.newRentEnd,rent:r.renewRentFee,deposit:0,total:r.renewRentFee,payStatus:cancelled?'已取消':(r.payStatus==='PAID'?'已支付':'待支付'),payMethod:r.payStatus==='PAID'?(r.payMethod||'—'):'—',payTime:r.payStatus==='PAID'?r.payTime:'',canceled:cancelled,no:r.renewNo})});return rows});
+const feeRows=computed(()=>{if(demoListEmpty.value)return[];const o=orderInfo.value;if(!o)return[];const rows=[{kind:'主订单',plan:o.plan||'—',periodStart:confPickupISO.value,periodEnd:confReturnISO.value,rent:parseRp(o.amount),deposit:parseRp(o.deposit),total:parseRp(o.amount)+parseRp(o.deposit),payStatus:(o.status==='created')?'待支付':(o.payStatus==='PAID'?'已支付':'待支付'),payMethod:o.payee||'—',payTime:(o.status==='created')?'':(o.payStatus==='PAID'?o.payTime:'')}];(o.renewOrders||[]).forEach(r=>{const cancelled=!!r.canceled;rows.push({kind:(r.renewType==='auto'?'自动续租':'手动续租'),plan:r.plan,periodStart:r.newRentStart,periodEnd:r.newRentEnd,rent:r.renewRentFee,deposit:0,total:r.renewRentFee,payStatus:cancelled?'已取消':(r.payStatus==='PAID'?'已支付':'待支付'),payMethod:r.payMethod||({OFFLINE:'线下支付',WALLET:'钱包','2C2P':'2C2P'}[r.payChannel]||'—'),payTime:r.payStatus==='PAID'?r.payTime:'',canceled:cancelled,no:r.renewNo})});return rows});
 const feeCardRow=computed(()=>{const rows=feeRows.value;return rows.find(r=>r.kind==='主订单')||null});
 const rentOpen=ref(false),depositOpen=ref(false),totalOpen=ref(false);
 const feePaid=computed(()=>{const o=orderInfo.value;return !!o&&(o.payStatus==='PAID'||o.status!=='created')});
@@ -7019,9 +7019,11 @@ function confirmCancelRenew(){if(cancelRenewLoading.value)return;cancelRenewLoad
 function payRenewDirect(no){const r=(orderInfo.value.renewOrders||[]).find(x=>x.renewNo===no);if(!r)return;payTarget.value={type:'renew',no:no,amount:r.renewRentFee};paymentType.value='2c2p';showPayment.value=true}
 function payOrderDirect(channel){const o=orderInfo.value;const amt=parseRp(o.amount)+parseRp(o.deposit);if(channel==='钱包'){if(!walletActive.value||walletActive.value.totalBalance<amt){toast('钱包余额不足，请充值','warn');return}deductWallet(amt)}paymentBusy.value=true;showRentLoading.value=true;setTimeout(()=>{showRentLoading.value=false;paymentBusy.value=false;orderInfo.value={...o,payStatus:'PAID',status:o.status==='created'?'pickup':o.status,statusText:o.status==='created'?'待取用':o.statusText,statusColor:o.status==='created'?'#FF8C1B':o.statusColor,payee:channel,payTime:formatNow()};SYS_payOrder(orderInfo.value?orderInfo.value.orderId:null);toast('支付成功','success')},900)}
 function openPayOrder(){const o=orderInfo.value;payOrderDirect(o.payee)}
-function markRenewPaid(no,payMethod){const pm=payMethod==='offline'?'线下支付':payMethod==='balance'?'钱包':'2C2P';const list=(orderInfo.value.renewOrders||[]).map(r=>r.renewNo===no?{...r,payStatus:'PAID',payTime:formatNow(),payMethod:pm}:r);orderInfo.value={...orderInfo.value,renewOrders:list}}
+function renewPayCode(pm){return (pm==='offline'||pm==='OFFLINE'||pm==='线下支付')?'OFFLINE':((pm==='balance'||pm==='WALLET'||pm==='钱包')?'WALLET':'2C2P')}
+function setRenewPayChannel(no,pm,markPaid){const o=orderInfo.value;if(!o)return;const list=(o.renewOrders||[]).map(r=>r.renewNo===no?(markPaid?{...r,payStatus:'PAID',payTime:formatNow(),payMethod:pm,payChannel:renewPayCode(pm)}:{...r,payMethod:pm,payChannel:renewPayCode(pm)}):r);orderInfo.value={...o,renewOrders:list}}
+function markRenewPaid(no,payMethod){const pm=payMethod==='offline'?'线下支付':payMethod==='balance'?'钱包':'2C2P';setRenewPayChannel(no,pm,true)}
 function deductWallet(amt){try{if(rechargeEnabled&&rechargeEnabled.value!==undefined&&!rechargeEnabled.value){}SYS_deduct(amt)}catch(e){}const w=walletActive.value;if(!w)return;let need=amt;const useRe=Math.min(w.rechargeBalance,need);w.rechargeBalance-=useRe;need-=useRe;if(need>0){const useBo=Math.min(w.bonusBalance,need);w.bonusBalance-=useBo;need-=useBo}w.totalBalance=w.rechargeBalance+w.bonusBalance;walletLedger.value.unshift({id:'WL'+Date.now(),type:'orderConsume',amount:-amt,balanceAfter:w.totalBalance,relatedOrder:orderInfo.value.orderId,operator:'当前账号',remark:'钱包支付',createdAt:new Date().toISOString()})}
-function confirmPayment(){if(!payTarget.value)return;if(payTarget.value.type==='renew'&&paymentType.value==='offline'){showPayment.value=false;toast('请等待门店确认','info');return}if(paymentType.value==='balance'){const need=payTarget.value.amount;if(!walletActive.value||walletActive.value.totalBalance<need){toast('钱包余额不足，请充值','warn');return}deductWallet(need)}paymentBusy.value=true;showRentLoading.value=true;const t=payTarget.value;setTimeout(()=>{showRentLoading.value=false;paymentBusy.value=false;if(t.type==='renew'){markRenewPaid(t.no,paymentType.value)}else{const o=orderInfo.value;orderInfo.value={...o,payStatus:'PAID',status:o.status==='created'?'pickup':o.status,statusText:o.status==='created'?'待取用':o.statusText,statusColor:o.status==='created'?'#FF8C1B':o.statusColor,payee:paymentType.value==='offline'?'线下支付':paymentType.value==='balance'?'钱包':'2C2P',payTime:formatNow()}}SYS_payOrder(orderInfo.value?orderInfo.value.orderId:null);showPayment.value=false;toast('支付成功','success')},900)}
+function confirmPayment(){if(!payTarget.value)return;if(payTarget.value.type==='renew'&&paymentType.value==='offline'){setRenewPayChannel(payTarget.value.no,'线下支付',false);showPayment.value=false;toast('请等待门店确认','info');return}if(paymentType.value==='balance'){const need=payTarget.value.amount;if(!walletActive.value||walletActive.value.totalBalance<need){toast('钱包余额不足，请充值','warn');return}deductWallet(need)}paymentBusy.value=true;showRentLoading.value=true;const t=payTarget.value;setTimeout(()=>{showRentLoading.value=false;paymentBusy.value=false;if(t.type==='renew'){markRenewPaid(t.no,paymentType.value)}else{const o=orderInfo.value;orderInfo.value={...o,payStatus:'PAID',status:o.status==='created'?'pickup':o.status,statusText:o.status==='created'?'待取用':o.statusText,statusColor:o.status==='created'?'#FF8C1B':o.statusColor,payee:paymentType.value==='offline'?'线下支付':paymentType.value==='balance'?'钱包':'2C2P',payTime:formatNow()}}SYS_payOrder(orderInfo.value?orderInfo.value.orderId:null);showPayment.value=false;toast('支付成功','success')},900)}
 var rentPtrInit=false;function openRent(){navOpen('rent')}
 /* ================= 统一页面导航栈（快照式，实现见下方 createNav） =================
    NAV_SCREENS 描述各页开关状态；pageRefList 为参与快照/恢复的 ref；nameOf 由当前状态推导页名。
@@ -8438,7 +8440,7 @@ var feeRows=computed(function(){
   var d=do_.value; if(!d) return [];
   var main={ kind:'主订单', renew:'-', plan:(d.plan||rentPlanText(d)), period:(d.rentStart||'-')+' ~ '+rentEndOf(d), rent:Number(d.amount)||0, deposit:depositOf(d), total:(Number(d.amount)||0)+depositOf(d), payStatus:feePayStatus(), payTime:(d.payTime||(showPaid.value?'2025-01-18 13:30:00':'—')) };
   var rows=[main];
-  (d.renewSubOrders||[]).forEach(function(r){ var _rd=renewDepOf(r,d); rows.push({ kind:renewKindLabel(r), isRenew:true, subOrderNo:r.subOrderNo, renew:renewKindLabel(r), paymentSplit:(r.paymentSplit||null), plan:(r.plan||rentPlanText(r)), period:(r.newRentStart||'-')+' ~ '+(r.newRentEnd||'-'), rent:Number(r.renewRentFee)||0, deposit:_rd, total:(Number(r.renewRentFee)||0)+_rd, payStatus:(r.subPayStatus||'—'), payTime:(r.payTime||r.subPayTime||'—') }); });
+  (d.renewSubOrders||[]).forEach(function(r){ var _rd=renewDepOf(r,d); rows.push({ kind:renewKindLabel(r), isRenew:true, subOrderNo:r.subOrderNo, payChannel:(r.payChannel||null), renew:renewKindLabel(r), paymentSplit:(r.paymentSplit||null), plan:(r.plan||rentPlanText(r)), period:(r.newRentStart||'-')+' ~ '+(r.newRentEnd||'-'), rent:Number(r.renewRentFee)||0, deposit:_rd, total:(Number(r.renewRentFee)||0)+_rd, payStatus:(r.subPayStatus||'—'), payTime:(r.payTime||r.subPayTime||'—') }); });
   return rows;
 });
 /* ══ 费用卡片：当前展示行（默认最后一条 = 最近一笔续租单/主订单） ══ */
@@ -8496,20 +8498,21 @@ var refundChannelBreakdown=computed(function(){
   rentCh.concat(depCh).forEach(function(x){ totalMap[x.channel]=(totalMap[x.channel]||0)+x.amount; });
   return {rent:rentCh, deposit:depCh, total:toArr(totalMap)};
 });
-function feeRenewSplit(list, total){
+function feeRenewSplit(list, total, row){
   // 续租支持线上（2C2P / 钱包）与线下支付，均正常展示
   if(list&&list.length){
     return list.filter(function(c){ return c && Number(c.amount)>0; })
                .map(function(c){ return {channel:chLabel(c.method), amount:Number(c.amount)}; });
   }
-  return Number(total)>0 ? [{channel:'2C2P', amount:Number(total)}] : [];
+  var ch=(row&&row.payChannel)?chLabel(row.payChannel):'2C2P';   // 无拆分数据时回落到行上的支付渠道（如线下确认支付回写的 OFFLINE）
+  return Number(total)>0 ? [{channel:ch, amount:Number(total)}] : [];
 }
 function feeRowBreakdown(r){
   if(r&&r.kind==='主订单'){ return feeChannelBreakdown.value; }
   if(r&&r.isRenew){
     var split=(r&&r.paymentSplit)||{};
-    var rentCh=feeRenewSplit(split.rentSplit, r?r.rent:0);
-    var depCh=feeRenewSplit(split.depositSplit, r?r.deposit:0);
+    var rentCh=feeRenewSplit(split.rentSplit, r?r.rent:0, r);
+    var depCh=feeRenewSplit(split.depositSplit, r?r.deposit:0, r);
     var map={};
     rentCh.concat(depCh).forEach(function(x){ map[x.channel]=(map[x.channel]||0)+x.amount; });
     var totalCh=Object.keys(map).map(function(k){return {channel:k,amount:map[k]};});
