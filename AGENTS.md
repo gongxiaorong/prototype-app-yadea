@@ -71,7 +71,7 @@
 - `.sheet-search`：弹窗内搜索框，只写类名，图标/`<input>` 放插槽。
 - `.sheet-body`：内容滚动区（等价 `flex-1 overflow-y-auto min-h-0` + 隐藏滚动条类）；只额外加内边距工具类。未归一的滚动区勿顺手改（属可见变化，需单独决定）。
 - **⚠️ sheet 内容行禁止自带底部 `pb-6/7/8`**（面板 token 已含 safe-area 底距，叠加成双重底距）。例外仅：textarea 内部、滚轮轮体留白、滚动区呼吸感——属元素自身语义。
-- **swap.html**：已接入同一套共享组件（`registerSheetKit` 含 `bottom-sheet`/`option-sheet`/`nav-bar`/`page`/`confirm-dialog`/`image-viewer`/`empty-state`/`tab-bar`/`loading-overlay`，`.sheet-*` token、`.fd/.sh` 过渡、`globalProperties.luci` 齐备）。保留手写：`loc-auth-modal`（图标在标题上方）与 `newAccCred`（单按钮结果页）；`transition name="fd"` 的全屏/登录带属非子页壳，保留。收敛情况以实际 DOM 为准，勿按旧结论汇报。
+- **swap.html**：已接入同一套共享组件（`registerSheetKit` 含 `bottom-sheet`/`option-sheet`/`nav-bar`/`page`/`confirm-dialog`/`image-viewer`/`empty-state`/`tab-bar`/`loading-overlay`/`kv-card`/`kv-row`，`.sheet-*`/`.kv-*` token、`.fd/.sh` 过渡、`globalProperties.luci` 齐备）。保留手写：`loc-auth-modal`（图标在标题上方）与 `newAccCred`（单按钮结果页）；`transition name="fd"` 的全屏/登录带属非子页壳，保留。收敛情况以实际 DOM 为准，勿按旧结论汇报。
 
 联系门店号码行：单行样式、整行点击拨号、**只显示号码**（不加备注/区号）；门店页/订单页/取还信息卡片三入口共用同一弹窗。
 
@@ -100,7 +100,7 @@
 
 ### kv-card / kv-row — 信息卡片（键值行式）
 
-> **仅在 `index.html` 注册与使用**：`swap.html` 的 `registerSheetKit` 尚未包含这两个组件（组件规划范围仅 index）。若要迁移到 swap，需先同步注册。
+> **双端均注册与使用**：`index.html` 与 `swap.html` 的 `registerSheetKit` 各自注册这两个组件；token（`.kv-card-div` 分隔线、`.kv-head` 分区间距）两端各一份，**改一处必须同步另一处**。
 
 ```html
 <kv-card title="车辆信息" divider label-width="5rem" class="mb-3">
@@ -114,7 +114,7 @@
 
 - **凡「label 左 / value 右」的信息卡与列表项卡一律用这两个组件**；禁止再手写 `justify-between` 紧凑行或 `w-16/w-20` 定宽行。
 - `kv-card` props：`title / divider(Boolean) / labelWidth('4rem') / copyable / copyText`；emit `copy`；slots `title / extra / footer / default`。
-  - **`#title` 插槽优先于 `title` prop**：标题带 `*`、图标或自定义字号（15/16px）时用插槽，插槽内容自带样式类。
+  - **`#title` 插槽优先于 `title` prop**：标题带 `*`、图标或需自定义字号时用插槽；**默认标题 `15px semibold #111`**，插槽内容不写字号即继承默认（切勿在插槽里重复写 13px 之类的字号类）。
   - `#extra` 只放状态/动作，**高度须 ≤16px**（`w-4 h-4` 盒 + `w-3.5 h-3.5` svg）；超了会把标题垂直下压、与其它卡不齐。
   - `#footer` 传入才渲染；需要分隔线时在 footer 内容自加 `border-top`。
   - ⚠️ 标题栏渲染条件须为 `title||$slots.title||$slots.extra`——**漏判 `$slots.title` 会让「只传 `#title`」的卡片标题整块不渲染**。
@@ -123,10 +123,10 @@
   - `align="top"` 用于多行 value；value 默认 `truncate`，要换行须 `value-class="whitespace-normal break-words"`。
 - 分隔线只在**相邻两行之间**（首行上方、末行下方天然不画）。
 - 行高恒 **32px**（`py-2` + 16px 内容）→ 行内图标/元素高度 ≤16px；多行 value 行除外（`align="top"`）。
-- 视觉基线：壳 `bg-white rounded-2xl px-4 py-3.5` + `1px solid #E5E5E5` + `0 1px 3px rgba(0,0,0,.04)`；label 13px `#999`（默认宽 4rem，长标签传 `label-width="5rem"`）；value 13px `#111` 右对齐。
+- 视觉基线：壳 `bg-white rounded-2xl px-4 py-3.5` + `1px solid #E5E5E5` + `0 1px 3px rgba(0,0,0,.04)`；标题 15px `semibold` `#111`；label 13px `#999`（默认宽 4rem，长标签传 `label-width="5rem"`）；value 13px `#111` 右对齐。
 - 间距（组件负责）：标题栏→首块 **14px**、行↔行 **16px**、行/自定义内容→footer **16px**；内容方**不要再自带顶距**。
 - **非 KV 结构**（费用/退款渠道明细树、可展开行等）：外壳仍用 `kv-card`，内容原样放默认插槽（**不经 `kv-row`、不开 `divider`**）。
-- 保留手写（例外）：`bd-info-card`（电池详情环图）、自动续租开关卡、钱包余额卡等**非行式卡**；`newAccCred`（账号创建成功单按钮结果页）。
+- 保留手写（例外）：自动续租开关卡、钱包余额卡等**非行式卡**；`newAccCred`（账号创建成功单按钮结果页）。
 
 ### tab-bar — 底部导航
 
