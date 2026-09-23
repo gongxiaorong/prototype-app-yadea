@@ -98,6 +98,36 @@
 - **`icon=""` 隐藏图标圆**（一行文字空态：`icon="" text="未找到匹配地区" text-class="text-[14px] font-normal text-[#999]"`）；根节点普通 div，支持 v-if/v-else、`data-od-id` 与 `style` 透传；默认 slot 渲染在 sub 之后（可用于按钮，如「暂无可用仓位 + 我知道了」）。
 - 例外（保留手写）：`swap.html` 的「暂无相关数据」（110px 渐变色方框图标，非圆底）与「暂无套餐」（图标右下带角标圆点）。
 
+### kv-card / kv-row — 信息卡片（键值行式）
+
+> **仅在 `index.html` 注册与使用**：`swap.html` 的 `registerSheetKit` 尚未包含这两个组件（组件规划范围仅 index）。若要迁移到 swap，需先同步注册。
+
+```html
+<kv-card title="车辆信息" divider label-width="5rem" class="mb-3">
+  <template #extra><span class="text-[13px] font-semibold">进行中</span></template>
+  <kv-row label="车型" :value="name"></kv-row>
+  <kv-row label="车架编号" :value="vin" :copyable="!!vin" @copy="t=>copyText(t,'车架编号')"></kv-row>
+  <kv-row label="退款原因" :value="r.reason||'—'" align="top" value-class="whitespace-normal break-words"></kv-row>
+  <template #footer>…</template>
+</kv-card>
+```
+
+- **凡「label 左 / value 右」的信息卡与列表项卡一律用这两个组件**；禁止再手写 `justify-between` 紧凑行或 `w-16/w-20` 定宽行。
+- `kv-card` props：`title / divider(Boolean) / labelWidth('4rem') / copyable / copyText`；emit `copy`；slots `title / extra / footer / default`。
+  - **`#title` 插槽优先于 `title` prop**：标题带 `*`、图标或自定义字号（15/16px）时用插槽，插槽内容自带样式类。
+  - `#extra` 只放状态/动作，**高度须 ≤16px**（`w-4 h-4` 盒 + `w-3.5 h-3.5` svg）；超了会把标题垂直下压、与其它卡不齐。
+  - `#footer` 传入才渲染；需要分隔线时在 footer 内容自加 `border-top`。
+  - ⚠️ 标题栏渲染条件须为 `title||$slots.title||$slots.extra`——**漏判 `$slots.title` 会让「只传 `#title`」的卡片标题整块不渲染**。
+- `kv-row` props：`label（⚠️ 不能命名为 `key`——Vue 保留属性）/ value / copyable / copyText / labelWidth / labelClass / valueClass / valueStyle / divider / align`；slots `key / value`；emit `copy`。
+  - `divider` 三态：不写=跟随卡片；`:divider="true"` 强制画（**该行上方**）；`:divider="false"` 强制不画；裸写 `divider` 视同 `true`。
+  - `align="top"` 用于多行 value；value 默认 `truncate`，要换行须 `value-class="whitespace-normal break-words"`。
+- 分隔线只在**相邻两行之间**（首行上方、末行下方天然不画）。
+- 行高恒 **32px**（`py-2` + 16px 内容）→ 行内图标/元素高度 ≤16px；多行 value 行除外（`align="top"`）。
+- 视觉基线：壳 `bg-white rounded-2xl px-4 py-3.5` + `1px solid #E5E5E5` + `0 1px 3px rgba(0,0,0,.04)`；label 13px `#999`（默认宽 4rem，长标签传 `label-width="5rem"`）；value 13px `#111` 右对齐。
+- 间距（组件负责）：标题栏→首块 **14px**、行↔行 **16px**、行/自定义内容→footer **16px**；内容方**不要再自带顶距**。
+- **非 KV 结构**（费用/退款渠道明细树、可展开行等）：外壳仍用 `kv-card`，内容原样放默认插槽（**不经 `kv-row`、不开 `divider`**）。
+- 保留手写（例外）：`bd-info-card`（电池详情环图）、自动续租开关卡、钱包余额卡等**非行式卡**；`newAccCred`（账号创建成功单按钮结果页）。
+
 ### tab-bar — 底部导航
 
 ```html
@@ -193,3 +223,4 @@
 | 新 utility 类"没生效" | UnoCSS 按需异步生成 | 等 ~1s 或查 `styleSheets`（§2.9） |
 | 挂载失败误判 | 生产构建 `app._instance` 为 `null` | §6.4 用 DOM 判据 |
 | 迁移后标题偏移 | 手写头部 `mr-8` 补偿 | 一律用 `nav-bar`（§3） |
+| kv-card 传了 `#title` 但标题不显示 | 标题栏 `v-if` 漏判 `$slots.title` | 条件须含 `title\|\|$slots.title\|\|$slots.extra`（§3） |

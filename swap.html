@@ -1329,17 +1329,12 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
 <template v-if="swapRecordsView.length">
 <div v-for="r in swapRecordsView" :key="r.id" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'swap-record-'+r.id">
-<div class="flex items-center gap-2 pb-3" style="border-bottom:1px solid #F0F0F0">
-<span class="flex-1 text-[16px] font-bold text-[#1A1A1A]">{{ r.title }}</span>
-<span class="text-[13px] font-medium" style="color:#FF8A00">{{ r.status }}</span>
-</div>
-<div class="pt-0.5">
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">订单编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.orderNo }}</span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">电池编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.batteryId }}</span><span data-cp @click="copyText(r.batteryId)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">{{ r.type==='borrow'?'借电站点':'还电站点' }}</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.station }}</span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">{{ r.type==='borrow'?'借电柜子':'还电柜子' }}</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.cabinet }}</span><span data-cp @click="copyText(r.cabinet)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">{{ r.type==='borrow'?'借电时间':'还电时间' }}</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.time }}</span></div>
-</div>
+<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">订单编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.orderNo || '—' }}</span><span v-if="r.orderNo&&r.orderNo!=='-'" data-cp @click="copyText(r.orderNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
+<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">电池编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.batteryId || '—' }}</span><span v-if="r.batteryId&&r.batteryId!=='-'" data-cp @click="copyText(r.batteryId)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
+<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">取电柜子</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.borrowNo || '—' }}</span><span v-if="r.borrowNo" data-cp @click="copyText(r.borrowNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
+<div v-if="r.returnNo" class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">还电柜子</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.returnNo }}</span><span data-cp @click="copyText(r.returnNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
+<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">取电时间</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px] tabular-nums" style="color:#111">{{ r.borrowTime || '—' }}</span></div>
+<div v-if="r.returnTime" class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">还电时间</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px] tabular-nums" style="color:#111">{{ r.returnTime }}</span></div>
 </div>
 </template>
 <empty-state v-else icon="scroll-text" text="暂无记录" root-class="flex flex-col items-center justify-center text-center" style="padding-top:150px" circle-class="contents" icon-class="w-20 h-20 text-[#C6CDD8]" text-class="text-[15px] font-semibold text-[#333] mt-5" data-od-id="swap-records-empty"></empty-state>
@@ -1725,7 +1720,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 rounded-full flex items-center py-1.5 gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px">
 <span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span>
 <input v-model="battQ" type="text" placeholder="请输入电池编号" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]" data-od-id="batt-search-input">
-<button type="button" data-cp @click="battQ=''" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 cursor-pointer transition-colors active:bg-[#E8EBF1]" :style="{border:'none',background:'transparent',visibility:battQ?'visible':'hidden'}" data-od-id="batt-search-clear"><span v-html="luci('x','w-4 h-4 text-[#999]')"></span></button>
+<button type="button" data-cp @click="battListScan" class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer shrink-0 transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent" data-od-id="batt-search-scan"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button>
 </div>
 <div data-cp @click="openBattFilter()" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shrink-0" :style="battFilterActive?{background:'#FFF3E0',border:'1px solid var(--accent-2)',color:'var(--accent-2)'}:{background:'#fff',border:'1px solid #E5E5E5',color:'#666'}" data-od-id="batt-filter-btn">
 <span v-html="luci('sliders-horizontal','w-4 h-4')"></span>
@@ -1733,26 +1728,23 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 <div class="flex-1 overflow-y-auto min-h-0 px-5 pt-3 pb-24 hide-scroll" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
-<empty-state v-if="!battList.length" icon="battery-charging" text="暂无电池" sub="没有符合筛选条件的电池" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1">
-<div data-cp @click="battQ='';battFilterReset();battFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="batt-empty-reset">清空筛选</div>
+<empty-state v-if="!battList.length" icon="battery-charging" text="暂无电池" :sub="battEmptySub">
+<div v-if="battQ||battFilterActive" data-cp @click="battQ='';battFilterReset();battFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="batt-empty-reset">清空筛选</div>
 </empty-state>
 <div v-for="b in battList" :key="b.no" data-cp @click="openBattDetail(b.no)" class="bg-white rounded-xl p-4 mb-2.5 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :data-od-id="'batt-item-'+b.no">
 <div class="text-[15px] font-semibold mb-1.5">电池编号：{{ b.no }}</div>
-<div class="flex justify-end items-center text-[13px] mb-1.5">
+<div class="flex justify-between items-center text-[13px] mb-1.5">
+<span class="truncate min-w-0 pr-2">归属：{{ battLocLabel(b) }}</span>
 <div class="flex gap-3 shrink-0">
-<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.cab(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.cab(b))}"></span>{{ BATT_TEXT.cab(b) }}</span>
-<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.rent(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.rent(b))}"></span>{{ BATT_TEXT.rent(b) }}</span>
 <span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.net(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.net(b))}"></span>{{ BATT_TEXT.net(b) }}</span>
+<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.cab(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.cab(b))}"></span>{{ BATT_TEXT.cab(b) }}</span>
 </div>
 </div>
 <div class="flex justify-between items-center text-[13px]">
-<span class="flex items-center gap-1 min-w-0 pr-2">
 <span class="flex items-center gap-1 shrink-0 tabular-nums" :style="{color:socColor(b.soc)}"><span v-html="luci(socIcon(b.soc),'w-3 h-3')"></span>{{ b.soc }}%</span>
-<span v-if="battStateOf(b)" class="truncate">· {{ battStateOf(b) }}</span>
-</span>
 <div class="flex gap-3 shrink-0">
-<span class="text-[12px]" style="color:#666">健康度 {{ b.health }}%</span>
-<span class="text-[12px]" style="color:#666">循环 {{ b.cycles }} 次</span>
+<span v-if="battStateOf(b)" class="flex items-center gap-1 text-[12px]" :style="{color:battStateColor(b)}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:battStateColor(b)}"></span>{{ battStateOf(b) }}</span>
+<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.rent(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.rent(b))}"></span>{{ BATT_TEXT.rent(b) }}</span>
 </div>
 </div>
 </div>
@@ -1764,7 +1756,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 rounded-full flex items-center py-1.5 gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px">
 <span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span>
 <input v-model="cabQ" type="text" placeholder="请输入机柜编号" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]" data-od-id="cab-search-input">
-<button type="button" data-cp @click="cabQ=''" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 cursor-pointer transition-colors active:bg-[#E8EBF1]" :style="{border:'none',background:'transparent',visibility:cabQ?'visible':'hidden'}" data-od-id="cab-search-clear"><span v-html="luci('x','w-4 h-4 text-[#999]')"></span></button>
+<button type="button" data-cp @click="cabListScan" class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer shrink-0 transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent" data-od-id="cab-search-scan"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button>
 </div>
 <div data-cp @click="openCabFilter()" class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer shrink-0" :style="cabFilterActive?{background:'#FFF3E0',border:'1px solid var(--accent-2)',color:'var(--accent-2)'}:{background:'#fff',border:'1px solid #E5E5E5',color:'#666'}" data-od-id="cab-filter-btn">
 <span v-html="luci('sliders-horizontal','w-4 h-4')"></span>
@@ -1772,13 +1764,13 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 <div class="flex-1 overflow-y-auto min-h-0 px-5 pt-3 pb-24 hide-scroll" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
-<empty-state v-if="!cabList.length" icon="box" text="暂无换电柜" sub="没有符合筛选条件的换电柜" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1">
-<div data-cp @click="cabQ='';cabFilterReset();cabFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="cab-empty-reset">清空筛选</div>
+<empty-state v-if="!cabList.length" icon="box" text="暂无换电柜" :sub="cabEmptySub">
+<div v-if="cabQ||cabFilterActive" data-cp @click="cabQ='';cabFilterReset();cabFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="cab-empty-reset">清空筛选</div>
 </empty-state>
 <div v-for="c in cabList" :key="c.no" data-cp @click="openCabDetail(c.no)" class="bg-white rounded-xl p-4 mb-2.5 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :data-od-id="'cab-item-'+c.no">
 <div class="text-[15px] font-semibold mb-1.5">机柜编号：{{ c.no }}</div>
 <div class="flex justify-between items-center text-[13px] mb-1.5">
-<span class="truncate min-w-0 pr-2">站点：{{ stationNameOf(c.stationId) }}</span>
+<span class="truncate min-w-0 pr-2">站点：{{ cabStationLabel(c) }}</span>
 <div class="flex gap-3 shrink-0">
 <span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.net(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.net(c))}"></span>{{ CAB_TEXT.net(c) }}</span>
 <span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.biz(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.biz(c))}"></span>{{ CAB_TEXT.biz(c) }}</span>
@@ -1887,23 +1879,24 @@ body.host-single-m #root-user{display:none}
 <span class="flex-1 text-[15px] font-medium" style="color:#111">门店管理</span>
 <div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">共 {{ stores.length }} 家</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
 </div>
-<div data-cp @click="openStationList()" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border-bottom:1px solid #EDEDED" data-od-id="mine-station-entry">
+<div data-cp @click="openStationList()" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9] transition-colors" data-od-id="mine-station-entry">
 <div class="w-7 h-7 flex items-center justify-center mr-3 text-[#666]"><span v-html="luci('map-pin','w-5 h-5')"></span></div>
 <span class="flex-1 text-[15px] font-medium" style="color:#111">站点管理</span>
 <div class="flex items-center gap-1"><span class="text-[13px] text-[#666] mr-1">共 {{ stations.length }} 个</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
 </div>
-<div data-cp @click="openDashboard()" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9] transition-colors" data-od-id="mine-dashboard-entry">
+<!-- 数据看板入口暂时隐藏（恢复：去掉本段 HTML 注释即可；分隔线已改为该行的 border-top） -->
+<!-- <div data-cp @click="openDashboard()" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border-top:1px solid #EDEDED" data-od-id="mine-dashboard-entry">
 <div class="w-7 h-7 flex items-center justify-center mr-3 text-[#666]"><span v-html="luci('bar-chart-3','w-5 h-5')"></span></div>
 <span class="flex-1 text-[15px] font-medium" style="color:#111">数据看板</span>
 <div class="flex items-center gap-1"><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
-</div>
+</div> -->
 </div>
 </div>
 </div>
 </div>
 <page :open="mPage==='cabDetail'" :z="600" oid="mcab-detail-page">
-<nav-bar :title="curCab?curCab.no:'换电柜详情'" border-color="#E5E5E5" @back="closePage()"><template #right><span v-if="curCab" class="text-sm font-medium text-[#2F6FEB] cursor-pointer active:opacity-70 whitespace-nowrap" data-cp @click="openCabEdit()" data-od-id="cab-detail-edit">编辑</span></template></nav-bar>
-<div class="flex-1 overflow-y-auto px-5 pt-4 pb-36 hide-scroll">
+<nav-bar title="换电柜详情" border-color="#E5E5E5" @back="closePage()"><template #right><span v-if="curCab" class="text-sm font-medium text-[#2F6FEB] cursor-pointer active:opacity-70 whitespace-nowrap" data-cp @click="openCabEdit()" data-od-id="cab-detail-edit">编辑</span></template></nav-bar>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
 <empty-state v-if="!curCab" icon="box" text="换电柜不存在" sub="该换电柜可能已被移除" root-class="flex flex-col items-center justify-center py-16" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
 <template v-if="curCab">
 <div class="bg-white rounded-2xl px-4 py-3.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
@@ -1914,11 +1907,15 @@ body.host-single-m #root-user{display:none}
 <span v-if="curCab.no" class="shrink-0 pl-1.5" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyCabNo()" data-od-id="cab-code-copy"></span>
 </div>
 <div class="flex items-center py-2">
-<span class="text-[13px] shrink-0" style="color:#999">名称</span>
+<span class="text-[13px] shrink-0" style="color:#999">机柜名称</span>
 <span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ curCab.name }}</span>
 </div>
+<div data-cp @click="curCab.stationId&&openStationDetail(curCab.stationId)" class="flex items-center py-2 cursor-pointer active:opacity-70" data-od-id="cab-station-entry">
+<span class="text-[13px] shrink-0" style="color:#999">当前站点</span>
+<span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:var(--link)">{{ stationNameOf(curCab.stationId) }}</span>
+</div>
 <div class="flex items-center py-2">
-<span class="text-[13px] shrink-0" style="color:#999">地址</span>
+<span class="text-[13px] shrink-0" style="color:#999">当前地址</span>
 <span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ stationAddrOf(curCab.stationId) }}</span>
 </div>
 <div class="grid grid-cols-4 gap-x-1 gap-y-3.5 mt-4">
@@ -1929,15 +1926,23 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 <div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold mb-3.5" style="color:#111">仓位状态</div>
-<div class="grid grid-cols-3 gap-2.5">
-<div v-for="s in cabSlots" :key="s.no" data-cp @click="openDoorInfo(s.no)" class="h-[72px] rounded-xl flex flex-col items-center justify-center gap-1.5 cursor-pointer transition-colors" :style="(s.tone?'background:#fff;border:1px solid #E5E5E5':(s.occupied?'background:#2B3F5F;border:1px solid #2B3F5F':'background:#fff;border:1px dashed #D5DBE5'))+(s.doorOpen?';box-shadow:0 0 0 2px #FF8A00':'')+(s.disabled?';opacity:.62':'')" :data-od-id="'cab-slot-'+curCab.no+'-'+s.no">
-<span class="text-[13px] font-semibold" :style="{color:s.tone?'#111':(s.occupied?'#FFFFFF':'#999')}">{{ s.no }}</span>
-<span class="text-[11px] font-semibold" :style="{color:s.stateColor}">{{ (s.disabled?'禁用 · ':'')+(s.state||(s.occupied?'有电池':'空仓')) }}</span>
-<div v-if="s.tone" class="flex items-center gap-1.5">
-<div class="w-11 h-[4px] rounded-full overflow-hidden shrink-0" style="background:#EEF0F3"><div class="h-full rounded-full" :style="{width:s.soc+'%',background:s.tone}"></div></div>
-<span class="text-[11px] font-semibold leading-none tabular-nums" :style="{color:s.tone}">{{ s.soc }}%</span>
+<div class="text-[13px] font-semibold mb-3" style="color:#111">机柜控制</div>
+<div class="grid grid-cols-4 gap-2">
+<div data-cp @click="cabAskEnabled(curCab.no)" :class="cabOnline?'':'op-disabled'" class="flex flex-col items-center gap-1.5 cursor-pointer active:opacity-70" data-od-id="cab-op-enabled">
+<div class="w-10 h-10 rounded-full flex items-center justify-center" :style="{background:curCab.enabled?'#DC2626':'#2F6FEB'}"><span v-html="luci(curCab.enabled?'minus':'play','w-5 h-5 text-white')"></span></div>
+<span class="text-[11px] font-medium" style="color:#666">{{ curCab.enabled?'禁用':'启用' }}</span>
 </div>
+<div data-cp @click="cabAskBiz(curCab.no)" :class="bizUsable?'':'op-disabled'" class="flex flex-col items-center gap-1.5 cursor-pointer active:opacity-70" data-od-id="cab-op-biz">
+<div class="w-10 h-10 rounded-xl flex items-center justify-center" :style="{background:curCab.bizOnline?'#FF8A00':'#16A34A'}"><span v-html="luci(curCab.bizOnline?'arrow-down':'arrow-up','w-5 h-5 text-white')"></span></div>
+<span class="text-[11px] font-medium" style="color:#666">{{ curCab.bizOnline?'下线':'上线' }}</span>
+</div>
+<div data-cp @click="cabAskOpenAll(curCab.no)" :class="cabUsable?'':'op-disabled'" class="flex flex-col items-center gap-1.5 cursor-pointer active:opacity-70" data-od-id="cab-op-openall">
+<div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#2F6FEB"><span v-html="luci('door-open','w-5 h-5 text-white')"></span></div>
+<span class="text-[11px] font-medium" style="color:#666">仓门全开</span>
+</div>
+<div data-cp @click="cabAskOpenEmpty(curCab.no)" :class="cabUsable?'':'op-disabled'" class="flex flex-col items-center gap-1.5 cursor-pointer active:opacity-70" data-od-id="cab-op-openempty">
+<div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#7C5CFC"><span v-html="luci('package-open','w-5 h-5 text-white')"></span></div>
+<span class="text-[11px] font-medium" style="color:#666">空仓全开</span>
 </div>
 </div>
 </div>
@@ -1962,28 +1967,20 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
+<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[13px] font-semibold mb-3.5" style="color:#111">仓位状态</div>
+<div class="grid grid-cols-3 gap-2.5">
+<div v-for="s in cabSlots" :key="s.no" data-cp @click="openDoorInfo(s.no)" class="h-[72px] rounded-xl flex flex-col items-center justify-center gap-1.5 cursor-pointer transition-colors" :style="(s.tone?'background:#fff;border:1px solid #E5E5E5':(s.occupied?'background:#2B3F5F;border:1px solid #2B3F5F':'background:#fff;border:1px dashed #D5DBE5'))+(s.doorOpen?';box-shadow:0 0 0 2px #FF8A00':'')+(s.disabled?';opacity:.62':'')" :data-od-id="'cab-slot-'+curCab.no+'-'+s.no">
+<span class="text-[13px] font-semibold" :style="{color:s.tone?'#111':(s.occupied?'#FFFFFF':'#999')}">{{ s.no }}</span>
+<span class="text-[11px] font-semibold" :style="{color:s.stateColor}">{{ (s.disabled?'禁用 · ':'')+(s.state||(s.occupied?'有电池':'空仓')) }}</span>
+<div v-if="s.tone" class="flex items-center gap-1.5">
+<div class="w-11 h-[4px] rounded-full overflow-hidden shrink-0" style="background:#EEF0F3"><div class="h-full rounded-full" :style="{width:s.soc+'%',background:s.tone}"></div></div>
+<span class="text-[11px] font-semibold leading-none tabular-nums" :style="{color:s.tone}">{{ s.soc }}%</span>
+</div>
+</div>
+</div>
+</div>
 </template>
-</div>
-<div v-if="curCab" class="absolute left-0 right-0 bottom-0 px-4 pb-5 pt-3" style="background:rgba(255,255,255,.96);border-top:1px solid #F0F0F0;backdrop-filter:blur(10px)">
-<div class="text-[13px] font-semibold mb-2.5" style="color:#111">机柜控制</div>
-<div class="grid grid-cols-4 gap-2">
-<div data-cp @click="cabAskEnabled(curCab.no)" :class="cabOnline?'':'op-disabled'" class="flex flex-col items-center gap-1.5 cursor-pointer active:opacity-70" data-od-id="cab-op-enabled">
-<div class="w-10 h-10 rounded-full flex items-center justify-center" :style="{background:curCab.enabled?'#DC2626':'#2F6FEB'}"><span v-html="luci(curCab.enabled?'minus':'play','w-5 h-5 text-white')"></span></div>
-<span class="text-[11px] font-medium" style="color:#666">{{ curCab.enabled?'禁用':'启用' }}</span>
-</div>
-<div data-cp @click="cabAskBiz(curCab.no)" :class="bizUsable?'':'op-disabled'" class="flex flex-col items-center gap-1.5 cursor-pointer active:opacity-70" data-od-id="cab-op-biz">
-<div class="w-10 h-10 rounded-xl flex items-center justify-center" :style="{background:curCab.bizOnline?'#FF8A00':'#16A34A'}"><span v-html="luci(curCab.bizOnline?'arrow-down':'arrow-up','w-5 h-5 text-white')"></span></div>
-<span class="text-[11px] font-medium" style="color:#666">{{ curCab.bizOnline?'下线':'上线' }}</span>
-</div>
-<div data-cp @click="cabAskOpenAll(curCab.no)" :class="cabUsable?'':'op-disabled'" class="flex flex-col items-center gap-1.5 cursor-pointer active:opacity-70" data-od-id="cab-op-openall">
-<div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#2F6FEB"><span v-html="luci('door-open','w-5 h-5 text-white')"></span></div>
-<span class="text-[11px] font-medium" style="color:#666">仓门全开</span>
-</div>
-<div data-cp @click="cabAskOpenEmpty(curCab.no)" :class="cabUsable?'':'op-disabled'" class="flex flex-col items-center gap-1.5 cursor-pointer active:opacity-70" data-od-id="cab-op-openempty">
-<div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#7C5CFC"><span v-html="luci('package-open','w-5 h-5 text-white')"></span></div>
-<span class="text-[11px] font-medium" style="color:#666">空仓全开</span>
-</div>
-</div>
 </div>
 </page>
 <!-- 机柜图片（机柜服务次级页：列表排列 + 点击大图预览；数据源 curCab.imgs，原型操作「列表数据」置空走空态） -->
@@ -2087,9 +2084,17 @@ body.host-single-m #root-user{display:none}
 <page :open="mPage==='cabUsage'" :z="600" oid="mcab-usage-page">
 <nav-bar title="使用记录" border-color="#E5E5E5" @back="closePage()"></nav-bar>
 <div class="bg-white shrink-0 px-5 pt-3 pb-3" style="border-bottom:1px solid #E5E5E5">
-<div class="flex-1 rounded-full flex items-center py-1.5 gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px">
-<span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span>
-<input v-model="useQ" type="text" placeholder="请输入账号/手机号/邮箱" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]" data-od-id="cab-use-search">
+<div class="flex-1 rounded-full flex items-center py-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:6px;padding-right:4px">
+<div class="relative shrink-0" data-cp @click.stop>
+<button data-cp @click="cabUseScopeOpen=!cabUseScopeOpen" type="button" class="flex items-center gap-1.5 text-[12px] font-medium text-[#333] bg-transparent border-0 outline-none pl-2 pr-2.5 mr-1.5 py-1 cursor-pointer" style="border-right:1px solid #E5E5E5">
+<span class="truncate max-w-[60px]">{{ cabUseScopeLabel }}</span>
+<svg class="w-4 h-4 text-[#999] transition-transform" :class="cabUseScopeOpen?'rotate-180':''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+</button>
+<div v-if="cabUseScopeOpen" data-cp @click.stop class="absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg border border-[#EEE] py-1 z-50 min-w-[100px]">
+<div v-for="opt in cabUseScopeOpts" :key="opt.v" data-cp @click="setCabUseScope(opt.v)" class="px-3 py-2 text-[12px] cursor-pointer hover:bg-[#F6F7F9]" :style="opt.v===cabUseScope?{color:'var(--link)',fontWeight:600,background:'#EBF1FD'}:{color:'#333'}">{{ opt.l }}</div>
+</div>
+</div>
+<input v-model="useQ" type="text" :placeholder="cabUsePH" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]" data-od-id="cab-use-search">
 <button type="button" data-cp @click="useQ=''" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 cursor-pointer transition-colors active:bg-[#E8EBF1]" :style="{border:'none',background:'transparent',visibility:useQ?'visible':'hidden'}" data-od-id="cab-use-search-clear"><span v-html="luci('x','w-4 h-4 text-[#999]')"></span></button>
 </div>
 </div>
@@ -2221,58 +2226,187 @@ body.host-single-m #root-user{display:none}
 <image-viewer :src="cabImgPreviewItem?{color:'#2B3F5F',label:'机柜图片',time:cabImgPreviewItem.time}:null" tip="点击空白处关闭" @close="showCabImgPreview=false"></image-viewer>
 </page>
 <page :open="mPage==='battDetail'" :z="600" oid="mbatt-detail-page">
-<nav-bar :title="curBatt?curBatt.no:'电池详情'" border-color="#E5E5E5" @back="closePage()"></nav-bar>
-<div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll">
+<nav-bar title="电池详情" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
 <empty-state v-if="!curBatt" icon="battery-charging" text="电池不存在" sub="该电池可能已被移除" root-class="flex flex-col items-center justify-center py-16" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
 <template v-if="curBatt">
-<div class="bg-white rounded-2xl px-4 py-5 mb-3 flex flex-col items-center" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="w-[132px] h-[132px] rounded-full flex items-center justify-center" :style="{background:'conic-gradient('+socColor(curBatt.soc)+' 0deg '+(curBatt.soc*3.6)+'deg,#EEF0F3 '+(curBatt.soc*3.6)+'deg 360deg)'}">
-<div class="w-[104px] h-[104px] rounded-full bg-white flex flex-col items-center justify-center" style="box-shadow:0 1px 4px rgba(0,0,0,.05)">
-<span class="text-[28px] font-bold leading-none tabular-nums" :style="{color:socColor(curBatt.soc)}">{{ curBatt.soc }}%</span>
-<span class="text-[11px] mt-1.5" style="color:#999">当前电量</span>
+<!-- 地图卡片（对标租车商户端「电池详情」：地图预览 + 当前位置 / 历史轨迹） -->
+<div class="mb-3 rounded-2xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="w-full h-[170px] relative cursor-pointer active:opacity-95" style="background:#E8EEF5;background-image:linear-gradient(rgba(43,63,95,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(43,63,95,.06) 1px,transparent 1px);background-size:28px 28px" data-cp @click="openBattLoc()" data-od-id="batt-loc-map">
+<div v-if="curBatt.at" class="absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-full z-[5] pointer-events-none">
+<div class="w-8 h-8 rounded-full flex items-center justify-center text-white shadow-md" style="background:var(--accent)"><span v-html="luci('battery-charging','w-4 h-4')"></span></div>
+<div class="w-0 h-0 mx-auto border-l-[5px] border-r-[5px] border-t-[6px] border-l-transparent border-r-transparent" style="border-top-color:var(--accent)"></div>
+</div>
+<div v-else class="absolute inset-0 flex flex-col items-center justify-center gap-1.5 pointer-events-none">
+<span v-html="luci('map-pin','w-7 h-7 text-[var(--accent)]')"></span>
+<span class="text-[12px]" style="color:#6B6B6B">暂无定位 · 点击查看</span>
 </div>
 </div>
-<div class="flex items-center gap-1.5 mt-4">
-<span v-if="curBatt.charging" class="text-[11px] px-2 py-1 rounded-full font-medium" style="color:#FF8A00;background:#FF8A001A">充电中</span>
-<span class="text-[11px] px-2 py-1 rounded-full font-medium" :style="{color:dotColor(BATT_DOT.cab(curBatt)),background:dotColor(BATT_DOT.cab(curBatt))+'1A'}">{{ BATT_TEXT.cab(curBatt) }}</span>
-<span class="text-[11px] px-2 py-1 rounded-full font-medium" :style="{color:dotColor(BATT_DOT.rent(curBatt)),background:dotColor(BATT_DOT.rent(curBatt))+'1A'}">{{ BATT_TEXT.rent(curBatt) }}</span>
-<span class="text-[11px] px-2 py-1 rounded-full font-medium" :style="{color:dotColor(BATT_DOT.net(curBatt)),background:dotColor(BATT_DOT.net(curBatt))+'1A'}">电池{{ BATT_TEXT.net(curBatt) }}</span>
+<div class="bg-white flex items-stretch" style="border-top:1px solid #E5E5E5">
+<div class="flex-1 min-w-0 px-3.5 py-3.5 flex items-center cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openBattLoc()" data-od-id="batt-loc-info">
+<div class="text-[14px] font-medium truncate" style="color:#111">{{ battLocText(curBatt) }}</div>
+</div>
+<div class="shrink-0 px-3.5 py-3.5 flex items-center justify-center gap-0.5 cursor-pointer active:bg-[#F6F7F9] min-w-[88px]" data-cp @click="openBattTrack()" data-od-id="batt-track-entry">
+<span class="text-[14px] font-semibold" style="color:#333">历史轨迹</span>
+<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
 </div>
 </div>
-<div class="bg-white rounded-2xl overflow-hidden mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">在柜状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.cab(curBatt))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ BATT_TEXT.cab(curBatt) }}</span></span></div>
-<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">租用状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.rent(curBatt))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ BATT_TEXT.rent(curBatt) }}</span></span></div>
-<div class="flex items-center justify-between px-4 py-3.5"><span class="text-[13px]" style="color:#999">联网状态</span><span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.net(curBatt))}"></span><span class="text-[13px] font-medium" style="color:#111">{{ BATT_TEXT.net(curBatt) }}</span></span></div>
 </div>
-<div class="bg-white rounded-2xl overflow-hidden mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">电池编号</span><span class="text-[13px] font-medium" style="color:#111">{{ curBatt.no }}</span></div>
-<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">当前所在</span><span class="text-[13px] font-medium" style="color:#111">{{ battAtLabel(curBatt) }}</span></div>
-<div class="flex items-center justify-between px-4 py-3.5" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">循环次数</span><span class="text-[13px] font-medium" style="color:#111">{{ curBatt.cycles }} 次</span></div>
-<div class="flex items-center justify-between px-4 py-3.5"><span class="text-[13px]" style="color:#999">健康度</span><span class="text-[13px] font-semibold" :style="{color:socColor(curBatt.health)}">{{ curBatt.health }}%</span></div>
+<!-- 电池信息（对标换电柜详情「机柜信息」：标题 + 标签/值行 + 状态网格） -->
+<div class="bg-white rounded-2xl px-4 py-3.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[13px] font-semibold mb-1.5" style="color:#111">电池信息</div>
+<div class="flex items-center py-2">
+<span class="text-[13px] shrink-0" style="color:#999">电池编号</span>
+<span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ curBatt.no }}</span>
+<span v-if="curBatt.no" class="shrink-0 pl-1.5" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyBattNo()" data-od-id="batt-code-copy"></span>
 </div>
-<div class="bg-white rounded-2xl px-4 pt-4 pb-2" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold" style="color:#111">流转记录</div>
-<empty-state v-if="!curBatt.records||!curBatt.records.length" icon="clock" text="暂无流转记录" root-class="flex flex-col items-center justify-center py-8" circle-class="w-11 h-11 rounded-full flex items-center justify-center mb-3 bg-[#F0F0F0]" icon-class="w-5 h-5 text-[#BBB]" text-class="text-[13px] font-semibold text-[#333]"></empty-state>
-<div class="mt-3.5">
-<div v-for="(r,i) in curBatt.records" :key="i" class="flex gap-3">
-<div class="flex flex-col items-center shrink-0">
-<div class="w-7 h-7 rounded-full flex items-center justify-center" style="background:#EEF1F8"><span v-html="luci(r.type==='borrow'?'arrow-up-right':r.type==='return'?'arrow-down-left':r.type==='charge'?'zap':r.type==='repair'?'wrench':'alert-circle','w-3.5 h-3.5 text-[#2B3F5F]')"></span></div>
-<div v-if="i<curBatt.records.length-1" class="flex-1 w-[1px] my-1.5" style="background:#E5E5E5"></div>
+<div class="flex items-center py-2">
+<span class="text-[13px] shrink-0" style="color:#999">当前归属</span>
+<span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ battLocLabel(curBatt) }}</span>
 </div>
-<div class="flex-1 min-w-0 pb-4">
-<div class="text-[11px]" style="color:#999">{{ r.time }}</div>
-<div class="text-[13px] mt-1" style="color:#333;line-height:1.5">{{ r.note }}</div>
+<div class="grid grid-cols-4 gap-x-1 gap-y-3.5 mt-4">
+<div v-for="s in battStateCells" :key="s.label" class="text-center">
+<div class="text-[14px] font-bold" :style="{color:s.color}">{{ s.value }}</div>
+<div class="text-[11px] mt-1" style="color:#999">{{ s.label }}</div>
 </div>
+</div>
+</div>
+<!-- 电池参数（4 列「值在上、标签在下」网格，字号/间距与「电池信息」状态网格一致；电量与健康度按 3 阶梯色标着色） -->
+<div class="bg-white rounded-2xl px-4 py-3.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[13px] font-semibold mb-1.5" style="color:#111">电池参数</div>
+<div class="grid grid-cols-4 gap-x-1 gap-y-3.5 mt-4">
+<div class="text-center">
+<div class="text-[14px] font-bold tabular-nums" :style="{color:socColor(curBatt.soc)}">{{ curBatt.soc }}%</div>
+<div class="text-[11px] mt-1" style="color:#999">当前电量</div>
+</div>
+<div class="text-center">
+<div class="text-[14px] font-bold tabular-nums" style="color:#111">{{ battVolt(curBatt) }}</div>
+<div class="text-[11px] mt-1" style="color:#999">当前电压</div>
+</div>
+<div class="text-center">
+<div class="text-[14px] font-bold tabular-nums" style="color:#111">{{ battAmp(curBatt) }}</div>
+<div class="text-[11px] mt-1" style="color:#999">当前电流</div>
+</div>
+<div class="text-center">
+<div class="text-[14px] font-bold tabular-nums" :style="{color:socColor(curBatt.health)}">{{ curBatt.health }}%</div>
+<div class="text-[11px] mt-1" style="color:#999">健康度</div>
+</div>
+<div class="text-center">
+<div class="text-[14px] font-bold tabular-nums" style="color:#111">{{ curBatt.cycles }}</div>
+<div class="text-[11px] mt-1" style="color:#999">循环次数</div>
+</div>
+</div>
+</div>
+<!-- 电池控制（对标换电柜详情「机柜控制」：仅放电控制一个操作） -->
+<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[13px] font-semibold mb-3" style="color:#111">电池控制</div>
+<div class="grid grid-cols-4 gap-2">
+<div data-cp @click="battAskDischarge()" class="flex flex-col items-center gap-1.5 cursor-pointer active:opacity-70" data-od-id="batt-op-discharge">
+<div class="w-10 h-10 rounded-full flex items-center justify-center" :style="{background:battDischargeOn(curBatt)?'#DC2626':'#16A34A'}"><span v-html="luci(battDischargeOn(curBatt)?'zap-off':'zap','w-5 h-5 text-white')"></span></div>
+<span class="text-[11px] font-medium" style="color:#666">{{ battDischargeOn(curBatt)?'禁止放电':'允许放电' }}</span>
+</div>
+</div>
+</div>
+<!-- 电池服务（对标换电柜详情「机柜服务」：仅「租借记录」一个入口） -->
+<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
+<div class="text-[13px] font-semibold mb-3" style="color:#111">电池服务</div>
+<div class="grid grid-cols-4 gap-2">
+<div data-cp @click="openBattRentRec()" class="flex flex-col items-center gap-2 py-1 cursor-pointer active:opacity-70" data-od-id="batt-entry-rentrec">
+<span v-html="luci('file-text','w-7 h-7 text-[#2F6FEB]')"></span>
+<span class="text-[13px] font-medium" style="color:#111">租借记录</span>
 </div>
 </div>
 </div>
 </template>
 </div>
-<div v-if="curBatt" class="absolute left-0 right-0 bottom-0 px-5 pb-6 pt-3" style="background:rgba(255,255,255,.96);border-top:1px solid #F0F0F0;backdrop-filter:blur(10px)">
-<div data-cp @click="curBatt.cabState==='inCab'?borrowBattery(curBatt.no):returnBattery(curBatt.no)" class="h-12 rounded-full flex items-center justify-center gap-2 text-[15px] font-semibold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="batt-op-borrow">
-<span v-html="luci(curBatt.cabState==='inCab'?'arrow-up-right':'arrow-down-left','w-4 h-4')"></span>
-<span>{{ curBatt.cabState==='inCab'?'模拟借出电池':'模拟归还电池' }}</span>
+</page>
+<!-- 电池租借记录（文档《B端_电池状态与告警体系》§八：来源换电订单 wb_swap_order；样式对标换电柜「使用记录」） -->
+<page :open="mPage==='battRentRec'" :z="600" oid="mbatt-rentrec-page">
+<nav-bar title="租借记录" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div class="bg-white shrink-0 px-5 pt-3 pb-3" style="border-bottom:1px solid #E5E5E5">
+<div class="flex-1 rounded-full flex items-center py-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:6px;padding-right:4px">
+<div class="relative shrink-0" data-cp @click.stop>
+<button data-cp @click="battRentScopeOpen=!battRentScopeOpen" type="button" class="flex items-center gap-1.5 text-[12px] font-medium text-[#333] bg-transparent border-0 outline-none pl-2 pr-2.5 mr-1.5 py-1 cursor-pointer" style="border-right:1px solid #E5E5E5">
+<span class="truncate max-w-[60px]">{{ battRentScopeLabel }}</span>
+<svg class="w-4 h-4 text-[#999] transition-transform" :class="battRentScopeOpen?'rotate-180':''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+</button>
+<div v-if="battRentScopeOpen" data-cp @click.stop class="absolute top-full left-0 mt-1 bg-white rounded-xl shadow-lg border border-[#EEE] py-1 z-50 min-w-[100px]">
+<div v-for="opt in battRentScopeOpts" :key="opt.v" data-cp @click="setBattRentScope(opt.v)" class="px-3 py-2 text-[12px] cursor-pointer hover:bg-[#F6F7F9]" :style="opt.v===battRentScope?{color:'var(--link)',fontWeight:600,background:'#EBF1FD'}:{color:'#333'}">{{ opt.l }}</div>
 </div>
+</div>
+<input v-model="battRentQ" type="text" :placeholder="battRentPH" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]" data-od-id="batt-rent-search">
+<button type="button" data-cp @click="battRentClear" class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 cursor-pointer transition-colors active:bg-[#E8EBF1]" :style="{border:'none',background:'transparent',visibility:battRentQ?'visible':'hidden'}" data-od-id="batt-rent-search-clear"><span v-html="luci('x','w-4 h-4 text-[#999]')"></span></button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
+<template v-if="battRentList.length">
+<div v-for="(r,i) in battRentList" :key="i" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'batt-rent-'+i">
+<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">租借用户</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ rentUser(r) }}</span><span data-cp @click="copyField('租借用户',rentUser(r))" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
+<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">订单编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.swapOrderNo || '—' }}</span><span v-if="r.swapOrderNo" data-cp @click="copyField('订单编号',r.swapOrderNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
+<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">电池编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ curBatt.no }}</span><span data-cp @click="copyField('电池编号',curBatt.no)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
+<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">取电柜子</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.borrowNo || '—' }}</span><span v-if="r.borrowNo" data-cp @click="copyField('取电柜子',r.borrowNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
+<div v-if="r.returnNo" class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">还电柜子</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.returnNo }}</span><span data-cp @click="copyField('还电柜子',r.returnNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
+<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">取电时间</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px] tabular-nums" style="color:#111">{{ r.borrowTime || '—' }}</span></div>
+<div v-if="r.returnTime" class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">还电时间</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px] tabular-nums" style="color:#111">{{ r.returnTime }}</span></div>
+</div>
+</template>
+<empty-state v-else icon="file-text" text="暂无租借记录" :sub="battRentEmptySub" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1" data-od-id="batt-rentrec-empty"></empty-state>
+</div>
+</page>
+<!-- 电池当前位置（对标租车商户端「当前位置」页） -->
+<page :open="mPage==='battLoc'" :z="620" oid="mbatt-loc-page">
+<nav-bar title="当前位置" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div class="flex-1 min-h-0 relative overflow-hidden" style="background:#E8EEF5;background-image:linear-gradient(rgba(255,255,255,.8) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.8) 2px,transparent 2px);background-size:56px 44px" data-od-id="batt-loc-page-map">
+<svg class="absolute inset-0 w-full h-full z-[8] pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="30" y1="32" x2="58" y2="66" stroke="#2B3F5F" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="2.2 1.6" vector-effect="non-scaling-stroke" opacity="0.95"/></svg>
+<div class="absolute z-[14] -translate-x-1/2 -translate-y-1/2" style="left:30%;top:32%">
+<div class="w-3.5 h-3.5 rounded-full bg-white" style="border:2.5px solid #2B3F5F;box-shadow:0 0 0 5px rgba(43,63,95,.18),0 1px 4px rgba(0,0,0,.12)"></div>
+</div>
+<div class="absolute z-[15] -translate-x-1/2 -translate-y-full" style="left:58%;top:66%">
+<div class="flex flex-col items-center">
+<div class="mb-1 px-2 py-0.5 rounded-md text-[11px] font-medium max-w-[150px] truncate" style="color:#111;background:#fff;border:1px solid #E5E5E5;box-shadow:0 2px 8px rgba(0,0,0,.1)">{{ battLocText(curBatt) }}</div>
+<div class="w-11 h-11 rounded-full flex items-center justify-center text-white" style="background:#2B3F5F;box-shadow:0 2px 10px rgba(43,63,95,.4)"><span v-html="luci('battery-charging','w-5 h-5')"></span></div>
+<div class="w-0 h-0 border-l-[6px] border-r-[6px] border-t-[7px] border-l-transparent border-r-transparent" style="border-top-color:#2B3F5F"></div>
+</div>
+</div>
+</div>
+<div class="shrink-0 bg-white px-4 pt-3.5 pb-5" style="border-top:1px solid #E5E5E5;box-shadow:0 -4px 16px rgba(0,0,0,.08)">
+<div class="flex items-center gap-3">
+<div class="flex-1 min-w-0">
+<div class="truncate text-[15px] font-semibold leading-snug" style="color:#111">{{ battLocText(curBatt) }}</div>
+<div class="mt-1.5 flex items-center gap-2.5 text-[12px]" style="color:#6B6B6B"><span>距您 <span class="font-semibold" style="color:#111;font-family:ui-monospace,monospace">1200</span> 米</span><span class="w-px h-3 bg-[#E5E5E5]"></span><span>步行 <span class="font-semibold" style="color:#111;font-family:ui-monospace,monospace">15</span> 分钟</span></div>
+</div>
+<div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 text-white" style="background:#E67E22;box-shadow:0 2px 10px rgba(230,126,34,.35)"><span v-html="luci('navigation','w-5 h-5')"></span></div>
+</div>
+</div>
+</page>
+<!-- 电池历史轨迹（对标租车商户端「历史轨迹」页） -->
+<page :open="mPage==='battTrack'" :z="620" oid="mbatt-track-page">
+<nav-bar title="历史轨迹" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div class="bg-white px-4 py-3 shrink-0 flex items-center gap-2" style="border-bottom:1px solid #E5E5E5" data-od-id="batt-track-time-bar">
+<div class="flex-1 min-w-0">
+<div class="text-[11px] mb-1" style="color:#999">开始时间</div>
+<div class="flex items-center justify-between px-3 py-2.5 rounded-lg" style="border:1px solid #E5E5E5;background:#FAFAFA">
+<span class="text-[13px] font-medium truncate" style="color:#111">{{ battTrackStart }}</span>
+<span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#999]')"></span>
+</div>
+</div>
+<div class="shrink-0 pt-5 text-sm" style="color:#CCC">—</div>
+<div class="flex-1 min-w-0">
+<div class="text-[11px] mb-1" style="color:#999">结束时间</div>
+<div class="flex items-center justify-between px-3 py-2.5 rounded-lg" style="border:1px solid #E5E5E5;background:#FAFAFA">
+<span class="text-[13px] font-medium truncate" style="color:#111">{{ battTrackEnd }}</span>
+<span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#999]')"></span>
+</div>
+</div>
+</div>
+<div class="flex-1 min-h-0 relative overflow-hidden" style="background:#E8EEF5;background-image:linear-gradient(rgba(255,255,255,.8) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.8) 2px,transparent 2px);background-size:56px 44px" data-od-id="batt-track-page-map">
+<svg class="absolute inset-0 w-full h-full z-[8] pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="12,70 25,55 38,62 50,40 63,48 75,30 88,38" fill="none" stroke="#2B3F5F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>
+<div v-for="(p,i) in M_TRACK_POIS" :key="'mtp'+i" class="absolute z-[10] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center" :style="{left:p.x+'%',top:p.y+'%'}">
+<div class="w-2 h-2 rounded-full" style="background:#2B3F5F;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2)"></div>
+<div class="mt-0.5 px-1.5 py-0.5 rounded text-[9px]" style="background:rgba(255,255,255,.92);color:#455A4C">{{ p.label }}</div>
+</div>
+<div class="absolute z-[12] -translate-x-1/2 -translate-y-full" style="left:12%;top:70%"><div class="flex flex-col items-center"><div class="px-1.5 py-0.5 rounded text-[10px] font-bold text-white" style="background:#E67E22">起</div><div class="w-0 h-0 border-l-[5px] border-r-[5px] border-t-[6px] border-l-transparent border-r-transparent" style="border-top-color:#E67E22"></div></div></div>
+<div class="absolute z-[12] -translate-x-1/2 -translate-y-full" style="left:88%;top:38%"><div class="flex flex-col items-center"><div class="px-1.5 py-0.5 rounded text-[10px] font-bold text-white" style="background:#2B3F5F">终</div><div class="w-0 h-0 border-l-[5px] border-r-[5px] border-t-[6px] border-l-transparent border-r-transparent" style="border-top-color:#2B3F5F"></div></div></div>
 </div>
 </page>
 <page :open="mPage==='dashboard'" :z="600" oid="mdashboard-page">
@@ -2529,13 +2663,23 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-<div class="flex gap-3 px-5 shrink-0">
+<template #footer>
+<div class="flex gap-3 px-5">
 <button data-cp @click="cabFilterReset()" class="flex-1 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer transition-colors" style="background:#fff;color:#111;border:1px solid #E5E5E5;box-shadow:none" data-od-id="cab-filter-reset">重置</button>
 <button data-cp @click="cabFilterConfirm()" class="flex-1 py-3.5 rounded-xl text-white text-[15px] font-semibold cursor-pointer border-none transition-colors" style="background:var(--accent)" data-od-id="cab-filter-confirm">确定</button>
 </div>
+</template>
 </bottom-sheet>
 <bottom-sheet :open="showBattFilter" title="全部筛选" :mask-z="600" max-h="65%" oid="batt-filter-sheet" panel-oid="batt-filter-panel" @close="closeBattFilter()">
 <div class="flex-1 overflow-y-auto px-5 pb-3">
+<div class="mb-5">
+<div class="text-[14px] font-semibold mb-2">联网状态</div>
+<div class="flex flex-wrap gap-2">
+<div data-cp @click="battDraft.battNet=''" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="!battDraft.battNet?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">全部</div>
+<div data-cp @click="battDraftSet('battNet','on')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.battNet==='on'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">在线</div>
+<div data-cp @click="battDraftSet('battNet','off')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.battNet==='off'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">离线</div>
+</div>
+</div>
 <div class="mb-5">
 <div class="text-[14px] font-semibold mb-2">在柜状态</div>
 <div class="flex flex-wrap gap-2">
@@ -2545,14 +2689,6 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 <div class="mb-5">
-<div class="text-[14px] font-semibold mb-2">联网状态</div>
-<div class="flex flex-wrap gap-2">
-<div data-cp @click="battDraft.battNet=''" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="!battDraft.battNet?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">全部</div>
-<div data-cp @click="battDraftSet('battNet','on')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.battNet==='on'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">在线</div>
-<div data-cp @click="battDraftSet('battNet','off')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.battNet==='off'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">离线</div>
-</div>
-</div>
-<div class="mb-4">
 <div class="text-[14px] font-semibold mb-2">租用状态</div>
 <div class="flex flex-wrap gap-2">
 <div data-cp @click="battDraft.rentState=''" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="!battDraft.rentState?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">全部</div>
@@ -2560,11 +2696,23 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="battDraftSet('rentState','rented')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.rentState==='rented'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">已租用</div>
 </div>
 </div>
+<div class="mb-4">
+<div class="text-[14px] font-semibold mb-2">电池状态</div>
+<div class="flex flex-wrap gap-2">
+<div data-cp @click="battDraft.battState=''" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="!battDraft.battState?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">全部</div>
+<div data-cp @click="battDraftSet('battState','充电中')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.battState==='充电中'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">充电中</div>
+<div data-cp @click="battDraftSet('battState','已满电')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.battState==='已满电'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">已满电</div>
+<div data-cp @click="battDraftSet('battState','预约中')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.battState==='预约中'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">预约中</div>
+<div data-cp @click="battDraftSet('battState','异常中')" class="px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all" :style="battDraft.battState==='异常中'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #E5E5E5'}">异常中</div>
 </div>
-<div class="flex gap-3 px-5 shrink-0">
+</div>
+</div>
+<template #footer>
+<div class="flex gap-3 px-5">
 <button data-cp @click="battFilterReset()" class="flex-1 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer transition-colors" style="background:#fff;color:#111;border:1px solid #E5E5E5;box-shadow:none" data-od-id="batt-filter-reset">重置</button>
 <button data-cp @click="battFilterConfirm()" class="flex-1 py-3.5 rounded-xl text-white text-[15px] font-semibold cursor-pointer border-none transition-colors" style="background:var(--accent)" data-od-id="batt-filter-confirm">确定</button>
 </div>
+</template>
 </bottom-sheet>
 <bottom-sheet :open="showDoorInfo" :title="'仓门 '+(curSlotNo||'')" :mask-z="600" max-h="65%" oid="door-info-sheet" panel-oid="door-info-panel" @close="closeDoorInfo()">
 <div class="flex-1 overflow-y-auto px-5 pb-4">
@@ -2644,7 +2792,13 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </bottom-sheet>
-</div><tab-bar :show="!settingsOpen" active-color="#2B3F5F" :items="[{key:'home',icon:'bar-chart-3',label:'首页',activeWhen:tab==='home'},{key:'cab',icon:'box',label:'换电柜',activeWhen:tab==='cab'},{key:'batt',icon:'battery-charging',label:'电池',activeWhen:tab==='batt'},{key:'mine',icon:'user',label:'我的',activeWhen:tab==='mine'}]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
+</div><tab-bar :show="!settingsOpen" active-color="#2B3F5F" :items="[
+      /* 首页 TAB 暂时隐藏（恢复：删掉本项的 hidden:true，并把 setup 里默认 tab 改回 'home'） */
+      {key:'home',icon:'bar-chart-3',label:'首页',activeWhen:tab==='home',hidden:true},
+      {key:'cab',icon:'box',label:'换电柜',activeWhen:tab==='cab'},
+      {key:'batt',icon:'battery-charging',label:'电池',activeWhen:tab==='batt'},
+      {key:'mine',icon:'user',label:'我的',activeWhen:tab==='mine'}
+    ]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
 <transition name="fd"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="login-page">
 <div v-show="loginView==='main'" class="flex-1 flex flex-col min-h-0 bg-[#F6F7F9]">
 <div class="pt-14 px-5 pb-1 flex items-center justify-end shrink-0">
@@ -2945,7 +3099,7 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" data-cp @click="firstLogin=false" :class="!firstLogin?'is-on':''">否</div>
 </div>
 </div>
-<template v-if="!showLogin&&((tab==='cab'&&!mPage)||(tab==='batt'&&!mPage)||(tab==='home'&&!mPage)||mPage==='stores'||mPage==='stations'||mPage==='cabAlarm'||mPage==='cabFault'||mPage==='cabUsage'||mPage==='cabImgs')">
+<template v-if="!showLogin&&((tab==='cab'&&!mPage)||(tab==='batt'&&!mPage)||(tab==='home'&&!mPage)||mPage==='stores'||mPage==='stations'||mPage==='cabAlarm'||mPage==='cabFault'||mPage==='cabUsage'||mPage==='cabImgs'||mPage==='battRentRec')">
 <div class="demo-ops-section" data-od-id="demo-list-data">
 <div class="demo-ops-label">列表数据</div>
 <div class="demo-ops-chips">
@@ -2954,14 +3108,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </template>
-<template v-if="mPage==='battDetail'||(mPage==='cabDetail'&&curCab)"><div class="demo-ops-group-hd">设备控制</div></template>
-<div v-if="mPage==='battDetail'" class="demo-ops-section" data-od-id="demo-door-reset">
-<div class="demo-ops-label">仓门状态</div>
-<div class="demo-ops-chips">
-<div class="demo-ops-chip" data-cp @click="setBattDoorOpen(true)" :class="(!battSlot?'op-disabled ':'')+(battSlot&&battSlot.doorOpen?'is-on':'')">已开仓</div>
-<div class="demo-ops-chip" data-cp @click="setBattDoorOpen(false)" :class="(!battSlot?'op-disabled ':'')+(battSlot&&!battSlot.doorOpen?'is-on':'')">已复位</div>
-</div>
-</div>
+<div v-if="mPage==='cabDetail'&&curCab" class="demo-ops-group-hd">设备控制</div>
 <div v-if="mPage==='cabDetail'&&curCab" class="demo-ops-section" data-od-id="demo-door-reset-all">
 <div class="demo-ops-label">仓门状态</div>
 <div class="demo-ops-chips">
@@ -3427,7 +3574,7 @@ var _ua=Vue.createApp({
       var st=curStation.value,cab=curCab.value;if(!st||!cab)return;
       if(!(cabinetFull.value&&cab.full>0)){toastPush('当前柜机暂无可借满电电池');return}
       var no=genBatNo(),oid=genOrderNo(),t=nowStr();
-      swapRecords.value=[{id:(swapRecords.value.length?swapRecords.value[0].id:0)+1,type:'borrow',title:'借电成功',status:'使用中',batteryId:no,station:st.name,addr:st.addr,cabinet:st.no+'-'+cab.no,orderNo:oid,time:t}].concat(swapRecords.value);
+      pushSwapRec({type:'borrow',title:'借电成功',status:'使用中',batteryId:no,orderNo:oid,borrowNo:st.no+'-'+cab.no,borrowTime:t});
       var maxId=batteryList.value.length?Math.max.apply(null,batteryList.value.map(function(b){return b.id})):0;
       batteryList.value=batteryList.value.concat([{id:maxId+1,no:no,location:st.name+' '+cab.no+'号柜',bindTime:t}]);
       cab.used=cab.used+1;cab.full=cab.full-1;
@@ -3437,7 +3584,7 @@ var _ua=Vue.createApp({
     function confirmReturn(){
       var b=returnBattery.value,st=curStation.value,cab=curCab.value;if(!b||!st||!cab)return;
       var t=nowStr();
-      swapRecords.value=[{id:(swapRecords.value.length?swapRecords.value[0].id:0)+1,type:'return',title:'还电成功',status:'已完成',batteryId:b.no,station:st.name,addr:st.addr,cabinet:st.no+'-'+cab.no,orderNo:'-',time:t}].concat(swapRecords.value);
+      pushSwapRec({type:'return',title:'还电成功',status:'已完成',batteryId:b.no,borrowNo:st.no+'-'+cab.no,returnNo:st.no+'-'+cab.no,borrowTime:t,returnTime:t});
       batteryList.value=batteryList.value.filter(function(x){return x.id!==b.id});
       cab.used=Math.max(0,cab.used-1);
       returnBattery.value=null;showReturn.value=false;toastPush('还电成功');
@@ -3620,7 +3767,7 @@ var _ua=Vue.createApp({
       returnStopTimers();
       var st=swapCtx.value.station,cab=swapCtx.value.cab,t=nowStr(),oid=genOrderNo();
       var b=batteryList.value.length?batteryList.value[batteryList.value.length-1]:null;
-      swapRecords.value=[{id:(swapRecords.value.length?swapRecords.value[0].id:0)+1,type:'return',title:'还电成功',status:'已完成',batteryId:b?b.no:'-',station:st.name,addr:st.addr,cabinet:st.no+'-'+(cab?cab.no:''),orderNo:oid,time:t}].concat(swapRecords.value);
+      pushSwapRec({type:'return',title:'还电成功',status:'已完成',batteryId:b?b.no:'-',orderNo:oid,borrowNo:st.no+'-'+(cab?cab.no:''),returnNo:st.no+'-'+(cab?cab.no:''),borrowTime:t,returnTime:t});
       if(b)batteryList.value=batteryList.value.filter(function(x){return x.id!==b.id});
       if(cab)cab.used=Math.max(0,cab.used-1);
       swapStep.value='return-done';
@@ -3639,7 +3786,7 @@ var _ua=Vue.createApp({
     /* 取出成功结算：写借电记录 + 绑定电池 + 释放柜仓位 */
     function borrowFinish(){
       var st=swapCtx.value.station,cab=swapCtx.value.cab,no=genBatNo(),oid=genOrderNo(),t=nowStr();
-      swapRecords.value=[{id:(swapRecords.value.length?swapRecords.value[0].id:0)+1,type:'borrow',title:'借电成功',status:'使用中',batteryId:no,station:st.name,addr:st.addr,cabinet:st.no+'-'+(cab?cab.no:''),orderNo:oid,time:t}].concat(swapRecords.value);
+      pushSwapRec({type:'borrow',title:'借电成功',status:'使用中',batteryId:no,orderNo:oid,borrowNo:st.no+'-'+(cab?cab.no:''),borrowTime:t});
       var maxId=batteryList.value.length?Math.max.apply(null,batteryList.value.map(function(b){return b.id})):0;
       batteryList.value=batteryList.value.concat([{id:maxId+1,no:no,location:st.name,bindTime:t}]);
       if(cab){cab.used=cab.used+1;cab.full=Math.max(0,cab.full-1)}
@@ -3711,7 +3858,7 @@ var _ua=Vue.createApp({
     function swapDone(){
       swapFlowStopTimers();
       var st=swapCtx.value.station,cab=swapCtx.value.cab,t=nowStr(),oid=genOrderNo(),oldBat=batteryList.value.length?batteryList.value[0].no:'-';
-      swapRecords.value=[{id:(swapRecords.value.length?swapRecords.value[0].id:0)+1,type:'swap',title:'换电成功',status:'已完成',batteryId:oldBat,station:st.name,addr:st.addr,cabinet:st.no+'-'+(cab?cab.no:''),orderNo:oid,time:t}].concat(swapRecords.value);
+      pushSwapRec({type:'swap',title:'换电成功',status:'已完成',batteryId:oldBat,orderNo:oid,borrowNo:st.no+'-'+(cab?cab.no:''),returnNo:st.no+'-'+(cab?cab.no:''),borrowTime:t,returnTime:t});
       if(cab){cab.used=Math.max(0,cab.used-1);cab.full=Math.max(0,cab.full-1)}
       swapStep.value='swap-done';
     }
@@ -4141,10 +4288,18 @@ var _ua=Vue.createApp({
     function openBatteryFind(){auth.navOpen('batteryFind');auth.profileSub.value='batteryFind'}
     function openBatteryTrack(){auth.navOpen('batteryTrack');auth.profileSub.value='batteryTrack'}
     /* ── 换电记录：「我的」入口查全部；电池详情入口仅查该电池 ── */
+    /* 换电记录（数据维度与商户端「租借记录」对齐）：订单编号 / 电池编号 / 取电柜子 / 还电柜子 / 取电时间 / 还电时间 */
     var SWAP_RECORDS=[
-      {id:1,type:'borrow',title:'借电成功',status:'使用中',batteryId:'2345676543223',station:'成都市武侯区剑南大道188号',cabinet:'CHZD08TBA1220823099',orderNo:'3243847283723942394',time:'2026.02.10 15:00:00'},
-      {id:2,type:'return',title:'还电成功',status:'已完成',batteryId:'2345676543223',station:'四川省成都市青羊区少城街道188号倍特金晖苑红墙巷小区',cabinet:'CHZD08TBA1220823099',orderNo:'3243847283723942394',time:'2026.02.10 15:00:00'}
+      {id:1,type:'borrow',title:'借电成功',status:'使用中',batteryId:'2345676543223',orderNo:'3243847283723942394',borrowNo:'CHZD08TBA1220823099',returnNo:'',borrowTime:'2026.02.10 15:00:00',returnTime:''},
+      {id:2,type:'return',title:'还电成功',status:'已完成',batteryId:'2345676543223',orderNo:'3243847283723942394',borrowNo:'CHZD08TBA1220823099',returnNo:'CHZD08TBA1220830121',borrowTime:'2026.02.10 11:20:00',returnTime:'2026.02.10 15:00:00'}
     ];
+    /* 新增一条换电记录（字段与租借记录一致；未传的字段走默认值） */
+    function pushSwapRec(o){
+      var r={id:(swapRecords.value.length?swapRecords.value[0].id:0)+1,type:'swap',title:'换电成功',status:'已完成',batteryId:'-',orderNo:'-',borrowNo:'',returnNo:'',borrowTime:'',returnTime:''};
+      for(var k in o)if(o.hasOwnProperty(k))r[k]=o[k];
+      swapRecords.value=[r].concat(swapRecords.value);
+      return r
+    }
     var swapRecords=Vue.ref(SWAP_RECORDS.slice());
     var swapRecordsScope=Vue.ref('all');
     var swapRecordsView=Vue.computed(function(){return swapRecordsScope.value==='battery'&&batteryDetailRec.value?swapRecords.value.filter(function(r){return r.batteryId===batteryDetailRec.value.no}):swapRecords.value});
@@ -4341,15 +4496,41 @@ var M_BATTERIES=[
   {no:'BT-2026-0007',soc:99,cycles:64,health:98,cabState:'inCab',rentState:'unrented',netOnline:true,charging:false,at:'P2K7V5H1R6U9Y4F2-04',records:[mRec('2026-09-14 10:30','charge','入柜充电，SOC 40% → 99%'),mRec('2026-09-14 08:12','return','由用户 U9001 归还至 P2K7V5H1R6U9Y4F2-04 仓位')]},
   {no:'BT-2026-0008',soc:31,cycles:243,health:84,cabState:'inCab',rentState:'unrented',netOnline:true,charging:true,at:'P2K7V5H1R6U9Y4F2-09',records:[mRec('2026-09-19 08:20','charge','入柜充电，SOC 9% → 31%'),mRec('2026-09-19 07:02','return','由用户 U5567 归还至 P2K7V5H1R6U9Y4F2-09 仓位')]},
   {no:'BT-2026-0009',soc:8,cycles:301,health:76,cabState:'inCab',rentState:'unrented',netOnline:false,charging:false,at:'P2K7V5H1R6U9Y4F2-11',records:[mRec('2026-09-19 05:40','alarm','电量过低且通讯异常，建议下架检修'),mRec('2026-09-18 23:55','return','由用户 U1234 归还至 P2K7V5H1R6U9Y4F2-11 仓位')]},
-  {no:'BT-2026-0010',soc:72,cycles:132,health:93,cabState:'outCab',rentState:'rented',netOnline:true,charging:false,at:'用户 王** · +62 812-8821',records:[mRec('2026-09-18 08:35','borrow','用户 王** 于 K7A3F9D2M5Q8T1B4-06 借出'),mRec('2026-09-16 20:10','return','由用户 王** 归还至 K7A3F9D2M5Q8T1B4-06 仓位')]},
-  {no:'BT-2026-0011',soc:45,cycles:187,health:89,cabState:'outCab',rentState:'rented',netOnline:true,charging:false,at:'用户 李** · +62 813-1043',records:[mRec('2026-09-19 07:20','borrow','用户 李** 于 P2K7V5H1R6U9Y4F2-02 借出'),mRec('2026-09-17 19:40','return','由用户 李** 归还至 P2K7V5H1R6U9Y4F2-02 仓位')]},
-  {no:'BT-2026-0012',soc:61,cycles:145,health:92,cabState:'outCab',rentState:'rented',netOnline:true,charging:false,at:'用户 陈** · +62 811-5566',records:[mRec('2026-09-17 12:08','borrow','用户 陈** 于 M9H5T2F7P4S1V6D3-05 借出'),mRec('2026-09-15 08:22','return','由用户 陈** 归还至 M9H5T2F7P4S1V6D3-05 仓位')]},
+  {no:'BT-2026-0010',soc:72,cycles:132,health:93,cabState:'outCab',rentState:'rented',netOnline:true,charging:false,at:'+62 811-5566',holder:{phone:'+62 811-5566',email:'',account:'wangfang'},records:[mRec('2026-09-18 08:35','borrow','用户 王** 于 K7A3F9D2M5Q8T1B4-06 借出'),mRec('2026-09-16 20:10','return','由用户 王** 归还至 K7A3F9D2M5Q8T1B4-06 仓位')]},
+  {no:'BT-2026-0011',soc:45,cycles:187,health:89,cabState:'outCab',rentState:'rented',netOnline:true,charging:false,at:'liqiang@yadea.com',holder:{phone:'',email:'liqiang@yadea.com',account:'liqiang'},records:[mRec('2026-09-19 07:20','borrow','用户 李** 于 P2K7V5H1R6U9Y4F2-02 借出'),mRec('2026-09-17 19:40','return','由用户 李** 归还至 P2K7V5H1R6U9Y4F2-02 仓位')]},
+  {no:'BT-2026-0012',soc:61,cycles:145,health:92,cabState:'outCab',rentState:'rented',netOnline:true,charging:false,at:'chenliang',holder:{phone:'',email:'',account:'chenliang'},records:[mRec('2026-09-17 12:08','borrow','用户 陈** 于 M9H5T2F7P4S1V6D3-05 借出'),mRec('2026-09-15 08:22','return','由用户 陈** 归还至 M9H5T2F7P4S1V6D3-05 仓位')]},
   {no:'BT-2026-0013',soc:5,cycles:412,health:68,cabState:'outCab',rentState:'unrented',netOnline:false,charging:false,at:'维修中 · 双流仓',records:[mRec('2026-09-12 15:30','repair','送修双流仓，SOC 极低需检测电芯')]},
   {no:'BT-2026-0014',soc:12,cycles:356,health:72,cabState:'outCab',rentState:'unrented',netOnline:false,charging:false,at:'维修中 · 武侯仓',records:[mRec('2026-09-10 09:14','repair','送修武侯仓，外壳破损待更换')]}
 ];
+/* 电池租借记录（文档《B端_电池状态与告警体系》§八）：来源换电订单 wb_swap_order，按电池编号索引
+   status：0=租借中（未归还，无还电柜/还电时间）/ 1=已归还
+   user：传手机号字符串，或传 {email} / {account}（展示优先级：手机号 > 邮箱 > 账号） */
+function mRent(user,status,swapOrderNo,borrowTime,borrowNo,returnTime,returnNo){
+  var u=(typeof user==='string')?{phone:user}:(user||{});
+  return {phone:u.phone||'',email:u.email||'',account:u.account||'',status:status,swapOrderNo:swapOrderNo,borrowTime:borrowTime,borrowNo:borrowNo,returnTime:returnTime,returnNo:returnNo}
+}
+/* 租借记录「用户」列：手机号 > 邮箱 > 账号 */
+function rentUser(r){return (r&&(r.phone||r.email||r.account))||'—'}
+var M_BATT_RENTS={
+  'BT-2026-0001':[mRent('+62 812-3390',0,'SW20260922103058','2026-09-22 10:30','K7A3F9D2M5Q8T1B4','',''),mRent('+62 812-3390',1,'SW20260916081244','2026-09-16 08:12','M9H5T2F7P4S1V6D3','2026-09-16 09:20','K7A3F9D2M5Q8T1B4'),mRent('+62 865-2210',1,'SW20260913084019','2026-09-13 08:40','K7A3F9D2M5Q8T1B4','2026-09-13 11:05','K7A3F9D2M5Q8T1B4')],
+  'BT-2026-0002':[mRent('+62 813-4471',1,'SW20260918083207','2026-09-18 08:32','K7A3F9D2M5Q8T1B4','2026-09-18 21:10','K7A3F9D2M5Q8T1B4')],
+  'BT-2026-0003':[mRent('+62 811-2098',1,'SW20260915091502','2026-09-15 09:15','M9H5T2F7P4S1V6D3','2026-09-15 12:05','K7A3F9D2M5Q8T1B4')],
+  'BT-2026-0004':[mRent('+62 816-7732',1,'SW20260918074011','2026-09-18 07:40','P2K7V5H1R6U9Y4F2','2026-09-18 19:50','K7A3F9D2M5Q8T1B4')],
+  'BT-2026-0005':[mRent('+62 812-8823',1,'SW20260917090526','2026-09-17 09:05','K7A3F9D2M5Q8T1B4','2026-09-17 16:20','R8B4L1E6N3G9U2C5')],
+  'BT-2026-0006':[mRent('+62 815-3312',1,'SW20260917183038','2026-09-17 18:30','K7A3F9D2M5Q8T1B4','2026-09-18 22:14','M9H5T2F7P4S1V6D3')],
+  'BT-2026-0007':[mRent('+62 817-5590',1,'SW20260913073516','2026-09-13 07:35','M9H5T2F7P4S1V6D3','2026-09-14 08:12','P2K7V5H1R6U9Y4F2')],
+  'BT-2026-0008':[mRent('+62 812-6647',1,'SW20260918201542','2026-09-18 20:15','K7A3F9D2M5Q8T1B4','2026-09-19 07:02','P2K7V5H1R6U9Y4F2')],
+  'BT-2026-0009':[mRent('+62 813-9902',1,'SW20260917192029','2026-09-17 19:20','R8B4L1E6N3G9U2C5','2026-09-18 23:55','P2K7V5H1R6U9Y4F2')],
+  'BT-2026-0010':[mRent('+62 811-5566',0,'SW20260918083521','2026-09-18 08:35','K7A3F9D2M5Q8T1B4','',''),mRent('+62 811-5566',1,'SW20260916080503','2026-09-16 08:05','M9H5T2F7P4S1V6D3','2026-09-16 20:10','K7A3F9D2M5Q8T1B4')],
+  'BT-2026-0011':[mRent({email:'liqiang@yadea.com'},0,'SW20260919072033','2026-09-19 07:20','P2K7V5H1R6U9Y4F2','',''),mRent({email:'liqiang@yadea.com'},1,'SW20260917124008','2026-09-17 12:40','K7A3F9D2M5Q8T1B4','2026-09-17 19:40','P2K7V5H1R6U9Y4F2')],
+  'BT-2026-0012':[mRent({account:'chenliang'},0,'SW20260917120845','2026-09-17 12:08','M9H5T2F7P4S1V6D3','',''),mRent({account:'chenliang'},1,'SW20260914193012','2026-09-14 19:30','K7A3F9D2M5Q8T1B4','2026-09-15 08:22','M9H5T2F7P4S1V6D3')],
+  'BT-2026-0013':[mRent('+62 811-7745',1,'SW20260911102057','2026-09-11 10:20','R8B4L1E6N3G9U2C5','2026-09-12 14:50','P2K7V5H1R6U9Y4F2')],
+  'BT-2026-0014':[mRent('+62 813-2286',1,'SW20260909084031','2026-09-09 08:40','P2K7V5H1R6U9Y4F2','2026-09-10 09:00','M9H5T2F7P4S1V6D3')]
+};
 var _ma=Vue.createApp({
   setup:function(){
-    var tab=Vue.ref('home'),settingsOpen=Vue.ref(false);
+    /* 默认落在「换电柜」TAB（首页 TAB 已隐藏；恢复：改回 'home' 并去掉 tab-bar 首页项的 hidden:true） */
+    var tab=Vue.ref('cab'),settingsOpen=Vue.ref(false);
     var toastBus=createToastBus();
     function toastPush(msg,type){toastBus.push(msg,type)}
     function toast(m){toastBus.push(m)}
@@ -4378,13 +4559,13 @@ var _ma=Vue.createApp({
 
     /* ── 筛选（弹窗内改 draft，确认后写回） ── */
     var CAB_EMPTY={bizState:'',netState:'',fault:'',alarm:'',enabled:''};
-    var BATT_EMPTY={cabState:'',battNet:'',rentState:''};
+    var BATT_EMPTY={battNet:'',cabState:'',rentState:'',battState:''};
     var cabFilter=Vue.reactive(Object.assign({},CAB_EMPTY));
     var cabDraft=Vue.reactive(Object.assign({},CAB_EMPTY));
     var battFilter=Vue.reactive(Object.assign({},BATT_EMPTY));
     var battDraft=Vue.reactive(Object.assign({},BATT_EMPTY));
 
-    /* ── 状态文案与色标映射（机柜 7 维 / 电池 3 维） ── */
+    /* ── 状态文案与色标映射（机柜 7 维 / 电池 3 维 + 电池状态色标） ── */
     var CAB_TEXT={
       biz:function(c){return c.bizOnline?'上线':'下线'},
       net:function(c){return c.netOnline?'在线':'离线'},
@@ -4419,11 +4600,18 @@ var _ma=Vue.createApp({
       if(b.cabState==='inCab'&&b.soc>=95)return '已满电';
       return '';
     }
+    /* 电池状态色标（与仓门弹窗一致）：充电中 橙 / 已满电 绿 / 异常中 红 / 预约中 蓝 */
+    function battStateColor(b){var lab=battStateOf(b);return lab==='充电中'?WARN_C:lab==='已满电'?OK_C:lab==='异常中'?BAD_C:'#2F6FEB'}
     function dotColor(k){return k==='ok'?OK_C:k==='bad'?BAD_C:k==='warn'?WARN_C:OFF_C}
     /* 电量色标：80%~100% 绿 / 30%~79% 黄 / 0%~29% 红 */
     function socColor(s){return s>=80?OK_C:s>=30?WARN_C:BAD_C}
     /* 电量图标（参考租车电池卡）：≥80% 满格 / 30%~79% 中格 / ≤29% 低格 */
     function socIcon(s){return s>=80?'battery-full':s>=30?'battery-medium':'battery-low'}
+    /* 电压 / 电流（演示态估算：只由电池自身字段推导，取值稳定不随机）
+       电压：46.0V(0%) → 53.6V(100%) 随电量线性；
+       电流：不区分充放电，一律取正向读数（约 2.0~9.9A） */
+    function battVolt(b){if(!b)return '—';return (46+(Number(b.soc)||0)*0.076).toFixed(1)+'V'}
+    function battAmp(b){if(!b)return '—';return (2+(Number(b.soc)||0)*0.06+(Number(b.cycles)||0)%10/10).toFixed(2)+'A'}
 
     /* ── 查询辅助 ── */
     function storeOf(id){var r=stores.value.filter(function(s){return s.id===id})[0];return r||null}
@@ -4432,6 +4620,48 @@ var _ma=Vue.createApp({
     function battOf(no){var r=batteries.value.filter(function(b){return b.no===no})[0];return r||null}
     function stationNameOf(id){var s=stationOf(id);return s?s.name:'未绑定站点'}
     function stationAddrOf(id){var s=stationOf(id);return s?s.addr:'—'}
+    /* 列表卡片「站点」展示：无站点归属（stationId 空或查不到站点）→ - */
+    function cabStationLabel(c){var s=c?stationOf(c.stationId):null;return (s&&s.name)||'-'}
+    /* 电池列表「归属」：柜内 → 所属站点名称（无站点归属 → -）；用户持有 → 手机号 > 邮箱 > 账号 取首个可用（都没有 → -）；
+       其他（如维修中）→ at 文本，无 → - */
+    function battLocLabel(b){if(!b)return '-';var at=String(b.at||'');var m=at.match(/^([A-Z0-9]+)-(\d+)$/);if(m){var c=cabOf(m[1]);var s=c?stationOf(c.stationId):null;return (s&&s.name)||'-'}if(b.holder)return b.holder.phone||b.holder.email||b.holder.account||'-';return at||'-'}
+    /* 电池「当前位置」文案（地图卡片 / 当前位置页）：柜内 → 所属站点地址（无站点则站点名）；柜外（用户/维修）→ 归属 at 文本 */
+    function battLocText(b){if(!b)return '最后位置未知';var at=String(b.at||'');var m=at.match(/^([A-Z0-9]+)-(\d+)$/);if(!m)return at||'最后位置未知';var c=cabOf(m[1]);var s=c?stationOf(c.stationId):null;return (s&&(s.addr||s.name))||'最后位置未知'}
+    /* 电池历史轨迹页：时间范围取该电池流转记录的起止；轨迹折线/途经点为演示数据（对标租车商户端轨迹页） */
+    var M_TRACK_POIS=[{x:38,y:62,label:'中和街道'},{x:63,y:48,label:'博雅城市广场'}];
+    var battTrackStart=Vue.computed(function(){var b=curBatt.value;if(!b||!(b.records||[]).length)return '—';return b.records[b.records.length-1].time});
+    var battTrackEnd=Vue.computed(function(){var b=curBatt.value;if(!b||!(b.records||[]).length)return '—';return b.records[0].time});
+    function openBattLoc(){openPage('battLoc')}
+    function openBattTrack(){openPage('battTrack')}
+    /* 电池服务「租借记录」次级页 */
+    function openBattRentRec(){openPage('battRentRec')}
+    /* ── 电池租借记录（文档 §八：数据源 = 换电订单 M_BATT_RENTS，按电池编号索引）
+       搜索范围 = 订单编号 / 账号 / 手机号 / 邮箱（对标租车商户端订单列表；不做时间筛选） ── */
+    var battRentQ=Vue.ref('');
+    var battRentScope=Vue.ref('swapOrderNo');
+    var battRentScopeOpen=Vue.ref(false);
+    var battRentScopeOpts=[{v:'swapOrderNo',l:'订单编号'},{v:'account',l:'账号'},{v:'phone',l:'手机号'},{v:'email',l:'邮箱'}];
+    var battRentScopeLabel=Vue.computed(function(){var o=battRentScopeOpts.filter(function(x){return x.v===battRentScope.value})[0];return o?o.l:'订单编号'});
+    var battRentPH=Vue.computed(function(){return '请输入'+battRentScopeLabel.value});
+    function setBattRentScope(v){battRentScope.value=v;battRentScopeOpen.value=false}
+    document.addEventListener('click',function(){battRentScopeOpen.value=false});
+    function battRentClear(){battRentQ.value=''}
+    var battRentAll=Vue.computed(function(){var b=curBatt.value;return (b&&M_BATT_RENTS[b.no])||[]});
+    var battRentList=Vue.computed(function(){
+      if(demoListEmpty.value)return [];/* 原型操作「列表数据 = 空数据」 */
+      var q=(battRentQ.value||'').trim().toLowerCase();
+      if(!q)return battRentAll.value.slice();
+      return battRentAll.value.filter(function(r){
+        return String(r[battRentScope.value]||'').toLowerCase().indexOf(q)>-1
+      })
+    });
+    /* 空态副文案：仅「搜索无果」时提示；时间范围内无记录（该电池仍有历史记录）不展示副文案 */
+    var battRentEmptySub=Vue.computed(function(){
+      if(battRentQ.value)return '没有符合搜索条件的记录';
+      return battRentAll.value.length?'':'该电池暂无租借记录'
+    });
+    /* 通用复制（剪贴板不可用时退化为 toast 展示内容） */
+    function copyField(label,val){var t=String(val||'');if(!t)return;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t);toastPush(label+'已复制')}else{toastPush(label+'：'+t)}}catch(e){toastPush(label+'：'+t)}}
     /* 电池所在位置展示：柜内 at 为「机柜编号-仓号」→「站点名 · NN 号仓」；柜外（用户/维修）原样展示 */
     function battAtLabel(b){var at=String((b&&b.at)||'');var m=at.match(/^([A-Z0-9]+)-(\d+)$/);if(!m)return at||'—';var c=cabOf(m[1]);return (c?stationNameOf(c.stationId)+' · ':'')+m[2]+' 号仓'}
     function storeNameOf(id){var s=storeOf(id);return s?s.name:'—'}
@@ -4466,22 +4696,31 @@ var _ma=Vue.createApp({
     });
     var cabFilterCount=Vue.computed(function(){var n=0;['bizState','netState','fault','alarm','enabled'].forEach(function(k){if(cabFilter[k])n++});return n});
     var cabFilterActive=Vue.computed(function(){return cabFilterCount.value>0});
+    /* 空态副文案：仅「搜索/筛选无结果」时提示（原型操作「列表数据 = 空数据」不提示，空态保持最简） */
+    var cabEmptySub=Vue.computed(function(){
+      return (cabQ.value||cabFilterActive.value)?'没有符合筛选条件的换电柜':''
+    });
 
-    /* ── 电池列表筛选（在柜/电池/租用 三维度全部走筛选弹窗） ── */
+    /* ── 电池列表筛选（联网/在柜/租用/电池状态 四维度全部走筛选弹窗） ── */
     var battList=Vue.computed(function(){
       if(demoListEmpty.value)return [];/* 原型操作「列表数据 = 空数据」 */
       var q=(battQ.value||'').trim().toLowerCase();
       return batteries.value.filter(function(b){
         if(q&&(b.no+(b.at||'')+(b.rentState||'')).toLowerCase().indexOf(q)===-1)return false;
-        if(battFilter.cabState&&b.cabState!==battFilter.cabState)return false;
         if(battFilter.battNet==='on'&&!b.netOnline)return false;
         if(battFilter.battNet==='off'&&b.netOnline)return false;
+        if(battFilter.cabState&&b.cabState!==battFilter.cabState)return false;
         if(battFilter.rentState&&b.rentState!==battFilter.rentState)return false;
+        if(battFilter.battState&&battStateOf(b)!==battFilter.battState)return false;
         return true
       })
     });
-    var battFilterCount=Vue.computed(function(){var n=0;['cabState','battNet','rentState'].forEach(function(k){if(battFilter[k])n++});return n});
+    var battFilterCount=Vue.computed(function(){var n=0;['battNet','cabState','rentState','battState'].forEach(function(k){if(battFilter[k])n++});return n});
     var battFilterActive=Vue.computed(function(){return battFilterCount.value>0});
+    /* 空态副文案：仅「搜索/筛选无结果」时提示（原型操作「列表数据 = 空数据」不提示，空态保持最简） */
+    var battEmptySub=Vue.computed(function(){
+      return (battQ.value||battFilterActive.value)?'没有符合筛选条件的电池':''
+    });
 
     /* ── 经营统计与看板数据 ── */
     var cabOnlineRate=Vue.computed(function(){if(!cabinets.value.length)return 0;var on=cabinets.value.filter(function(c){return c.bizOnline&&c.netOnline}).length;return Math.round(on/cabinets.value.length*100)});
@@ -4548,6 +4787,8 @@ var _ma=Vue.createApp({
     function openCabImgsPreview(i){cabImgPreviewItem.value=cabImgView.value[i];showCabImgPreview.value=true}
     var showCabScan=Vue.ref(false);
     var cabScanTorch=Vue.ref(false);
+    /* 扫码来源：''=新增机柜（编号回填到表单） / 'cabList' / 'battList'=列表扫码（编号回填搜索框并过滤，对标租车） */
+    var cabScanFrom=Vue.ref('');
     var showCabManual=Vue.ref(false),cabManualNo=Vue.ref('');
     /* 原型操作「保存结果」：控制保存触发的三分支（ok 新增成功 / notFound 机柜编码不存在 / used 机柜编码已被使用） */
     var demoCabAddResult=Vue.ref('ok');
@@ -4556,9 +4797,20 @@ var _ma=Vue.createApp({
     var showCabImgPreview=Vue.ref(false),cabImgPreviewItem=Vue.ref(null);
     function openCabAdd(){cabAddNo.value='';cabAddName.value='';cabAddNoErr.value='';cabAddImgs.value=[];cabImgScope.value='add';openPage('cabAdd')}
     function closeCabAdd(){if(mPage.value==='cabAdd')closePage()}
-    function openCabScan(){showCabScan.value=true}
-    function closeCabScan(){showCabScan.value=false}
-    function mockCabScan(){cabAddNo.value='CAB-'+Math.floor(Math.random()*900000000+100000000);cabAddNoErr.value='';showCabScan.value=false;toastPush('扫码成功，编号已录入')}
+    function openCabScan(){cabScanFrom.value='';showCabScan.value=true}
+    function cabListScan(){cabScanFrom.value='cabList';showCabScan.value=true}
+    function battListScan(){cabScanFrom.value='battList';showCabScan.value=true}
+    function closeCabScan(){showCabScan.value=false;cabScanFrom.value=''}
+    function mockCabScan(){
+      /* 列表扫码：命中该列表的一条真实编号并回填搜索框（对标租车列表扫码——填搜索词并过滤） */
+      if(cabScanFrom.value==='cabList'||cabScanFrom.value==='battList'){
+        var isCab=cabScanFrom.value==='cabList';
+        var arr=isCab?cabinets.value:batteries.value;
+        if(arr.length){var hit=arr[Math.floor(Math.random()*arr.length)].no;if(isCab){cabQ.value=hit}else{battQ.value=hit}}
+        showCabScan.value=false;cabScanFrom.value='';toastPush('扫码成功');return
+      }
+      cabAddNo.value='CAB-'+Math.floor(Math.random()*900000000+100000000);cabAddNoErr.value='';showCabScan.value=false;toastPush('扫码成功，编号已录入')
+    }
     function openCabManual(){cabManualNo.value='';showCabManual.value=true}
     function confirmCabManual(){var v=(cabManualNo.value||'').trim();if(!v)return;cabAddNo.value=v;cabAddNoErr.value='';showCabManual.value=false;showCabScan.value=false}
     function openCabImgPicker(sh){cabImgPickerSH.value=sh||'add';showCabImgPicker.value=true}
@@ -4609,6 +4861,19 @@ var _ma=Vue.createApp({
         {label:'故障状态',value:CAB_TEXT.fault(c),color:c.fault?BAD_C:NORM_C}
       ]
     });
+    /* 电池信息网格（值在上、标签在下，对标机柜状态网格）：联网 / 在柜 / 租用 / 电池状态（柜外不显示电池状态） */
+    var battStateCells=Vue.computed(function(){
+      var b=curBatt.value;if(!b)return [];
+      var cells=[
+        {label:'联网状态',value:BATT_TEXT.net(b),color:dotColor(BATT_DOT.net(b))},
+        {label:'在柜状态',value:BATT_TEXT.cab(b),color:dotColor(BATT_DOT.cab(b))},
+        {label:'租用状态',value:BATT_TEXT.rent(b),color:dotColor(BATT_DOT.rent(b))}
+      ];
+      /* 电池状态属「柜内」概念：柜外（租用中 / 维修中等）不展示该格 */
+      var st=b.cabState==='inCab'?battStateOf(b):'';
+      if(st)cells.push({label:'电池状态',value:st,color:battStateColor(b)});
+      return cells
+    });
     /* 机柜告警/故障列表（纯记录）：来源 = 当前柜的 alarms / faults
        筛选：keyWord 模糊匹配（柜子SN / 内容 / 仓门 / 电池SN）+ status 快捷筛选（0=告警中/故障中、1=已解除、''=全部，默认 0） */
     var recQ=Vue.ref(''),recStatus=Vue.ref(0);
@@ -4632,9 +4897,16 @@ var _ma=Vue.createApp({
     var recEmptySub=Vue.computed(function(){return cabRecAll.value.length?'没有符合筛选条件的记录':''});
     /* 从机柜详情进入列表时重置筛选（keyWord 清空、status 回默认 0） */
     function openCabRec(kind){recQ.value='';recStatus.value=0;openPage(kind)}
-    /* 机柜使用记录（文档 §八）：该柜的操作记录；useQ 按账号/手机号/邮箱（含姓名）模糊搜索（请求参数 search）
+    /* 机柜使用记录（文档 §八）：该柜的操作记录；useQ 按所选范围（账号 / 手机号 / 邮箱）模糊搜索（请求参数 search）
        操作人展示：仅显示手机号 > 邮箱 > 账号（不显示姓名，手机号带区号）；系统自动操作 = 系统 */
     var useQ=Vue.ref('');
+    var cabUseScope=Vue.ref('account');
+    var cabUseScopeOpen=Vue.ref(false);
+    var cabUseScopeOpts=[{v:'account',l:'账号'},{v:'phone',l:'手机号'},{v:'email',l:'邮箱'}];
+    var cabUseScopeLabel=Vue.computed(function(){var o=cabUseScopeOpts.filter(function(x){return x.v===cabUseScope.value})[0];return o?o.l:'账号'});
+    var cabUsePH=Vue.computed(function(){return '请输入'+cabUseScopeLabel.value});
+    function setCabUseScope(v){cabUseScope.value=v;cabUseScopeOpen.value=false}
+    document.addEventListener('click',function(){cabUseScopeOpen.value=false});
     function cabUseOperator(r){
       if(!r)return '—';
       if(r.system)return '系统';
@@ -4645,15 +4917,15 @@ var _ma=Vue.createApp({
     var cabUseList=Vue.computed(function(){
       if(demoListEmpty.value)return [];/* 原型操作「列表数据 = 空数据」 */
       var c=curCab.value;if(!c)return [];
-      var q=(useQ.value||'').trim();
+      var q=(useQ.value||'').trim().toLowerCase();
       if(!q)return (c.uses||[]).slice();
       return (c.uses||[]).filter(function(r){
         if(r.system)return false;
-        return String((r.name||'')+(r.phone||'')+(r.email||'')+(r.account||'')).indexOf(q)>-1
+        return String(r[cabUseScope.value]||'').toLowerCase().indexOf(q)>-1
       })
     });
-    /* 从机柜详情进入使用记录时清空搜索 */
-    function openCabUsage(){useQ.value='';openPage('cabUsage')}
+    /* 从机柜详情进入使用记录时清空搜索并复位搜索范围 */
+    function openCabUsage(){useQ.value='';cabUseScope.value='account';openPage('cabUsage')}
     /* ── 仓门信息弹窗（点击任意仓位打开：有电池时带电池信息，空仓只留状态与操作） ── */
     var showDoorInfo=Vue.ref(false),curSlotNo=Vue.ref('');
     var curSlot=Vue.computed(function(){var c=curCab.value;if(!c)return null;return (c.slots||[]).filter(function(s){return s.no===curSlotNo.value})[0]||null});
@@ -4664,11 +4936,11 @@ var _ma=Vue.createApp({
     var doorEnableTag=Vue.computed(function(){var s=curSlot.value;if(!s)return null;return s.disabled?{label:'禁用中',color:BAD_C}:{label:'已启用',color:OK_C}});
     var doorBattTag=Vue.computed(function(){
       var lab=battStateOf(curSlotBatt.value);if(!lab)return null;
-      return {label:lab,color:lab==='充电中'?WARN_C:lab==='已满电'?OK_C:lab==='异常中'?BAD_C:'#2F6FEB'};
+      return {label:lab,color:battStateColor(curSlotBatt.value)};
     });
-    /* 电压 / 电流：演示态固定值（与设计稿一致） */
-    var doorVolt=Vue.computed(function(){return curSlotBatt.value?'48V':'—'});
-    var doorAmp=Vue.computed(function(){return curSlotBatt.value?'7.09A':'—'});
+    /* 电压 / 电流：与电池详情同源取值（电压随电量 46.0~53.6V；电流为不区分充放电的正向读数），空仓显示 — */
+    var doorVolt=Vue.computed(function(){return curSlotBatt.value?battVolt(curSlotBatt.value):'—'});
+    var doorAmp=Vue.computed(function(){return curSlotBatt.value?battAmp(curSlotBatt.value):'—'});
     function openDoorInfo(slotNo){curSlotNo.value=slotNo;showDoorInfo.value=true}
     function closeDoorInfo(){showDoorInfo.value=false}
     /* 禁用 / 启用仓门（门级启用状态：下发 ENABLE_DOOR / DISABLE_DOOR，仅影响本仓门） */
@@ -4682,13 +4954,9 @@ var _ma=Vue.createApp({
     /* 原型操作：登录状态（对标租车商户端——点「未登录」直接进登录页，点「已登录」关闭登录页） */
     function demoLogin(){loggedIn.value=true;closeLogin();toastPush('登录成功')}
     function demoLogout(){navReset();loggedIn.value=false;showLogin.value=true;profileOV.value=null;profileSub.value=null;toastPush('已退出登录')}
-    /* 原型操作：电池详情复位入口（该电池所在仓门的「已开仓」演示状态） */
-    function battSlotOf(b){var p=String((b&&b.at)||'').split('-'),c=p.length>1?cabOf(p[0]):null;return c?slotOf(c,p[1]):null}
-    var battSlot=Vue.computed(function(){return battSlotOf(curBatt.value)});
-    function setBattDoorOpen(on){var s=battSlot.value;if(!s){toastPush('该电池不在柜内，无仓门状态');return}s.doorOpen=!!on;toastPush(on?'仓门已置为已开仓':'仓门状态已复位')}
-    /* 原型操作：仓门复位入口（不分机柜，作用于全部机柜的仓门） */
+    /* 原型操作：仓门状态入口（仅换电柜详情，作用于全部机柜的仓门；纯演示切换，不弹 toast） */
     var anyDoorOpen=Vue.computed(function(){return cabinets.value.some(function(c){return (c.slots||[]).some(function(s){return s.doorOpen})})});
-    function setAllDoorsOpen(on){cabinets.value.forEach(function(c){(c.slots||[]).forEach(function(s){s.doorOpen=!!on})});toastPush(on?'仓门已置为已开仓':'仓门状态已复位')}
+    function setAllDoorsOpen(on){cabinets.value.forEach(function(c){(c.slots||[]).forEach(function(s){s.doorOpen=!!on})})}
     /* 原型操作：机柜 5 维状态（联网/运营/启用/告警/故障）直接切枚举 */
     function setCabDim(k,v){
       var c=curCab.value;if(!c)return;c[k]=v;
@@ -4699,6 +4967,15 @@ var _ma=Vue.createApp({
     }
     /* 复制机柜编码（file:// 下剪贴板可能不可用，失败时退化为 toast 展示编号） */
     function copyCabNo(){var c=curCab.value;if(!c)return;var t=c.no;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t);toastPush('机柜编码已复制')}else{toastPush('机柜编码：'+t)}}catch(e){toastPush('机柜编码：'+t)}}
+    /* 复制电池编号（与机柜编号同款：剪贴板不可用时退化为 toast 展示编号） */
+    function copyBattNo(){var b=curBatt.value;if(!b)return;var t=b.no;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t);toastPush('电池编号已复制')}else{toastPush('电池编号：'+t)}}catch(e){toastPush('电池编号：'+t)}}
+    /* 电池放电控制（对标租车「电池详情」：禁止放电 / 允许放电，二次确认后切换；默认允许） */
+    function battDischargeOn(b){return !b||b.discharge!==false}
+    function battAskDischarge(){
+      var b=curBatt.value;if(!b)return;
+      var on=battDischargeOn(b);
+      mAsk(on?'禁止放电':'允许放电',on?'禁止后设备将无法放电':'允许后设备可正常放电',function(){b.discharge=!on;toastPush(on?'已禁止放电':'已允许放电','success')})
+    }
 
     /* ── 机柜筛选弹窗 ── */
     function openCabFilter(){Object.assign(cabDraft,cabFilter);showCabFilter.value=true}
@@ -4734,10 +5011,6 @@ var _ma=Vue.createApp({
     /* 机柜级远程操作：仓门全开 = 整柜全部仓门；空仓全开 = 仅空仓（无电池且无故障）仓门 */
     function cabAskOpenAll(no){var c=cabOf(no);if(!c)return;if(!doorReady(c,'远程开仓'))return;mAsk('仓门全开','确认远程打开全部 '+c.doors+' 个仓门？（含仓内仍有电池的仓门）',function(){(c.slots||[]).forEach(function(s){s.doorOpen=true});toastPush(c.no+' 仓门全开指令已下发')})}
     function cabAskOpenEmpty(no){var c=cabOf(no);if(!c)return;if(!doorReady(c,'远程开仓'))return;var n=(c.slots||[]).filter(function(s){return !s.occupied}).length;if(!n){toastPush('该柜暂无可开仓的空仓');return}mAsk('空仓全开','确认远程打开全部 '+n+' 个空仓的仓门？',function(){(c.slots||[]).filter(function(s){return !s.occupied}).forEach(function(s){s.doorOpen=true});toastPush(c.no+' 空仓全开指令已下发（'+n+' 个）')})}
-
-    /* ── 电池借出 / 归还联动（柜仓位 ↔ 电池状态） ── */
-    function borrowBattery(no){var b=battOf(no);if(!b)return;if(b.rentState==='rented'){toastPush('该电池已租用，无法重复借出');return}if(b.cabState!=='inCab'){toastPush('该电池不在柜内，无法借出');return}var parts=String(b.at||'').split('-'),cab=cabOf(parts[0]);if(cab&&parts[1]){var sl=slotOf(cab,parts[1]);if(sl)sl.occupied=false}var user='用户 演示'+String(b.no).slice(-4);b.cabState='outCab';b.rentState='rented';b.charging=false;b.at=user;b.records.unshift(mRec(nowStr(),'borrow','用户 '+user+' 于 '+(parts[0]||'柜')+'-'+(parts[1]||'')+' 借出'));toastPush('已借出 '+b.no+'（仓位已释放）')}
-    function returnBattery(no){var b=battOf(no);if(!b)return;if(b.cabState==='inCab'){toastPush('该电池已在柜内，无需归还');return}var cab=null,slot=null,online=cabinets.value.filter(function(c){return c.bizOnline&&c.enabled});for(var i=0;i<online.length;i++){var f=freeSlotOf(online[i]);if(f){cab=online[i];slot=f;break}}if(!cab){toastPush('暂无可用空仓，无法归还');return}slot.occupied=true;b.cabState='inCab';b.rentState='unrented';b.at=cab.no+'-'+slot.no;b.charging=(b.soc<90);b.records.unshift(mRec(nowStr(),'return','归还至 '+cab.no+'-'+slot.no+' 仓位'+(b.charging?'，开始充电':'')));toastPush('已归还 '+b.no+' → '+cab.no+'-'+slot.no)}
 
     /* ── 门店 / 站点表单（门店 1:1 站点；已被其他门店占用的站点禁用） ── */
     var storeForm=Vue.reactive({id:'',name:'',addr:'',phone:'',hours:'',stationId:''});
@@ -4784,20 +5057,19 @@ var _ma=Vue.createApp({
       tab,setTab,settingsOpen,toasts:toastBus.list,toast,
       stores,stations,cabinets,batteries,
       mPage,mStoreId,mStationId,mCabNo,mBattNo,showCabFilter,showBattFilter,showDoorInfo,curSlotNo,showStoreForm,showStationForm,showBindCab,mConfirm,mConfirmLoading,
-      cabFilter,battFilter,cabDraft,battDraft,cabFilterCount,cabFilterActive,battFilterCount,battFilterActive,
-      cabList,battList,curStore,curStation,curCab,curBatt,cabSlots,cabStateCells,cabRecList,cabRecAll,recQ,recStatus,recStatusTabs,recEmptyText,recEmptySub,recStatusLabel,cabUseList,useQ,cabUseOperator,cabUseSourceLabel,cabUseResultLabel,openCabUsage,curSlot,curSlotBatt,doorEnableTag,doorBattTag,doorVolt,doorAmp,cabOnline,cabUsable,bizUsable,curDoorUsable,storeQ,stationQ,storeView,stationView,
+      cabFilter,battFilter,cabDraft,battDraft,cabFilterCount,cabFilterActive,cabEmptySub,battFilterCount,battFilterActive,battEmptySub,
+      cabList,battList,curStore,curStation,curCab,curBatt,cabSlots,cabStateCells,battStateCells,cabRecList,cabRecAll,recQ,recStatus,recStatusTabs,recEmptyText,recEmptySub,recStatusLabel,cabUseList,useQ,cabUseOperator,cabUseSourceLabel,cabUseResultLabel,openCabUsage,cabUseScope,cabUseScopeOpen,cabUseScopeOpts,cabUseScopeLabel,cabUsePH,setCabUseScope,curSlot,curSlotBatt,doorEnableTag,doorBattTag,doorVolt,doorAmp,cabOnline,cabUsable,bizUsable,curDoorUsable,storeQ,stationQ,storeView,stationView,
       cabQ,battQ,
-      stationNameOf,stationAddrOf,storeNameOf,battAtLabel,storeOfStation,cabsOfStation,stationsOfStore,battCountOf,cabOf,battOf,slotOf,freeSlotOf,
+      stationNameOf,stationAddrOf,storeNameOf,battAtLabel,cabStationLabel,battLocLabel,battLocText,M_TRACK_POIS,battTrackStart,battTrackEnd,openBattLoc,openBattTrack,openBattRentRec,battRentQ,battRentClear,battRentList,battRentEmptySub,battRentScope,battRentScopeOpen,battRentScopeOpts,battRentScopeLabel,battRentPH,setBattRentScope,copyField,rentUser,storeOfStation,cabsOfStation,stationsOfStore,battCountOf,cabOf,battOf,slotOf,freeSlotOf,
       openPage,closePage,openDashboard,openStoreList,openStationList,openStoreDetail,openStationDetail,openCabDetail,openBattDetail,openCabRec,
-      openCabAdd,closeCabAdd,openCabScan,closeCabScan,mockCabScan,openCabManual,confirmCabManual,cabScanTorch,showCabScan,showCabManual,cabManualNo,submitCabAdd,demoCabAddResult,cabAddNo,cabAddName,cabAddNoErr,cabAddImgs,
+      openCabAdd,closeCabAdd,openCabScan,closeCabScan,mockCabScan,cabListScan,battListScan,cabScanFrom,openCabManual,confirmCabManual,cabScanTorch,showCabScan,showCabManual,cabManualNo,submitCabAdd,demoCabAddResult,cabAddNo,cabAddName,cabAddNoErr,cabAddImgs,
       cabImgList,cabEditImgs,cabEditName,openCabEdit,closeCabEdit,saveCabEdit,openCabImgs,cabImgView,openCabImgsPreview,showCabImgPicker,openCabImgPicker,pickCabImgSource,openCabImgPreview,openCabImgMore,showCabImgAction,cabImgActionReupload,cabImgActionDelete,showCabImgPreview,cabImgPreviewItem,
-      openCabFilter,closeCabFilter,cabDraftSet,cabFilterReset,cabFilterConfirm,openDoorInfo,closeDoorInfo,doorAskEnable,doorAskOpen,toBattDetail,copyCabNo,demoLogin,demoLogout,demoListEmpty,demoSetListEmpty,battSlot,setBattDoorOpen,anyDoorOpen,setAllDoorsOpen,setCabDim,
+      openCabFilter,closeCabFilter,cabDraftSet,cabFilterReset,cabFilterConfirm,openDoorInfo,closeDoorInfo,doorAskEnable,doorAskOpen,toBattDetail,copyCabNo,copyBattNo,battDischargeOn,battAskDischarge,demoLogin,demoLogout,demoListEmpty,demoSetListEmpty,anyDoorOpen,setAllDoorsOpen,setCabDim,
       openBattFilter,closeBattFilter,battDraftSet,battFilterReset,battFilterConfirm,
       mAsk,mConfirmClose,mConfirmOk,cabAskBiz,cabAskFault,cabAskAlarm,cabAskEnabled,cabAskOpenAll,cabAskOpenEmpty,
-      borrowBattery,returnBattery,
       storeForm,storeFormErr,stationForm,stationFormErr,bindStationId,openStoreForm,pickStoreStation,saveStore,openStationForm,saveStation,openBindCab,cabBindStation,storeStationOptions,
       cabOnlineRate,inCabCount,rentedCount,todaySwapCount,todayRevenue,alarmList,cabStats,
-      dashTrend,dashTrendMax,dashCabDist,dashBattDist,donut,dotColor,socColor,socIcon,CAB_TEXT,CAB_DOT,BATT_TEXT,BATT_DOT,battStateOf
+      dashTrend,dashTrendMax,dashCabDist,dashBattDist,donut,dotColor,socColor,socIcon,battVolt,battAmp,CAB_TEXT,CAB_DOT,BATT_TEXT,BATT_DOT,battStateOf,battStateColor
     })
   }})
 registerSheetKit(_ma);_ma.mount(document.getElementById('root-merchant'));

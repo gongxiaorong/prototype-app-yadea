@@ -138,6 +138,19 @@ body{font-family:var(--font-body)}
 .sheet-opt:active{opacity:.8}
 .sheet-opt-off{background:#F6F7F9;color:#111}
 .sheet-opt-on{background:var(--accent);color:#fff;font-weight:600}
+/* ═══ KV 卡片共享组件 token（registerSheetKit·见 AGENTS.md「KV 卡片规范」） ═══ */
+/* 分隔线默认只画在「相邻两行之间」：首行上方、末行下方天然不画（无需 :last-child，混入非 kv-row 内容也不误画）
+   margin-top:-1px 抵消 border 的 1px 占位，保证带分隔线的行高与不带线时严格一致（统一 32px） */
+.kv-card-div>.kv-row+.kv-row{border-top:1px dashed #E5E5E5;margin-top:-1px}
+/* 行级关闭：kv-row 传 :divider="false"（4 个类选择器，特异性高于上一条，稳定覆盖） */
+.kv-card-div>.kv-row.kv-noline{border-top:none}
+/* ═══ 分区间距（标题栏 / kv行 / 自定义内容 / footer 可任意组合）═══
+   ① 标题栏 → 首块：6(标题栏 mb-1.5) + 8 = 14px（首块是自定义内容时由本规则补 8px；是 kv-row 时由行自带 padding-top）
+   ② kv行 → footer：行的 padding-bottom(8) + 8 = 16px，与行↔行(8+8)一致
+   ③ kv行 → 自定义内容、自定义内容之间：由内容自带间距，组件不干预（混排布局由调用方设计）
+   无标题栏时 ① 不命中，顶距由卡片 py-3.5 决定；footer 仅在传入 #footer 插槽时渲染。 */
+.kv-head+*:not(.kv-row){padding-top:8px}
+.kv-row+.kv-foot{padding-top:8px}
 </style>
 <style id="layer-user">#root-user .filter-tabs{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain;user-select:none;width:100%;flex-wrap:nowrap;white-space:nowrap}
 #root-user .filter-pill{padding:6px 16px;border-radius:20px;font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:background .15s,color .15s,border-color .15s}
@@ -200,31 +213,15 @@ body{font-family:var(--font-body)}
 #root-merchant .login-code-btn.is-on{background:#EBF1FD;color:var(--link)}
 #root-merchant .login-brand-mark{width:4.5rem;height:4.5rem;border-radius:1.25rem;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--accent) 0%,var(--accent) 100%);box-shadow:0 8px 20px rgba(43,63,95,.28);color:#fff}
 #root-merchant .login-submit.is-on{background:var(--accent);color:#fff;cursor:pointer}
-#root-merchant .demo-ops-stack.is-hidden{visibility:hidden}
-#root-merchant .demo-ops-meta{background:#F6F7F9;border:1px solid #E5E5E5;border-radius:8px;padding:12px;margin-bottom:16px;font-size:12px;line-height:1.6}
-#root-merchant .demo-ops-meta .k{color:#6B6B6B}
-#root-merchant .demo-ops-meta .v{color:#111;font-weight:500;word-break:break-all}
-#root-merchant .demo-ops-btn{width:100%;padding:12px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;text-align:left;border:1px solid #E5E5E5;background:#fff;color:#111;margin-bottom:8px;transition:background .15s,border-color .15s,opacity .15s}
-#root-merchant .demo-ops-btn:hover:not(:disabled){background:#F6F7F9}
-#root-merchant .demo-ops-btn:active:not(:disabled){opacity:.85}
-#root-merchant .demo-ops-btn:disabled{opacity:.45;cursor:not-allowed}
-#root-merchant .demo-ops-btn.primary{background:#ECFDF3;border-color:#BBF7D0;color:var(--success)}
-#root-merchant .demo-ops-btn.primary:hover:not(:disabled){background:#DCFCE7}
-#root-merchant .demo-ops-btn.secondary{background:#EBF1FD;border-color:#BFDBFE;color:var(--link)}
-#root-merchant .demo-ops-btn.secondary:hover:not(:disabled){background:#DBEAFE}
 #root-merchant .demo-ops-chip-code{margin-left:4px;font-size:9px;font-weight:400;color:inherit;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 #root-merchant .demo-ops-chip-copy{margin-left:3px;display:inline-flex;align-items:center;opacity:.55;cursor:pointer;transition:opacity .15s}
 #root-merchant .demo-ops-chip-copy:hover{opacity:1}
 #root-merchant .demo-ops-chip.is-on-ok{background:var(--link);border-color:var(--link);color:#fff}
-#root-merchant .demo-ops-chip.is-on-danger{background:var(--link);border-color:var(--link);color:#fff}
 #root-merchant .demo-ops-perm-g{margin-bottom:10px}
 #root-merchant .demo-ops-perm-g:last-child{margin-bottom:0}
 #root-merchant .demo-ops-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
 #root-merchant .demo-ops-link{font-size:11px;font-weight:600;color:var(--link);cursor:pointer;user-select:none}
 #root-merchant .demo-ops-link:active{opacity:.7}
-#root-merchant @keyframes shimmer{0%{background-position:-200px 0}100%{background-position:200px 0}}
-#root-merchant .skeleton{background:linear-gradient(90deg,#eee 25%,#f5f5f5 50%,#eee 75%);background-size:400px 100%;animation:shimmer 1.5s infinite;border-radius:4px}
-#root-merchant .sk{background:linear-gradient(90deg,#eee 25%,#f5f5f5 50%,#eee 75%);background-size:400px 100%;animation:shimmer 1.5s infinite;border-radius:4px}
 #root-merchant .filter-tabs:active{cursor:grabbing}
 #root-merchant .wallet-ledger-tabs{display:flex;background:#fff;flex-shrink:0;border-bottom:1px solid #E5E5E5}
 #root-merchant .wallet-ledger-tabs .tab{flex:1;text-align:center;padding:13px 0;font-size:15px;font-weight:500;color:#666;cursor:pointer;position:relative}
@@ -263,8 +260,6 @@ body{font-family:var(--font-body)}
 #root-merchant .od-tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font-size:12px;line-height:1;font-weight:500}
 #root-merchant .od-tag.on{background:#E7F7EE;color:#16A34A}
 #root-merchant .od-tag.off{background:#F2F3F5;color:#999}
-#root-merchant .login-nav-btn{width:2.25rem;height:2.25rem;border-radius:9999px;display:flex;align-items:center;justify-content:center;color:#111;background:transparent;transition:background .15s}
-#root-merchant .login-nav-btn:active{background:#F0F1F3}
 </style>
 <style id="layer-host">/* ===== HOST: 宿主外壳 ===== */
 body{margin:0;background:#E8EAED;color:#111;-webkit-font-smoothing:antialiased}
@@ -279,7 +274,6 @@ body{margin:0;background:#E8EAED;color:#111;-webkit-font-smoothing:antialiased}
 #host-bar .cur{display:flex;align-items:center;gap:6px}
 #host-bar .cur .cur-lbl{font-size:12px;color:#8B8B95;margin-right:2px}
 #host-bar .cur button{padding:3px 12px}
-#host-bar .cur button.sysnav{background:#2B3F5F;border-color:#2B3F5F;color:#fff;font-weight:600}
 #host-main{display:flex;align-items:stretch;overflow-x:auto;padding:24px;box-sizing:border-box;min-height:calc(100vh - 60px)}
 .host-stage{display:flex;align-items:stretch;gap:16px;margin-inline:auto;max-width:100%}
 #root-user,#root-merchant{flex:0 0 auto;display:flex;align-items:center;justify-content:center;padding:8px;box-sizing:border-box}
@@ -764,21 +758,15 @@ body.host-single-m #root-user{display:none}
 <span class="text-[16px] font-bold" style="color:#FF6A00" data-page-node-id="DNVZKWj4sC44SYKJXjPmlv">{{ fmtRp(confDeposit,2) }}</span>
 </div>
 </div>
-<div data-cp @click="openIdSelect" class="bg-white rounded-2xl p-4 mb-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="confirm-id-entry" data-page-node-id="6qMUuDk1iawM82obgnBP0e">
-<div class="flex items-center justify-between mb-2.5" v-if="confirmIdInfo" data-page-node-id="A1Rk1456xgJKMlA2HfOt8x">
-<div class="text-[14px] font-semibold text-[#111]" data-page-node-id="xoy9EIdgmzWAwpF63Pjpy9"><span v-if="uploadIdEnabled" class="mr-0.5" style="color:#DC2626" data-page-node-id="VRtvK6kxNAF6lPPQEyBppG">*</span>实名信息</div>
-<div class="flex items-center gap-1 text-[12px]" style="color:var(--link)" data-page-node-id="0H0UXSI003oexm0FVBGo0u"><span class="inline-flex items-center justify-center w-3.5 h-3.5 shrink-0" style="transform:translateY(1.5px)" data-page-node-id="xchn4AAmf2UgdnZFyQlDA6"><span v-html="luci('chevron-right','w-3.5 h-3.5 text-[#999]')" data-page-node-id="kc0OxnrlmdoAFVusiEbuXL"></span></span></div>
-</div>
-<div v-if="confirmIdInfo" data-page-node-id="4qR7GgAstmBJddYuX4m8tz">
-<div class="flex items-center justify-between" data-page-node-id="OrgCrZ2s0S6QrYPMwHqeFe"><span class="text-[13px] text-[#999]" data-page-node-id="GCCwBfsRpBX4BRwD7lAPml">姓名</span><span class="text-[14px] text-[#111] font-medium" data-page-node-id="NFh0JL7QhmSEpZ6UNX84w0">{{ confirmIdInfo.name }}</span></div>
-<div class="flex items-center justify-between mt-2" data-page-node-id="nEBmmXKNkn0Ys4aoyT5V1s"><span class="text-[13px] text-[#999]" data-page-node-id="myuTPvgCFiDQn5coVXEsV1">身份证</span><span class="text-[14px] text-[#111]" data-page-node-id="tMaQxFjM0W0JTz4IQ58C8V">{{ maskNo(confirmIdInfo.idNo) }}</span></div>
-<div class="flex items-center justify-between mt-2" data-page-node-id="a4YkSV2O1ccQOD7jfxdq6o"><span class="text-[13px] text-[#999]" data-page-node-id="M8sR8QHDHb4Anvo4TGLwfB">驾驶证</span><span class="text-[14px] text-[#111]" data-page-node-id="O2QV7JEb79v9fxm8MPrPGZ">{{ confirmIdInfo.driverNo?maskNo(confirmIdInfo.driverNo):'—' }}</span></div>
-</div>
-<div v-else class="flex items-center justify-between" data-page-node-id="u6wZOBnwtARsG3qYCn2oOz">
-<div class="text-[14px] font-semibold text-[#111]" data-page-node-id="dnea7jo1YHRhgiZNpuOKeJ"><span v-if="uploadIdEnabled" class="mr-0.5" style="color:#DC2626" data-page-node-id="EbNXZWyYEQ6zNnFP7TcGtx">*</span>实名信息</div>
-<div class="flex items-center gap-1 text-[12px]" style="color:var(--link)" data-page-node-id="LjhKyfpsRgyvXqLkGAIU5g"><span class="inline-flex items-center justify-center w-3.5 h-3.5 shrink-0" style="transform:translateY(1.5px)" v-html="luci('chevron-right','w-3.5 h-3.5 text-[#999]')" data-page-node-id="fkFZ8hCtmk9A60zsucEVam"></span></div>
-</div>
-</div>
+<kv-card class="mb-3 cursor-pointer active:bg-[#F6F7F9]" data-od-id="confirm-id-entry" data-page-node-id="6qMUuDk1iawM82obgnBP0e" data-cp @click="openIdSelect">
+<template #title><span class="min-w-0 truncate"><span v-if="uploadIdEnabled" class="mr-0.5" style="color:#DC2626">*</span>实名信息</span></template>
+<template #extra><span class="inline-flex items-center justify-center w-3.5 h-3.5 shrink-0" style="transform:translateY(1.5px)"><span v-html="luci('chevron-right','w-3.5 h-3.5 text-[#999]')"></span></span></template>
+<template v-if="confirmIdInfo">
+<kv-row label="姓名" :value="confirmIdInfo.name"></kv-row>
+<kv-row label="身份证" :value="maskNo(confirmIdInfo.idNo)"></kv-row>
+<kv-row label="驾驶证" :value="confirmIdInfo.driverNo?maskNo(confirmIdInfo.driverNo):'—'"></kv-row>
+</template>
+</kv-card>
 <div class="bg-white rounded-2xl p-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-page-node-id="aXyEWBdcmJygk897QzR6s0">
 <div class="text-[14px] font-semibold text-[#111] mb-3" data-page-node-id="fsIxvrKkdzEbZDBGPClLMD">支付方式</div>
 <div class="conf-pay-grid" data-page-node-id="r7iparUVOLWvNEebOX6GDE">
@@ -1085,27 +1073,16 @@ body.host-single-m #root-user{display:none}
         <span v-html="luci('bike','w-[100px] h-[100px] '+(vdDevice&& vdDevice.dark?'text-white':'text-[#2B3F5F]'))" data-page-node-id="VcUmLJthN7omjVbcjB9co1"></span>
       </div>
     </div>
-    <div class="bg-white rounded-2xl p-4 mb-3" data-od-id="vd-info-card" data-page-node-id="JhdqnGlxodIomEEsevoRHD">
-      <div class="flex items-center justify-between mb-3" data-page-node-id="zvK1N7fnZiYwbA3DZ5AQ3S">
-        <span class="text-[14px] font-bold text-[#1A1A1A]" data-page-node-id="Cq7QJ67qN7brDqAptvkTyf">车辆信息</span>
+    <kv-card title="车辆信息" class="mb-3" data-od-id="vd-info-card" data-page-node-id="JhdqnGlxodIomEEsevoRHD">
+      <template #extra>
         <span class="text-[11px] font-semibold px-2.5 py-1 rounded-full" :style="vdDevice&& vdDevice.locked?{background:'rgba(220,38,38,.12)',color:'#DC2626'}:{background:'rgba(23,163,74,.12)',color:'#17A34A'}" data-od-id="vd-motor-lock-chip" data-page-node-id="RHrgFucFYpgQWnkPboiywD">{{ vdDevice&& vdDevice.locked?'已锁电机':'未锁电机' }}</span>
-      </div>
-      <div class="text-[13px] space-y-2.5" data-page-node-id="fglDLAV70s1nLibuNKl9NZ">
-        <div class="flex items-center gap-2" data-page-node-id="cMbM0DRiXtz9gW7IVfD7TE">
-          <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="aHoT918GcHHZNCo6Hq90Xx">车型</span>
-          <span class="flex-1 text-right text-[#1A1A1A] truncate" data-page-node-id="V5YDkKXP1fBy2IUxuoQ7SF">{{ vdDevice?vdDevice.name:'-' }}</span>
-        </div>
-        <div class="flex items-center gap-2" data-page-node-id="lC6JM0OlFxs487l4AB8Q4E">
-          <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="K6MpvjCWEzUw4aAf0UFvkH">车架编号</span>
-          <span class="flex-1 min-w-0 text-right text-[#1A1A1A] flex items-center justify-end gap-1.5" data-page-node-id="swDSPebIBLiWOqQ7nBxzxM"><span class="min-w-0 truncate">{{ vdDevice?vdDevice.vin:'-' }}</span><span v-if="vdDevice&&vdDevice.vin" class="shrink-0" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]')" data-cp @click="copyText(vdDevice.vin,'车架编号')" data-page-node-id="vd-vin-copy"></span></span>
-        </div>
-        <div v-if="!scanBindMode&&vdDevice&&vdDevice.status!=='租用中'" class="flex items-center gap-2" data-page-node-id="dFEjcALqZOhPyoXJ7KcvlL">
-          <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="PAxK8Yn0sEV3EqLCQvRCtq">车辆名称</span>
-          <span class="flex-1 text-right text-[#1A1A1A] truncate" data-page-node-id="3f8hxKT7P0gAlwVsTE41W8">{{ vdDevice?vdDevice.displayName:'-' }}</span>
-          <span v-if="vdDevice&& vdDevice.status!=='租用中'" data-cp @click="openVNameEdit" class="w-7 h-7 rounded-full flex items-center justify-center active:bg-[#F0F0F0] shrink-0" v-html="luci('pencil','w-4 h-4 text-[#666]')" data-page-node-id="anJRkj41zbYMmLLYbQFOti"></span>
-        </div>
-      </div>
-    </div>
+      </template>
+      <kv-row label="车型" :value="vdDevice?vdDevice.name:'-'" data-page-node-id="cMbM0DRiXtz9gW7IVfD7TE"></kv-row>
+      <kv-row label="车架编号" :value="vdDevice?vdDevice.vin:'-'" :copyable="!!(vdDevice&&vdDevice.vin)" @copy="t=>copyText(t,'车架编号')" data-page-node-id="lC6JM0OlFxs487l4AB8Q4E"></kv-row>
+      <kv-row v-if="!scanBindMode&&vdDevice&&vdDevice.status!=='租用中'" label="车辆名称" value-class="flex items-center justify-end gap-1.5" data-page-node-id="dFEjcALqZOhPyoXJ7KcvlL">
+        <template #value><span class="min-w-0 truncate">{{ vdDevice?vdDevice.displayName:'-' }}</span><span v-if="vdDevice&& vdDevice.status!=='租用中'" data-cp @click="openVNameEdit" class="w-4 h-4 rounded-full flex items-center justify-center active:bg-[#F0F0F0] shrink-0" v-html="luci('pencil','w-3.5 h-3.5 text-[#666]')" data-page-node-id="anJRkj41zbYMmLLYbQFOti"></span></template>
+      </kv-row>
+    </kv-card>
     <div v-if="!scanBindMode&&vdDevice&&vdDevice.status!=='租用中'" class="py-4 flex items-center justify-center" data-page-node-id="iRSwRf53A4wksMLIFGYDGu">
       <span data-cp @click="openUnbindConfirm" class="text-[14px] font-medium cursor-pointer select-none active:opacity-70" style="color:#DC2626" data-od-id="vd-unbind" data-page-node-id="dsbbq6V5VcsUegm60R87Y1">解除绑定</span>
     </div>
@@ -1607,18 +1584,14 @@ body.host-single-m #root-user{display:none}
 <div class="text-[15px] font-semibold text-[#333] mb-1.5" data-page-node-id="Zxbh7DOoYvG2XcJEOSLQ0k">暂无退款记录</div>
 </div>
 <template v-for="(r,ri) in refundRecords" :key="r.refundNo" data-page-node-id="CJMo7F8p5K5OTVHrcMMJYV">
-<div class="bg-white rounded-2xl p-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'refund-card-'+r.refundNo" data-page-node-id="GYuTz0BrlQ5vbHtTQyx5HA">
-<div class="flex items-center justify-between mb-3" data-page-node-id="DTru8Yv3VsRO2vs3tNLYyS">
-<span class="text-[13px] font-semibold text-[#333] min-w-0 truncate" data-page-node-id="FxMhLbo2pajZLvJ2YGzQoJ">{{ r.time }}</span>
-<span class="text-[13px] font-semibold shrink-0" :style="{color:r.statusColor}" data-page-node-id="5nqk85yOh6xu59HkRGO4cK">{{ r.statusText }}</span>
-</div>
-<div class="text-[13px] flex flex-col gap-2.5" data-page-node-id="Wmy6FucGCNFZgMelMdi8JF">
-<div class="flex items-center justify-between gap-2" data-page-node-id="FQF2hwhm48zL1l6vke03XW"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="J5C43g768CrXOqPs5sTw5Y">租金</span><span class="flex-1 text-right text-[#333]" data-page-node-id="pM0lz0WDhDWybIit3s45Df">{{ fmtRp(r.rent,2) }}</span></div>
-<div class="flex items-center justify-between gap-2" data-page-node-id="FMK0dcKwotWA26vnLXMOfp"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="A7Bde83mYE12WLDk2GxWSS">押金</span><span class="flex-1 text-right text-[#333]" data-page-node-id="P5JBhDuqhIPV7uWijAC7Yd">{{ fmtRp(r.deposit,2) }}</span></div>
-<div class="flex items-start justify-between gap-2" data-page-node-id="QGbm1fH18HPuyNeA0iEIXO"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="p2BNYNK9VSnCdSEmkmlFrV">退款原因</span><span class="flex-1 text-right font-medium text-[#333]" data-page-node-id="oSwZGju9cz3ez11YaA2ZFX">{{ r.reason||'—' }}</span></div>
-<div v-if="r.status==='SUCCESS'||r.status==='FAILED'" class="flex items-center justify-between gap-2" data-page-node-id="hpZW3TqVqBPxuMekpkj2Jr"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="ZttwVzvcDqnpfkwC5lm81S">完成时间</span><span class="flex-1 text-right font-medium text-[#333]" data-page-node-id="GdqZBTAJK9qk9kMWG5AAHt">{{ r.finishTime||'-' }}</span></div>
-</div>
-</div>
+<kv-card class="mb-3" :data-od-id="'refund-card-'+r.refundNo" data-page-node-id="GYuTz0BrlQ5vbHtTQyx5HA" label-width="4.5rem">
+<template #title><span class="min-w-0 truncate text-[13px] font-semibold" style="color:#333">{{ r.time }}</span></template>
+<template #extra><span class="text-[13px] font-semibold shrink-0" :style="{color:r.statusColor}" data-page-node-id="5nqk85yOh6xu59HkRGO4cK">{{ r.statusText }}</span></template>
+<kv-row label="租金" :value="fmtRp(r.rent,2)"></kv-row>
+<kv-row label="押金" :value="fmtRp(r.deposit,2)"></kv-row>
+<kv-row label="退款原因" :value="r.reason||'—'" align="top" value-class="font-medium whitespace-normal break-words leading-relaxed"></kv-row>
+<kv-row v-if="r.status==='SUCCESS'||r.status==='FAILED'" label="完成时间" :value="r.finishTime||'-'"></kv-row>
+</kv-card>
 </template>
 </div>
 </page>
@@ -1723,11 +1696,8 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 
-<div v-if="feeCardRow" class="bg-white rounded-2xl p-4 mb-3" data-od-id="od-fee-entry" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-page-node-id="4cHtHKHvoTtfVzFWfVyUZu">
-<div class="flex items-center justify-between mb-2" data-page-node-id="T4Pn44hxg5Lt5yjuyXayTZ">
-<span class="text-[14px] font-bold text-[#1A1A1A]" data-page-node-id="eRqrt9aI61FNClFSi1gwoS">费用明细</span>
-<div class="flex items-center gap-1 text-[13px] cursor-pointer active:opacity-70" style="color:var(--link)" data-cp @click="showFeeDetail=true" data-page-node-id="tfa3FKYom8vVMFJbn70CjB"><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-page-node-id="Oiq3eUVZnMyjIEjrv4A4ZF"></span></div>
-</div>
+<kv-card v-if="feeCardRow" title="费用明细" class="mb-3" data-od-id="od-fee-entry" data-page-node-id="4cHtHKHvoTtfVzFWfVyUZu">
+<template #extra><span class="inline-flex items-center justify-center w-4 h-4 shrink-0 cursor-pointer active:opacity-70" data-cp @click="showFeeDetail=true" data-page-node-id="tfa3FKYom8vVMFJbn70CjB"><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-page-node-id="Oiq3eUVZnMyjIEjrv4A4ZF"></span></span></template>
 <div v-if="feeCardRow" class="text-[13px] flex flex-col gap-2.5" data-page-node-id="ZU46vxZTAUEf4JgwXCYgn6">
 <div class="flex items-center justify-between gap-2 cursor-pointer active:opacity-60" data-cp @click.stop="rentOpen=!rentOpen" data-page-node-id="Kmp0xorAFT5RCCpODyCVEQ">
 <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="iApWvxIGuBcyzc1MviNDBu">租金</span>
@@ -1752,13 +1722,10 @@ body.host-single-m #root-user{display:none}
 </div>
 <div v-if="['手动续租','自动续租'].includes(feeCardRow.kind)&&feeCardRow.payStatus!=='已支付'" class="mt-2 flex gap-2" data-page-node-id="4yMHtvIBBnun0TfAB81gQH"><div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-center cursor-pointer active:opacity-90" style="border:1px solid var(--accent);color:var(--accent)" data-cp @click="requestCancelRenew(feeCardRow.no)" data-page-node-id="0AhwhMjBh3CiD37M7RTtHj">取消续租</div><div v-if="feeCardRow.payStatus==='待支付'&&feeCardRow.payMethod!=='线下支付'" class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-white text-center cursor-pointer active:opacity-90" style="background:var(--accent)" data-cp @click="payRenewDirect(feeCardRow.no)" data-page-node-id="UiyIXGTTQqNFum2CvTiPKk">立即支付</div></div>
 </div>
-</div>
+</kv-card>
 
-<div class="bg-white rounded-2xl p-4 mb-3" data-od-id="od-refund" data-page-node-id="PN4dkWoEermif1aSXdefAE">
-<div class="mb-2 flex items-center justify-between cursor-pointer active:opacity-70" data-cp @click="openRefundList" data-page-node-id="Zz8HsHSvY1PXdx040ShDqo">
-<span class="text-[14px] font-bold text-[#1A1A1A]" data-page-node-id="7ca1tO7SuYAIXILIhj6b22">退款明细</span>
-<div class="flex items-center gap-1 text-[13px] text-[#999]" style="color:var(--link)" data-page-node-id="suSqrDnsUqOiw3J8lJJ3Th"><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-page-node-id="1if3yPqCm0BgoU9QJvB4pz"></span></div>
-</div>
+<kv-card title="退款明细" class="mb-3 cursor-pointer active:opacity-70" data-od-id="od-refund" data-page-node-id="PN4dkWoEermif1aSXdefAE" data-cp @click="openRefundList">
+<template #extra><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-page-node-id="1if3yPqCm0BgoU9QJvB4pz"></span></template>
 <div class="text-[13px] flex flex-col gap-2.5" data-page-node-id="xwS7Z3Ak5efNe1THM1eXWx">
 <div class="flex items-center justify-between gap-2 cursor-pointer active:opacity-60" data-cp @click.stop="refundRentOpen=!refundRentOpen" data-page-node-id="N37rrCB7xlp3JBpxQSilbZ">
 <span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="564jFXYdNHJkK5XwC865DI">租金</span>
@@ -1782,21 +1749,19 @@ body.host-single-m #root-user{display:none}
 <div v-for="c in refundChannels.total" :key="c.channel" class="flex items-center justify-between text-[12px]" data-page-node-id="eQBWAHLcdAvz1j2DItIMaL"><span class="text-[#999]" data-page-node-id="Q9CCn2EZZFvhclwcnX1S8k">{{ c.channel }}</span><span class="text-[#666]" data-page-node-id="B3rmob7cYemtALF20kVKmQ">{{ fmtRp(c.amount,2) }}</span></div>
 </div>
 </div>
-</div>
+</kv-card>
 
-<div class="bg-white rounded-2xl p-4 mb-3" :class="(orderInfo.status==='created'||orderInfo.status==='pickup')?'cursor-pointer active:bg-[#F6F7F9]':''" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="od-docs-entry" data-cp @click="(orderInfo.status==='created'||orderInfo.status==='pickup')&&openIdSelect()" data-page-node-id="tr8uzpDsfXZw4uNMmbTx5n">
-<div class="flex items-center justify-between mb-2.5" data-page-node-id="j2C5exVEGknD3kFsmhgxSW">
-<div class="text-[14px] font-semibold text-[#111]" data-page-node-id="iaEJnmqYNDeX0Pd9Yig52D">实名信息</div>
-<div v-if="orderInfo.status==='created'||orderInfo.status==='pickup'" class="flex items-center gap-1 text-[12px] text-[#999]" style="color:var(--link)" data-page-node-id="RRRNnMOpwNvTTKrBAhxLRS"><span class="inline-flex items-center justify-center w-3.5 h-3.5 shrink-0" style="transform:translateY(1.5px)" data-page-node-id="jquAZRQlsGyIM2GqBgGi79"><span v-html="luci('chevron-right','w-3.5 h-3.5 text-[#999]')" data-page-node-id="c2QzV4KSMoRVZUwQhEeLul"></span></span></div>
-</div>
-<template v-if="confirmIdInfo" data-page-node-id="cHu0vAKn18QA4YJ2FHQPTp">
-<div class="flex items-center justify-between" data-page-node-id="MFSW4bXHjYt53SWdvBvXlj"><span class="text-[13px] text-[#999]" data-page-node-id="GLPbTSx2gHDrLa8vfpkPIe">姓名</span><span class="text-[14px] text-[#111]" data-page-node-id="G9W8Q2S1MVDG6pB43aZACb">{{ confirmIdInfo.name }}</span></div>
-<div class="flex items-center justify-between mt-2" data-page-node-id="iqAYYv6izt7TT0NeE7Jlug"><span class="text-[13px] text-[#999]" data-page-node-id="pwfsECTvmknrNsoGNpy8cj">身份证</span><span class="text-[14px] text-[#111]" data-page-node-id="xveIC7K1lFEZxfJaf29FVw">{{ maskNo(confirmIdInfo.idNo) }}</span></div>
-<div class="flex items-center justify-between mt-2" data-page-node-id="YWyrKPE7yfpYVSgp1tV5Wm"><span class="text-[13px] text-[#999]" data-page-node-id="AH5eiu2FVrOLhGeeyzDqa3">驾驶证</span><span class="text-[14px] text-[#111]" data-page-node-id="xzkEyqg8mAvcHF4JhDSwzs">{{ confirmIdInfo.driverNo?maskNo(confirmIdInfo.driverNo):'—' }}</span></div>
+<kv-card class="mb-3" :class="(orderInfo.status==='created'||orderInfo.status==='pickup')?'cursor-pointer active:bg-[#F6F7F9]':''" data-od-id="od-docs-entry" data-page-node-id="tr8uzpDsfXZw4uNMmbTx5n" data-cp @click="(orderInfo.status==='created'||orderInfo.status==='pickup')&&openIdSelect()">
+<template #title><span class="min-w-0 truncate text-[14px] font-semibold" style="color:#111">实名信息</span></template>
+<template #extra><span v-if="orderInfo.status==='created'||orderInfo.status==='pickup'" class="inline-flex items-center justify-center w-3.5 h-3.5 shrink-0" style="transform:translateY(1.5px)" data-page-node-id="jquAZRQlsGyIM2GqBgGi79"><span v-html="luci('chevron-right','w-3.5 h-3.5 text-[#999]')" data-page-node-id="c2QzV4KSMoRVZUwQhEeLul"></span></span></template>
+<template v-if="confirmIdInfo">
+<kv-row label="姓名" :value="confirmIdInfo.name"></kv-row>
+<kv-row label="身份证" :value="maskNo(confirmIdInfo.idNo)"></kv-row>
+<kv-row label="驾驶证" :value="confirmIdInfo.driverNo?maskNo(confirmIdInfo.driverNo):'—'"></kv-row>
 </template>
 <div v-else class="text-[13px] text-[#999]" data-page-node-id="G8goiZKUBkL0b1cqR40JiF">未选择实名信息</div>
-<div class="h-px bg-[#F0F0F0] my-3" data-page-node-id="MwhFqCzuht1GUotgB7ucoi"></div>
-<div class="flex items-center py-1 cursor-pointer active:bg-[#F6F7F9]" data-cp @click.stop="navOpen('confirmDocs')" data-page-node-id="5pUK71d35wc1E0ZYOR3rHF">
+<template #footer>
+<div class="flex items-center py-1 cursor-pointer active:bg-[#F6F7F9]" style="border-top:1px solid #F0F0F0" data-cp @click.stop="navOpen('confirmDocs')" data-page-node-id="5pUK71d35wc1E0ZYOR3rHF">
 <div class="w-10 h-10 rounded-full bg-[#FFF8F3] flex items-center justify-center mr-3 shrink-0" data-page-node-id="1bho60DpzmqcwHBMDJhkQ3"><span v-html="luci('folder-open','w-5 h-5 text-[#FF6A00]')" data-page-node-id="vVQa47Qgl7uk9e0BZQbpjj"></span></div>
 <div class="flex-1 min-w-0" data-page-node-id="2ZDkfGo5CKuVasDqz6xYfA">
 <div class="text-[14px] font-medium text-[#1A1A1A]" data-page-node-id="EKcTJfaahMEIlkLEw7Bb3M">补充资料</div>
@@ -1804,33 +1769,24 @@ body.host-single-m #root-user{display:none}
 </div>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999] shrink-0')" data-page-node-id="qKnacL32MoRybPmmNOFMtN"></span>
 </div>
-</div>
+</template>
+</kv-card>
 
 
 
-<div v-if="(orderInfo.status==='created'||orderInfo.status==='progress'||orderInfo.status==='pickup'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled')&&(orderInfo.category==='车辆租赁'||orderInfo.category==='车电套餐')" class="bg-white rounded-2xl p-4 mb-3" data-od-id="od-vehicle" data-page-node-id="NFFZpcuPif0tS5dinei8Jt">
-<div class="flex items-center justify-between mb-3" data-page-node-id="dtcC2jLgTmROr0QcNJhf2G">
-<span class="text-[14px] font-bold text-[#1A1A1A]" data-page-node-id="weGBUvDx5DwBnEmL5XSbN3">车辆信息</span>
-<span v-if="orderInfo.status==='pickup'" data-cp @click="scanCtx='vehicle';navOpen('scan')" class="cursor-pointer text-[var(--link)] active:opacity-70 select-none" v-html="luci('link','w-3.5 h-3.5')" data-page-node-id="4RGnRyBK3GW3TTHz3ltaUg"></span>
-</div>
-<div class="text-[13px] space-y-2.5" data-page-node-id="9850II58djgmf2GVoYeR6w">
-<div class="flex items-center gap-2" data-page-node-id="bSAvBPhmA0c8EvrH5tDXCx"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="Y6wGE7uqiH3YTLCvMD3iK5">车型</span><span class="flex-1 text-right text-[#333]" data-page-node-id="kPUWWCMlDd8HEPO0yXrExb">{{ orderInfo.vModel || orderInfo.model }}</span></div>
-<div v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" class="flex items-center gap-2" data-page-node-id="NCtH52PVCGtnPvE3CgsCYD"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="oYeoHhz5vpC6QwAtHuBe36">车架号</span><span class="flex-1 text-right text-[#333] flex items-center justify-end gap-1.5" data-page-node-id="evoJL6AeIZAl3gXQFHjTtG">{{ orderInfo.frame || '—' }}<span v-if="orderInfo.frame" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]')" data-cp @click="copyText(orderInfo.frame,'车架号')" data-page-node-id="VLMyaAUqUGgnB7g8MyUUdW"></span></span></div>
-<div v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" class="flex items-center gap-2" data-page-node-id="HF6EiQvqz0lb63pfkyYkSM"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="6qJuRNNT16qMZafLjGnnDP">取用时间</span><span class="flex-1 text-right text-[#333]" data-page-node-id="QZIZoJKNpDTkjS4vvqcHdo">{{ orderInfo.pickupTime || '—' }}</span></div>
-</div>
-</div>
+<kv-card v-if="(orderInfo.status==='created'||orderInfo.status==='progress'||orderInfo.status==='pickup'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled')&&(orderInfo.category==='车辆租赁'||orderInfo.category==='车电套餐')" title="车辆信息" class="mb-3" data-od-id="od-vehicle" data-page-node-id="NFFZpcuPif0tS5dinei8Jt">
+<template #extra><span v-if="orderInfo.status==='pickup'" data-cp @click="scanCtx='vehicle';navOpen('scan')" class="cursor-pointer text-[var(--link)] active:opacity-70 select-none" v-html="luci('link','w-3.5 h-3.5')" data-page-node-id="4RGnRyBK3GW3TTHz3ltaUg"></span></template>
+<kv-row label="车型" :value="orderInfo.vModel || orderInfo.model" data-page-node-id="bSAvBPhmA0c8EvrH5tDXCx"></kv-row>
+<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="车架号" :value="orderInfo.frame || '—'" :copyable="!!orderInfo.frame" @copy="t=>copyText(t,'车架号')" data-page-node-id="NCtH52PVCGtnPvE3CgsCYD"></kv-row>
+<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="取用时间" :value="orderInfo.pickupTime || '—'" data-page-node-id="HF6EiQvqz0lb63pfkyYkSM"></kv-row>
+</kv-card>
 
-<div v-if="(orderInfo.status==='created'||orderInfo.status==='progress'||orderInfo.status==='pickup'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled')&&(orderInfo.category==='电池租赁'||orderInfo.category==='车电套餐')" class="bg-white rounded-2xl p-4 mb-3" data-od-id="od-battery" data-page-node-id="0iiObVS6ioYKU18dcI5Atp">
-<div class="flex items-center justify-between mb-3" data-page-node-id="oYMn7BywmG7kWXGx6b12Sm">
-<span class="text-[14px] font-bold text-[#1A1A1A]" data-page-node-id="rPJDqg7gzGCHLh8UCVylPe">电池信息</span>
-<span v-if="orderInfo.status==='pickup'" data-cp @click="scanCtx='battery';navOpen('scan')" class="cursor-pointer text-[var(--link)] active:opacity-70 select-none" v-html="luci('link','w-3.5 h-3.5')" data-page-node-id="4R8yK2M2kPGVUonQ6D3H2p"></span>
-</div>
-<div class="text-[13px] space-y-2.5" data-page-node-id="gKGYXs8hP1qNLm2cT5zqjK">
-<div class="flex items-center gap-2" data-page-node-id="hvqebkMMqYvaSEGYbQu1i5"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="OzjPVmTtQ7xtcl2GElUld0">型号</span><span class="flex-1 text-right text-[#333]" data-page-node-id="EYHx9yquA0KLqQ2VftteJh">{{ orderInfo.bModel || orderInfo.model }}</span></div>
-<div v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" class="flex items-center gap-2" data-page-node-id="2LViv8K4fPbmGKzoA3JMbS"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="jBEwa9TeBMB8hWx3LtWoyn">电池编号</span><span class="flex-1 text-right text-[#333] flex items-center justify-end gap-1.5" data-page-node-id="WWhkuDYk0qVkcr0OyEoyV0">{{ orderInfo.battNo || '—' }}<span v-if="orderInfo.battNo" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]')" data-cp @click="copyText(orderInfo.battNo,'电池编号')" data-page-node-id="Y9OAekoCR5vGzD6F9SQgSA"></span></span></div>
-<div v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" class="flex items-center gap-2" data-page-node-id="t0BY8IT0goplR50sT15sJ2"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="GB6CTwMQYJFXtrrpEnVTnM">取用时间</span><span class="flex-1 text-right text-[#333]" data-page-node-id="Y8l9xpktpEBRiaNQ0znQfa">{{ orderInfo.pickupTime || '—' }}</span></div>
-</div>
-</div>
+<kv-card v-if="(orderInfo.status==='created'||orderInfo.status==='progress'||orderInfo.status==='pickup'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled')&&(orderInfo.category==='电池租赁'||orderInfo.category==='车电套餐')" title="电池信息" class="mb-3" data-od-id="od-battery" data-page-node-id="0iiObVS6ioYKU18dcI5Atp">
+<template #extra><span v-if="orderInfo.status==='pickup'" data-cp @click="scanCtx='battery';navOpen('scan')" class="cursor-pointer text-[var(--link)] active:opacity-70 select-none" v-html="luci('link','w-3.5 h-3.5')" data-page-node-id="4R8yK2M2kPGVUonQ6D3H2p"></span></template>
+<kv-row label="型号" :value="orderInfo.bModel || orderInfo.model" data-page-node-id="hvqebkMMqYvaSEGYbQu1i5"></kv-row>
+<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="电池编号" :value="orderInfo.battNo || '—'" :copyable="!!orderInfo.battNo" @copy="t=>copyText(t,'电池编号')" data-page-node-id="2LViv8K4fPbmGKzoA3JMbS"></kv-row>
+<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="取用时间" :value="orderInfo.pickupTime || '—'" data-page-node-id="t0BY8IT0goplR50sT15sJ2"></kv-row>
+</kv-card>
 
 <div class="bg-white rounded-2xl p-4 mb-3 flex items-center justify-between" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="od-autorenew" data-page-node-id="AJDuQkvXIT8uT3grsCj7HG">
 <div class="flex-1 min-w-0 pr-3" data-page-node-id="3TD7rN5L95wZUF1pU35p0e">
@@ -1909,32 +1865,18 @@ body.host-single-m #root-user{display:none}
 <span class="text-[14px] text-[#999]" data-page-node-id="WMaNceD6uJHXIUf6eFsqJD">暂无费用明细</span>
 </div>
 <div v-else class="flex flex-col gap-3" data-page-node-id="OQycqY4MnWQbueCxJr8yM5">
-<div v-for="(r,i) in feeRows.slice().reverse()" :key="i" class="bg-white rounded-2xl p-4" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-page-node-id="hGBbSsF53LHBlvGpue64q9">
-<div class="mb-2 flex items-center justify-between" data-page-node-id="JSZaDFTBZwcQmelghjykFT"><span class="text-[14px] font-bold text-[#1A1A1A]" data-page-node-id="ntxkGA16k1if0QTZfckDrd">{{ r.kind }}</span></div>
-<div class="text-[13px] flex flex-col gap-2.5" data-page-node-id="6sa32DCJuFKbI3uSTFEYsL">
-<div class="flex items-center gap-2" data-page-node-id="B8xbLijWqYspiMHZLHLCS7"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="R5MQ0C19NxoCYVAst1X1T7">租赁方案</span><span class="flex-1 text-right text-[#333]" data-page-node-id="syHLYX3DMxoEhiTaM6fp41">{{ r.plan }}</span></div>
-<div class="flex items-start gap-2" data-page-node-id="BPbg8BHTKygGjM7sj6pDcz"><span class="text-[#999] w-16 flex-shrink-0 leading-[1.5]" data-page-node-id="lPuAsCW3JJhk2hsJDVsiUK">租赁时间</span><span class="flex-1 min-w-0 text-right text-[#333] leading-[1.5]" data-page-node-id="JDmiELuQOvT1R24V1PBavf">{{ r.periodStart }}<br data-page-node-id="V1O2Wyz03hZ6zCXQHftExf">{{ r.periodEnd }}</span></div>
-<div class="flex items-center justify-between gap-2" data-page-node-id="UBtXnNQBYLWzrMVfGjHQZ">
-<span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="d133bSpyMfHZH3Afn6Qfzw">租金</span>
-<span class="flex-1 text-right text-[#333]" data-page-node-id="HFOE8otRsZ1UzkQnV1uy77">{{ fmtRp(r.rent,2) }}</span>
-</div>
-
-<div class="flex items-center justify-between gap-2" data-page-node-id="f5Ha1VgGFMWItWdEskRbgK">
-<span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="oDhpmVmHKmZwZhV3E6tnG2">押金</span>
-<span class="flex-1 text-right text-[#333]" data-page-node-id="wXZE2RbkGvJ2HMLLHOMzEo">{{ fmtRp(r.deposit,2) }}</span>
-</div>
-
-<div class="flex items-center justify-between gap-2" data-page-node-id="dCOfvXiOpIuBlZczyfBejl">
-<span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="Cn9Ka2Jdz15NFWVbFeQqRo">合计</span>
-<span class="flex-1 text-right font-semibold" style="color:var(--accent)" data-page-node-id="CsAjAx1uxFsM1eiH8RdL0E">{{ fmtRp(r.total,2) }}</span>
-</div>
-
-<div class="flex items-center gap-2" data-page-node-id="odFeeChannel"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="odFeeChannelL">支付渠道</span><span class="flex-1 text-right text-[#333]" data-page-node-id="odFeeChannelV">{{ r.payMethod }}</span></div>
-<div class="flex items-center gap-2" data-page-node-id="WsHoLlcKazZIV0Kl3LFn2E"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="obqaaTfv6GEEqk7KJjTGfZ">支付状态</span><span class="flex-1 text-right text-[#333]" data-page-node-id="SrTUyqPGVyFK3BkdWaZdXW">{{ r.payStatus }}</span></div>
-<div v-if="r.payTime&&!r.canceled" class="flex items-center gap-2" data-page-node-id="K1XumjCOVrpZ2wrKOjiiXB"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="oWWZp20b4noO32DEMURPbG">支付时间</span><span class="flex-1 text-right text-[#333]" data-page-node-id="jvkqCPCoScxUWOjge3SGrZ">{{ r.payTime }}</span></div>
+<kv-card v-for="(r,i) in feeRows.slice().reverse()" :key="i" data-page-node-id="hGBbSsF53LHBlvGpue64q9">
+<template #title><span class="text-[14px] font-bold text-[#1A1A1A]" data-page-node-id="ntxkGA16k1if0QTZfckDrd">{{ r.kind }}</span></template>
+<kv-row label="租赁方案" :value="r.plan"></kv-row>
+<kv-row label="租赁时间" align="top" label-class="leading-[1.5]" value-class="leading-[1.5] whitespace-normal"><template #value><span>{{ r.periodStart }}</span><br><span>{{ r.periodEnd }}</span></template></kv-row>
+<kv-row label="租金" :value="fmtRp(r.rent,2)"></kv-row>
+<kv-row label="押金" :value="fmtRp(r.deposit,2)"></kv-row>
+<kv-row label="合计" :value="fmtRp(r.total,2)" value-class="font-semibold" :value-style="{color:'var(--accent)'}"></kv-row>
+<kv-row label="支付渠道" :value="r.payMethod"></kv-row>
+<kv-row label="支付状态" :value="r.payStatus"></kv-row>
+<kv-row v-if="r.payTime&&!r.canceled" label="支付时间" :value="r.payTime"></kv-row>
 <div v-if="['手动续租','自动续租'].includes(r.kind)&&r.payStatus!=='已支付'&&!r.canceled" class="mt-2 flex gap-2" data-page-node-id="QZlErNijw4n04lKL6yH8g6"><div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-center cursor-pointer active:opacity-90" style="border:1px solid var(--accent);color:var(--accent)" data-cp @click="requestCancelRenew(r.no)" data-page-node-id="1spqj2CPWy9cbpe8KC57g0">取消续租</div><div v-if="r.payStatus==='待支付'&&r.payMethod!=='线下支付'" class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-white text-center cursor-pointer active:opacity-90" style="background:var(--accent)" data-cp @click="payRenewDirect(r.no)" data-page-node-id="7ASzCfY2bxujqQL2dYWybL">立即支付</div></div>
-</div>
-</div>
+</kv-card>
 </div>
 </div>
 </page>
@@ -2123,22 +2065,18 @@ body.host-single-m #root-user{display:none}
   <div class="flex-1 overflow-y-auto min-h-0 conf-scroll-hide px-4 pt-3 pb-6" style="touch-action:pan-y;-webkit-overflow-scrolling:touch" data-page-node-id="hU6GDmuxiD12OSBdviXFHG">
 
     <template v-if="idInfoList.length" data-page-node-id="2TGRcvthnTP3HPM7CWcB48">
-      <div v-for="(rec,i) in idInfoList" :key="rec.id" class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5" :style="i<idInfoList.length-1?{marginBottom:'12px'}:{}" data-od-id="'id-record-'+i" data-page-node-id="zzPF461uGmDjwm12kdAZKP">
-        <div class="flex items-center py-3.5 px-4 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="idSelectMode?confirmIdSelect(rec):openIdDetail(rec)" data-page-node-id="8W3FnHiXxtBSOjzdxPjZD7">
-          <div class="flex-1 min-w-0" data-page-node-id="OtyNbVkpmHBzzo8e3VpCzE">
-            <div class="text-[16px] font-semibold text-[#1A1A1A]" data-page-node-id="M8XVZYNSTqpWZGme4pjv7r">{{ rec.name }}</div>
-            <div class="text-[13px] text-[#999] mt-0.5 leading-relaxed" data-page-node-id="cD9JRFiMKkkaeNncRQUyzs">
-              <div v-if="rec.idNo" data-page-node-id="NSTgl7D0mlhv1Xc8hvwAw6">身份证 {{ maskNo(rec.idNo) }}</div>
-              <div v-if="rec.driverNo" data-page-node-id="z6tmK8LuxdG3JZ1EBGGkH0">驾驶证 {{ maskNo(rec.driverNo) }}</div>
-            </div>
+      <kv-card v-for="(rec,i) in idInfoList" :key="rec.id" class="mb-3 cursor-pointer active:bg-[#F6F7F9]" data-od-id="'id-record-'+i" data-page-node-id="zzPF461uGmDjwm12kdAZKP" data-cp @click="idSelectMode?confirmIdSelect(rec):openIdDetail(rec)">
+        <template #title><span class="min-w-0 truncate text-[16px] font-semibold" style="color:#1A1A1A">{{ rec.name }}</span></template>
+        <template #extra><span v-if="idSelectMode&&confirmIdInfo&&confirmIdInfo.id===rec.id" v-html="luci('check','w-5 h-5 text-[#2B3F5F] shrink-0')" data-page-node-id="BjJqvKX5hop2uMpzuacuAH"></span></template>
+        <kv-row v-if="rec.idNo" label="身份证" :value="maskNo(rec.idNo)"></kv-row>
+        <kv-row v-if="rec.driverNo" label="驾驶证" :value="maskNo(rec.driverNo)"></kv-row>
+        <template #footer v-if="!idSelectMode">
+          <div class="card-actions" data-page-node-id="S0HYVXyCEAT7F7cKOimKLI">
+            <div class="card-action-btn" style="color:#2F6FEB" data-cp @click.stop="openIdEditRecord(rec)" data-page-node-id="Z1yVjmGM3A06Fsd3IFEDut">编辑</div>
+            <div class="card-action-btn" style="color:#DC2626" data-cp @click.stop="openIdDelete(rec)" data-page-node-id="Qn7vq4IRlz8SgV1Mu9vFco">删除</div>
           </div>
-          <span v-if="idSelectMode&&confirmIdInfo&&confirmIdInfo.id===rec.id" v-html="luci('check','w-5 h-5 text-[#2B3F5F] shrink-0')" data-page-node-id="BjJqvKX5hop2uMpzuacuAH"></span>
-        </div>
-        <div class="card-actions" v-if="!idSelectMode" data-page-node-id="S0HYVXyCEAT7F7cKOimKLI">
-          <div class="card-action-btn" style="color:#2F6FEB" data-cp @click.stop="openIdEditRecord(rec)" data-page-node-id="Z1yVjmGM3A06Fsd3IFEDut">编辑</div>
-          <div class="card-action-btn" style="color:#DC2626" data-cp @click.stop="openIdDelete(rec)" data-page-node-id="Qn7vq4IRlz8SgV1Mu9vFco">删除</div>
-        </div>
-      </div>
+        </template>
+      </kv-card>
     </template>
 
     <div v-else class="flex flex-col items-center justify-center py-20 px-6 text-center" data-od-id="id-list-empty" data-page-node-id="DAkBQn1e28rRSNOZRmRpw8">
@@ -2561,37 +2499,26 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 overflow-y-auto min-h-0 conf-scroll-hide px-4 pt-3 pb-[112px]" style="touch-action:pan-y;-webkit-overflow-scrolling:touch" data-page-node-id="L8eMP2MTk5VPzRfd2IhM0D">
 
 <!-- 基本信息 -->
-<div class="bg-white rounded-2xl p-4 mb-3" data-od-id="ro-basic" data-page-node-id="PeVEKKgHtSjAHQS0r5rfGU">
-<div class="flex items-center justify-between mb-3" data-page-node-id="33T7pmRXPWHlmWDsAZRorp">
-<span class="text-[14px] font-bold text-[#1A1A1A]" data-page-node-id="3SxHVGSisAaVwQXD3apnmy">基本信息</span>
-<span class="text-[13px]" :style="{color:rechargeStatusTag(rechargeOrder.payStatus).color}" data-page-node-id="oMBmfHBiMBFVDJbZNs3yrB">{{ rechargeStatusTag(rechargeOrder.payStatus).text }}</span>
-</div>
-<div class="text-[13px] space-y-2.5" data-page-node-id="YD70qb3zpGrhfC3ETANiAO">
-<div class="flex items-center gap-2" data-page-node-id="l5DNvsWvHK8sGzsPFzeFxN"><span class="text-[#999] w-20 flex-shrink-0" data-page-node-id="CBrFz6KGQIOEmr18IC0gtn">订单编号</span><span class="flex-1 text-right text-[#333]" data-page-node-id="Te5wRWnLa7K6Pt7etAMFY6">{{ rechargeOrder.orderNo || '-' }}</span></div>
-<div class="flex items-center gap-2" data-page-node-id="Fr5kh6ShvP4GWOrXWcDaQa"><span class="text-[#999] w-20 flex-shrink-0" data-page-node-id="ZCO1qk9n1Aac5igeZJ6uxZ">创建时间</span><span class="flex-1 text-right text-[#333]" data-page-node-id="KNzQgSWA6ns1gN3kWMezST">{{ rechargeOrder.createTime || '-' }}</span></div>
-<div class="flex items-center gap-2" data-page-node-id="cAnie8Ro7XNiYTc3wD2jWg"><span class="text-[#999] w-20 flex-shrink-0" data-page-node-id="SJrAS76ARYRiSVZVSyDtfC">支付渠道</span><span class="flex-1 text-right text-[#333]" data-page-node-id="s17IMNdKc3IDYIIRYDyJo4">{{ rechargeChannelText(rechargeOrder.payChannel) }}</span></div>
-<div v-if="['PAID','REFUNDING','PARTIAL_REFUND','FULL_REFUND'].includes(rechargeOrder.payStatus)" class="flex items-center gap-2" data-page-node-id="Eef3FpmAuZtfg6aNucTJ14"><span class="text-[#999] w-20 flex-shrink-0" data-page-node-id="WV3CgM2RWCK0OtTbIIHigi">支付时间</span><span class="flex-1 text-right text-[#333]" data-page-node-id="ww3pwiq38NluzPD4OYEI2Q">{{ rechargeOrder.payTime }}</span></div>
-<div v-if="rechargeOrder.payStatus==='CANCELLED'" class="flex items-center gap-2" data-page-node-id="dxjfbszBGSBDkqDW7pqgtA"><span class="text-[#999] w-20 flex-shrink-0" data-page-node-id="9CTXLNtQCB0ydFMnC9u692">取消时间</span><span class="flex-1 text-right text-[#333]" data-page-node-id="oLLogNVJqGLdyQmUzVp44h">{{ rechargeOrder.cancelTime || '-' }}</span></div>
-</div>
-</div>
+<kv-card title="基本信息" class="mb-3" label-width="5rem" data-od-id="ro-basic" data-page-node-id="PeVEKKgHtSjAHQS0r5rfGU">
+<template #extra><span class="text-[13px]" :style="{color:rechargeStatusTag(rechargeOrder.payStatus).color}" data-page-node-id="oMBmfHBiMBFVDJbZNs3yrB">{{ rechargeStatusTag(rechargeOrder.payStatus).text }}</span></template>
+<kv-row label="订单编号" :value="rechargeOrder.orderNo || '-'"></kv-row>
+<kv-row label="创建时间" :value="rechargeOrder.createTime || '-'"></kv-row>
+<kv-row label="支付渠道" :value="rechargeChannelText(rechargeOrder.payChannel)"></kv-row>
+<kv-row v-if="['PAID','REFUNDING','PARTIAL_REFUND','FULL_REFUND'].includes(rechargeOrder.payStatus)" label="支付时间" :value="rechargeOrder.payTime"></kv-row>
+<kv-row v-if="rechargeOrder.payStatus==='CANCELLED'" label="取消时间" :value="rechargeOrder.cancelTime || '-'"></kv-row>
+</kv-card>
 
 <!-- 充值明细 -->
-<div class="bg-white rounded-2xl p-4 mb-3" data-od-id="ro-recharge" data-page-node-id="8y9wvDS5BjtlN8eLXCdGg6">
-<div class="text-[14px] font-bold text-[#1A1A1A] mb-3" data-page-node-id="mpnKRUIEtED6mNS2Juci5B">充值明细</div>
-<div class="text-[13px] space-y-2.5" data-page-node-id="QmRyUCrdpVEfAZK2A2NGHi">
-<div class="flex items-center gap-2" data-page-node-id="gAI2gM3469vgh7HVEwkCVb"><span class="text-[#999] w-20 flex-shrink-0" data-page-node-id="k8aStK4NhKzIzpC9wB241m">充值金额</span><span class="flex-1 text-right text-[#333]" data-page-node-id="qwLdfcwXWD5EpHMx8ypBjw">{{ fmtRp(rechargeOrder.amount) }}</span></div>
-<div class="flex items-center gap-2" data-page-node-id="nJbeEwzav6C7TpJBEEpZrw"><span class="text-[#999] w-20 flex-shrink-0" data-page-node-id="ePgqXsFywQGaEArYyRD5KF">赠送金额</span><span class="flex-1 text-right text-[#333]" data-page-node-id="b30NtD6pvajqvetNQUmFq4">{{ fmtRp(rechargeOrder.giftAmount) }}</span></div>
-</div>
-</div>
+<kv-card title="充值明细" class="mb-3" label-width="5rem" data-od-id="ro-recharge" data-page-node-id="8y9wvDS5BjtlN8eLXCdGg6">
+<kv-row label="充值金额" :value="fmtRp(rechargeOrder.amount)"></kv-row>
+<kv-row label="赠送金额" :value="fmtRp(rechargeOrder.giftAmount)"></kv-row>
+</kv-card>
 
 <!-- 退款明细（仅部分退款/全部退款时展示） -->
-<div v-if="['PARTIAL_REFUND','FULL_REFUND'].includes(rechargeOrder.payStatus)" class="bg-white rounded-2xl p-4 mb-3" data-od-id="ro-refund-detail" data-page-node-id="RR1vpya2DOqS4KNJuJDGGW">
-<div class="text-[14px] font-bold text-[#1A1A1A] mb-3" data-page-node-id="vNJ6EsFtDUnilUmssKXhcQ">退款明细</div>
-<div class="text-[13px] space-y-2.5" data-page-node-id="zEnMVoR8gutbABGJ1SLiEe">
-<div class="flex items-center gap-2" data-page-node-id="f76ApS9nItjppxM0viwRPl"><span class="text-[#999] w-20 flex-shrink-0" data-page-node-id="oCkpIqVFaoXd0UMNcOYhSE">充值金额</span><span class="flex-1 text-right text-[#333]" data-page-node-id="ZflBeCbvD1bk8Y9UfpkkOA">{{ fmtRp(rechargeOrder.refundAmount) }}</span></div>
-<div class="flex items-center gap-2" data-page-node-id="3Gwlj3jThC6ZNZsMVj3dUN"><span class="text-[#999] w-20 flex-shrink-0" data-page-node-id="Z1YERrt13odr9hQQ2sgqyd">赠送金额</span><span class="flex-1 text-right text-[#333]" data-page-node-id="ONlWgiKRnK9EFcw0L7UIku">{{ fmtRp(rechargeOrder.refundGiftAmount) }}</span></div>
-</div>
-</div>
+<kv-card v-if="['PARTIAL_REFUND','FULL_REFUND'].includes(rechargeOrder.payStatus)" title="退款明细" class="mb-3" label-width="5rem" data-od-id="ro-refund-detail" data-page-node-id="RR1vpya2DOqS4KNJuJDGGW">
+<kv-row label="充值金额" :value="fmtRp(rechargeOrder.refundAmount)"></kv-row>
+<kv-row label="赠送金额" :value="fmtRp(rechargeOrder.refundGiftAmount)"></kv-row>
+</kv-card>
 
 </div>
 
@@ -2638,7 +2565,7 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" :class="vehicleCount===0?'is-on':''" data-cp @click="setVehicleCount(0)" data-page-node-id="RjzUP4yYjcSqbDTcVPjDy2">0 辆</div>
 </div>
 </div>
-<div class="demo-ops-section" data-page-node-id="BattDemoA"><div class="demo-ops-label" data-page-node-id="BattDemoB">电池数据</div><div class="demo-ops-chips" data-page-node-id="BattDemoC"><div class="demo-ops-chip" :class="batteryCount===2?'is-on':''" data-cp @click="setBatteryCount(2)" data-page-node-id="BattDemo1">2 块</div><div class="demo-ops-chip" :class="batteryCount===1?'is-on':''" data-cp @click="setBatteryCount(1)" data-page-node-id="BattDemo11">1 块</div><div class="demo-ops-chip" :class="batteryCount===0?'is-on':''" data-cp @click="setBatteryCount(0)" data-page-node-id="BattDemo2">0 块</div>
+<div class="demo-ops-section" data-page-node-id="BattDemoA"><div class="demo-ops-label" data-page-node-id="BattDemoB">电池数据</div><div class="demo-ops-chips" data-page-node-id="BattDemoC"><div class="demo-ops-chip" :class="batteryCount===2?'is-on':''" data-cp @click="setBatteryCount(2)" data-page-node-id="BattDemo1">2 块</div><div class="demo-ops-chip" :class="batteryCount===1?'is-on':''" data-cp @click="setBatteryCount(1)" data-page-node-id="BattDemo11">1 块</div><div class="demo-ops-chip" :class="batteryCount===0?'is-on':''" data-cp @click="setBatteryCount(0)" data-page-node-id="BattDemo2">0 块</div></div></div>
 
 <div class="demo-ops-section" data-page-node-id="WCWY05AwKKfUAOfREVvaCs">
 <div class="demo-ops-label" data-page-node-id="1Ggo7H08e9yyA1hVZjeGdz">消息推送</div>
@@ -2791,7 +2718,7 @@ body.host-single-m #root-user{display:none}
   </div>
 </div>
 </template>
-</aside></div></section>
+</aside></div></div></section>
     <section id="root-merchant"><div class="od-stage" id="mount-merchant"><div class="w-[393px] h-[852px] bg-black rounded-[55px] p-3 relative shrink-0" style="box-shadow:0 0 0 2px #333,0 30px 60px rgba(0,0,0,.35)">
 <div class="absolute top-[23px] left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-black rounded-[20px] z-[2000]"></div>
 <div class="w-full h-full bg-[#F6F7F9] rounded-[44px] overflow-hidden flex flex-col relative" ref="stage" data-cp @click="tipHide">
@@ -3165,32 +3092,20 @@ body.host-single-m #root-user{display:none}
 <page :open="curAlert" :z="510" :swipe-close="closeAlertDetail">
 <nav-bar title="告警详情" border-color="#E5E5E5" @back="closeAlertDetail"></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll">
-<div class="bg-white border border-[#E5E5E5] rounded-xl p-4 mb-3">
-<div class="flex items-start gap-3 mb-3">
-<div class="w-11 h-11 rounded-[12px] flex items-center justify-center shrink-0" :class="lvBg(curAlert.lv)">
-<span v-html="luci(curAlert.icon,'w-5 h-5')"></span>
-</div>
-<div class="flex-1 min-w-0">
-<div class="text-[16px] font-semibold mb-1">{{ curAlert.type }}</div>
-<div class="flex flex-wrap gap-1.5">
-<span class="text-[11px] font-semibold px-2 py-0.5 rounded-[4px]" :class="lvBg(curAlert.lv)">{{ lvLabel(curAlert.lv) }}</span>
-<span class="text-[11px] font-medium px-1.5 py-0.5 rounded" :class="stBg(curAlert.status)">{{ stLabel(curAlert.status) }}</span>
-</div>
-</div>
-</div>
-<div class="space-y-2.5 text-[13px]">
-          <div class="flex justify-between gap-3"><span class="text-[#6B6B6B] shrink-0">车架号</span><span class="font-medium text-right break-all">{{ curAlert.vin }}</span></div>
-          <div class="flex justify-between gap-3"><span class="text-[#6B6B6B] shrink-0">首次触发</span><span class="font-medium text-right">{{ curAlert.firstTime }}</span></div>
-          <div class="flex justify-between gap-3"><span class="text-[#6B6B6B] shrink-0">最近触发</span><span class="font-medium text-right">{{ curAlert.time }}</span></div>
-          <div v-if="curAlert.status==='closed'&&curAlert.closedTime" class="flex justify-between gap-3"><span class="text-[#6B6B6B] shrink-0">关闭时间</span><span class="font-medium text-right">{{ curAlert.closedTime }}</span></div>
-          <div v-if="curAlert.status==='closed'&&curAlert.closeSource" class="flex justify-between gap-3"><span class="text-[#6B6B6B] shrink-0">关闭方式</span><span class="font-medium text-right">{{ closeSourceLabel(curAlert.closeSource) }}</span></div>
-          <div class="flex justify-between gap-3"><span class="text-[#6B6B6B] shrink-0">持续时间</span><span class="font-medium text-right">{{ curAlert.duration }}</span></div>
-          <div class="flex justify-between gap-3"><span class="text-[#6B6B6B] shrink-0">触发次数</span><span class="font-medium text-right">{{ (curAlert.count) + ' 次' }}</span></div>
-          <div class="flex justify-between gap-3"><span class="text-[#6B6B6B] shrink-0">最后位置</span><span class="font-medium text-right">{{ curAlert.location }}</span></div>
-          <div v-if="curAlert.orderId" class="flex justify-between gap-3"><span class="text-[#6B6B6B] shrink-0">关联订单</span><span class="font-medium text-right text-[#333]">{{ curAlert.orderId }}</span></div>
-          <div v-if="curAlert.ignoreReason" class="flex justify-between gap-3"><span class="text-[#6B6B6B] shrink-0">忽略原因</span><span class="font-medium text-right">{{ ignoreReasonLabel(curAlert.ignoreReason) }}</span></div>
-        </div>
-</div>
+<kv-card class="mb-3">
+<template #title><span class="flex items-center gap-2.5 min-w-0"><span class="w-11 h-11 rounded-[12px] flex items-center justify-center shrink-0" :class="lvBg(curAlert.lv)"><span v-html="luci(curAlert.icon,'w-5 h-5')"></span></span><span class="text-[16px] font-semibold truncate">{{ curAlert.type }}</span></span></template>
+<template #extra><span class="flex flex-wrap items-center justify-end gap-1.5 shrink-0"><span class="text-[11px] font-semibold px-2 py-0.5 rounded-[4px]" :class="lvBg(curAlert.lv)">{{ lvLabel(curAlert.lv) }}</span><span class="text-[11px] font-medium px-1.5 py-0.5 rounded" :class="stBg(curAlert.status)">{{ stLabel(curAlert.status) }}</span></span></template>
+<kv-row label="车架号" :value="curAlert.vin" align="top" value-class="whitespace-normal break-words"></kv-row>
+<kv-row label="首次触发" :value="curAlert.firstTime"></kv-row>
+<kv-row label="最近触发" :value="curAlert.time"></kv-row>
+<kv-row v-if="curAlert.status==='closed'&&curAlert.closedTime" label="关闭时间" :value="curAlert.closedTime"></kv-row>
+<kv-row v-if="curAlert.status==='closed'&&curAlert.closeSource" label="关闭方式" :value="closeSourceLabel(curAlert.closeSource)"></kv-row>
+<kv-row label="持续时间" :value="curAlert.duration"></kv-row>
+<kv-row label="触发次数" :value="(curAlert.count) + ' 次'"></kv-row>
+<kv-row label="最后位置" :value="curAlert.location"></kv-row>
+<kv-row v-if="curAlert.orderId" label="关联订单" :value="curAlert.orderId"></kv-row>
+<kv-row v-if="curAlert.ignoreReason" label="忽略原因" :value="ignoreReasonLabel(curAlert.ignoreReason)"></kv-row>
+</kv-card>
 <div class="bg-white border border-[#E5E5E5] rounded-xl overflow-hidden mb-3" data-od-id="alert-quick-actions">
         <div v-if="can('vehicle.detail')" class="flex items-center gap-3 px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #E5E5E5" data-cp @click="goAlertVehicle">
           <div class="w-9 h-9 rounded-[10px] bg-[#EBF1FD] flex items-center justify-center shrink-0"><span v-html="luci('bike','w-[18px] h-[18px] text-[var(--accent)]')"></span></div>
@@ -3400,13 +3315,14 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 min-w-0"><div class="text-[15px] font-semibold mb-0.5">{{ dv.account || '未绑定用户' }}</div><div v-if="dv.phone||dv.email" class="text-[13px] text-[#666]">{{ dv.phone || dv.email }}</div></div>
 <span v-if="dv.account&&dv.status!=='租用中'&&can('vehicle.bind')" data-cp @click.stop="vehMod='unbind'" class="text-[14px] font-medium cursor-pointer select-none text-[#DC2626] active:opacity-70 shrink-0">解绑</span><span v-else-if="can('vehicle.bind')" data-cp @click.stop="openUserPick('vehicle')" class="text-[14px] font-medium cursor-pointer select-none text-[var(--link)] active:opacity-70 shrink-0">绑定</span>
 </div>
-<div class="bg-white rounded-xl p-4" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div class="flex items-center py-2.5" style="border-bottom:1px dashed #E5E5E5"><div class="flex-1"><div class="text-[12px] text-[#8A8A8A] mb-1">车架号</div><div class="text-[16px] font-bold flex items-center gap-1.5"><span class="min-w-0 truncate">{{ dv.vin }}</span><span v-if="dv.vin" class="shrink-0" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyText(dv.vin,'车架号')" data-page-node-id="veh-vin-copy"></span></div></div><div class="flex items-center gap-2"><span class="text-[11px] font-semibold px-2.5 py-0.5 rounded" :style="dv.online?{background:'#ECFDF3',color:'#17A34A',border:'1px solid #17A34A'}:{background:'#FFFBEB',color:'#D97706',border:'1px solid #D97706'}">{{ dv.online?'在线':'离线' }}</span></div></div>
-<div class="flex py-2.5" style="border-bottom:1px dashed #E5E5E5"><div class="flex-1"><div class="text-[12px] text-[#8A8A8A] mb-1">中控编号</div><div class="text-[14px] font-semibold">{{ dv.ctrl }}</div></div></div>
-<div class="flex py-2.5" style="border-bottom:1px dashed #E5E5E5"><div class="flex-1"><div class="text-[12px] text-[#999] mb-1">车型</div><div class="text-[14px] font-semibold">{{ dv.model }}</div></div></div>
-<div class="flex py-2.5" style="border-bottom:1px dashed #E5E5E5"><div class="flex-1"><div class="text-[12px] text-[#999] mb-1">电池电量</div><div class="text-[14px] font-semibold" :style="{color:bc(dv.batteryMain)}">主{{ dv.batteryMain }}% / 副{{ dv.batterySub }}%</div></div><div class="flex-1"><div class="text-[12px] text-[#999] mb-1">运营状态</div><div class="text-[14px] font-semibold">{{ dv.status }}</div></div></div>
-<div class="flex justify-between items-center py-2.5"><div class="text-[12px] text-[#999]">最后信号时间</div><div class="text-[14px] font-semibold">{{ dv.time }}</div></div>
-</div>
+<kv-card :title="dv.vin" divider label-width="5rem" :copyable="!!dv.vin" @copy="t=>copyText(t,'车架号')">
+  <template #extra><span class="text-[11px] font-semibold px-2.5 py-0.5 rounded" :style="dv.online?{background:'#ECFDF3',color:'#17A34A',border:'1px solid #17A34A'}:{background:'#FFFBEB',color:'#D97706',border:'1px solid #D97706'}">{{ dv.online?'在线':'离线' }}</span></template>
+  <kv-row label="中控编号" :value="dv.ctrl"></kv-row>
+  <kv-row label="车型" :value="dv.model"></kv-row>
+  <kv-row label="电池电量" :value="'主'+dv.batteryMain+'% / 副'+dv.batterySub+'%'" :value-style="{color:bc(dv.batteryMain)}"></kv-row>
+  <kv-row label="运营状态" :value="dv.status"></kv-row>
+  <kv-row label="最后信号时间" :value="dv.time"></kv-row>
+</kv-card>
 </div>
 </page>
 
@@ -3641,10 +3557,12 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-<div class="flex gap-3 px-5 shrink-0">
+<template #footer>
+<div class="flex gap-3 px-5">
 <button data-cp @click="vehResetFS" class="flex-1 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer transition-colors" style="background:#fff;color:#111;border:1px solid #E5E5E5;box-shadow:none">重置</button>
 <button data-cp @click="vehApplyFS" class="flex-1 py-3.5 rounded-xl text-white text-[15px] font-semibold cursor-pointer border-none transition-colors" style="background:var(--accent)">确定</button>
-</div></bottom-sheet>
+</div>
+</template></bottom-sheet>
 
 <confirm-dialog :open="vehMod" :title="vehModTitle" :desc="vehModDesc" :loading="vehModLoading" z="800" @close="vehMod=null" @confirm="vehConfirmMod"></confirm-dialog>
 </template>
@@ -3785,7 +3703,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex gap-2 items-center">
 <div class="flex-1 rounded-full flex items-center py-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:6px;padding-right:4px">
 <div class="relative shrink-0" data-cp @click.stop>
-<button data-cp @click="searchScopeOpen=!searchScopeOpen" type="button" class="flex items-center gap-1.5 text-[12px] font-medium text-[#333] bg-transparent border-0 outline-none pl-2 pr-2.5 mr-1.5 py-1 cursor-pointer transition-colors hover:bg-[#EFEFF1]" style="border-right:1px solid #E5E5E5">
+<button data-cp @click="searchScopeOpen=!searchScopeOpen" type="button" class="flex items-center gap-1.5 text-[12px] font-medium text-[#333] bg-transparent border-0 outline-none pl-2 pr-2.5 mr-1.5 py-1 cursor-pointer" style="border-right:1px solid #E5E5E5">
 <span class="truncate max-w-[60px]">{{ searchScopeLabel }}</span>
 <svg class="w-4 h-4 text-[#999] transition-transform" :class="searchScopeOpen?'rotate-180':''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
 </button>
@@ -3864,17 +3782,13 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 min-w-0"><div class="text-[15px] font-semibold mb-0.5">{{ curBatt.account || '未绑定用户' }}</div><div v-if="curBatt.phone||curBatt.email" class="text-[13px] text-[#666]">{{ curBatt.phone || curBatt.email }}</div></div>
 <span v-if="curBatt.account&&curBatt.status!=='租用中'&&can('battery.bind')" data-cp @click.stop="battMod='unbind'" class="text-[14px] font-medium cursor-pointer select-none text-[#DC2626] active:opacity-70 shrink-0">解绑</span><span v-else-if="can('battery.bind')" data-cp @click.stop="openUserPick('battery')" class="text-[14px] font-medium cursor-pointer select-none text-[var(--link)] active:opacity-70 shrink-0">绑定</span>
 </div>
-<div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="batt-detail-info-card">
-<div class="flex items-center py-2.5" style="border-bottom:1px dashed #E5E5E5">
-<div class="flex-1 pl-4 pr-2"><div class="text-[12px] text-[#8A8A8A] mb-1">电池编号</div><div class="text-[16px] font-bold flex items-center gap-1.5"><span class="min-w-0 truncate">{{ curBatt.battNo }}</span><span v-if="curBatt.battNo" class="shrink-0" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyText(curBatt.battNo,'电池编号')" data-page-node-id="batt-no-copy"></span></div></div>
-<div class="flex items-center gap-2 pr-4">
-<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded" :style="curBatt.online?{background:'#ECFDF3',color:'#17A34A',border:'1px solid #17A34A'}:{background:'#FFFBEB',color:'#D97706',border:'1px solid #D97706'}">{{ curBatt.online?'在线':'离线' }}</span>
-</div>
-</div>
-<div class="flex py-2.5 px-4" style="border-bottom:1px dashed #E5E5E5"><div class="flex-1"><div class="text-[12px] text-[#8A8A8A] mb-1">电池型号</div><div class="text-[14px] font-semibold">{{ curBatt.model }}</div></div></div>
-<div class="flex py-2.5 px-4" style="border-bottom:1px dashed #E5E5E5"><div class="flex-1"><div class="text-[12px] text-[#999] mb-1">电量</div><div class="text-[14px] font-semibold" :style="{color:bc(curBatt.level)}">{{ curBatt.level }}%</div></div><div class="flex-1"><div class="text-[12px] text-[#999] mb-1">运营状态</div><div class="text-[14px] font-semibold" :style="{color:sc(curBatt.status)}">{{ curBatt.status }}</div></div></div>
-<div class="flex items-center justify-between py-2.5 px-4"><div class="text-[12px] text-[#999]">最后信号时间</div><div class="text-[14px] font-semibold">{{ curBatt.time }}</div></div>
-</div>
+<kv-card :title="curBatt.battNo" divider label-width="5rem" :copyable="!!curBatt.battNo" @copy="t=>copyText(t,'电池编号')" data-od-id="batt-detail-info-card">
+<template #extra><span class="text-[11px] font-semibold px-2.5 py-0.5 rounded" :style="curBatt.online?{background:'#ECFDF3',color:'#17A34A',border:'1px solid #17A34A'}:{background:'#FFFBEB',color:'#D97706',border:'1px solid #D97706'}">{{ curBatt.online?'在线':'离线' }}</span></template>
+<kv-row label="电池型号" :value="curBatt.model"></kv-row>
+<kv-row label="电量" :value="curBatt.level+'%'" :value-style="{color:bc(curBatt.level)}"></kv-row>
+<kv-row label="运营状态" :value="curBatt.status" :value-style="{color:sc(curBatt.status)}"></kv-row>
+<kv-row label="最后信号时间" :value="curBatt.time"></kv-row>
+</kv-card>
 </template>
 </div>
 </page>
@@ -4062,7 +3976,7 @@ body.host-single-m #root-user{display:none}
 <span class="flex-1 text-[15px]" :style="battAddModel?{color:'#111',fontWeight:500}:{color:'#999'}">{{ battAddModel||'选择电池型号' }}</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
 </div></div>
-<div class="form-row"><div class="form-label">{{ '电池编号' }}</div><div class="login-field relative flex items-center" :style="!battAddModel?{opacity:0.5,pointerEvents:'none'}:null"><input v-model="battAddNo" type="text" :placeholder="'请输入电池编号'" :disabled="!battAddModel" class="flex-1 min-w-0 pl-3.5 pr-2 py-3.5 text-[15px]"><button data-cp @click="scanBattNo" type="button" class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mr-1.5 cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button></div></div>
+<div class="form-row"><div class="form-label">{{ '电池编号' }}</div><div class="login-field relative flex items-center" :style="!battAddModel?{opacity:0.5,pointerEvents:'none'}:null"><input v-model="battAddNo" type="text" maxlength="64" :placeholder="'请输入电池编号'" :disabled="!battAddModel" class="flex-1 min-w-0 pl-3.5 pr-2 py-3.5 text-[15px]"><button data-cp @click="scanBattNo" type="button" class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mr-1.5 cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button></div></div>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5">
@@ -4108,28 +4022,27 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-<div class="flex gap-3 px-5 shrink-0">
+<template #footer>
+<div class="flex gap-3 px-5">
 <button data-cp @click="battResetFS" class="flex-1 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer transition-colors" style="background:#fff;color:#111;border:1px solid #E5E5E5;box-shadow:none">重置</button>
 <button data-cp @click="battApplyFS" class="flex-1 py-3.5 rounded-xl text-white text-[15px] font-semibold cursor-pointer border-none transition-colors" style="background:var(--accent)">确定</button>
-</div></bottom-sheet>
+</div>
+</template></bottom-sheet>
 
 <page :open="ordersOV==='detail' && vehOV!=='detail'" :z="500" :swipe-close="()=>goBack()">
 <nav-bar title="订单详情" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-32 hid" style="touch-action:pan-y">
-<div class="bg-white rounded-2xl p-4 mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div class="flex items-center justify-between mb-2"><div class="text-[14px] font-bold text-[#1A1A1A]">基本信息</div><span class="text-[13px] font-semibold" :style="stg(dSt)">{{ sl(dSt) }}</span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-16 flex-shrink-0">订单编号</span><span class="flex-1 text-right text-[13px] text-[#333] flex items-center justify-end gap-1.5">{{ do_.id }}<span v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyId"></span></span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-16 flex-shrink-0">用户账号</span><span class="flex-1 text-right text-[13px] font-semibold flex items-center justify-end gap-1.5"><span :class="(do_.account||do_.customer)?'text-[var(--link)] cursor-pointer active:opacity-70':'text-[#333]'" data-cp @click="(do_.account||do_.customer)&&goUserDetail(do_.account||do_.customer)">{{ orderCustomerText(do_) }}</span><span v-if="do_.phone" v-html="luci('phone','w-3.5 h-3.5 text-[var(--accent)]')"></span></span></div>
-<div class="flex items-start gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-16 flex-shrink-0 leading-[1.5]">租赁时间</span><span class="flex-1 min-w-0 text-right text-[13px] text-[#333] leading-[1.5]" v-html="((do_.rentStart||'-')+' ~ '+rentEndOf(do_)).replace(' ~ ','<br>')"></span></div>
-<div class="flex items-center gap-2 py-2.5" :style="(dSt==='complete'||dSt==='cancelled')?'border-bottom:1px dashed #E5E5E5':''"><span class="text-[13px] text-[#999] w-16 flex-shrink-0">创建时间</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ do_.created }}</span></div>
-<div v-if="dSt==='complete'" class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-16 flex-shrink-0">完成时间</span><span class="flex-1 text-right text-[13px] text-[#333]">2025-01-20 14:30:00</span></div>
-<div v-if="dSt==='cancelled'" class="flex items-center gap-2 py-2.5"><span class="text-[13px] text-[#999] w-16 flex-shrink-0">取消时间</span><span class="flex-1 text-right text-[13px] text-[#333]">2025-01-18 10:15:00</span></div>
-</div>
-<div class="bg-white rounded-2xl p-4 mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div class="flex items-center justify-between mb-2">
-<div class="text-[14px] font-bold text-[#1A1A1A]">费用明细</div>
-<span v-if="feeStatRows.length" v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-cp @click="navOpen();ordersOV='feedetail'" class="w-8 h-8 -mr-2 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] shrink-0" title="查看费用明细"></span>
-</div>
+<kv-card title="基本信息" class="mb-3" divider>
+<template #extra><span class="text-[13px] font-semibold" :style="stg(dSt)">{{ sl(dSt) }}</span></template>
+<kv-row label="订单编号" :value="do_.id" copyable @copy="()=>copyId()"></kv-row>
+<kv-row label="用户账号" value-class="font-semibold"><template #value><span :class="(do_.account||do_.customer)?'text-[var(--link)] cursor-pointer active:opacity-70':'text-[#333]'" data-cp @click="(do_.account||do_.customer)&&goUserDetail(do_.account||do_.customer)">{{ orderCustomerText(do_) }}</span><span v-if="do_.phone" class="ml-1.5" v-html="luci('phone','w-3.5 h-3.5 text-[var(--accent)]')"></span></template></kv-row>
+<kv-row label="租赁时间" align="top" label-class="leading-[1.5]" value-class="leading-[1.5]"><template #value><span v-html="((do_.rentStart||'-')+' ~ '+rentEndOf(do_)).replace(' ~ ','<br>')"></span></template></kv-row>
+<kv-row label="创建时间" :value="do_.created"></kv-row>
+<kv-row v-if="dSt==='complete'" label="完成时间" value="2025-01-20 14:30:00"></kv-row>
+<kv-row v-if="dSt==='cancelled'" label="取消时间" value="2025-01-18 10:15:00"></kv-row>
+</kv-card>
+<kv-card title="费用明细" class="mb-3">
+<template #extra><span v-if="feeStatRows.length" v-html="luci('chevron-right','w-3.5 h-3.5 text-[#999]')" data-cp @click="navOpen();ordersOV='feedetail'" class="w-4 h-4 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] shrink-0" title="查看费用明细"></span></template>
 <template v-if="feeStatRows.length">
 <div class="text-[13px] space-y-2.5">
 <div class="flex items-center justify-between gap-2 cursor-pointer active:opacity-60" data-cp @click.stop="feeRentOpen=!feeRentOpen">
@@ -4155,13 +4068,10 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </template>
-</div>
+</kv-card>
 <!-- ═══ 退款明细 · 卡片（费用明细下方） ═══ -->
-<div v-if="orderPerm('refund.list')" class="bg-white rounded-2xl p-4 mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div class="mb-3 flex items-center justify-between">
-<span class="text-[14px] font-bold text-[#1A1A1A]">退款明细</span>
-<span v-html="luci('chevron-right','w-4 h-4 text-[#999]')" data-cp @click="openRefundRecords" class="w-8 h-8 -mr-2 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] shrink-0" title="查看退款记录"></span>
-</div>
+<kv-card v-if="orderPerm('refund.list')" title="退款明细" class="mb-3">
+<template #extra><span v-html="luci('chevron-right','w-3.5 h-3.5 text-[#999]')" data-cp @click="openRefundRecords" class="w-4 h-4 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] shrink-0" title="查看退款记录"></span></template>
 <div class="text-[13px] space-y-2.5">
 <div class="flex items-center justify-between gap-2 cursor-pointer active:opacity-60" data-cp @click.stop="refundRentOpen=!refundRentOpen">
 <span class="text-[#999] w-16 flex-shrink-0">租金</span>
@@ -4185,49 +4095,36 @@ body.host-single-m #root-user{display:none}
 <div v-for="c in refundChannelBreakdown.total" :key="c.channel" class="flex items-center justify-between text-[12px]"><span class="text-[#999]">{{ c.channel }}</span><span class="text-[#666]">{{ fmtRp(c.amount,2) }}</span></div>
 </div>
 </div>
-</div>
+</kv-card>
 
 <!-- ═══ 实名信息 · 卡片（参考 C 端订单详情：实名信息只读，不支持选择） ═══ -->
-<div class="bg-white rounded-2xl p-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-  <div class="flex items-center justify-between mb-2.5">
-    <div class="text-[14px] font-semibold text-[#111]">实名信息</div>
-  </div>
+<kv-card title="实名信息" class="mb-3">
   <template v-if="dHasRealName">
-  <div class="flex items-center justify-between"><span class="text-[13px] text-[#999]">姓名</span><span class="text-[14px] text-[#111] font-medium">{{ do_.customer||do_.account||'—' }}</span></div>
-  <div class="flex items-center justify-between mt-2"><span class="text-[13px] text-[#999]">身份证</span><span class="text-[14px] text-[#111]">{{ do_.idNo||'—' }}</span></div>
-  <div class="flex items-center justify-between mt-2"><span class="text-[13px] text-[#999]">驾驶证</span><span class="text-[14px] text-[#111]">{{ do_.driverNo||'—' }}</span></div>
+  <kv-row label="姓名" :value="do_.customer||do_.account||'—'"></kv-row>
+  <kv-row label="身份证" :value="do_.idNo||'—'"></kv-row>
+  <kv-row label="驾驶证" :value="do_.driverNo||'—'"></kv-row>
   </template>
   <div v-else class="text-[13px] text-[#999]">未选择实名信息</div>
-  <div class="h-px bg-[#F0F0F0] my-3"></div>
-  <div class="flex items-center py-1 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openDocsPage">
-    <div class="w-10 h-10 rounded-full bg-[#EBF1FD] flex items-center justify-center mr-3 shrink-0"><span v-html="luci('folder-open','w-5 h-5 text-[var(--accent)]')"></span></div>
-    <div class="flex-1 min-w-0">
-      <div class="text-[14px] font-medium text-[#1A1A1A]">补充资料</div>
-      <div class="text-[12px] text-[#999] mt-0.5">{{ curDocs.length ? curDocs.length+' 份' : '可上传身份证、驾驶证、合同等' }}</div>
-    </div>
-    <span v-html="luci('chevron-right','w-4 h-4 text-[#999] shrink-0')"></span>
-  </div>
-</div>
+  <kv-row label="补充资料" :divider="true" class="cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openDocsPage">
+    <template #value><span>{{ curDocs.length ? curDocs.length+' 份' : '可上传身份证、驾驶证、合同等' }}</span><span class="ml-1.5 shrink-0" v-html="luci('chevron-right','w-3.5 h-3.5 text-[#999]')"></span></template>
+  </kv-row>
+</kv-card>
 
 <!-- ═══ 车辆信息 · 卡片（实名信息下方） ═══ -->
-<div v-if="do_.type!=='battery'" class="bg-white rounded-2xl p-4 mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div class="flex items-center justify-between mb-3"><span class="text-[14px] font-bold text-[#1A1A1A]">车辆信息</span><span v-if="['progress','return','overdue','breach'].indexOf(dSt)!==-1&&orderPerm('operate.change_vehicle')" data-cp @click="openOrderPick('changeVehicle')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('refresh-cw','w-3.5 h-3.5')"></span><span v-else-if="dSt==='pickup'&&orderPerm('operate.assign_vehicle')" data-cp @click="openOrderPick('assignVehicle')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('link','w-3.5 h-3.5')"></span></div>
-<div class="text-[13px] space-y-2.5">
-<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">车型</span><span class="flex-1 text-right text-[#333] truncate">{{ do_.type==='package'?do_.item.split('+')[0]:do_.item }}</span></div>
-<div v-if="dSt!=='created'&&dSt!=='pickup'" class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">车架号</span><span class="flex-1 text-right text-[#333] flex items-center justify-end gap-1.5 truncate"><span v-if="do_.vin" class="text-[var(--link)] cursor-pointer active:opacity-70" data-cp @click="goVehicleDetail(do_.vin)">{{ do_.vin }}</span><span v-else>—</span><span v-if="do_.vin" class="shrink-0" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyText(do_.vin,'车架号')"></span></span></div>
-<div v-if="dSt!=='created'&&dSt!=='pickup'" class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">取用时间</span><span class="flex-1 text-right text-[#333] truncate">{{ do_.rentStart }}</span></div>
-</div>
-</div>
+<kv-card v-if="do_.type!=='battery'" title="车辆信息" class="mb-3">
+<template #extra><span v-if="['progress','return','overdue','breach'].indexOf(dSt)!==-1&&orderPerm('operate.change_vehicle')" data-cp @click="openOrderPick('changeVehicle')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('refresh-cw','w-3.5 h-3.5')"></span><span v-else-if="dSt==='pickup'&&orderPerm('operate.assign_vehicle')" data-cp @click="openOrderPick('assignVehicle')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('link','w-3.5 h-3.5')"></span></template>
+<kv-row label="车型" :value="do_.type==='package'?do_.item.split('+')[0]:do_.item"></kv-row>
+<kv-row v-if="dSt!=='created'&&dSt!=='pickup'" label="车架号" :copyable="!!do_.vin" @copy="t=>copyText(t,'车架号')"><template #value><span v-if="do_.vin" class="text-[var(--link)] cursor-pointer active:opacity-70" data-cp @click="goVehicleDetail(do_.vin)">{{ do_.vin }}</span><span v-else>—</span></template></kv-row>
+<kv-row v-if="dSt!=='created'&&dSt!=='pickup'" label="取用时间" :value="do_.rentStart"></kv-row>
+</kv-card>
 
 <!-- ═══ 电池信息 · 卡片（实名信息下方） ═══ -->
-<div v-if="do_.type!=='vehicle'" class="bg-white rounded-2xl p-4 mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div class="flex items-center justify-between mb-3"><span class="text-[14px] font-bold text-[#1A1A1A]">电池信息</span><span v-if="['progress','return','overdue','breach'].indexOf(dSt)!==-1&&orderPerm('operate.change_battery')" data-cp @click="openOrderPick('changeBattery')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('refresh-cw','w-3.5 h-3.5')"></span><span v-else-if="dSt==='pickup'&&orderPerm('operate.assign_battery')" data-cp @click="openOrderPick('assignBattery')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('link','w-3.5 h-3.5')"></span></div>
-<div class="text-[13px] space-y-2.5">
-<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">型号</span><span class="flex-1 text-right text-[#333] truncate">{{ do_.type==='package'?do_.item.split('+')[1]:do_.item }}</span></div>
-<div v-if="dSt!=='created'&&dSt!=='pickup'" class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">电池编号</span><span class="flex-1 text-right text-[#333] flex items-center justify-end gap-1.5 truncate"><span v-if="do_.battNo" class="text-[var(--link)] cursor-pointer active:opacity-70" data-cp @click="goBatteryDetail(do_.battNo)">{{ do_.battNo }}</span><span v-else>—</span><span v-if="do_.battNo" class="shrink-0" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyText(do_.battNo,'电池编号')"></span></span></div>
-<div v-if="dSt!=='created'&&dSt!=='pickup'" class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">取用时间</span><span class="flex-1 text-right text-[#333] truncate">{{ do_.rentStart }}</span></div>
-</div>
-</div>
+<kv-card v-if="do_.type!=='vehicle'" title="电池信息" class="mb-3">
+<template #extra><span v-if="['progress','return','overdue','breach'].indexOf(dSt)!==-1&&orderPerm('operate.change_battery')" data-cp @click="openOrderPick('changeBattery')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('refresh-cw','w-3.5 h-3.5')"></span><span v-else-if="dSt==='pickup'&&orderPerm('operate.assign_battery')" data-cp @click="openOrderPick('assignBattery')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('link','w-3.5 h-3.5')"></span></template>
+<kv-row label="型号" :value="do_.type==='package'?do_.item.split('+')[1]:do_.item"></kv-row>
+<kv-row v-if="dSt!=='created'&&dSt!=='pickup'" label="电池编号" :copyable="!!do_.battNo" @copy="t=>copyText(t,'电池编号')"><template #value><span v-if="do_.battNo" class="text-[var(--link)] cursor-pointer active:opacity-70" data-cp @click="goBatteryDetail(do_.battNo)">{{ do_.battNo }}</span><span v-else>—</span></template></kv-row>
+<kv-row v-if="dSt!=='created'&&dSt!=='pickup'" label="取用时间" :value="do_.rentStart"></kv-row>
+</kv-card>
 
 <!-- ═══ 自动续租 · 卡片（参考 C 端订单详情，仅本地开关状态） ═══ -->
 <div v-if="['created','pickup','progress','return','overdue','breach'].indexOf(dSt)!==-1" class="bg-white rounded-2xl p-4 mb-3 flex items-center justify-between" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="od-autorenew">
@@ -4255,7 +4152,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex gap-2 items-center">
 <div class="flex-1 rounded-full flex items-center py-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:6px;padding-right:4px">
 <div class="relative shrink-0" data-cp @click.stop>
-<button data-cp @click="roSearchScopeOpen=!roSearchScopeOpen" type="button" class="flex items-center gap-1.5 text-[12px] font-medium text-[#333] bg-transparent border-0 outline-none pl-2 pr-2.5 mr-1.5 py-1 cursor-pointer transition-colors hover:bg-[#EFEFF1]" style="border-right:1px solid #E5E5E5">
+<button data-cp @click="roSearchScopeOpen=!roSearchScopeOpen" type="button" class="flex items-center gap-1.5 text-[12px] font-medium text-[#333] bg-transparent border-0 outline-none pl-2 pr-2.5 mr-1.5 py-1 cursor-pointer" style="border-right:1px solid #E5E5E5">
 <span class="truncate max-w-[60px]">{{ roSearchScopeLabel }}</span>
 <svg class="w-4 h-4 text-[#999] transition-transform" :class="roSearchScopeOpen?'rotate-180':''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
 </button>
@@ -4307,7 +4204,7 @@ body.host-single-m #root-user{display:none}
   </div>
  </div>
 </div>
-<div class="flex gap-3 px-5 shrink-0"><button data-cp @click="roResetFS" class="flex-1 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer transition-colors" style="background:#fff;color:#111;border:1px solid #E5E5E5;box-shadow:none">重置</button><button data-cp @click="roApplyFS" class="flex-1 py-3.5 rounded-xl text-white text-[15px] font-semibold cursor-pointer border-none transition-colors" style="background:var(--accent)">确定</button></div></bottom-sheet>
+<template #footer><div class="flex gap-3 px-5"><button data-cp @click="roResetFS" class="flex-1 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer transition-colors" style="background:#fff;color:#111;border:1px solid #E5E5E5;box-shadow:none">重置</button><button data-cp @click="roApplyFS" class="flex-1 py-3.5 rounded-xl text-white text-[15px] font-semibold cursor-pointer border-none transition-colors" style="background:var(--accent)">确定</button></div></template></bottom-sheet>
 
 <!-- ═══ RECHARGE ORDER CREATE-TIME DATE PICKER ═══ -->
 <bottom-sheet :open="roDatePicker" :title="roDatePicker==='start'?'选择开始日期':'选择结束日期'" type="B" :mask-z="630" panel-oid="recharge-date-sheet" @close="cancelRoDatePicker" @confirm="confirmRoDatePicker">
@@ -4336,30 +4233,29 @@ body.host-single-m #root-user{display:none}
 <page :open="roOV==='detail' && curRechargeOrder" :z="500" :swipe-close="roGoBack" oid="recharge-order-detail">
 <nav-bar title="订单详情" border-color="#E5E5E5" @back="roGoBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-32 hid" style="touch-action:pan-y">
-<div class="bg-white rounded-2xl p-4 mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div class="flex items-center justify-between mb-2"><div class="text-[14px] font-bold text-[#1A1A1A]">基本信息</div><span class="text-[13px] font-semibold" :style="{color:roPayStatusTag(curRechargeOrder.payStatus).c}">{{ roPayStatusTag(curRechargeOrder.payStatus).l }}</span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">订单编号</span><span class="flex-1 text-right text-[13px] text-[#333] flex items-center justify-end gap-1.5">{{ curRechargeOrder.orderNo }}<span v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyText(curRechargeOrder.orderNo,'订单编号')"></span></span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">创建时间</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ curRechargeOrder.createTime }}</span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">支付渠道</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ roPayChannelText(curRechargeOrder.payChannel) }}</span></div>
-<div v-if="['PAID','REFUNDING','PARTIAL_REFUND','FULL_REFUND'].includes(curRechargeOrder.payStatus)" class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">支付时间</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ curRechargeOrder.payTime||'-' }}</span></div>
-<div v-if="curRechargeOrder.payStatus==='CANCELLED'" class="flex items-center gap-2 py-2.5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">取消时间</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ curRechargeOrder.cancelTime||'-' }}</span></div>
-</div>
-<div class="bg-white rounded-2xl p-4 mb-3 cursor-pointer active:bg-[#FAFAFA]" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-cp @click="goUserDetail(curRechargeOrder.account||curRechargeOrder.phone||curRechargeOrder.email)">
-<div class="flex items-center justify-between mb-2"><div class="text-[14px] font-bold text-[#1A1A1A]">用户信息</div><span v-html="luci('chevron-right','w-4 h-4 text-[#bbb]')"></span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">账号</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ curRechargeOrder.account||'-' }}</span><span v-if="curRechargeOrder.account" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click.stop="copyText(curRechargeOrder.account,'账号')" class="shrink-0 ml-1"></span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">手机号</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ curRechargeOrder.phone||'-' }}</span><span v-if="curRechargeOrder.phone" v-html="luci('phone','w-3.5 h-3.5 text-[var(--accent)] cursor-pointer active:opacity-70')" data-cp @click.stop="callPhone(curRechargeOrder.phone)" class="shrink-0 ml-1"></span><span v-if="curRechargeOrder.phone" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click.stop="copyText(curRechargeOrder.phone,'手机号')" class="shrink-0 ml-1"></span></div>
-<div class="flex items-center gap-2 py-2.5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">邮箱</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ curRechargeOrder.email||'-' }}</span><span v-if="curRechargeOrder.email" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click.stop="copyText(curRechargeOrder.email,'邮箱')" class="shrink-0 ml-1"></span></div>
-</div>
-<div class="bg-white rounded-2xl p-4 mb-3" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div class="text-[14px] font-bold text-[#1A1A1A] mb-2">充值明细</div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">充值金额</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ fmtRp(curRechargeOrder.amount) }}</span></div>
-<div class="flex items-center gap-2 py-2.5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">赠送金额</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ fmtRp(curRechargeOrder.giftAmount||0) }}</span></div>
-</div>
-<div v-if="roCanRefundRecords()&&can('recharge_order.refund.list')" class="bg-white rounded-2xl p-4 mb-3 cursor-pointer active:bg-[#FAFAFA]" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-cp @click="roOpenRefunds">
-<div class="flex items-center justify-between mb-2"><div class="text-[14px] font-bold text-[#1A1A1A]">退款明细</div><span v-html="luci('chevron-right','w-4 h-4 text-[#bbb]')"></span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">充值金额</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ fmtRp(curRechargeOrder.refundAmount||0) }}</span></div>
-<div class="flex items-center gap-2 py-2.5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">赠送金额</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ fmtRp(curRechargeOrder.refundGiftAmount||0) }}</span></div>
-</div>
+<kv-card title="基本信息" class="mb-3" divider label-width="5rem">
+<template #extra><span class="text-[13px] font-semibold" :style="{color:roPayStatusTag(curRechargeOrder.payStatus).c}">{{ roPayStatusTag(curRechargeOrder.payStatus).l }}</span></template>
+<kv-row label="订单编号" :value="curRechargeOrder.orderNo" copyable @copy="t=>copyText(t,'订单编号')"></kv-row>
+<kv-row label="创建时间" :value="curRechargeOrder.createTime"></kv-row>
+<kv-row label="支付渠道" :value="roPayChannelText(curRechargeOrder.payChannel)"></kv-row>
+<kv-row v-if="['PAID','REFUNDING','PARTIAL_REFUND','FULL_REFUND'].includes(curRechargeOrder.payStatus)" label="支付时间" :value="curRechargeOrder.payTime||'-'"></kv-row>
+<kv-row v-if="curRechargeOrder.payStatus==='CANCELLED'" label="取消时间" :value="curRechargeOrder.cancelTime||'-'"></kv-row>
+</kv-card>
+<kv-card title="用户信息" class="mb-3 cursor-pointer active:bg-[#FAFAFA]" divider label-width="5rem" data-cp @click="goUserDetail(curRechargeOrder.account||curRechargeOrder.phone||curRechargeOrder.email)">
+<template #extra><span v-html="luci('chevron-right','w-4 h-4 text-[#bbb]')"></span></template>
+<kv-row label="账号" :value="curRechargeOrder.account||'-'" :copyable="!!curRechargeOrder.account" @copy="t=>copyText(t,'账号')"></kv-row>
+<kv-row label="手机号" :value="curRechargeOrder.phone||'-'" :copyable="!!curRechargeOrder.phone" @copy="t=>copyText(t,'手机号')"><template #value><span>{{ curRechargeOrder.phone||'-' }}</span><span v-if="curRechargeOrder.phone" class="ml-1.5" v-html="luci('phone','w-3.5 h-3.5 text-[var(--accent)] cursor-pointer active:opacity-70')" data-cp @click.stop="callPhone(curRechargeOrder.phone)"></span></template></kv-row>
+<kv-row label="邮箱" :value="curRechargeOrder.email||'-'" :copyable="!!curRechargeOrder.email" @copy="t=>copyText(t,'邮箱')"></kv-row>
+</kv-card>
+<kv-card title="充值明细" class="mb-3" divider label-width="5rem">
+<kv-row label="充值金额" :value="fmtRp(curRechargeOrder.amount)"></kv-row>
+<kv-row label="赠送金额" :value="fmtRp(curRechargeOrder.giftAmount||0)"></kv-row>
+</kv-card>
+<kv-card v-if="roCanRefundRecords()&&can('recharge_order.refund.list')" title="退款明细" class="mb-3 cursor-pointer active:bg-[#FAFAFA]" divider label-width="5rem" data-cp @click="roOpenRefunds">
+<template #extra><span v-html="luci('chevron-right','w-4 h-4 text-[#bbb]')"></span></template>
+<kv-row label="充值金额" :value="fmtRp(curRechargeOrder.refundAmount||0)"></kv-row>
+<kv-row label="赠送金额" :value="fmtRp(curRechargeOrder.refundGiftAmount||0)"></kv-row>
+</kv-card>
 <div v-if="curRechargeOrder.payStatus==='UNPAID'||roCanRefund()" class="absolute bottom-0 left-0 right-0 px-5 pb-7 pt-3 z-[10]" style="background:rgba(246,247,249,.95);backdrop-filter:blur(10px)">
 <div class="flex gap-3">
 <button v-if="curRechargeOrder.payStatus==='UNPAID'&&can('recharge_order.operate.cancel')" data-cp @click="roRequestCancel" class="flex-1 py-3.5 rounded-xl text-[15px] font-semibold text-white border-none cursor-pointer" style="background:var(--accent)">取消订单</button>
@@ -4374,15 +4270,16 @@ body.host-single-m #root-user{display:none}
 <page :open="roOV==='refunds'" :z="510" :swipe-close="()=>goBack()" oid="recharge-refund-records">
 <nav-bar title="退款记录" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid" style="touch-action:pan-y">
-<div v-for="(r,i) in roRefunds" :key="i" class="bg-white rounded-2xl p-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div class="flex items-center justify-between mb-2"><span class="text-[13px] font-semibold text-[#333]">{{ r.applyTime }}</span><span class="text-[13px] font-semibold" :style="{color:refundStg(r.refundStatus)}">{{ refundStLabel(r.refundStatus) }}</span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">充值金额</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ fmtRp(r.rechargeAmount) }}</span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">赠送金额</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ fmtRp(r.giftAmount) }}</span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">操作账号</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ r.operator }}</span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">退款来源</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ r.refundSource||'-' }}</span></div>
-<div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">退款原因</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ r.refundReason }}</span></div>
-<div class="flex items-center gap-2 py-2.5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">完成时间</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ r.refundTime||'-' }}</span></div>
-</div>
+<kv-card v-for="(r,i) in roRefunds" :key="i" class="mb-3" label-width="5rem" divider>
+<template #title><span class="text-[13px] font-semibold" style="color:#333">{{ r.applyTime }}</span></template>
+<template #extra><span class="text-[13px] font-semibold" :style="{color:refundStg(r.refundStatus)}">{{ refundStLabel(r.refundStatus) }}</span></template>
+<kv-row label="充值金额" :value="fmtRp(r.rechargeAmount)"></kv-row>
+<kv-row label="赠送金额" :value="fmtRp(r.giftAmount)"></kv-row>
+<kv-row label="操作账号" :value="r.operator"></kv-row>
+<kv-row label="退款来源" :value="r.refundSource||'-'"></kv-row>
+<kv-row label="退款原因" :value="r.refundReason" align="top" value-class="whitespace-normal break-words"></kv-row>
+<kv-row label="完成时间" :value="r.refundTime||'-'"></kv-row>
+</kv-card>
 <empty-state v-if="!roRefunds.length" icon="file-text" text="暂无退款记录" circle-class="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-3"></empty-state>
 </div>
 </page>
@@ -4415,20 +4312,16 @@ body.host-single-m #root-user{display:none}
  </template>
  <template v-else>
  <div class="flex flex-col gap-3">
-  <div v-for="r in curRefunds" :key="r.refundNo" class="bg-white rounded-xl p-4" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :data-od-id="'refund-card-'+r.refundNo">
-  <div class="flex items-center justify-between gap-3 mb-3">
-  <div class="text-[15px] font-semibold text-[#111] min-w-0 truncate">{{ r.refundTime }}</div>
-  <span class="text-[13px] font-semibold shrink-0" :style="{color:refundStg(r.refundStatus)}">{{ refundStLabel(r.refundStatus) }}</span>
-  </div>
-  <div class="flex flex-col gap-2.5">
-  <div class="flex justify-between items-center gap-3"><span class="text-[13px] text-[#999] shrink-0">租金</span><span class="text-[14px] font-medium">{{ fmtRp(r.rentAmount) }}</span></div>
-  <div class="flex justify-between items-center gap-3"><span class="text-[13px] text-[#999] shrink-0">押金</span><span class="text-[14px] font-medium">{{ fmtRp(r.depositAmount) }}</span></div>
-  <div class="flex justify-between items-center gap-3"><span class="text-[13px] text-[#999] shrink-0">操作账号</span><span class="text-[14px] font-medium text-right">{{ r.operator || '—' }}</span></div>
-  <div class="flex justify-between items-center gap-3"><span class="text-[13px] text-[#999] shrink-0">退款来源</span><span class="text-[14px] font-medium text-right">{{ refundSourceLabel(r) }}</span></div>
-  <div class="flex justify-between items-start gap-3"><span class="text-[13px] text-[#999] shrink-0">退款原因</span><span class="text-[14px] font-medium text-right">{{ r.reason || '—' }}</span></div>
-  <div v-if="r.refundStatus==='SUCCESS'||r.refundStatus==='FAILED'" class="flex justify-between items-center gap-3"><span class="text-[13px] text-[#999] shrink-0">完成时间</span><span class="text-[14px] font-medium text-right">{{ r.finishTime || '—' }}</span></div>
-  </div>
-  </div>
+  <kv-card v-for="r in curRefunds" :key="r.refundNo" class="mb-3" :data-od-id="'refund-card-'+r.refundNo" label-width="4rem">
+  <template #title><span class="text-[15px] font-semibold text-[#111] min-w-0 truncate">{{ r.refundTime }}</span></template>
+  <template #extra><span class="text-[13px] font-semibold shrink-0" :style="{color:refundStg(r.refundStatus)}">{{ refundStLabel(r.refundStatus) }}</span></template>
+  <kv-row label="租金" :value="fmtRp(r.rentAmount)"></kv-row>
+  <kv-row label="押金" :value="fmtRp(r.depositAmount)"></kv-row>
+  <kv-row label="操作账号" :value="r.operator || '—'"></kv-row>
+  <kv-row label="退款来源" :value="refundSourceLabel(r)"></kv-row>
+  <kv-row label="退款原因" :value="r.reason || '—'" align="top" value-class="font-medium whitespace-normal break-words leading-relaxed"></kv-row>
+  <kv-row v-if="r.refundStatus==='SUCCESS'||r.refundStatus==='FAILED'" label="完成时间" :value="r.finishTime || '—'"></kv-row>
+  </kv-card>
  </div>
  </template>
  </div>
@@ -4489,26 +4382,22 @@ body.host-single-m #root-user{display:none}
    <nav-bar title="费用明细" border-color="#E5E5E5" @back="goBack"></nav-bar>
    <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid" style="touch-action:pan-y">
      <div class="flex flex-col gap-3">
-       <div v-for="(r,i) in feeRows.slice().reverse()" :key="i" class="bg-white rounded-2xl p-4" style="box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-         <div class="flex items-center justify-between mb-2">
-           <div class="text-[14px] font-bold text-[#1A1A1A]">{{ r.kind }}</div>
-           <div data-cp @click="openRowMore(r)" class="w-8 h-8 -mr-2 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] shrink-0" title="更多操作"><svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-[#666]"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></div>
+       <kv-card v-for="(r,i) in feeRows.slice().reverse()" :key="i">
+         <template #title><span class="text-[14px] font-bold text-[#1A1A1A]">{{ r.kind }}</span></template>
+         <template #extra><span data-cp @click="openRowMore(r)" class="w-4 h-4 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] shrink-0" title="更多操作"><svg viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5 text-[#666]"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></span></template>
+         <kv-row label="租赁方案" :value="r.plan"></kv-row>
+         <kv-row label="租赁时间" align="top" label-class="leading-[1.5]" value-class="leading-[1.5] whitespace-normal"><template #value><span v-html="(r.period||'-').replace(' ~ ','<br>')"></span></template></kv-row>
+         <kv-row label="租金" :value="fmtRp(r.rent)"></kv-row>
+         <kv-row label="押金" :value="fmtRp(r.deposit)"></kv-row>
+         <kv-row label="合计" :value="fmtRp(r.total)" :value-style="{color:'var(--accent)'}"></kv-row>
+         <kv-row label="支付渠道" :value="feeRowChannel(r)"></kv-row>
+         <kv-row label="支付状态" :value="r.payStatus"></kv-row>
+         <kv-row v-if="r.payStatus!=='待支付'&&r.payStatus!=='未支付'" label="支付时间" :value="r.payTime"></kv-row>
+         <div v-if="r.isRenew&&r.payStatus==='待支付'" class="flex gap-2 pt-1">
+           <div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-center cursor-pointer active:opacity-90" style="border:1px solid #DC2626;color:#DC2626" data-cp @click="feeAskAction('feeCancelRenew',r)">取消续租</div>
+           <div v-if="feeRowOnlyOffline(r)" class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-white text-center cursor-pointer active:opacity-90" style="background:var(--accent)" data-cp @click="feeAskAction('feePayRenew',r)">确认支付</div>
          </div>
-         <div class="text-[13px] space-y-2.5">
-           <div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">租赁方案</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ r.plan }}</span></div>
-           <div class="flex items-start gap-2"><span class="text-[#999] w-16 flex-shrink-0 leading-[1.5]">租赁时间</span><span class="flex-1 min-w-0 text-right text-[13px] text-[#333] leading-[1.5]" v-html="(r.period||'-').replace(' ~ ','<br>')"></span></div>
-           <div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">租金</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ fmtRp(r.rent) }}</span></div>
-           <div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">押金</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ fmtRp(r.deposit) }}</span></div>
-           <div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">合计</span><span class="flex-1 text-right" style="color:var(--accent)">{{ fmtRp(r.total) }}</span></div>
-           <div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">支付渠道</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ feeRowChannel(r) }}</span></div>
-           <div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">支付状态</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ r.payStatus }}</span></div>
-           <div v-if="r.payStatus!=='待支付'&&r.payStatus!=='未支付'" class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">支付时间</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ r.payTime }}</span></div>
-           <div v-if="r.isRenew&&r.payStatus==='待支付'" class="flex gap-2 pt-1">
-             <div class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-center cursor-pointer active:opacity-90" style="border:1px solid #DC2626;color:#DC2626" data-cp @click="feeAskAction('feeCancelRenew',r)">取消续租</div>
-             <div v-if="feeRowOnlyOffline(r)" class="flex-1 py-2 rounded-xl text-[13px] font-semibold text-white text-center cursor-pointer active:opacity-90" style="background:var(--accent)" data-cp @click="feeAskAction('feePayRenew',r)">确认支付</div>
-           </div>
-         </div>
-       </div>
+       </kv-card>
      </div>
    </div>
  </page>
@@ -4662,7 +4551,7 @@ body.host-single-m #root-user{display:none}
    </div>
   </div>
  </div>
- <div class="flex gap-3 px-5 shrink-0"><button data-cp @click="ordersResetFS" class="flex-1 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer transition-colors" style="background:#fff;color:#111;border:1px solid #E5E5E5;box-shadow:none">重置</button><button data-cp @click="ordersApplyFS" class="flex-1 py-3.5 rounded-xl text-white text-[15px] font-semibold cursor-pointer border-none transition-colors" style="background:var(--accent)">确定</button></div></bottom-sheet>
+ <template #footer><div class="flex gap-3 px-5"><button data-cp @click="ordersResetFS" class="flex-1 py-3.5 rounded-xl text-[15px] font-semibold cursor-pointer transition-colors" style="background:#fff;color:#111;border:1px solid #E5E5E5;box-shadow:none">重置</button><button data-cp @click="ordersApplyFS" class="flex-1 py-3.5 rounded-xl text-white text-[15px] font-semibold cursor-pointer border-none transition-colors" style="background:var(--accent)">确定</button></div></template></bottom-sheet>
 
  <!-- ═══ ORDERS CREATE-TIME DATE PICKER ═══ -->
  <bottom-sheet :open="ordersDatePicker" :title="ordersDatePicker==='start'?'选择开始日期':'选择结束日期'" type="B" :mask-z="630" panel-oid="orders-date-sheet" @close="cancelOrdersDatePicker" @confirm="confirmOrdersDatePicker">
@@ -5172,23 +5061,22 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span><input v-model="aQ" :placeholder="'搜索账号/姓名/手机号'" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
 <transition-group v-if="aFilter.length" name="item">
-<div v-for="(a,i) in aFilter" :key="a.account" class="bg-white rounded-xl mb-2.5 overflow-hidden" :style="{border:'1px solid #E5E5E5',boxShadow:'0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)',transitionDelay:i*50+'ms'}">
-<div class="p-4 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openAccDetail(a)">
-<div class="flex justify-between items-center mb-2"><span class="text-[15px] font-semibold">{{ a.account }}</span><span class="text-[11px] font-semibold px-2.5 py-0.5 rounded" :style="a.status==='启用'?{background:'#ECFDF3',color:'#17A34A',border:'1px solid #17A34A'}:{background:'#F6F7F9',color:'#999',border:'1px solid #DDD'}">{{ a.status }}</span></div>
-<div class="text-[13px]">
-  <div class="flex justify-between py-1"><span class="text-[#999]">手机号</span><span class="text-[#111]">{{ mask(a.code+a.phone) }}</span></div>
-  <div class="flex justify-between py-1"><span class="text-[#999]">邮箱</span><span class="text-[#111]">{{ a.email||'—' }}</span></div>
-  <div class="flex justify-between py-1"><span class="text-[#999]">姓名</span><span class="text-[#111]">{{ a.name }}</span></div>
-  <div class="flex justify-between py-1"><span class="text-[#999]">备注</span><span class="text-[#111]">{{ a.remark||'—' }}</span></div>
-  <div class="flex justify-between py-1"><span class="text-[#999]">创建时间</span><span class="text-[#111]">{{ a.created }}</span></div>
-</div>
+<kv-card v-for="(a,i) in aFilter" :key="a.account" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" :style="{transitionDelay:i*50+'ms'}" data-cp @click="openAccDetail(a)">
+<template #title><span class="text-[15px] font-semibold min-w-0 truncate">{{ a.account }}</span></template>
+<template #extra><span class="text-[11px] font-semibold px-2.5 py-0.5 rounded shrink-0" :style="a.status==='启用'?{background:'#ECFDF3',color:'#17A34A',border:'1px solid #17A34A'}:{background:'#F6F7F9',color:'#999',border:'1px solid #DDD'}">{{ a.status }}</span></template>
+<kv-row label="手机号" :value="mask(a.code+a.phone)"></kv-row>
+<kv-row label="邮箱" :value="a.email||'—'"></kv-row>
+<kv-row label="姓名" :value="a.name"></kv-row>
+<kv-row label="备注" :value="a.remark||'—'"></kv-row>
+<kv-row label="创建时间" :value="a.created"></kv-row>
 <div class="flex gap-1 pt-1 pb-0.5"><span v-for="r in a.roles.split('、')" :key="r" class="px-2 py-0.5 rounded text-[11px] font-medium bg-[#EBF1FD] text-[#333]">{{ r }}</span></div>
-</div>
+<template #footer>
 <div class="card-actions">
-<div v-if="can('account.edit')" class="card-action-btn" style="color:var(--link)" data-cp @click="openAccEdit(a)">编辑</div>
-<div v-if="(a.status==='启用'&&can('account.status.disable'))||(a.status!=='启用'&&can('account.status.enable'))" class="card-action-btn" :style="{color:a.status==='启用'?'#D97706':'#17A34A'}" data-cp @click="toggleAcc(a)">{{ a.status==='启用'?'禁用':'启用' }}</div>
+<div v-if="can('account.edit')" class="card-action-btn" style="color:var(--link)" data-cp @click.stop="openAccEdit(a)">编辑</div>
+<div v-if="(a.status==='启用'&&can('account.status.disable'))||(a.status!=='启用'&&can('account.status.enable'))" class="card-action-btn" :style="{color:a.status==='启用'?'#D97706':'#17A34A'}" data-cp @click.stop="toggleAcc(a)">{{ a.status==='启用'?'禁用':'启用' }}</div>
 </div>
-</div>
+</template>
+</kv-card>
 </transition-group>
 <empty-state icon="users" :text="aQ ? '未找到匹配的账号' : '暂无账号'" circle-class="w-14 h-14 rounded-full bg-[#EBF1FD] flex items-center justify-center mb-3" v-else></empty-state>
 </div>
@@ -5197,15 +5085,13 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='aDetail'" :z="510" :swipe-close="()=>goBack()">
 <nav-bar title="账号详情" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
-<div class="text-[13px] font-semibold text-[#999] mb-2">基本信息</div>
-<div class="bg-white rounded-xl p-4 mb-5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div v-for="(r,j) in adRows" :key="r.k" class="flex py-2.5" :style="j<adRows.length-1?{borderBottom:'1px dashed #E5E5E5'}:{}"><span class="text-[13px] text-[#999] w-20 shrink-0">{{ r.k }}</span><span class="text-sm font-medium flex-1">{{ r.v }}</span></div>
-</div>
-<div class="text-[13px] font-semibold text-[#999] mb-2">职位与权限</div>
-<div class="bg-white rounded-xl p-4" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div class="flex py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 shrink-0">职位</span><span class="text-sm font-medium flex-1">{{ da.roles }}</span></div>
-<div class="flex py-2.5"><span class="text-[13px] text-[#999] w-20 shrink-0">状态</span><span class="text-sm font-medium flex-1">{{ da.status }}</span></div>
-</div>
+<kv-card title="基本信息" class="mb-3" label-width="5rem" divider>
+<kv-row v-for="(r,j) in adRows" :key="r.k" :label="r.k" :value="r.v"></kv-row>
+</kv-card>
+<kv-card title="职位与权限" class="mb-3" label-width="5rem" divider>
+<kv-row label="职位" :value="da.roles"></kv-row>
+<kv-row label="状态" :value="da.status"></kv-row>
+</kv-card>
 </div>
 </page>
 
@@ -5266,20 +5152,18 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span><input v-model="pQ" :placeholder="'搜索职位名称'" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
 <transition-group v-if="pFilter.length" name="item">
-<div v-for="(p,i) in pFilter" :key="p.name" class="bg-white rounded-xl mb-2.5 overflow-hidden" :style="{border:'1px solid #E5E5E5',boxShadow:'0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)',transitionDelay:i*50+'ms'}">
-<div class="p-4 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openPosDetail(p)">
-<div class="flex justify-between items-center mb-2"><span class="text-[15px] font-semibold">{{ p.name }}</span></div>
-<div class="text-[13px]">
-  <div class="flex justify-between py-1"><span class="text-[#999]">上级职位</span><span class="text-[#111]">{{ p.parent }}</span></div>
-  <div class="flex justify-between py-1"><span class="text-[#999]">备注</span><span class="text-[#111]">{{ p.remark||'—' }}</span></div>
-  <div class="flex justify-between py-1"><span class="text-[#999]">创建时间</span><span class="text-[#111]">{{ p.created }}</span></div>
-</div>
-</div>
+<kv-card v-for="(p,i) in pFilter" :key="p.name" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" :style="{transitionDelay:i*50+'ms'}" data-cp @click="openPosDetail(p)">
+<template #title><span class="text-[15px] font-semibold min-w-0 truncate">{{ p.name }}</span></template>
+<kv-row label="上级职位" :value="p.parent"></kv-row>
+<kv-row label="备注" :value="p.remark||'—'"></kv-row>
+<kv-row label="创建时间" :value="p.created"></kv-row>
+<template #footer>
 <div class="card-actions">
-<div v-if="can('position.edit')" class="card-action-btn" style="color:var(--link)" data-cp @click="openPosEdit(p)">编辑</div>
-<div v-if="can('position.delete')" class="card-action-btn" style="color:#DC2626" data-cp @click="delPos(p)">删除</div>
+<div v-if="can('position.edit')" class="card-action-btn" style="color:var(--link)" data-cp @click.stop="openPosEdit(p)">编辑</div>
+<div v-if="can('position.delete')" class="card-action-btn" style="color:#DC2626" data-cp @click.stop="delPos(p)">删除</div>
 </div>
-</div>
+</template>
+</kv-card>
 </transition-group>
 <empty-state icon="briefcase" :text="pQ ? '未找到匹配的职位' : '暂无职位'" circle-class="w-14 h-14 rounded-full bg-[#EBF1FD] flex items-center justify-center mb-3" v-else></empty-state>
 </div>
@@ -5288,9 +5172,9 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='pDetail'" :z="510" :swipe-close="()=>goBack()">
 <nav-bar title="职位详情" border-color="#E5E5E5" @back="goBack"><template #right><span v-if="can('position.add')" class="text-sm font-medium text-[var(--link)] cursor-pointer shrink-0" data-cp @click="openPosAdd(dp.name)">新增下级职位</span></template></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
-<div class="bg-white rounded-xl p-4 mb-5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-<div v-for="(r,j) in pdRows" :key="r.k" class="flex py-2.5" :style="j<pdRows.length-1?{borderBottom:'1px dashed #E5E5E5'}:{}"><span class="text-[13px] text-[#999] w-20 shrink-0">{{ r.k }}</span><span class="text-sm font-medium flex-1">{{ r.v }}</span></div>
-</div>
+<kv-card class="mb-3" label-width="5rem" divider>
+<kv-row v-for="(r,j) in pdRows" :key="r.k" :label="r.k" :value="r.v"></kv-row>
+</kv-card>
 <div v-for="sec in [{l:'平台端权限',t:pTreeP},{l:'商户端权限',t:pTreeM}]" :key="sec.l">
 <div class="text-[13px] font-semibold text-[#999] mb-2">{{ sec.l }}</div>
 <div class="bg-white rounded-xl overflow-hidden mb-5" style="border:1px solid #E5E5E5">
@@ -5564,7 +5448,7 @@ body.host-single-m #root-user{display:none}
 <div class="bg-white shrink-0 px-5 pt-3 pb-2">
   <div class="flex-1 rounded-full flex items-center py-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:6px;padding-right:4px">
     <div class="relative shrink-0" data-cp @click.stop>
-      <button data-cp @click="uSearchScopeOpen=!uSearchScopeOpen" type="button" class="flex items-center gap-1.5 text-[12px] font-medium text-[#333] bg-transparent border-0 outline-none pl-2 pr-2.5 mr-1.5 py-1 cursor-pointer transition-colors hover:bg-[#EFEFF1]" style="border-right:1px solid #E5E5E5">
+      <button data-cp @click="uSearchScopeOpen=!uSearchScopeOpen" type="button" class="flex items-center gap-1.5 text-[12px] font-medium text-[#333] bg-transparent border-0 outline-none pl-2 pr-2.5 mr-1.5 py-1 cursor-pointer" style="border-right:1px solid #E5E5E5">
         <span class="truncate max-w-[60px]">{{ uSearchScopeLabel }}</span>
         <svg class="w-4 h-4 text-[#999] transition-transform" :class="uSearchScopeOpen?'rotate-180':''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </button>
@@ -5584,18 +5468,14 @@ body.host-single-m #root-user{display:none}
 <!-- 用户列表 -->
 <div class="flex-1 overflow-y-auto px-5 pt-3 pb-10 hid">
 <template v-if="uFiltered.length">
-<div v-for="u in uFiltered" :key="u.id" class="bg-white rounded-xl p-4 mb-2.5 cursor-pointer active:bg-[#F6F7F9]" :style="{border:'1px solid #E5E5E5',boxShadow:'0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)'}" data-cp @click="openUserDetail(u)" :data-od-id="'user-item-'+u.id">
-<div class="flex justify-between items-center mb-2">
-  <span class="text-[15px] font-semibold">{{ u.account }}</span>
-  <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded" :style="u.status==='正常'?{background:'#ECFDF3',color:'#17A34A',border:'1px solid #17A34A'}:{background:'#F1F2F3',color:'#6B7280',border:'1px solid #D9DEE7'}">{{ u.status }}</span>
-</div>
-<div class="text-[13px]">
-  <div class="flex justify-between py-1"><span class="text-[#999]">手机号</span><span class="text-[#111]">{{ u.phone }}</span></div>
-  <div class="flex justify-between py-1"><span class="text-[#999]">邮箱</span><span class="text-[#111]">{{ u.email||'—' }}</span></div>
-  <div class="flex justify-between py-1"><span class="text-[#999]">昵称</span><span class="text-[#111]">{{ u.nickname||'—' }}</span></div>
-  <div class="flex justify-between py-1"><span class="text-[#999]">注册时间</span><span class="text-[#111]">{{ u.created }}</span></div>
-</div>
-</div>
+<kv-card v-for="u in uFiltered" :key="u.id" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openUserDetail(u)" :data-od-id="'user-item-'+u.id">
+<template #title><span class="text-[15px] font-semibold min-w-0 truncate">{{ u.account }}</span></template>
+<template #extra><span class="text-[11px] font-semibold px-2.5 py-0.5 rounded shrink-0" :style="u.status==='正常'?{background:'#ECFDF3',color:'#17A34A',border:'1px solid #17A34A'}:{background:'#F1F2F3',color:'#6B7280',border:'1px solid #D9DEE7'}">{{ u.status }}</span></template>
+<kv-row label="手机号" :value="u.phone"></kv-row>
+<kv-row label="邮箱" :value="u.email||'—'"></kv-row>
+<kv-row label="昵称" :value="u.nickname||'—'"></kv-row>
+<kv-row label="注册时间" :value="u.created"></kv-row>
+</kv-card>
 </template>
 <empty-state icon="users" text="暂无用户" circle-class="w-14 h-14 rounded-full bg-[#EBF1FD] flex items-center justify-center mb-3" v-else></empty-state>
 </div>
@@ -5695,15 +5575,16 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="用户详情" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
   <!-- 基本信息 -->
-  <div class="text-[13px] font-semibold text-[#999] mb-2">基本信息</div>
-  <div class="bg-white rounded-xl p-4 mb-5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)">
-    <div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">账号</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ du.account||'-' }}</span><span v-if="du.account" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyText(du.account,'账号')" class="shrink-0 ml-1"></span></div>
-    <div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">手机号</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ du.phone||'-' }}</span><span v-if="du.phone" v-html="luci('phone','w-3.5 h-3.5 text-[var(--accent)] cursor-pointer active:opacity-70')" data-cp @click="callPhone(du.phone)" class="shrink-0 ml-1"></span><span v-if="du.phone" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyText(du.phone,'手机号')" class="shrink-0 ml-1"></span></div>
-    <div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">邮箱</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ du.email||'-' }}</span><span v-if="du.email" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyText(du.email,'邮箱')" class="shrink-0 ml-1"></span></div>
-    <div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">昵称</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ du.nickname||'-' }}</span></div>
-    <div class="flex items-center gap-2 py-2.5" style="border-bottom:1px dashed #E5E5E5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">状态</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ du.status||'正常' }}</span></div>
-    <div class="flex items-center gap-2 py-2.5"><span class="text-[13px] text-[#999] w-20 flex-shrink-0">注册时间</span><span class="flex-1 text-right text-[13px] text-[#333]">{{ du.created||'-' }}</span></div>
-  </div>
+  <kv-card title="基本信息" class="mb-3" label-width="5rem" divider>
+    <kv-row label="账号" :value="du.account||'-'" :copyable="!!du.account" @copy="t=>copyText(t,'账号')"></kv-row>
+    <kv-row label="手机号">
+      <template #value>{{ du.phone||'-' }}<span v-if="du.phone" v-html="luci('phone','w-3.5 h-3.5 text-[var(--accent)] cursor-pointer active:opacity-70')" data-cp @click="callPhone(du.phone)" class="shrink-0 ml-1"></span><span v-if="du.phone" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyText(du.phone,'手机号')" class="shrink-0 ml-1"></span></template>
+    </kv-row>
+    <kv-row label="邮箱" :value="du.email||'-'" :copyable="!!du.email" @copy="t=>copyText(t,'邮箱')"></kv-row>
+    <kv-row label="昵称" :value="du.nickname||'-'"></kv-row>
+    <kv-row label="状态" :value="du.status||'正常'"></kv-row>
+    <kv-row label="注册时间" :value="du.created||'-'"></kv-row>
+  </kv-card>
 
   <!-- 用户钱包 -->
   <template v-if="can('user.wallet')">
@@ -6255,6 +6136,48 @@ function registerSheetKit(app){
      props:{icon:{type:String,default:'inbox'},text:{type:String,default:''},sub:{type:String,default:''},rootClass:{type:String,default:'flex flex-col items-center justify-center py-16'},circleClass:{type:String,default:'w-16 h-16 rounded-full bg-[#EBF1FD] flex items-center justify-center mb-4'},iconClass:{type:String,default:'w-8 h-8 text-[var(--accent)]'},textClass:{type:String,default:'text-[15px] font-semibold text-[#111] mb-1'},subClass:{type:String,default:'text-[13px] text-[#999] text-center mt-1'}},
      template:'<div :class="rootClass"><div v-if="icon" :class="circleClass"><span v-html="luci(icon,iconClass)"></span></div><div v-if="text" :class="textClass">{{ text }}</div><div v-if="sub" :class="subClass">{{ sub }}</div><slot></slot></div>'
    });
+  /* ══ KV 卡片（键值信息卡）══
+     用法：<kv-card title="车辆信息" class="mb-3" divider>
+             <template #extra>标题栏右侧（状态胶囊/编辑/复制等）</template>
+             <kv-row label="车型" :value="vdDevice?vdDevice.name:'-'"></kv-row>
+           </kv-card>
+     props: title(标题栏左侧文本，纯中文用静态属性，动态值用 :title) / divider(卡片内相邻行之间画虚线，单类型 Boolean，静态写 divider 即可)
+            / labelWidth(下发给行的 label 宽度，默认 4rem) / copyable + copyText(标题文本后的复制图标，缺省复制 title)。
+     布局约定：标题文本与复制图标同属左侧一组（图标紧贴文本，文本过长先截断、图标不丢）；#extra 只放状态/动作，在最右侧。
+     分区：标题栏 / 默认插槽(kv-row 与自定义内容可混排) / #footer 三段可任意组合，间距全部由组件 CSS 负责——
+       标题栏→首块 14px；kv行→自定义内容或 footer 16px（与行↔行一致）；自定义内容之间的间距由内容自带。
+       footer 仅在传入 #footer 时渲染（<template #footer>），需要分隔线在 footer 内容里自加 border-top。
+     间距约定：标题栏(:class 含 kv-head)与内容的间距统一 14px——kv-row 卡 = 标题栏 mb-1.5(6) + 首行 padding-top(8)；
+     自定义内容卡由 CSS「.kv-head+*:not(.kv-row){padding-top:8px}」补齐，两种内容视觉一致，自定义内容不要再自带顶距。
+     ⚠️ divider 只能声明为单一 Boolean：写 [Boolean,String] 时空串会被转成 true，弹窗/分隔线会自开（同 bottom-sheet 的 open 陷阱）。 */
+  app.component('kv-card',{
+    name:'kv-card',
+    props:{title:{type:String,default:''},divider:{type:Boolean,default:false},labelWidth:{type:String,default:'4rem'},copyable:{type:Boolean,default:false},copyText:{type:String,default:''}},
+    emits:['copy'],
+    provide:function(){return{kvLabelWidth:this.labelWidth,kvDivider:this.divider}},
+    methods:{kvTitleCopy:function(){this.$emit('copy',this.copyText||this.title)}},
+    template:'<div class="kv-card bg-white rounded-2xl px-4 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :class="divider?\'kv-card-div\':\'\'"><div v-if="title||$slots.title||$slots.extra" class="kv-head flex items-center justify-between mb-1.5"><span class="flex items-center gap-1.5 min-w-0 flex-1"><span class="min-w-0 truncate text-[13px] font-semibold" style="color:#111" :title="title"><slot name="title">{{ title }}</slot></span><span v-if="copyable" class="shrink-0" data-cp @click.stop="kvTitleCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></span><slot name="extra"></slot></div><slot></slot><div v-if="$slots.footer" class="kv-foot"><slot name="footer"></slot></div></div>'
+  });
+  /* KV 行：label 左 / value 右；value 可选复制；key 与 value 均可插槽自定义。
+     用法：<kv-row label="车架编号" :value="vin" :copyable="!!vin" @copy="t=>copyText(t,'车架编号')"></kv-row>
+     props: label(左文本；⚠️ 不能命名为 key——Vue 保留属性) / value / copyable / copyText(缺省取 value)
+            / labelWidth(覆盖卡片下发值，如 '5rem'、'auto') / labelClass / valueClass / valueStyle
+            / divider(该行「上方」是否画虚线：不写=跟随 kv-card 的 divider；:divider="true" 强制画；:divider="false" 强制不画；裸写 divider 视同 true)
+            / align('center' 默认：label 与 value 垂直居中对齐，value 内含图标时也不会错位；多行 value 要与首行对齐时传 'top')
+     slots: key / value（覆盖默认文本）；emits: copy(payload = copyText || value)。
+     ⚠️ 行的分隔线只在「相邻两行之间」出现：首行上方默认不画，末行下方默认不画（即最后一个 key-value 默认关闭）。
+     ⚠️ 行高统一 32px = py-2(16) + 内容 16px（13px 文字行高）→ 行内图标/元素高度必须 ≤16px（
+        用 w-4 h-4 的盒子 + w-3.5 h-3.5 的 svg）；超过会把该行撑高、与相邻行不齐（多行 value 行除外，用 align="top"）。 */
+  app.component('kv-row',{
+    name:'kv-row',
+    props:{label:{type:String,default:''},value:{default:''},copyable:{type:Boolean,default:false},copyText:{type:String,default:''},labelWidth:{type:String,default:''},labelClass:{type:String,default:''},valueClass:{type:String,default:''},valueStyle:{default:null},divider:{default:undefined},align:{type:String,default:'center'}},
+    inject:{kvLabelWidth:{default:'4rem'},kvDivider:{default:false}},
+    emits:['copy'],
+    /* 行级分隔线的三态：null=继承卡片；true/false=显式开关（裸属性得到空串 ''，按 HTML 语义视为 true） */
+    computed:{kvLineOn:function(){var d=this.divider;if(d===undefined||d===null)return null;return d===''?true:!!d},kvLineClass:function(){var on=this.kvLineOn;return on===null?'':(on?'':'kv-noline')},kvLineStyle:function(){return this.kvLineOn===true?'border-top:1px dashed #E5E5E5;margin-top:-1px':''}},
+    methods:{kvCopy:function(){this.$emit('copy',this.copyText||this.value)}},
+    template:'<div class="kv-row flex py-2" :class="[align===\'top\'?\'items-start\':\'items-center\',kvLineClass]" :style="kvLineStyle"><span class="shrink-0 text-[13px]" style="color:#999" :class="labelClass" :style="{width:labelWidth||kvLabelWidth}"><slot name="key">{{ label }}</slot></span><span class="flex-1 min-w-0 text-right pl-3 text-[13px] truncate" style="color:#111" :class="valueClass" :style="valueStyle||{}"><slot name="value">{{ value }}</slot></span><span v-if="copyable" class="shrink-0 pl-1.5" data-cp @click.stop="kvCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></div>'
+  });
    /* TabBar：底部导航（图标+文字，active 高亮，支持权限 hidden 与自定义 go）。
       用法：<tab-bar :items="[{key:'home',icon:'home',label:'首页',activeWhen:tab==='home',hidden:!can('home.view'),go:function(){setTab('home')}}]" :show="!showLogin" active-color="#2B3F5F" @select="setTab"></tab-bar>;
       无 go 时 @select 抛出 item.key。 */
