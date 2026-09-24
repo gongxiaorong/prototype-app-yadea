@@ -123,7 +123,7 @@
   - `align="top"` 用于多行 value；value 默认 `truncate`，要换行须 `value-class="whitespace-normal break-words"`。
 - 分隔线只在**相邻两行之间**（首行上方、末行下方天然不画）。
 - 行高恒 **32px**（`py-2` + 16px 内容）→ 行内图标/元素高度 ≤16px；多行 value 行除外（`align="top"`）。
-- 视觉基线：壳 `bg-white rounded-2xl px-4 py-3.5` + `1px solid #E5E5E5` + `0 1px 3px rgba(0,0,0,.04)`；标题 15px `semibold` `#111`；label 13px `#999`（默认宽 4rem，长标签传 `label-width="5rem"`）；value 13px `#333333` 右对齐（组件默认色）。
+- 视觉基线：壳 `bg-white rounded-2xl px-4 py-3.5` + `1px solid #E5E5E5` + `0 1px 3px rgba(0,0,0,.04)`；标题 15px `semibold` `#333333`；label 13px `#999`（默认宽 4rem，长标签传 `label-width="5rem"`）；value 13px `#333333` 右对齐（组件默认色）。
 - 间距（组件负责）：标题栏→首块 **14px**、行↔行 **16px**、行/自定义内容→footer **16px**；内容方**不要再自带顶距**。
 - **非 KV 结构**（费用/退款渠道明细树、可展开行等）：外壳仍用 `kv-card`，内容原样放默认插槽（**不经 `kv-row`、不开 `divider`**）。
 - 保留手写（例外）：自动续租开关卡、钱包余额卡等**非行式卡**；`newAccCred`（账号创建成功单按钮结果页）。

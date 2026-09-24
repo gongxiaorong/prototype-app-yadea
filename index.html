@@ -792,7 +792,7 @@ body.host-single-m #root-user{display:none}
 <template v-if="confirmIdInfo">
 <kv-row label="姓名" :value="confirmIdInfo.name"></kv-row>
 <kv-row label="身份证" :value="maskNo(confirmIdInfo.idNo)"></kv-row>
-<kv-row label="驾驶证" :value="confirmIdInfo.driverNo?maskNo(confirmIdInfo.driverNo):'—'"></kv-row>
+<kv-row label="驾驶证" :value="confirmIdInfo.driverNo?maskNo(confirmIdInfo.driverNo):'-'"></kv-row>
 </template>
 </kv-card>
 <div class="bg-white rounded-2xl p-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-page-node-id="aXyEWBdcmJygk897QzR6s0">
@@ -802,7 +802,7 @@ body.host-single-m #root-user{display:none}
 <div class="conf-pay" :class="confPayType==='offline'?'is-selected':''" data-cp @click="confPayType='offline'" data-page-node-id="z7saGAULp2rzBvHdcsQAul">线下支付</div>
 <div class="conf-pay" :class="confPayType==='balance'?'is-selected':''" data-cp @click="confPayType='balance'" data-page-node-id="5h6UNFBzFYa5oz6CfnW9NO">
 <span class="text-[11px]" data-page-node-id="s1ujyDjQjXuB9NpyAOuxsC">钱包</span>
-<span class="text-[10px] text-[#999]" data-page-node-id="pya2yyjf9Lyd000tmTAbh7">{{ (walletActive?fmtRp(walletActive.totalBalance,2):'—') }}</span>
+<span class="text-[10px] text-[#999]" data-page-node-id="pya2yyjf9Lyd000tmTAbh7">{{ (walletActive?fmtRp(walletActive.totalBalance,2):'-') }}</span>
 </div>
 </div>
 </div>
@@ -1276,7 +1276,7 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#999]')" data-page-node-id="HvS2EuUB5dKeJtWiG2kRVA"></span>
 </div>
 </div>
-<div class="text-[#CCC] text-sm pt-5 shrink-0" data-page-node-id="58XRzE4T2U49deexQ2GZUo">—</div>
+<div class="text-[#CCC] text-sm pt-5 shrink-0" data-page-node-id="58XRzE4T2U49deexQ2GZUo">-</div>
 <div class="flex-1 min-w-0" data-page-node-id="wTXvfPLeJdQXUqEOYjY34P">
 <div class="text-[11px] text-[#999] mb-1" data-page-node-id="yeeSsbnBVZhlBD4Io6ScTu">结束时间</div>
 <div data-cp @click="openTrackTimePicker('end')" class="flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;background:#FAFAFA" data-page-node-id="B2EOTtJmEWOixcXF64yDbT">
@@ -1613,7 +1613,7 @@ body.host-single-m #root-user{display:none}
 <template #extra><span class="text-[13px] font-semibold shrink-0" :style="{color:r.statusColor}" data-page-node-id="5nqk85yOh6xu59HkRGO4cK">{{ r.statusText }}</span></template>
 <kv-row label="租金" :value="fmtRp(r.rent,2)"></kv-row>
 <kv-row label="押金" :value="fmtRp(r.deposit,2)"></kv-row>
-<kv-row label="退款原因" :value="r.reason||'—'" align="top" value-class="font-medium whitespace-normal break-words leading-relaxed"></kv-row>
+<kv-row label="退款原因" :value="r.reason||'-'" align="top" value-class="font-medium whitespace-normal break-words leading-relaxed"></kv-row>
 <kv-row v-if="r.status==='SUCCESS'||r.status==='FAILED'" label="完成时间" :value="r.finishTime||'-'"></kv-row>
 </kv-card>
 </template>
@@ -1708,7 +1708,7 @@ body.host-single-m #root-user{display:none}
 <div class="store-thumb flex-shrink-0" :style="{background:((orderInfo&&orderInfo.img||(selectedVehicle&&selectedVehicle.img)||'#2B3F5F')+'10')}" data-page-node-id="R0xKS0500W2K4Ia7X0PA3E"><span v-html="luci('bike','w-6 h-6')" :style="{color:(orderInfo&&orderInfo.img||(selectedVehicle&&selectedVehicle.img)||'#2B3F5F')}" data-page-node-id="XzzPevqN4Fq89rjqgqbF0b"></span></div>
 </div>
 <div class="pt-3 text-[13px] space-y-2.5" data-page-node-id="uThFvxsxjBabrSOKe50YIb">
-<div class="flex items-start gap-2" data-page-node-id="8CVzDTxZpOfuwmpRCuHCst"><span class="text-[#999] w-16 flex-shrink-0 leading-[1.5]" data-page-node-id="CHaof6eqiy4Fgx3n6gvTU4">租赁时间</span><span class="flex-1 min-w-0 text-right text-[#333] leading-[1.5]" data-page-node-id="wBsmqsnjII2hD5tDNQMrmh">{{ feeCardRow?feeCardRow.periodStart:'—' }}<br data-page-node-id="1ZDkUoVFoFKQAVPjEjIrNB">{{ feeCardRow?feeCardRow.periodEnd:'—' }}</span></div>
+<div class="flex items-start gap-2" data-page-node-id="8CVzDTxZpOfuwmpRCuHCst"><span class="text-[#999] w-16 flex-shrink-0 leading-[1.5]" data-page-node-id="CHaof6eqiy4Fgx3n6gvTU4">租赁时间</span><span class="flex-1 min-w-0 text-right text-[#333] leading-[1.5]" data-page-node-id="wBsmqsnjII2hD5tDNQMrmh">{{ feeCardRow?feeCardRow.periodStart:'-' }}<br data-page-node-id="1ZDkUoVFoFKQAVPjEjIrNB">{{ feeCardRow?feeCardRow.periodEnd:'-' }}</span></div>
 <div class="flex items-center gap-2" data-page-node-id="Nmw3Kh7NjpEGnqnguh2il2"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="A9GhIJZ022sULiiRudAX85">订单编号</span><span class="flex-1 text-right text-[#333]" data-page-node-id="IuTfQ9ZlBNEE8kEijDmTtO">{{ orderInfo.orderId }}</span></div>
 <div class="flex items-center gap-2" data-page-node-id="7Qt6PFHjqHgfOaKhzcsqO0"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="KEMprUjmddNASK9QyEpIIa">创建时间</span><span class="flex-1 text-right text-[#333]" data-page-node-id="Kg0USBhSMUlDNnyBShEbK6">{{ orderInfo.createTime }}</span></div>
 <div v-if="orderInfo.status==='complete' && orderInfo.finishTime" class="flex items-center gap-2" data-page-node-id="A2nJwlCPteDTvMUiO3GzLy"><span class="text-[#999] w-16 flex-shrink-0" data-page-node-id="PjeEKICRQKkyeLD26cfpKQ">完成时间</span><span class="flex-1 text-right text-[#333]" data-page-node-id="DIh7oSXG0eJCgXHB5owj9T">{{ orderInfo.finishTime }}</span></div>
@@ -1781,7 +1781,7 @@ body.host-single-m #root-user{display:none}
 <template v-if="confirmIdInfo">
 <kv-row label="姓名" :value="confirmIdInfo.name"></kv-row>
 <kv-row label="身份证" :value="maskNo(confirmIdInfo.idNo)"></kv-row>
-<kv-row label="驾驶证" :value="confirmIdInfo.driverNo?maskNo(confirmIdInfo.driverNo):'—'"></kv-row>
+<kv-row label="驾驶证" :value="confirmIdInfo.driverNo?maskNo(confirmIdInfo.driverNo):'-'"></kv-row>
 </template>
 <div v-else class="text-[13px] text-[#999]" data-page-node-id="G8goiZKUBkL0b1cqR40JiF">未选择实名信息</div>
 <div class="h-px bg-[#F0F0F0] my-3" data-page-node-id="MwhFqCzuht1GUotgB7ucoi"></div>
@@ -1800,15 +1800,15 @@ body.host-single-m #root-user{display:none}
 <kv-card v-if="(orderInfo.status==='created'||orderInfo.status==='progress'||orderInfo.status==='pickup'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled')&&(orderInfo.category==='车辆租赁'||orderInfo.category==='车电套餐')" title="车辆信息" class="mb-3" data-od-id="od-vehicle" data-page-node-id="NFFZpcuPif0tS5dinei8Jt">
 <template #extra><span v-if="orderInfo.status==='pickup'" data-cp @click="scanCtx='vehicle';navOpen('scan')" class="cursor-pointer text-[var(--link)] active:opacity-70 select-none" v-html="luci('link','w-3.5 h-3.5')" data-page-node-id="4RGnRyBK3GW3TTHz3ltaUg"></span></template>
 <kv-row label="车型" :value="orderInfo.vModel || orderInfo.model" data-page-node-id="bSAvBPhmA0c8EvrH5tDXCx"></kv-row>
-<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="车架号" :value="orderInfo.frame || '—'" :copyable="!!orderInfo.frame" @copy="t=>copyText(t,'车架号')" data-page-node-id="NCtH52PVCGtnPvE3CgsCYD"></kv-row>
-<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="取用时间" :value="orderInfo.pickupTime || '—'" data-page-node-id="HF6EiQvqz0lb63pfkyYkSM"></kv-row>
+<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="车架号" :value="orderInfo.frame || '-'" :copyable="!!orderInfo.frame" @copy="t=>copyText(t,'车架号')" data-page-node-id="NCtH52PVCGtnPvE3CgsCYD"></kv-row>
+<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="取用时间" :value="orderInfo.pickupTime || '-'" data-page-node-id="HF6EiQvqz0lb63pfkyYkSM"></kv-row>
 </kv-card>
 
 <kv-card v-if="(orderInfo.status==='created'||orderInfo.status==='progress'||orderInfo.status==='pickup'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled')&&(orderInfo.category==='电池租赁'||orderInfo.category==='车电套餐')" title="电池信息" class="mb-3" data-od-id="od-battery" data-page-node-id="0iiObVS6ioYKU18dcI5Atp">
 <template #extra><span v-if="orderInfo.status==='pickup'" data-cp @click="scanCtx='battery';navOpen('scan')" class="cursor-pointer text-[var(--link)] active:opacity-70 select-none" v-html="luci('link','w-3.5 h-3.5')" data-page-node-id="4R8yK2M2kPGVUonQ6D3H2p"></span></template>
 <kv-row label="型号" :value="orderInfo.bModel || orderInfo.model" data-page-node-id="hvqebkMMqYvaSEGYbQu1i5"></kv-row>
-<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="电池编号" :value="orderInfo.battNo || '—'" :copyable="!!orderInfo.battNo" @copy="t=>copyText(t,'电池编号')" data-page-node-id="2LViv8K4fPbmGKzoA3JMbS"></kv-row>
-<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="取用时间" :value="orderInfo.pickupTime || '—'" data-page-node-id="t0BY8IT0goplR50sT15sJ2"></kv-row>
+<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="电池编号" :value="orderInfo.battNo || '-'" :copyable="!!orderInfo.battNo" @copy="t=>copyText(t,'电池编号')" data-page-node-id="2LViv8K4fPbmGKzoA3JMbS"></kv-row>
+<kv-row v-if="orderInfo.status==='progress'||orderInfo.status==='return'||orderInfo.status==='overdue'||orderInfo.status==='breach'||orderInfo.status==='complete'||orderInfo.status==='cancelled'" label="取用时间" :value="orderInfo.pickupTime || '-'" data-page-node-id="t0BY8IT0goplR50sT15sJ2"></kv-row>
 </kv-card>
 
 <div class="bg-white rounded-2xl p-4 mb-3 flex items-center justify-between" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="od-autorenew" data-page-node-id="AJDuQkvXIT8uT3grsCj7HG">
@@ -1912,7 +1912,7 @@ body.host-single-m #root-user{display:none}
 <div class="conf-pay-grid" data-page-node-id="bndWUb3CE11n9cSU5xTT2P">
 <div class="conf-pay" :class="paymentType==='2c2p'?'is-selected':''" data-cp @click="paymentType='2c2p'" data-page-node-id="E8uMMiEO6pa1FBkHHkOhiB">2C2P</div>
 <div class="conf-pay" :class="paymentType==='offline'?'is-selected':''" data-cp @click="paymentType='offline'" data-page-node-id="wgIaibQx2jWoBRsoqhVusX">线下支付</div>
-<div class="conf-pay" :class="paymentType==='balance'?'is-selected':''" data-cp @click="paymentType='balance'" data-page-node-id="2QJUxXdzIUzZ7ZHWMuzw0p"><span class="text-[11px]" data-page-node-id="hQ94HnoiCg6HxerZsdCLOH">钱包</span><span class="text-[10px] text-[#999]" data-page-node-id="WDWFVwhDxeRsfAUQNHcU0j">{{ walletActive?fmtRp(walletActive.totalBalance,2):'—' }}</span></div>
+<div class="conf-pay" :class="paymentType==='balance'?'is-selected':''" data-cp @click="paymentType='balance'" data-page-node-id="2QJUxXdzIUzZ7ZHWMuzw0p"><span class="text-[11px]" data-page-node-id="hQ94HnoiCg6HxerZsdCLOH">钱包</span><span class="text-[10px] text-[#999]" data-page-node-id="WDWFVwhDxeRsfAUQNHcU0j">{{ walletActive?fmtRp(walletActive.totalBalance,2):'-' }}</span></div>
 </div>
 <div v-if="paymentType==='balance'&&walletActive&&walletActive.totalBalance<(payTarget?payTarget.amount:0)" class="text-[12px] mt-2" style="color:#DC2626" data-page-node-id="IMP8R2G889WX7I6E1C2cDu">余额不足，请选择其他支付方式或去充值</div>
 </div>
@@ -2349,16 +2349,16 @@ body.host-single-m #root-user{display:none}
 <span class="text-[13px] text-[#666]" data-page-node-id="v8wCHEIi9cUAu9exruURjW">可用余额</span>
 <span data-cp @click="walletBalanceVisible=!walletBalanceVisible" class="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F6F7F9]" v-html="luci(walletBalanceVisible?'eye':'eye-off','w-[18px] h-[18px] text-[#999]')" data-page-node-id="kzxWu8S0nA8Qf8kGVdNFem"></span>
 </div>
-<div class="text-[32px] font-bold text-[#111] tracking-tight mb-4" data-page-node-id="6oa8nMYr4SF7Y4nfju8dbU">{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.totalBalance,2):'—'):'•••••••' }}</div>
+<div class="text-[32px] font-bold text-[#111] tracking-tight mb-4" data-page-node-id="6oa8nMYr4SF7Y4nfju8dbU">{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.totalBalance,2):'-'):'•••••••' }}</div>
 <div class="flex items-center justify-between py-3" style="border-top:1px solid #F0F0F0" data-page-node-id="HZbqEoDGRxx5LPShczngzW">
 <span class="text-[14px] text-[#333]" data-page-node-id="Xk2X0lrOJuAkDzaNpDRaXY">充值余额</span>
-<span class="text-[16px] font-semibold text-[#111]" data-page-node-id="Ly0SvOFGVGjBhLFb3Fp1cz">{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.rechargeBalance,2):'—'):'•••••••' }}</span>
+<span class="text-[16px] font-semibold text-[#111]" data-page-node-id="Ly0SvOFGVGjBhLFb3Fp1cz">{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.rechargeBalance,2):'-'):'•••••••' }}</span>
 </div>
 <div class="flex items-center justify-between py-3" style="border-top:1px solid #F0F0F0" data-page-node-id="8msFDIzk6liH3nVt1EvmIW">
 <div class="flex items-center gap-2" data-page-node-id="Aea3UJML3nUZXtwd6lvFS3">
 <span class="text-[14px] text-[#333]" data-page-node-id="6pM3exzV2hDGMibL28svtR">赠送余额</span>
 </div>
-<span class="text-[16px] font-semibold text-[#FF6A00]" data-page-node-id="udUGDjtcPXyqqYNPAECBfw">{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.bonusBalance,2):'—'):'•••••••' }}</span>
+<span class="text-[16px] font-semibold text-[#FF6A00]" data-page-node-id="udUGDjtcPXyqqYNPAECBfw">{{ walletBalanceVisible?(walletActive?fmtRp(walletActive.bonusBalance,2):'-'):'•••••••' }}</span>
 </div>
 <div class="flex items-center gap-3 mt-4" data-page-node-id="bXZB3nBbfIMjOCtPQSRyxz">
 <button data-cp @click="openTopup" class="flex-1 h-11 rounded-xl text-[15px] font-semibold text-white active:opacity-90 transition-opacity flex items-center justify-center" style="background:var(--accent)" data-page-node-id="UkXKPTACK6a6uyxZmhYXce" v-if="rechargeEnabledFlag">充值</button>
@@ -2382,7 +2382,7 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="flex items-center justify-between" data-page-node-id="cGpLbDuWpOaVDeVdrIEpCe">
 <span class="text-[13px] text-[#999]" data-page-node-id="T8Synh249SYQvLCCUtAWNV">{{ new Date(r.createdAt).toLocaleString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).replace(/\//g,'-') }}</span>
-<span class="text-[12px] text-[#999]" data-page-node-id="gaFEfC7m4CWCiJyQAcrli5">余额 <span class="text-[#666] font-medium" data-page-node-id="cLtzMYqVPBiyxGE0uyaXco">{{ r.balanceAfter!=null?fmtRp(r.balanceAfter,2):'—' }}</span></span>
+<span class="text-[12px] text-[#999]" data-page-node-id="gaFEfC7m4CWCiJyQAcrli5">余额 <span class="text-[#666] font-medium" data-page-node-id="cLtzMYqVPBiyxGE0uyaXco">{{ r.balanceAfter!=null?fmtRp(r.balanceAfter,2):'-' }}</span></span>
 </div>
 </div>
 </div>
@@ -2432,7 +2432,7 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="flex items-center justify-between" data-page-node-id="EFPC7HLCC0Epf5sItsWnlk">
 <span class="text-[13px] text-[#999]" data-page-node-id="77gQmHmdnZcWlzCY9oehNZ">{{ new Date(r.createdAt).toLocaleString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).replace(/\//g,'-') }}</span>
-<span class="text-[12px] text-[#999]" data-page-node-id="B62AZof2ekyGxwosb8Ax4l">余额 <span class="text-[#666] font-medium" data-page-node-id="3Vsr4C6mHq4mY3VzHekJbY">{{ r.balanceAfter!=null?fmtRp(r.balanceAfter,2):'—' }}</span></span>
+<span class="text-[12px] text-[#999]" data-page-node-id="B62AZof2ekyGxwosb8Ax4l">余额 <span class="text-[#666] font-medium" data-page-node-id="3Vsr4C6mHq4mY3VzHekJbY">{{ r.balanceAfter!=null?fmtRp(r.balanceAfter,2):'-' }}</span></span>
 </div>
 </div>
 </template>
@@ -3387,7 +3387,7 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#999]')"></span>
 </div>
 </div>
-<div class="text-[#CCC] text-sm pt-5 shrink-0">—</div>
+<div class="text-[#CCC] text-sm pt-5 shrink-0">-</div>
 <div class="flex-1 min-w-0">
 <div class="text-[11px] text-[#999] mb-1">结束时间</div>
 <div data-cp @click="openTrackTimePicker('end')" class="flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;background:#FAFAFA">
@@ -3875,7 +3875,7 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#999]')"></span>
 </div>
 </div>
-<div class="text-[#CCC] text-sm pt-5 shrink-0">—</div>
+<div class="text-[#CCC] text-sm pt-5 shrink-0">-</div>
 <div class="flex-1 min-w-0">
 <div class="text-[11px] text-[#999] mb-1">结束时间</div>
 <div data-cp @click="openBattTrackTimePicker('end')" class="flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;background:#FAFAFA">
@@ -4096,9 +4096,9 @@ body.host-single-m #root-user{display:none}
 <!-- ═══ 实名信息 · 卡片（参考 C 端订单详情：实名信息只读，不支持选择） ═══ -->
 <kv-card title="实名信息" class="mb-3">
   <template v-if="dHasRealName">
-  <kv-row label="姓名" :value="do_.customer||do_.account||'—'"></kv-row>
-  <kv-row label="身份证" :value="do_.idNo||'—'"></kv-row>
-  <kv-row label="驾驶证" :value="do_.driverNo||'—'"></kv-row>
+  <kv-row label="姓名" :value="do_.customer||do_.account||'-'"></kv-row>
+  <kv-row label="身份证" :value="do_.idNo||'-'"></kv-row>
+  <kv-row label="驾驶证" :value="do_.driverNo||'-'"></kv-row>
   </template>
   <div v-else class="text-[13px] text-[#999]">未选择实名信息</div>
   <div class="h-px bg-[#F0F0F0] my-3"></div>
@@ -4116,7 +4116,7 @@ body.host-single-m #root-user{display:none}
 <kv-card v-if="do_.type!=='battery'" title="车辆信息" class="mb-3">
 <template #extra><span v-if="['progress','return','overdue','breach'].indexOf(dSt)!==-1&&orderPerm('operate.change_vehicle')" data-cp @click="openOrderPick('changeVehicle')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('refresh-cw','w-3.5 h-3.5')"></span><span v-else-if="dSt==='pickup'&&orderPerm('operate.assign_vehicle')" data-cp @click="openOrderPick('assignVehicle')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('link','w-3.5 h-3.5')"></span></template>
 <kv-row label="车型" :value="do_.type==='package'?do_.item.split('+')[0]:do_.item"></kv-row>
-<kv-row v-if="dSt!=='created'&&dSt!=='pickup'" label="车架号" :copyable="!!do_.vin" @copy="t=>copyText(t,'车架号')"><template #value><span v-if="do_.vin" class="text-[var(--link)] cursor-pointer active:opacity-70" data-cp @click="goVehicleDetail(do_.vin)">{{ do_.vin }}</span><span v-else>—</span></template></kv-row>
+<kv-row v-if="dSt!=='created'&&dSt!=='pickup'" label="车架号" :copyable="!!do_.vin" @copy="t=>copyText(t,'车架号')"><template #value><span v-if="do_.vin" class="text-[var(--link)] cursor-pointer active:opacity-70" data-cp @click="goVehicleDetail(do_.vin)">{{ do_.vin }}</span><span v-else>-</span></template></kv-row>
 <kv-row v-if="dSt!=='created'&&dSt!=='pickup'" label="取用时间" :value="do_.rentStart"></kv-row>
 </kv-card>
 
@@ -4124,7 +4124,7 @@ body.host-single-m #root-user{display:none}
 <kv-card v-if="do_.type!=='vehicle'" title="电池信息" class="mb-3">
 <template #extra><span v-if="['progress','return','overdue','breach'].indexOf(dSt)!==-1&&orderPerm('operate.change_battery')" data-cp @click="openOrderPick('changeBattery')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('refresh-cw','w-3.5 h-3.5')"></span><span v-else-if="dSt==='pickup'&&orderPerm('operate.assign_battery')" data-cp @click="openOrderPick('assignBattery')" class="cursor-pointer select-none text-[var(--link)] active:opacity-70" v-html="luci('link','w-3.5 h-3.5')"></span></template>
 <kv-row label="型号" :value="do_.type==='package'?do_.item.split('+')[1]:do_.item"></kv-row>
-<kv-row v-if="dSt!=='created'&&dSt!=='pickup'" label="电池编号" :copyable="!!do_.battNo" @copy="t=>copyText(t,'电池编号')"><template #value><span v-if="do_.battNo" class="text-[var(--link)] cursor-pointer active:opacity-70" data-cp @click="goBatteryDetail(do_.battNo)">{{ do_.battNo }}</span><span v-else>—</span></template></kv-row>
+<kv-row v-if="dSt!=='created'&&dSt!=='pickup'" label="电池编号" :copyable="!!do_.battNo" @copy="t=>copyText(t,'电池编号')"><template #value><span v-if="do_.battNo" class="text-[var(--link)] cursor-pointer active:opacity-70" data-cp @click="goBatteryDetail(do_.battNo)">{{ do_.battNo }}</span><span v-else>-</span></template></kv-row>
 <kv-row v-if="dSt!=='created'&&dSt!=='pickup'" label="取用时间" :value="do_.rentStart"></kv-row>
 </kv-card>
 
@@ -4323,10 +4323,10 @@ body.host-single-m #root-user{display:none}
   <template #extra><span class="text-[13px] font-semibold shrink-0" :style="{color:refundStg(r.refundStatus)}">{{ refundStLabel(r.refundStatus) }}</span></template>
   <kv-row label="租金" :value="fmtRp(r.rentAmount)"></kv-row>
   <kv-row label="押金" :value="fmtRp(r.depositAmount)"></kv-row>
-  <kv-row label="操作账号" :value="r.operator || '—'"></kv-row>
+  <kv-row label="操作账号" :value="r.operator || '-'"></kv-row>
   <kv-row label="退款来源" :value="refundSourceLabel(r)"></kv-row>
-  <kv-row label="退款原因" :value="r.reason || '—'" align="top" value-class="font-medium whitespace-normal break-words leading-relaxed"></kv-row>
-  <kv-row v-if="r.refundStatus==='SUCCESS'||r.refundStatus==='FAILED'" label="完成时间" :value="r.finishTime || '—'"></kv-row>
+  <kv-row label="退款原因" :value="r.reason || '-'" align="top" value-class="font-medium whitespace-normal break-words leading-relaxed"></kv-row>
+  <kv-row v-if="r.refundStatus==='SUCCESS'||r.refundStatus==='FAILED'" label="完成时间" :value="r.finishTime || '-'"></kv-row>
   </kv-card>
  </div>
  </template>
@@ -4358,7 +4358,7 @@ body.host-single-m #root-user{display:none}
                  <div class="mb-2"><div class="text-[12px] text-[#999]">租金</div><div class="text-[14px] font-bold text-[#111]">{{ fmtRp(splitPartView(r.before.rentSplit, r.before.rentFee).total) }}</div></div>
                  <div><div class="text-[12px] text-[#999]">押金</div><div class="text-[14px] font-bold text-[#111]">{{ fmtRp(splitPartView(r.before.depositSplit, r.before.deposit).total) }}</div></div>
                </template>
-               <div v-else class="text-[14px] text-[#999] py-4 text-center">—</div>
+               <div v-else class="text-[14px] text-[#999] py-4 text-center">-</div>
              </div>
            </div>
            <!-- 改价后 -->
@@ -4369,13 +4369,13 @@ body.host-single-m #root-user{display:none}
                  <div class="mb-2"><div class="text-[12px] text-[#999]">租金</div><div class="text-[14px] font-bold text-[#111]">{{ fmtRp(splitPartView(r.after.rentSplit, r.after.rentFee).total) }}</div></div>
                  <div><div class="text-[12px] text-[#999]">押金</div><div class="text-[14px] font-bold text-[#111]">{{ fmtRp(splitPartView(r.after.depositSplit, r.after.deposit).total) }}</div></div>
                </template>
-               <div v-else class="text-[14px] text-[#999] py-4 text-center">—</div>
+               <div v-else class="text-[14px] text-[#999] py-4 text-center">-</div>
              </div>
            </div>
            <!-- 备注 -->
            <div class="flex justify-between items-start gap-3 pt-3" style="border-top:1px solid #EDEDED">
              <span class="text-[13px] text-[#999] shrink-0">备注</span>
-             <span class="text-[14px] font-medium text-right flex-1">{{ r.reason || '—' }}</span>
+             <span class="text-[14px] font-medium text-right flex-1">{{ r.reason || '-' }}</span>
            </div>
          </div>
        </div>
@@ -5106,9 +5106,9 @@ body.host-single-m #root-user{display:none}
 <template #title><span class="min-w-0 truncate">{{ a.account }}</span></template>
 <template #extra><span class="text-[11px] font-semibold px-2.5 py-0.5 rounded shrink-0" :style="a.status==='启用'?{background:'#ECFDF3',color:'#17A34A',border:'1px solid #17A34A'}:{background:'#F6F7F9',color:'#999',border:'1px solid #DDD'}">{{ a.status }}</span></template>
 <kv-row label="手机号" :value="mask(a.code+a.phone)"></kv-row>
-<kv-row label="邮箱" :value="a.email||'—'"></kv-row>
+<kv-row label="邮箱" :value="a.email||'-'"></kv-row>
 <kv-row label="姓名" :value="a.name"></kv-row>
-<kv-row label="备注" :value="a.remark||'—'"></kv-row>
+<kv-row label="备注" :value="a.remark||'-'"></kv-row>
 <kv-row label="创建时间" :value="a.created"></kv-row>
 <div class="flex gap-1 pt-1 pb-0.5"><span v-for="r in a.roles.split('、')" :key="r" class="px-2 py-0.5 rounded text-[11px] font-medium bg-[#EBF1FD] text-[#333]">{{ r }}</span></div>
 <template #footer>
@@ -5217,7 +5217,7 @@ body.host-single-m #root-user{display:none}
 <kv-card v-for="(p,i) in pFilter" :key="p.name" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" :style="{transitionDelay:i*50+'ms'}" data-cp @click="openPosDetail(p)">
 <template #title><span class="min-w-0 truncate">{{ p.name }}</span></template>
 <kv-row label="上级职位" :value="p.parent"></kv-row>
-<kv-row label="备注" :value="p.remark||'—'"></kv-row>
+<kv-row label="备注" :value="p.remark||'-'"></kv-row>
 <kv-row label="创建时间" :value="p.created"></kv-row>
 <template #footer>
 <div class="card-actions">
@@ -5288,7 +5288,7 @@ body.host-single-m #root-user{display:none}
 <div v-for="(c,i) in csList" :key="i" class="bg-white rounded-xl mb-2.5 overflow-hidden" :style="{border:'1px solid #E5E5E5',boxShadow:'0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)',transitionDelay:i*50+'ms'}">
 <div class="p-4 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openCsEdit(i)">
 <div class="text-[15px] font-semibold mb-2">{{ c.code }} {{ c.phone }}</div>
-<div class="grid grid-cols-2 gap-0.5 text-xs text-[#666]"><div>{{ '服务时段：' + (p2(c.sh)+':'+p2(c.sm)) + ' - ' + (p2(c.eh)+':'+p2(c.em)) }}</div><div style="grid-column:1/-1">{{ '备注：' + (c.remark||'—') }}</div></div>
+<div class="grid grid-cols-2 gap-0.5 text-xs text-[#666]"><div>{{ '服务时段：' + (p2(c.sh)+':'+p2(c.sm)) + ' - ' + (p2(c.eh)+':'+p2(c.em)) }}</div><div style="grid-column:1/-1">{{ '备注：' + (c.remark||'-') }}</div></div>
 </div>
 <div class="card-actions">
 <div v-if="can('cs_info.edit')" class="card-action-btn" style="color:var(--link)" data-cp @click="openCsEdit(i)">编辑</div>
@@ -5540,8 +5540,8 @@ body.host-single-m #root-user{display:none}
 <template #title><span class="min-w-0 truncate">{{ u.account }}</span></template>
 <template #extra><span class="text-[11px] font-semibold px-2.5 py-0.5 rounded shrink-0" :style="u.status==='正常'?{background:'#ECFDF3',color:'#17A34A',border:'1px solid #17A34A'}:{background:'#F1F2F3',color:'#6B7280',border:'1px solid #D9DEE7'}">{{ u.status }}</span></template>
 <kv-row label="手机号" :value="u.phone"></kv-row>
-<kv-row label="邮箱" :value="u.email||'—'"></kv-row>
-<kv-row label="昵称" :value="u.nickname||'—'"></kv-row>
+<kv-row label="邮箱" :value="u.email||'-'"></kv-row>
+<kv-row label="昵称" :value="u.nickname||'-'"></kv-row>
 <kv-row label="注册时间" :value="u.created"></kv-row>
 </kv-card>
 </template>
@@ -6102,7 +6102,7 @@ var RENT_META={
  '天能锂电 48V20Ah':{desc:'标准锂电池·续航90km',prices:[40000,160000,980000,2800000],img:'#17A34A'}
 };
 var RENT_PERIOD=['时租','日租','周租','月租'];
-var MERGED=Vue.reactive({orderCount:0,vehicleCount:0,batteryCount:0,walletBalance:0,lastOrderId:'—',updatedAt:0,myVehicles:[],myBatteries:[],myOrders:[],myWallet:null,stores:[]});
+var MERGED=Vue.reactive({orderCount:0,vehicleCount:0,batteryCount:0,walletBalance:0,lastOrderId:'-',updatedAt:0,myVehicles:[],myBatteries:[],myOrders:[],myWallet:null,stores:[]});
 /* 共享扩展：钱包流水 / 用户资料 / 充值订单（双端同源，充值订单以商户端种子为权威） */
 var LEDGER=Vue.ref([]);
 var PROFILE=Vue.reactive({name:'User001',phone:'+86 13800001111',email:'user001@yadea.id',account:'user001'});
@@ -6225,7 +6225,7 @@ function registerSheetKit(app){
     emits:['copy'],
     provide:function(){return{kvLabelWidth:this.labelWidth,kvDivider:this.divider}},
     methods:{kvTitleCopy:function(){this.$emit('copy',this.copyText||this.title)}},
-    template:'<div class="kv-card bg-white rounded-2xl px-4 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :class="divider?\'kv-card-div\':\'\'"><div v-if="title||$slots.title||$slots.extra" class="kv-head flex items-center justify-between mb-1.5"><span class="flex items-center gap-1.5 min-w-0 flex-1"><span class="min-w-0 truncate text-[15px] font-semibold" style="color:#111" :title="title"><slot name="title">{{ title }}</slot></span><span v-if="copyable" class="shrink-0" data-cp @click.stop="kvTitleCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></span><slot name="extra"></slot></div><slot></slot><div v-if="$slots.footer" class="kv-foot"><slot name="footer"></slot></div></div>'
+    template:'<div class="kv-card bg-white rounded-2xl px-4 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :class="divider?\'kv-card-div\':\'\'"><div v-if="title||$slots.title||$slots.extra" class="kv-head flex items-center justify-between mb-1.5"><span class="flex items-center gap-1.5 min-w-0 flex-1"><span class="min-w-0 truncate text-[15px] font-semibold" style="color:#333333" :title="title"><slot name="title">{{ title }}</slot></span><span v-if="copyable" class="shrink-0" data-cp @click.stop="kvTitleCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></span><slot name="extra"></slot></div><slot></slot><div v-if="$slots.footer" class="kv-foot"><slot name="footer"></slot></div></div>'
   });
   /* KV 行：label 左 / value 右；value 可选复制；key 与 value 均可插槽自定义。
      用法：<kv-row label="车架编号" :value="vin" :copyable="!!vin" @copy="t=>copyText(t,'车架编号')"></kv-row>
@@ -6394,8 +6394,8 @@ const locLoading=ref(false),locRinging=ref(false),locFocus=ref('vehicle');
 const locAddressFull=computed(()=>locLoading.value?'定位获取中…':(mapCtx.value==='battery'?'深圳市南山区科苑南路附近':'深圳市南山区科技南一路附近'));
 const locAddressShort=computed(()=>{const a=locAddressFull.value;if(!a||a==='定位获取中…')return a||'设备位置';const parts=a.split(/[市区县]/).filter(Boolean);return parts.length?parts[parts.length-1]:a});
 const locSeed=computed(()=>{const d=mapCtx.value==='battery'?(currentBattery.value?currentBattery.value.code:''):(currentVehicle.value?currentVehicle.value.vin:'');return String(d).split('').reduce((s,c)=>s+c.charCodeAt(0),0)});
-const locDistM=computed(()=>locLoading.value?'—':String(120+(locSeed.value%380)));
-const locWalkMin=computed(()=>locDistM.value==='—'?'—':String(Math.max(1,Math.round(Number(locDistM.value)/80))));
+const locDistM=computed(()=>locLoading.value?'-':String(120+(locSeed.value%380)));
+const locWalkMin=computed(()=>locDistM.value==='-'?'-':String(Math.max(1,Math.round(Number(locDistM.value)/80))));
 const locVehPt=computed(()=>({x:58,y:42}));
 const locUserPt=computed(()=>{const v=locVehPt.value;const dx=14+(locSeed.value%8);const dy=16+((locSeed.value>>3)%6);return{x:Math.max(10,Math.min(88,v.x-dx)),y:Math.max(14,Math.min(86,v.y+dy))}});
 function loadLocData(){locLoading.value=true;locFocus.value='vehicle';setTimeout(()=>{locLoading.value=false},380)}
@@ -6815,7 +6815,7 @@ function setOrderFilter(v){orderFilter.value=v;showRentLoading.value=true;setTim
 const orderInfo=ref({category:'车辆租赁',storeName:'雅迪电动车(双流区雅和北路店)',orderId:'YZ202512180001',createTime:'2025-12-18 10:30:00',payTime:'2025-12-18 10:35:00',payee:'2C2P',status:'pickup',statusText:'待取用',statusColor:'#FF8C1B',model:'乐迪SAA',vModel:'乐迪SAA',frame:'',bModel:'',battNo:'',pickupTime:'',finishTime:'',cancelTime:'',img:'#2B3F5F',desc:'72V32Ah锂电池·续航120km·智能防盗',plan:'月租×2月',amount:'Rp 117,272',deposit:'Rp 200.45',payStatus:'PAID',renewOrders:[{renewNo:'RZ202602180001',parentOrderNo:'YZ202512180001',plan:'周租×1周',newRentStart:'2026-02-18 10:35:00',newRentEnd:'2026-02-25 10:35:00',renewRentFee:25000,renewDeposit:0,payStatus:'PAID',payMethod:'2C2P',payTime:'2026-02-18 10:36:00',createTime:'2026-02-18 10:35:00',renewType:'manual'},{renewNo:'RZ202602250002',parentOrderNo:'YZ202512180001',plan:'周租×1周',newRentStart:'2026-02-25 10:35:00',newRentEnd:'2026-03-04 10:35:00',renewRentFee:25000,renewDeposit:0,payStatus:'PAID',payMethod:'钱包',payTime:'2026-02-25 10:35:00',createTime:'2026-02-25 10:35:00',renewType:'auto'},{renewNo:'RZ202603040003',parentOrderNo:'YZ202512180001',plan:'周租×1周',newRentStart:'2026-03-04 10:35:00',newRentEnd:'2026-03-11 10:35:00',renewRentFee:25000,renewDeposit:0,payStatus:'UNPAID',createTime:'2026-03-04 10:35:00',renewType:'manual'}]});
 function openOrderDetailFromList(o){openOrderDetailCore(o);navOpen('orderDetail')}
 function openOrderDetailCore(o){showRentLoading.value=true;payChannel.value='2C2P';cancelBeforePay.value='paid';const _oi={category:orderListCategory.value||'车辆租赁',storeName:o.store||'',orderId:o.id||'',createTime:o.created||'',payTime:o.payTime||'',payee:'2C2P',status:o.status||'pickup',statusText:o.statusText||'已创建',statusColor:o.statusColor||'#FF6A00',model:o.model||'乐迪SAA',vModel:o.vModel||'',frame:o.frame||'',bModel:o.bModel||'',battNo:o.battNo||'',pickupTime:o.pickupTime||'',finishTime:o.finishTime||'',cancelTime:o.cancelTime||'',desc:o.desc||(selectedVehicle.value?selectedVehicle.value.desc:''),plan:o.plan||'',amount:o.amount||'',deposit:o.deposit||'Rp 200.45',payStatus:o.payStatus||'PAID',renewOrders:o.renewOrders||[]};setTimeout(()=>{if(o.status==='pickup'||o.status==='created'){startOrderTimer()}else{stopOrderTimer()}orderInfo.value=_oi;showRentLoading.value=false},600)}
-function copyText(t,label){var v=(t||'').trim();if(!v||v==='—'){toast('无内容可复制','warn');return}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(v).then(function(){toast('复制成功','success')},function(){toast('复制失败','warn')})}else{toast('复制失败','warn')}}
+function copyText(t,label){var v=(t||'').trim();if(!v||v==='-'){toast('无内容可复制','warn');return}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(v).then(function(){toast('复制成功','success')},function(){toast('复制失败','warn')})}else{toast('复制失败','warn')}}
 
 const profileOV=ref(null),profileSub=ref(null),profileMod=ref(null),profileModLoading=ref(false);
 const hasPhone=ref(true),hasEmail=ref(true),hasPwd=ref(true);
@@ -7008,7 +7008,7 @@ const feeSummary=computed(()=>{const o=orderInfo.value;if(!o)return{rent:0,depos
 const refundRentOpen=ref(false),refundDepositOpen=ref(false),refundTotalOpen=ref(false);
 const refundChannels=computed(()=>{const rows=feeRows.value;const rm={},dm={},tm={};rows.forEach(r=>{if(r.payStatus!=='已支付')return;const ch=r.payMethod==='线下支付'?'线下支付':r.payMethod==='钱包'?'钱包':'2C2P';if(r.rent>0)rm[ch]=(rm[ch]||0)+r.rent;if(r.deposit>0)dm[ch]=(dm[ch]||0)+r.deposit});const toArr=m=>Object.keys(m).map(k=>({channel:k,amount:m[k]}));const ra=toArr(rm),da=toArr(dm);ra.concat(da).forEach(x=>{tm[x.channel]=(tm[x.channel]||0)+x.amount});return{rent:ra,deposit:da,total:toArr(tm)}});
 
-const feeRows=computed(()=>{if(demoListEmpty.value)return[];const o=orderInfo.value;if(!o)return[];const rows=[{kind:'主订单',plan:o.plan||'—',periodStart:confPickupISO.value,periodEnd:confReturnISO.value,rent:parseRp(o.amount),deposit:parseRp(o.deposit),total:parseRp(o.amount)+parseRp(o.deposit),payStatus:(o.status==='created')?'待支付':(o.payStatus==='PAID'?'已支付':'待支付'),payMethod:o.payee||'—',payTime:(o.status==='created')?'':(o.payStatus==='PAID'?o.payTime:'')}];(o.renewOrders||[]).forEach(r=>{const cancelled=!!r.canceled;rows.push({kind:(r.renewType==='auto'?'自动续租':'手动续租'),plan:r.plan,periodStart:r.newRentStart,periodEnd:r.newRentEnd,rent:r.renewRentFee,deposit:0,total:r.renewRentFee,payStatus:cancelled?'已取消':(r.payStatus==='PAID'?'已支付':'待支付'),payMethod:r.payMethod||({OFFLINE:'线下支付',WALLET:'钱包','2C2P':'2C2P'}[r.payChannel]||'—'),payTime:r.payStatus==='PAID'?r.payTime:'',canceled:cancelled,no:r.renewNo})});return rows});
+const feeRows=computed(()=>{if(demoListEmpty.value)return[];const o=orderInfo.value;if(!o)return[];const rows=[{kind:'主订单',plan:o.plan||'-',periodStart:confPickupISO.value,periodEnd:confReturnISO.value,rent:parseRp(o.amount),deposit:parseRp(o.deposit),total:parseRp(o.amount)+parseRp(o.deposit),payStatus:(o.status==='created')?'待支付':(o.payStatus==='PAID'?'已支付':'待支付'),payMethod:o.payee||'-',payTime:(o.status==='created')?'':(o.payStatus==='PAID'?o.payTime:'')}];(o.renewOrders||[]).forEach(r=>{const cancelled=!!r.canceled;rows.push({kind:(r.renewType==='auto'?'自动续租':'手动续租'),plan:r.plan,periodStart:r.newRentStart,periodEnd:r.newRentEnd,rent:r.renewRentFee,deposit:0,total:r.renewRentFee,payStatus:cancelled?'已取消':(r.payStatus==='PAID'?'已支付':'待支付'),payMethod:r.payMethod||({OFFLINE:'线下支付',WALLET:'钱包','2C2P':'2C2P'}[r.payChannel]||'-'),payTime:r.payStatus==='PAID'?r.payTime:'',canceled:cancelled,no:r.renewNo})});return rows});
 const feeCardRow=computed(()=>{const rows=feeRows.value;return rows.find(r=>r.kind==='主订单')||null});
 const rentOpen=ref(false),depositOpen=ref(false),totalOpen=ref(false);
 const feePaid=computed(()=>{const o=orderInfo.value;return !!o&&(o.payStatus==='PAID'||o.status!=='created')});
@@ -7196,7 +7196,7 @@ const bizStats=computed(()=>[{label:'今日收款',value:fmtRp(3240),trend:null}
   {id:5,vin:'LSVAU2Z0A00015000',type:'疑似断电',lv:'p0',status:'pending',time:'2024-10-24 08:50:51',firstTime:'2024-10-24 08:50:51',duration:'1小时55分',count:1,location:'上海市浦东新区张江路',orderId:'YD202501170005',icon:'zap-off',ignoreReason:'',closeSource:'',closedTime:'',timeline:[
   {id:'t5-1',at:'2024-10-24 08:50:51',kind:'opened'}
   ]},
-  {id:6,vin:'LSVAU2Z0A00037000',type:'疑似断电',lv:'p0',status:'ignored',time:'2024-10-24 07:30:14',firstTime:'2024-10-24 07:30:14',duration:'—',count:1,location:'深圳市南山区科技园',orderId:'',icon:'zap-off',ignoreReason:'误报',closeSource:'',closedTime:'',timeline:[
+  {id:6,vin:'LSVAU2Z0A00037000',type:'疑似断电',lv:'p0',status:'ignored',time:'2024-10-24 07:30:14',firstTime:'2024-10-24 07:30:14',duration:'-',count:1,location:'深圳市南山区科技园',orderId:'',icon:'zap-off',ignoreReason:'误报',closeSource:'',closedTime:'',timeline:[
   {id:'t6-1',at:'2024-10-24 07:30:14',kind:'opened'},
   {id:'t6-2',at:'2024-10-24 07:45:39',kind:'ignored',reason:'误报'}
   ]},
@@ -7263,7 +7263,7 @@ const LV_L=computed(()=>({p0:'高',p1:'中',p2:'低'}));
 function lvBg(lv){return LV[lv]||LV.p2}
 function stBg(s){return ST[s]||ST.pending}
 function stLabel(s){return ST_L.value[s]||s}
-function closeSourceLabel(s){return CLOSE_SRC_L.value[s]||s||'—'}
+function closeSourceLabel(s){return CLOSE_SRC_L.value[s]||s||'-'}
 function lvLabel(lv){return LV_L.value[lv]||lv}
 function nowAlertTs(){const d=new Date();const p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())}
 function ensureTimeline(a){if(!a.timeline)a.timeline=[];return a.timeline}
@@ -7284,8 +7284,8 @@ function timelineLabel(ev){
   if(ev.kind==='claimed')return '开始处理';
   if(ev.kind==='ignored')return ev.reason?'已忽略 · ' + (ignoreReasonLabel(ev.reason)):'已忽略';
   if(ev.kind==='reopened')return '重新打开为待处理';
-  if(ev.kind==='closed')return '已关闭 · ' + (closeSourceLabel(ev.source)||'—');
-  return ev.kind||'—';
+  if(ev.kind==='closed')return '已关闭 · ' + (closeSourceLabel(ev.source)||'-');
+  return ev.kind||'-';
 }
 function timelineDotClass(ev){
   if(!ev)return 'bg-[#CCC]';
@@ -7326,7 +7326,7 @@ function ingestAlertEvent(vin,type,payload){
     return open;
   }
   const ts=payload.time||nowAlertTs();
-  const row={id:Date.now(),vin,type,lv:payload.lv||'p1',status:'pending',time:ts,firstTime:ts,duration:payload.duration||'—',count:1,location:payload.location||'',orderId:payload.orderId||'',icon:payload.icon||'alert-triangle',ignoreReason:'',closeSource:'',closedTime:'',timeline:[]};
+  const row={id:Date.now(),vin,type,lv:payload.lv||'p1',status:'pending',time:ts,firstTime:ts,duration:payload.duration||'-',count:1,location:payload.location||'',orderId:payload.orderId||'',icon:payload.icon||'alert-triangle',ignoreReason:'',closeSource:'',closedTime:'',timeline:[]};
   pushTimeline(row,{at:ts,kind:'opened'});
   allAlerts.value.unshift(row);
   return row;
@@ -7339,7 +7339,7 @@ function closeAlertById(id,source){
   a.status='closed';
   a.closeSource=source;
   a.closedTime=nowAlertTs();
-  a.duration=a.duration&&a.duration!=='—'?a.duration:'—';
+  a.duration=a.duration&&a.duration!=='-'?a.duration:'-';
   pushTimeline(a,{at:a.closedTime,kind:'closed',source});
   return a;
 }
@@ -7431,12 +7431,12 @@ const locAddressShort=computed(()=>{
   return parts.length?parts[parts.length-1]:a;
 });
 const locDistM=computed(()=>{
-  if(locLoading.value)return '—';
+  if(locLoading.value)return '-';
   const seed=(dv.value.vin||'').split('').reduce((s,c)=>s+c.charCodeAt(0),0);
   return String(120+(seed%380));
 });
 const locWalkMin=computed(()=>{
-  if(locDistM.value==='—')return '—';
+  if(locDistM.value==='-')return '-';
   return String(Math.max(1,Math.round(Number(locDistM.value)/80)));
 });
 /* 车辆点固定示意位；用户点按距离偏移，连线 = 用户 ↔ 车辆 */
@@ -7792,14 +7792,14 @@ const demoPagePermCtx=computed(()=>{
       {c:'order_config.detail',n:'订单配置'},{c:'cs_info.list',n:'客服信息'},{c:'recharge.list',n:'充值配置'}
     ]}].filter(Boolean)};
   }
-  return{title:'—',groups:[]};
+  return{title:'-',groups:[]};
 });
 const demoPagePermGroups=computed(()=>(demoPagePermCtx.value.groups||[]).map(g=>{
   const items=(g.items||[]).filter(i=>!TAB_PERM_CODES.includes(i.c));
   if(!items.length)return null;
   return{id:g.id,name:g.name,codes:items.map(i=>i.c),items};
 }).filter(Boolean));
-const demoPagePermTitle=computed(()=>demoPagePermCtx.value.title||'—');
+const demoPagePermTitle=computed(()=>demoPagePermCtx.value.title||'-');
 const demoPagePermCodes=computed(()=>{const s=[];(demoPagePermGroups.value||[]).forEach(g=>(g.codes||[]).forEach(c=>s.push(c)));return s});
 /* 当前页面伪路由：供权限面板复制 code+页面路径 */
 const pageRoute=computed(function(){
@@ -7906,12 +7906,12 @@ const battLocAddressShort=computed(()=>{
   return parts.length?parts[parts.length-1]:a;
 });
 const battLocDistM=computed(()=>{
-  if(battLocLoading.value)return '—';
+  if(battLocLoading.value)return '-';
   const seed=(curBatt.value?(curBatt.value.battNo||''):'').split('').reduce((s,c)=>s+c.charCodeAt(0),0);
   return String(120+(seed%380));
 });
 const battLocWalkMin=computed(()=>{
-  if(battLocDistM.value==='—')return '—';
+  if(battLocDistM.value==='-')return '-';
   return String(Math.max(1,Math.round(Number(battLocDistM.value)/80)));
 });
 const battLocBattPt=computed(()=>({x:58,y:42}));
@@ -8159,7 +8159,7 @@ function toggleAutoRenew(){if(!orderPerm('operate.auto_renew')){deny();return}va
 var dHasRealName=computed(()=>{var o=do_.value;return !!(o&&o.realName!==false)});
 function demoSetRealName(v){var o=do_.value;if(!o)return;o.realName=!!v}
 function copyId(){copyText(do_.value&&do_.value.id)}
-function copyText(t,label){var v=(t||'').trim();if(!v||v==='—'){toast('无内容可复制','warn');return}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(v).then(function(){toast('复制成功','success')},function(){toast('复制失败','warn')})}else{toast('复制失败','warn')}}
+function copyText(t,label){var v=(t||'').trim();if(!v||v==='-'){toast('无内容可复制','warn');return}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(v).then(function(){toast('复制成功','success')},function(){toast('复制失败','warn')})}else{toast('复制失败','warn')}}
 function callPhone(p){if(!p)return;window.location.href='tel:'+p}
 function goVehicleDetail(vin){navOpen();var v=vehicles.value.find(x=>x.vin===vin);setTab('vehicles',true);vehOpenDetail(v||{vin:vin})}
 function goBatteryDetail(no){navOpen();var b=batteries.value.find(x=>x.battNo===no);setTab('orders',true);battOpenDetail(b||{battNo:no})}
@@ -8175,7 +8175,7 @@ var orderPickActive=computed(()=>['assignVehicle','assignBattery','changeVehicle
 var orderPickIsBatt=computed(()=>ordersMod.value==='assignBattery'||ordersMod.value==='changeBattery');
 var orderPickSel=ref(null);
 var orderPickQ=ref('');
-var orderPickList=computed(function(){var idle=function(o){return o.status==='空闲'};var q=(orderPickQ.value||'').trim().toLowerCase();var hasQ=q.length>0;var match=function(no){return !hasQ||(no||'').toLowerCase().indexOf(q)!==-1};return orderPickIsBatt.value?batteries.value.filter(idle).filter(function(b){return match(b.battNo)}).map(function(b){return{key:'b'+b.battNo,no:b.battNo,title:b.model,sub:(b.battNo||'')+' · '+(b.online?'在线':'离线'),online:b.online,meta:(b.level!=null?b.level:0)+'%'}}):vehicles.value.filter(idle).filter(function(v){return match(v.vin)}).map(function(v){return{key:'v'+v.vin,no:v.vin,title:v.model,sub:(v.vin||'—')+' · '+(v.online?'在线':'离线'),online:v.online,meta:(v.batteryMain!=null?v.batteryMain:0)+'% / '+(v.batterySub!=null?v.batterySub:0)+'%'}})});
+var orderPickList=computed(function(){var idle=function(o){return o.status==='空闲'};var q=(orderPickQ.value||'').trim().toLowerCase();var hasQ=q.length>0;var match=function(no){return !hasQ||(no||'').toLowerCase().indexOf(q)!==-1};return orderPickIsBatt.value?batteries.value.filter(idle).filter(function(b){return match(b.battNo)}).map(function(b){return{key:'b'+b.battNo,no:b.battNo,title:b.model,sub:(b.battNo||'')+' · '+(b.online?'在线':'离线'),online:b.online,meta:(b.level!=null?b.level:0)+'%'}}):vehicles.value.filter(idle).filter(function(v){return match(v.vin)}).map(function(v){return{key:'v'+v.vin,no:v.vin,title:v.model,sub:(v.vin||'-')+' · '+(v.online?'在线':'离线'),online:v.online,meta:(v.batteryMain!=null?v.batteryMain:0)+'% / '+(v.batterySub!=null?v.batterySub:0)+'%'}})});
 var orderPickEmpty=computed(()=>orderPickList.value.length===0);
 function openOrderPick(m){var suf={assignVehicle:'operate.assign_vehicle',changeVehicle:'operate.change_vehicle',assignBattery:'operate.assign_battery',changeBattery:'operate.change_battery'}[m];if(suf&&!orderPerm(suf)){deny();return}orderPickSel.value=null;orderPickQ.value='';ordersMod.value=m}
 function closeOrderPick(){ordersMod.value=null;orderPickSel.value=null;orderPickQ.value=''}
@@ -8299,7 +8299,7 @@ function submitRefund(){if(refundSaving.value)return;if(refundMode.value!=='retu
  /* ===== 订单改价（ADR-0004：改价与支付拆分合并，拆分即改价；仅待支付主订单可操作） ===== */
 function depositOf(o){ return (o&&o.deposit!=null)?o.deposit:500 }
 function chLabel(m){ return ({ '2C2P':'2C2P', WALLET:'钱包', OFFLINE:'线下支付' })[m]||m }
-function psAllocText(list){ return ((list||[]).filter(function(c){return c&&Number(c.amount)>0})).map(function(c){return chLabel(c.method)+' '+fmtRp(c.amount)}).join('、')||'—' }
+function psAllocText(list){ return ((list||[]).filter(function(c){return c&&Number(c.amount)>0})).map(function(c){return chLabel(c.method)+' '+fmtRp(c.amount)}).join('、')||'-' }
 function buildSplit(a,b,c){ var r=[]; a=Number(a)||0;b=Number(b)||0;c=Number(c)||0; if(a>0)r.push({method:'2C2P',amount:a}); if(b>0)r.push({method:'WALLET',amount:b}); if(c>0)r.push({method:'OFFLINE',amount:c}); return r }
 var showPaySplit=ref(false), psRent2c2p=ref(0), psRentWallet=ref(0), psRentOffline=ref(0), psDep2c2p=ref(0), psDepWallet=ref(0), psDepOffline=ref(0), psReason=ref(''), psTab=ref('rent'), showMoreActions=ref(false), psConfirmMod=ref(null), psActiveChannel=ref('2C2P');
 function applySplit(list,refs){ (list||[]).forEach(function(c){ if(!c)return; var v=Number(c.amount)||0; if(c.method==='2C2P')refs[0].value=v; else if(c.method==='WALLET')refs[1].value=v; else if(c.method==='OFFLINE')refs[2].value=v }) }
@@ -8403,7 +8403,7 @@ var feeSummary=computed(function(){
   return { rent:rent, dep:dep, total:total, changed:(d.paySplitAudits||[]).length>0, origTotal:rent+dep, split:d.paymentSplit||null };
 });
 var payChannelsText=computed(function(){
-  var d=do_.value; if(!d) return '—';
+  var d=do_.value; if(!d) return '-';
   if(d.payment==='offline') return '线下支付';
   var split=d.paymentSplit;
   if(split){
@@ -8416,7 +8416,7 @@ var payChannelsText=computed(function(){
   }
   return '2C2P';
 });
-function rentPlanText(o){ var m={hourly:'时租',daily:'日租',weekly:'周租',monthly:'月租'}; var u={hourly:'小时',daily:'天',weekly:'周',monthly:'月'}; var t=(o&&o.rentType)||''; var base=(m[t]||t)||'—'; return base+' × '+(o&&o.rentCount||1)+(u[t]||''); }
+function rentPlanText(o){ var m={hourly:'时租',daily:'日租',weekly:'周租',monthly:'月租'}; var u={hourly:'小时',daily:'天',weekly:'周',monthly:'月'}; var t=(o&&o.rentType)||''; var base=(m[t]||t)||'-'; return base+' × '+(o&&o.rentCount||1)+(u[t]||''); }
 function rentEndOf(d){ if(d&&d.rentEnd) return d.rentEnd; var s=d&&d.rentStart; if(!s) return '-'; var m=/×(\d+)\s*([月天周])/.exec(d.plan||''); if(!m) return '-'; var n=Number(m[1])||1, unit=m[2]; var dt=new Date(String(s).replace(/-/g,'/')); if(isNaN(dt.getTime())) return '-'; if(unit==='月'){ dt.setMonth(dt.getMonth()+n); } else if(unit==='天'){ dt.setDate(dt.getDate()+n); } else if(unit==='周'){ dt.setDate(dt.getDate()+n*7); } var pad=function(x){return String(x).padStart(2,'0')}; return dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate())+' '+pad(dt.getHours())+':'+pad(dt.getMinutes())+':'+pad(dt.getSeconds()); }
 function renewKindLabel(r){ if(!r)return '续租单'; var t=r.renewType; return (t==='AGENT'||t==='USER_APPLY')?'手动续租':(t==='AUTO'?'自动续租':'续租单'); }
 function feePayStatus(){ var st=dSt.value; if(st==='created')return '待支付'; var m={pending:'待支付',processing:'支付中',paid:'已支付',refunding:'退款中',partialRefund:'部分退款',fullRefund:'全部退款'}; return m[dPaySt.value]||'已支付'; }
@@ -8430,7 +8430,7 @@ function buildRenewDemo(v){
   var base=rentEndOf(o); if(!base||base==='-')base='2026-09-28 14:00:00';
   function plus(s,n){ var dt=new Date(String(s).replace(/-/g,'/')); if(isNaN(dt.getTime()))return s; dt.setDate(dt.getDate()+n); var p=function(x){return String(x).padStart(2,'0')}; return dt.getFullYear()+'-'+p(dt.getMonth()+1)+'-'+p(dt.getDate())+' '+p(dt.getHours())+':'+p(dt.getMinutes())+':'+p(dt.getSeconds()); }
   var seq=String(Date.now()).slice(-9);
-  function mk(tag,type,st,days,rent){ return { subOrderNo:'YD'+seq+tag, renewType:type, rentType:'daily', rentCount:days, newRentStart:base, newRentEnd:plus(base,days), renewRentFee:rent, subPayStatus:st, payTime:st==='待支付'?'—':now(), paymentSplit:{ rentSplit:[{method:'2C2P',amount:rent}] } }; }
+  function mk(tag,type,st,days,rent){ return { subOrderNo:'YD'+seq+tag, renewType:type, rentType:'daily', rentCount:days, newRentStart:base, newRentEnd:plus(base,days), renewRentFee:rent, subPayStatus:st, payTime:st==='待支付'?'-':now(), paymentSplit:{ rentSplit:[{method:'2C2P',amount:rent}] } }; }
   var rows=[];
   if(v==='mp'||v==='all')rows.push(mk('01','AGENT','待支付',2,100));
   if(v==='md'||v==='all')rows.push(mk('02','AGENT','已支付',2,130));
@@ -8448,9 +8448,9 @@ var feeTick=ref(0);
 var feeRows=computed(function(){
   feeTick.value;
   var d=do_.value; if(!d) return [];
-  var main={ kind:'主订单', renew:'-', plan:(d.plan||rentPlanText(d)), period:(d.rentStart||'-')+' ~ '+rentEndOf(d), rent:Number(d.amount)||0, deposit:depositOf(d), total:(Number(d.amount)||0)+depositOf(d), payStatus:feePayStatus(), payTime:(d.payTime||(showPaid.value?'2025-01-18 13:30:00':'—')) };
+  var main={ kind:'主订单', renew:'-', plan:(d.plan||rentPlanText(d)), period:(d.rentStart||'-')+' ~ '+rentEndOf(d), rent:Number(d.amount)||0, deposit:depositOf(d), total:(Number(d.amount)||0)+depositOf(d), payStatus:feePayStatus(), payTime:(d.payTime||(showPaid.value?'2025-01-18 13:30:00':'-')) };
   var rows=[main];
-  (d.renewSubOrders||[]).forEach(function(r){ var _rd=renewDepOf(r,d); rows.push({ kind:renewKindLabel(r), isRenew:true, subOrderNo:r.subOrderNo, payChannel:(r.payChannel||null), renew:renewKindLabel(r), paymentSplit:(r.paymentSplit||null), plan:(r.plan||rentPlanText(r)), period:(r.newRentStart||'-')+' ~ '+(r.newRentEnd||'-'), rent:Number(r.renewRentFee)||0, deposit:_rd, total:(Number(r.renewRentFee)||0)+_rd, payStatus:(r.subPayStatus||'—'), payTime:(r.payTime||r.subPayTime||'—') }); });
+  (d.renewSubOrders||[]).forEach(function(r){ var _rd=renewDepOf(r,d); rows.push({ kind:renewKindLabel(r), isRenew:true, subOrderNo:r.subOrderNo, payChannel:(r.payChannel||null), renew:renewKindLabel(r), paymentSplit:(r.paymentSplit||null), plan:(r.plan||rentPlanText(r)), period:(r.newRentStart||'-')+' ~ '+(r.newRentEnd||'-'), rent:Number(r.renewRentFee)||0, deposit:_rd, total:(Number(r.renewRentFee)||0)+_rd, payStatus:(r.subPayStatus||'-'), payTime:(r.payTime||r.subPayTime||'-') }); });
   return rows;
 });
 /* ══ 费用卡片：当前展示行（默认最后一条 = 最近一笔续租单/主订单） ══ */
@@ -8552,14 +8552,14 @@ var feeStatChannels=computed(function(){
   rentCh.concat(depCh).forEach(function(x){ tm[x.channel]=(tm[x.channel]||0)+x.amount; });
   return {rent:rentCh,deposit:depCh,total:toArr(tm)};
 });
-function feeRowChannel(r){ var bd=feeRowBreakdown(r); var arr=bd.total&&bd.total.length?bd.total:bd.rent.concat(bd.deposit); if(!arr||!arr.length)return '—'; var seen={},out=[]; arr.forEach(function(x){var c=x.channel; if(c&&!seen[c]){seen[c]=1;out.push(c);}}); return out.length?out.join('、'):'—'; }
+function feeRowChannel(r){ var bd=feeRowBreakdown(r); var arr=bd.total&&bd.total.length?bd.total:bd.rent.concat(bd.deposit); if(!arr||!arr.length)return '-'; var seen={},out=[]; arr.forEach(function(x){var c=x.channel; if(c&&!seen[c]){seen[c]=1;out.push(c);}}); return out.length?out.join('、'):'-'; }
 function splitPartView(list, fallbackAmt){
   var arr=(list||[]).filter(function(c){return c&&Number(c.amount)>0});
-  if(arr.length===0){ var f=Number(fallbackAmt)||0; return { total:f, lines: f>0?[{label:'—',amount:f}]:[] } }
+  if(arr.length===0){ var f=Number(fallbackAmt)||0; return { total:f, lines: f>0?[{label:'-',amount:f}]:[] } }
   var total=arr.reduce(function(s,c){return s+Number(c.amount)},0);
   return { total:total, lines:arr.map(function(c){return {label:chLabel(c.method),amount:Number(c.amount)}}) };
 }
-function splitPartText(list, fallbackAmt){ return splitPartView(list, fallbackAmt).lines.map(function(l){return l.label+' '+fmtRp(l.amount)}).join('、') || '—' }
+function splitPartText(list, fallbackAmt){ return splitPartView(list, fallbackAmt).lines.map(function(l){return l.label+' '+fmtRp(l.amount)}).join('、') || '-' }
 var opRecords=computed(function(){
   var d=do_.value; if(!d) return [];
   var list=(d.paySplitAudits||[]).map(function(a){
@@ -8947,7 +8947,7 @@ const aQ=ref(''),allRoles=computed(()=>['店长','管理员','员工','财务','
 const accounts=ref([]);
 const aFilter=computed(()=>{if(demoListEmpty.value)return[];const q=aQ.value.toLowerCase();return q?accounts.value.filter(a=>(a.account+a.name+a.phone).toLowerCase().includes(q)):accounts.value});
 const fa=ref({account:'',name:'',code:'+86',phone:'',email:'',roles:[],remark:''});const da=ref({});
-const adRows=computed(()=>[{k:'账号',v:da.value.account},{k:'姓名',v:da.value.name},{k:'手机号',v:(da.value.code||'')+' '+(da.value.phone||'')},{k:'邮箱',v:da.value.email},{k:'备注',v:da.value.remark||'—'},{k:'创建时间',v:da.value.created}]);
+const adRows=computed(()=>[{k:'账号',v:da.value.account},{k:'姓名',v:da.value.name},{k:'手机号',v:(da.value.code||'')+' '+(da.value.phone||'')},{k:'邮箱',v:da.value.email},{k:'备注',v:da.value.remark||'-'},{k:'创建时间',v:da.value.created}]);
 function mask(p){if(!p||p.length<11)return p;return p.slice(0,p.length-8)+'****'+p.slice(-4)}
 function togRole(arr,r){const i=arr.indexOf(r);i===-1?arr.push(r):arr.splice(i,1)}
 function openAccDetail(a){navOpen();if(!can('account.detail')){deny();return}da.value={...a};profileSub.value='aDetail'}
@@ -9076,7 +9076,7 @@ function goUserDetail(account){
   if(!account)return;
   navOpen();
   var u=users.value.find(function(x){return x.account===account||x.phone===account})||userList.value.find(function(x){return x.account===account||x.phone===account});
-  if(!u)u={id:0,account:account,phone:'',email:'',nickname:'',status:'正常',created:'—'};
+  if(!u)u={id:0,account:account,phone:'',email:'',nickname:'',status:'正常',created:'-'};
   setTab('profile',true);
   openUserDetail(u);
 }
@@ -9091,7 +9091,7 @@ const uBindList=computed(function(){
   var match=function(no){return !hasQ||(no||'').toLowerCase().indexOf(q)!==-1};
   return uBindIsBatt.value
     ? batteries.value.filter(idle).filter(function(b){return match(b.battNo)}).map(function(b){return{key:'b'+b.battNo,no:b.battNo,title:b.model,sub:(b.battNo||'')+' · '+(b.online?'在线':'离线'),online:b.online,meta:(b.level!=null?b.level:0)+'%'}})
-    : vehicles.value.filter(idle).filter(function(v){return match(v.vin)}).map(function(v){return{key:'v'+v.vin,no:v.vin,title:v.model,sub:(v.vin||'—')+' · '+(v.online?'在线':'离线'),online:v.online,meta:(v.batteryMain!=null?v.batteryMain:0)+'% / '+(v.batterySub!=null?v.batterySub:0)+'%'}});
+    : vehicles.value.filter(idle).filter(function(v){return match(v.vin)}).map(function(v){return{key:'v'+v.vin,no:v.vin,title:v.model,sub:(v.vin||'-')+' · '+(v.online?'在线':'离线'),online:v.online,meta:(v.batteryMain!=null?v.batteryMain:0)+'% / '+(v.batterySub!=null?v.batterySub:0)+'%'}});
 });
 const uBindEmpty=computed(()=>uBindList.value.length===0);
 function openUBind(t){if(!can('user.bind')){deny();return}uBindMod.value=t;uBindSel.value=null;uBindQ.value=''}
@@ -9113,8 +9113,8 @@ const pQ=ref('');
 const positions=ref([]);
 const pFilter=computed(()=>{if(demoListEmpty.value)return[];const q=pQ.value.toLowerCase();return q?positions.value.filter(p=>p.name.toLowerCase().includes(q)):positions.value});
 const dp=ref({});
-const pdRows=computed(()=>[{k:'职位名称',v:dp.value.name},{k:'门店级别',v:dp.value.level||'—'},{k:'上级职位',v:dp.value.parent},{k:'备注',v:dp.value.remark||'—'},{k:'创建时间',v:dp.value.created}]);
-const fp=ref({name:'',parent:'—',remark:''});
+const pdRows=computed(()=>[{k:'职位名称',v:dp.value.name},{k:'门店级别',v:dp.value.level||'-'},{k:'上级职位',v:dp.value.parent},{k:'备注',v:dp.value.remark||'-'},{k:'创建时间',v:dp.value.created}]);
+const fp=ref({name:'',parent:'-',remark:''});
 function mkP(){return[{name:'仪表盘',icon:'pie-chart',exp:false,items:[{n:'查看营收数据',c:false},{n:'查看车辆运营',c:false}]},{name:'订单管理',icon:'file-text',exp:false,items:[{n:'查看订单列表',c:false},{n:'查看订单详情',c:false},{n:'取消订单',c:false},{n:'结束订单',c:false},{n:'退款处理',c:false}]}]}
 function mkPM(){return[{name:'仪表盘',icon:'pie-chart',exp:false,items:[{n:'查看营收数据',c:false},{n:'查看车辆运营',c:false}]},{name:'订单管理',icon:'file-text',exp:false,items:[{n:'查看订单列表',c:false},{n:'查看订单详情',c:false}]}]}
 const pTreeP=ref(mkP()),pTreeM=ref(mkPM());function rstPerm(){pTreeP.value=mkP();pTreeM.value=mkPM()}
@@ -9124,7 +9124,7 @@ function selAll(tree){tree.forEach(g=>{g.items.forEach(c=>c.c=true);g.exp=true})
 let tgtPos=null;
 function openPosDetail(p){navOpen();if(!can('position.detail')){deny();return}dp.value={...p};pTreeP.value=mkP();pTreeM.value=mkPM();profileSub.value='pDetail'}
 function openPosEdit(p){navOpen();if(!can('position.edit')){deny();return}fp.value={...p};rstPerm();profileSub.value='pEdit'}
-function openPosAdd(parent){navOpen();if(!can('position.add')){deny();return}fp.value={name:'',parent:parent||'—',remark:''};rstPerm();profileSub.value='pAdd'}
+function openPosAdd(parent){navOpen();if(!can('position.add')){deny();return}fp.value={name:'',parent:parent||'-',remark:''};rstPerm();profileSub.value='pAdd'}
 var posSaving=ref(false);
 function savePos(){if(posSaving.value)return;if(!vErr({name:fp.value.name}))return;posSaving.value=true;brandLoading.value=true;setTimeout(function(){brandLoading.value=false;const mode=profileSub.value;navDrop();profileSub.value=null;fE.value={};if(mode==='pEdit'){const i=positions.value.findIndex(p=>p.name===dp.value.name);if(i>=0)Object.assign(positions.value[i],fp.value)}else{positions.value.push({...fp.value,created:now()})}toast(mode==='pEdit'?'职位已保存':'职位新增成功','success');posSaving.value=false},400)}
 function delPos(p){if(!can('position.delete')){deny();return}tgtPos=p;profileMod.value='delPos'}
@@ -9304,10 +9304,10 @@ function initI18nData(){
   const statusRank={created:0,pickup:1,progress:2,return:3,overdue:4,breach:5,complete:6,cancelled:7};
   orders.value=[
     {id:'YD202609010001',vin:'LSVAU2Z0A11119000',customer:'Han Min',phone:'+86 13800001234',plan:'月租×' + (1) + '月',amount:450,status:'progress',type:'vehicle',item:'雅迪冠能3 S9 MAX',created:'2026-09-01 10:00:00',payment:'offline',paySt:'paid',rentStart:'2026-08-28 14:00:00',renewSubOrders:[
-      {subOrderNo:'YD202609050021',renewType:'AGENT',rentType:'daily',rentCount:3,newRentStart:'2026-09-28 14:00:00',newRentEnd:'2026-10-01 14:00:00',renewRentFee:150,subPayStatus:'待支付',payTime:'—',paymentSplit:{rentSplit:[{method:'2C2P',amount:150}]}},
+      {subOrderNo:'YD202609050021',renewType:'AGENT',rentType:'daily',rentCount:3,newRentStart:'2026-09-28 14:00:00',newRentEnd:'2026-10-01 14:00:00',renewRentFee:150,subPayStatus:'待支付',payTime:'-',paymentSplit:{rentSplit:[{method:'2C2P',amount:150}]}},
       {subOrderNo:'YD202609150033',renewType:'AGENT',rentType:'weekly',rentCount:1,newRentStart:'2026-10-03 14:00:00',newRentEnd:'2026-10-10 14:00:00',renewRentFee:130,subPayStatus:'已支付',payTime:'2026-09-15 10:30:00',paymentSplit:{rentSplit:[{method:'2C2P',amount:130}]}},
-      {subOrderNo:'YD202609200022',renewType:'AGENT',rentType:'daily',rentCount:2,newRentStart:'2026-10-01 14:00:00',newRentEnd:'2026-10-03 14:00:00',renewRentFee:100,subPayStatus:'待支付',payTime:'—',paymentSplit:{rentSplit:[{method:'2C2P',amount:100}]}},
-      {subOrderNo:'YD202609250044',renewType:'MANUAL',rentType:'weekly',rentCount:1,newRentStart:'2026-10-12 14:00:00',newRentEnd:'2026-10-19 14:00:00',renewRentFee:130,subPayStatus:'待支付',payTime:'—',paymentSplit:{rentSplit:[{method:'OFFLINE',amount:130}]}}
+      {subOrderNo:'YD202609200022',renewType:'AGENT',rentType:'daily',rentCount:2,newRentStart:'2026-10-01 14:00:00',newRentEnd:'2026-10-03 14:00:00',renewRentFee:100,subPayStatus:'待支付',payTime:'-',paymentSplit:{rentSplit:[{method:'2C2P',amount:100}]}},
+      {subOrderNo:'YD202609250044',renewType:'MANUAL',rentType:'weekly',rentCount:1,newRentStart:'2026-10-12 14:00:00',newRentEnd:'2026-10-19 14:00:00',renewRentFee:130,subPayStatus:'待支付',payTime:'-',paymentSplit:{rentSplit:[{method:'OFFLINE',amount:130}]}}
     ]},
     {id:'YD202609010002',vin:'LSVAU2Z0A44444000',customer:'Wang Fang',phone:'+86 13800004444',plan:'月租×' + (1) + '月',amount:520,status:'progress',type:'vehicle',item:'雅迪冠能3 S9 MAX',created:'2026-09-02 11:00:00',payment:'2c2p',paySt:'paid',rentStart:'2026-09-02 14:00:00',paymentSplit:{rentSplit:[{method:'2C2P',amount:520}],depositSplit:[{method:'2C2P',amount:500}]},renewSubOrders:[
       {subOrderNo:'YD202609150031',renewType:'AGENT',rentType:'weekly',rentCount:1,newRentStart:'2026-10-02 14:00:00',newRentEnd:'2026-10-09 14:00:00',renewRentFee:130,subPayStatus:'已支付',payTime:'2026-09-15 10:30:00',paymentSplit:{rentSplit:[{method:'2C2P',amount:130}]}}
@@ -9400,7 +9400,7 @@ function initI18nData(){
     {account:'Ops Zhao',name:'Zhao Qiang',code:'+86',phone:'13690129012',email:'zhao@test.com',roles:'运维',remark:'',status:'禁用',created:'2024-12-05 10:00:00'}
   ];
   positions.value=[
-    {name:'店长',parent:'—',level:'运营门店',remark:'门店最高管理职位',created:'2024-10-01 09:00:00'},
+    {name:'店长',parent:'-',level:'运营门店',remark:'门店最高管理职位',created:'2024-10-01 09:00:00'},
     {name:'管理员',parent:'店长',level:'代理商门店',remark:'协助店长管理',created:'2024-10-01 09:00:00'},
     {name:'员工',parent:'管理员',level:'代理商门店',remark:'日常运营',created:'2024-10-15 14:30:00'}
   ];
@@ -9413,7 +9413,7 @@ function initI18nData(){
 }
 watch(protoForceUpdate,(newVal)=>{if(newVal!=='none'&&!showVersionCheck.value){setTimeout(()=>checkVersion(),100)}});
 (function(){if(!uWallet.value||(!uWallet.value.total&&!uWallet.value.rechargeBalance&&!uWallet.value.bonusBalance))uWallet.value=(typeof walletFor==="function")?walletFor("user001"):uWallet.value})();
-function publishMerged(){try{MERGED.orderCount=(( (orders.value||orders)||[]).length)||0;MERGED.vehicleCount=(vehicles?(((vehicles.value||vehicles)||[]).length)||0:0);MERGED.batteryCount=(batteries?(((batteries.value||batteries)||[]).length)||0:0);MERGED.walletBalance=(uWallet&&uWallet.total)?uWallet.total:0;var _o=(((orders.value||orders)||[])[0])||null;MERGED.lastOrderId=_o?(_o.orderId||_o.id||"—"):"—";MERGED.updatedAt=Date.now();MERGED.myVehicles=(function(){var _fr=(((vehicles&&vehicles.value)||[]).filter(function(v){return v.vin && v.status!=='空闲'}).map(function(v){return {vin:v.vin,model:v.model,status:v.status||(v.online?"在线":"离线"),online:v.online,batteryMain:v.batteryMain,batterySub:v.batterySub}}));if(uVehicles&&uVehicles.value)uVehicles.value.forEach(function(x){if(x&&x._manual&&_fr.findIndex(function(f){return f.vin===x.vin})<0)_fr.push(x)});return _fr})();MERGED.myBatteries=(function(){var _fb=(((batteries&&batteries.value)||[]).filter(function(b){return b.battNo && b.status!=='空闲'}).map(function(b){return {code:b.battNo,id:b.battNo,model:b.model,soc:b.level,status:b.status,lost:b.lost,discharge:b.discharge||(b.online?"在线":"离线")}}));if(uBatteries&&uBatteries.value)uBatteries.value.forEach(function(x){if(x&&x._manual&&_fb.findIndex(function(f){return f.code===x.code})<0)_fb.push(x)});return _fb})();MERGED.myWallet=(function(){var _w=(uWallet&&uWallet.value)?uWallet.value:null;return (_w)?{totalBalance:_w.total,rechargeBalance:_w.rechargeBalance,bonusBalance:_w.bonusBalance,rechargeFrozen:_w.rechargeFrozen,bonusFrozen:_w.bonusFrozen,totalFrozen:(_w.rechargeFrozen||0)+(_w.bonusFrozen||0)}:null})();MERGED.myOrders=(function(){var _cols={created:"#2B3F5F",pickup:"#FF8C1B",progress:"#22D098","return":"#FF6A00",overdue:"#DC2626",breach:"#FF4343",complete:"#333333",cancelled:"#666666"};var _txt={created:"已创建",pickup:"待取用",progress:"进行中","return":"待归还",overdue:"已超期",breach:"已违约",complete:"已完成",cancelled:"已取消"};var _shop=(stores&&stores.value&&stores.value[0])?(stores.value[0].name||"测试门店"):"测试门店";return (((orders.value||orders)||[]).filter(function(o){return true})||[]).map(function(o){return {id:o.id||o.orderId||"",status:o.status,statusText:_txt[o.status]||"已创建",statusColor:_cols[o.status]||"#2B3F5F",model:o.item||o.type||"",img:"#FF6A00",desc:"",store:_shop,plan:o.plan||"",created:o.created||"",payTime:o.payTime||"",pickupTime:o.rentStart||o.created||"",returnTime:"",amount:o.amount||0,frame:o.vin||"",vModel:o.item||o.type||""}})})();MERGED.stores=(stores&&stores.value)?stores.value.map(function(s){return s.name}):[];}catch(e){}}
+function publishMerged(){try{MERGED.orderCount=(( (orders.value||orders)||[]).length)||0;MERGED.vehicleCount=(vehicles?(((vehicles.value||vehicles)||[]).length)||0:0);MERGED.batteryCount=(batteries?(((batteries.value||batteries)||[]).length)||0:0);MERGED.walletBalance=(uWallet&&uWallet.total)?uWallet.total:0;var _o=(((orders.value||orders)||[])[0])||null;MERGED.lastOrderId=_o?(_o.orderId||_o.id||"-"):"-";MERGED.updatedAt=Date.now();MERGED.myVehicles=(function(){var _fr=(((vehicles&&vehicles.value)||[]).filter(function(v){return v.vin && v.status!=='空闲'}).map(function(v){return {vin:v.vin,model:v.model,status:v.status||(v.online?"在线":"离线"),online:v.online,batteryMain:v.batteryMain,batterySub:v.batterySub}}));if(uVehicles&&uVehicles.value)uVehicles.value.forEach(function(x){if(x&&x._manual&&_fr.findIndex(function(f){return f.vin===x.vin})<0)_fr.push(x)});return _fr})();MERGED.myBatteries=(function(){var _fb=(((batteries&&batteries.value)||[]).filter(function(b){return b.battNo && b.status!=='空闲'}).map(function(b){return {code:b.battNo,id:b.battNo,model:b.model,soc:b.level,status:b.status,lost:b.lost,discharge:b.discharge||(b.online?"在线":"离线")}}));if(uBatteries&&uBatteries.value)uBatteries.value.forEach(function(x){if(x&&x._manual&&_fb.findIndex(function(f){return f.code===x.code})<0)_fb.push(x)});return _fb})();MERGED.myWallet=(function(){var _w=(uWallet&&uWallet.value)?uWallet.value:null;return (_w)?{totalBalance:_w.total,rechargeBalance:_w.rechargeBalance,bonusBalance:_w.bonusBalance,rechargeFrozen:_w.rechargeFrozen,bonusFrozen:_w.bonusFrozen,totalFrozen:(_w.rechargeFrozen||0)+(_w.bonusFrozen||0)}:null})();MERGED.myOrders=(function(){var _cols={created:"#2B3F5F",pickup:"#FF8C1B",progress:"#22D098","return":"#FF6A00",overdue:"#DC2626",breach:"#FF4343",complete:"#333333",cancelled:"#666666"};var _txt={created:"已创建",pickup:"待取用",progress:"进行中","return":"待归还",overdue:"已超期",breach:"已违约",complete:"已完成",cancelled:"已取消"};var _shop=(stores&&stores.value&&stores.value[0])?(stores.value[0].name||"测试门店"):"测试门店";return (((orders.value||orders)||[]).filter(function(o){return true})||[]).map(function(o){return {id:o.id||o.orderId||"",status:o.status,statusText:_txt[o.status]||"已创建",statusColor:_cols[o.status]||"#2B3F5F",model:o.item||o.type||"",img:"#FF6A00",desc:"",store:_shop,plan:o.plan||"",created:o.created||"",payTime:o.payTime||"",pickupTime:o.rentStart||o.created||"",returnTime:"",amount:o.amount||0,frame:o.vin||"",vModel:o.item||o.type||""}})})();MERGED.stores=(stores&&stores.value)?stores.value.map(function(s){return s.name}):[];}catch(e){}}
 (function(){if(!(uVehicles&&uVehicles.value&&uVehicles.value.length)){uVehicles.value=vehicles.value.filter(function(v){return v.vin && v.status!=='空闲'}).map(function(v){return{vin:v.vin,model:v.model,status:v.status,online:v.online,batteryMain:v.batteryMain,batterySub:v.batterySub}})}if(!(uBatteries&&uBatteries.value&&uBatteries.value.length)){uBatteries.value=batteries.value.filter(function(b){return b.battNo && b.status!=='空闲'}).map(function(b){return{code:b.battNo,id:b.battNo,model:b.model,soc:b.level,status:b.status,lost:b.lost,discharge:b.discharge}})}})();
 watch(function(){return[(((orders.value||orders)||[]).length)||0,(vehicles?(((vehicles.value||vehicles)||[]).length)||0:0),(batteries?(((batteries.value||batteries)||[]).length)||0:0),(uWallet&&uWallet.total)||0,(vehicles?JSON.stringify((vehicles.value||[]).map(function(v){return v.status+':'+(v.locked?'1':'0')+':'+(v.engineOn?'1':'0')})):''),(batteries?JSON.stringify((batteries.value||[]).map(function(b){return b.status})):'')]},publishMerged,{immediate:true});
 SYS_recent(15);publishMerged();
