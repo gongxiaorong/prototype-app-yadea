@@ -123,10 +123,37 @@
   - `align="top"` 用于多行 value；value 默认 `truncate`，要换行须 `value-class="whitespace-normal break-words"`。
 - 分隔线只在**相邻两行之间**（首行上方、末行下方天然不画）。
 - 行高恒 **32px**（`py-2` + 16px 内容）→ 行内图标/元素高度 ≤16px；多行 value 行除外（`align="top"`）。
-- 视觉基线：壳 `bg-white rounded-2xl px-4 py-3.5` + `1px solid #E5E5E5` + `0 1px 3px rgba(0,0,0,.04)`；标题 15px `semibold` `#111`；label 13px `#999`（默认宽 4rem，长标签传 `label-width="5rem"`）；value 13px `#111` 右对齐。
+- 视觉基线：壳 `bg-white rounded-2xl px-4 py-3.5` + `1px solid #E5E5E5` + `0 1px 3px rgba(0,0,0,.04)`；标题 15px `semibold` `#111`；label 13px `#999`（默认宽 4rem，长标签传 `label-width="5rem"`）；value 13px `#333333` 右对齐（组件默认色）。
 - 间距（组件负责）：标题栏→首块 **14px**、行↔行 **16px**、行/自定义内容→footer **16px**；内容方**不要再自带顶距**。
 - **非 KV 结构**（费用/退款渠道明细树、可展开行等）：外壳仍用 `kv-card`，内容原样放默认插槽（**不经 `kv-row`、不开 `divider`**）。
 - 保留手写（例外）：自动续租开关卡、钱包余额卡等**非行式卡**；`newAccCred`（账号创建成功单按钮结果页）。
+
+### form-field — 页面级表单字段（白底输入 + 状态矩阵）
+
+```html
+<form-field label="账号" required :error="fE.account" :counter="(fa.account||'').length" counter-max="20" :disabled="accBasicDisabled">
+  <input v-model="fa.account" maxlength="20" placeholder="请输入账号" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]">
+</form-field>
+```
+
+- **页面级表单 = `.form-plain`（无白卡分组）+ `.ff-*` 白底字段**：字段直接浮在页面灰底（壳层 `bg-[#F6F7F9]`）上，**不再用 `.form-card` 白卡**（`.form-card` 仅登录页保留）。`.form-plain` 与 `.form-card` 共用 `.form-row/.form-label/.form-actions` 后代间距规则。
+- 组件只做「外壳」：label + 状态容器 + 计数 + 错误提示；输入元素由默认插槽传入（input / textarea / `.ff-select` 选择行 / `.ff-upload` 上传框）。**取值绑定、校验、内层 `:disabled` 表达式全部留在调用方**（只换壳不改逻辑）。
+- label（`.ff-label` 与 `.form-plain/.form-card` 的 `.form-label`）统一 13px `#333333`，必填星号 `.ff-star` 为 `#DC2626`。
+- props：`label / required / error / hint / counter / counterMax / disabled / readonly / bare / oid / boxClass`；slots `default / label`。
+  - `bare`：无容器模式（不渲染 `.ff-box`，只保留 label/提示）——**胶囊组等「成组选择」必须用 bare**（否则被套成白底卡）；裸写 `bare` 即生效，`:bare="false"` 关闭。
+  - `boxClass` 传额外容器类：多行框 `box-class="is-area"`（计数落右下角）；选择行 `box-class="ff-select"`；上传框 `box-class="ff-upload py-5"`。
+- 状态矩阵（token 在 `<style id="layer-base">` 的「表单字段 token」段）：
+
+| 状态 | 底 | 边框 | 文字 | 触发 |
+| --- | --- | --- | --- | --- |
+| 正常 | `#fff` | `1px #EFEFF1` | `#111` | 默认 |
+| **禁用** | **`#E7E9EC`** | `#DDE0E3` | `#9AA0A6`（占位 `#B7BCC2`、计数 `#B7BCC2`） | `disabled` → `.is-disabled`（含 `pointer-events:none`） |
+| 错误 | 跟随当前 | `#DC2626` | 跟随当前 | `error` 非空 → `.is-error` |
+| 聚焦 | 不变 | 不变 | 不变 | **刻意不加高亮/选中态**（按需求） |
+
+- 其他 token：`.ff-box`（白底输入容器；`.ff-box.mini` 36px 小尺寸）、`.ff-select`（选择行：白底 + chevron，替代原浅蓝虚线框）、`.ff-upload`（上传框：白底 + `1px dashed #E5E5E5`）、`.ff-counter`（12px `#999`）、`.ff-hint`（12px，`.is-err` 红）、`.ff-star`（必填星号）、`.ff-bare`（无容器）；复合字段（如区号 + 手机号两框一行）用 `<form-field bare>` 包一行、内部各框写 `.ff-box` 并自行 `:class="x?'is-disabled':''"`。
+- **禁用态禁止再用** `opacity:.5/.75`、`background:'#F0F1F3'`、内联 `pointerEvents:'none'` —— 一律 `:disabled` + `.is-disabled`。
+- 弹窗内表单（`bottom-sheet`/`confirm-dialog`）与登录页本轮不迁移，继续用 `.login-field`；后续对齐按本小节口径。
 
 ### tab-bar — 底部导航
 
@@ -224,3 +251,6 @@
 | 挂载失败误判 | 生产构建 `app._instance` 为 `null` | §6.4 用 DOM 判据 |
 | 迁移后标题偏移 | 手写头部 `mr-8` 补偿 | 一律用 `nav-bar`（§3） |
 | kv-card 传了 `#title` 但标题不显示 | 标题栏 `v-if` 漏判 `$slots.title` | 条件须含 `title\|\|$slots.title\|\|$slots.extra`（§3） |
+| 表单禁用态看不出区别 | 旧写法 `opacity`/`#F0F1F3` 与正常灰底几乎同色 | 禁用态一律 `disabled` → `.ff-box.is-disabled`（`#E7E9EC` 深灰，§3 form-field） |
+| 写了 `bare` 却没生效（被套成白底卡） | 裸属性值为空串 `''`（falsy） | 组件内按三态判定 `b===''?true:!!b`（同 kv-row 的 `divider`，§3 form-field） |
+| 胶囊组被套成白底卡 | 未传 `bare`，默认渲染 `.ff-box` | 成组选择（胶囊/chip）一律 `<form-field ... bare>`（§3 form-field） |

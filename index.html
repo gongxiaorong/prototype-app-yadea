@@ -64,10 +64,37 @@ body{font-family:var(--font-body)}
 .login-field-dial{min-width:5.5rem;padding:0 12px;gap:4px;cursor:pointer;flex-shrink:0}
 .login-field-dial:active{background:#EEE}
 .form-card{background:#fff;border:1px solid #E5E5E5;border-radius:12px;padding:16px 16px 8px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.form-card .form-row{margin-bottom:16px}
-.form-card .form-row:last-child{margin-bottom:8px}
-.form-card .form-label{font-size:13px;font-weight:500;color:#6B6B6B;margin-bottom:6px}
-.form-card .form-actions{margin:4px 0 8px}
+/* 页面级表单：无卡分组（字段白底浮于页面 #F6F7F9 上，见 AGENTS.md「表单字段规范」） */
+.form-plain{background:transparent;border:0;border-radius:0;box-shadow:none;padding:0}
+:is(.form-card,.form-plain) .form-row{margin-bottom:16px}
+:is(.form-card,.form-plain) .form-row:last-child{margin-bottom:8px}
+:is(.form-card,.form-plain) .form-label{font-size:13px;font-weight:500;color:#333333;margin-bottom:6px}
+:is(.form-card,.form-plain) .form-actions{margin:4px 0 8px}
+/* ═══ 表单字段 token（form-field 组件 + .ff-* 形态；状态矩阵：正常/聚焦/禁用/错误） ═══ */
+.ff-row{margin-bottom:16px}
+.ff-row:last-child{margin-bottom:8px}
+.ff-label{display:flex;align-items:center;font-size:13px;font-weight:500;color:#333333;margin-bottom:6px}
+.ff-star{color:#DC2626;margin-right:2px}
+.ff-hint{font-size:12px;margin-top:6px;color:#999;line-height:1.5}
+.ff-hint.is-err{color:#DC2626}
+.ff-box{position:relative;display:flex;align-items:center;min-height:48px;background:#fff;border:1px solid #EFEFF1;border-radius:12px;box-sizing:border-box;transition:border-color .15s,box-shadow .15s}
+/* 聚焦不加高亮/选中态：输入框获得焦点时保持常态外观（按需求） */
+.ff-box input,.ff-box select,.ff-box textarea{box-sizing:border-box;border:0!important;outline:none!important;box-shadow:none!important;background:transparent!important;-webkit-appearance:none;appearance:none;width:100%;min-width:0;font-family:inherit}
+.ff-box input::placeholder,.ff-box textarea::placeholder{color:#9CA3AF}
+.ff-box.is-error{border-color:#DC2626;box-shadow:inset 0 0 0 1px #DC2626}
+.ff-box.is-disabled{background:#E7E9EC;border-color:#DDE0E3;cursor:not-allowed}
+.ff-box.is-disabled input,.ff-box.is-disabled textarea{color:#9AA0A6;-webkit-text-fill-color:#9AA0A6;cursor:not-allowed}
+.ff-box.is-disabled input::placeholder,.ff-box.is-disabled textarea::placeholder{color:#B7BCC2}
+.ff-box.is-area{align-items:stretch}
+.ff-counter{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;color:#999;pointer-events:none}
+.ff-box.is-area .ff-counter{top:auto;bottom:8px;transform:none}
+.ff-box.is-disabled .ff-counter{color:#B7BCC2}
+.ff-select{background:#fff;border:1px solid #EFEFF1;border-radius:12px;box-sizing:border-box}
+.ff-select.is-disabled{background:#E7E9EC;border-color:#DDE0E3;cursor:not-allowed}
+.ff-select.is-disabled *{color:#9AA0A6!important}
+.ff-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;border:1px dashed #E5E5E5;border-radius:12px;box-sizing:border-box}
+.ff-bare{position:relative;display:block}
+.ff-box.mini{min-height:36px;border-radius:10px}
 .login-code-btn{border:none;min-width:7.25rem;min-height:48px;background:#F0F1F3;color:#9CA3AF;border-radius:12px;transition:background .15s,color .15s}
 .login-code-btn.is-cd{background:#F5F6F8;color:#6B6B6B}
 .login-code-btn:disabled,.login-code-btn.is-off{background:#F0F1F3;color:#9CA3AF;cursor:not-allowed}
@@ -1447,10 +1474,10 @@ body.host-single-m #root-user{display:none}
     <page :open="profileSub==='nickname'" :z="512" :swipe-close="navBack" oid="nickname-page">
       <nav-bar title="修改昵称" border-color="#E5E5E5" @back="navBack()"><template #right><span data-cp :class="['text-sm font-medium whitespace-nowrap transition-colors',nickValid?'text-[#2F6FEB] cursor-pointer active:opacity-70':'text-[#C8C8C8] cursor-not-allowed']" data-od-id="nickname-save" @click="saveNickname">保存</span></template></nav-bar>
       <div class="flex-1 overflow-y-auto px-4 pt-3 pb-10">
-        <div class="bg-white rounded-xl px-4 h-[56px] flex items-center gap-2">
-          <input v-model="nickDraft" type="text" maxlength="20" placeholder="请输入昵称" class="flex-1 min-w-0 h-full text-[16px] bg-transparent outline-none border-none" style="color:#111">
-          <span v-if="nickDraft" data-cp data-od-id="nickname-clear" @click="nickDraft=''" class="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0" style="background:#C9C9C9"><span v-html="luci('x','w-3 h-3 text-white')"></span></span>
-        </div>
+        <form-field>
+          <input v-model="nickDraft" type="text" maxlength="20" placeholder="请输入昵称" class="flex-1 min-w-0 px-3.5 py-3.5 text-[15px] bg-transparent outline-none border-none" style="color:#111">
+          <span v-if="nickDraft" data-cp data-od-id="nickname-clear" @click="nickDraft=''" class="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0 mr-3.5" style="background:#C9C9C9"><span v-html="luci('x','w-3 h-3 text-white')"></span></span>
+        </form-field>
         <div class="text-[12px] text-[#999] px-1 mt-3">支持输入2-20个字符，不限中文、数字、字母、符号</div>
       </div>
     </page>
@@ -1458,10 +1485,10 @@ body.host-single-m #root-user{display:none}
     <page :open="profileSub==='account'" :z="512" :swipe-close="navBack" oid="account-page">
       <nav-bar title="修改账号" border-color="#E5E5E5" @back="navBack()"><template #right><span data-cp :class="['text-sm font-medium whitespace-nowrap transition-colors',accValid?'text-[#2F6FEB] cursor-pointer active:opacity-70':'text-[#C8C8C8] cursor-not-allowed']" data-od-id="account-save" @click="saveAccount">保存</span></template></nav-bar>
       <div class="flex-1 overflow-y-auto px-4 pt-3 pb-10">
-        <div class="bg-white rounded-xl px-4 h-[56px] flex items-center gap-2">
-          <input v-model="accDraft" type="text" maxlength="20" placeholder="请输入账号" class="flex-1 min-w-0 h-full text-[16px] bg-transparent outline-none border-none" style="color:#111">
-          <span v-if="accDraft" data-cp data-od-id="account-clear" @click="accDraft=''" class="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0" style="background:#C9C9C9"><span v-html="luci('x','w-3 h-3 text-white')"></span></span>
-        </div>
+        <form-field>
+          <input v-model="accDraft" type="text" maxlength="20" placeholder="请输入账号" class="flex-1 min-w-0 px-3.5 py-3.5 text-[15px] bg-transparent outline-none border-none" style="color:#111">
+          <span v-if="accDraft" data-cp data-od-id="account-clear" @click="accDraft=''" class="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0 mr-3.5" style="background:#C9C9C9"><span v-html="luci('x','w-3 h-3 text-white')"></span></span>
+        </form-field>
         <div class="text-[12px] text-[#999] px-1 mt-3">必须字母开头，仅支持字母、数字、下划线，长度4～20位</div>
       </div>
     </page>
@@ -1469,7 +1496,7 @@ body.host-single-m #root-user{display:none}
     <page :open="profileSub==='pwdVerify'" :z="600" oid="pwd-verify-page" data-page-node-id="2ixsY07cJpsL40uwV6QN4r">
       <nav-bar title="修改密码" border-color="#E5E5E5" data-page-node-id="V1oow5qU3y8UIIE6OU0xM9" @back="navBack()"></nav-bar>
       <div class="px-4 pt-4 flex-1 overflow-y-auto flex flex-col" data-page-node-id="J9QvAS7Z8mBasnTc4dMs5f">
-        <div class="form-card" data-page-node-id="nH75xwLhVIiA6Rhv6x6ISh">
+        <div class="form-plain" data-page-node-id="nH75xwLhVIiA6Rhv6x6ISh">
         <template v-if="pwdChannel==='phone'" data-page-node-id="tPWfcpLBRzII9fTtZB7d33">
           <div class="form-row" data-page-node-id="gX2kq0i3xXrKHPh83CQBZi">
             <div class="form-label" data-page-node-id="7cpAyvAI6kfCqGNGWbSvNC">手机号</div>
@@ -1482,16 +1509,15 @@ body.host-single-m #root-user{display:none}
             <div class="text-[15px] font-medium text-[#222] py-1" data-od-id="pwd-email-readonly" data-page-node-id="GmlwSqBA7anEkFZOHMyk1W">{{ boundEmail }}</div>
           </div>
         </template>
-        <div class="form-row" data-page-node-id="Ymyvw0HOQ9OckI6jFvyXgA">
-          <div class="form-label" data-page-node-id="wTzrjC4raLK3pjMD8YkNIN">验证码</div>
+        <form-field label="验证码" bare>
           <div class="flex items-stretch gap-2.5" data-page-node-id="GfYmO5nkAQHw4LAZQDoLVp">
-            <div class="login-field flex-1 relative flex items-center min-w-0" data-page-node-id="shB0h6YIcxwGxoQxLk3ldE">
+            <div class="ff-box flex-1 relative flex items-center min-w-0" data-page-node-id="shB0h6YIcxwGxoQxLk3ldE">
               <input type="tel" inputmode="numeric" maxlength="6" v-model="pwdCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="pwdCode=pwdCode.replace(/\D/g,'').slice(0,6)" data-page-node-id="CBc83eeQDIM774n02ObJH5">
               <div v-if="pwdCode" data-cp @click="pwdCode=''" class="login-clear absolute right-2.5" data-page-node-id="RCyqQlh8RgmVH0QuY1NjZO"><span v-html="luci('x','w-3 h-3 text-[#666]')" data-page-node-id="eaH8Mpc2kaslcj2QrJvnoH"></span></div>
             </div>
             <button type="button" data-cp @click="sendPwdCode(pwdChannel)" :disabled="pwdCd>0||(pwdChannel==='phone'?!hasPhone:!hasEmail)" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="pwdCd>0?'is-cd':((pwdChannel==='phone'?hasPhone:hasEmail)?'is-on':'is-off')">{{ pwdCd>0?('重新获取 ('+pwdCd+'s)'):'获取验证码' }}</button>
           </div>
-        </div>
+        </form-field>
         <div class="form-actions" data-page-node-id="I1tYXrBcKgCDr4KXB2uEkp">
         <button type="button" class="login-submit" :class="pwdCode?'is-on':'is-off'" :disabled="!pwdCode" data-cp @click="nextPwdVerify" data-page-node-id="wdFuUDvuztdHfoV9MDWQq8">下一步</button>
         </div>
@@ -1940,27 +1966,21 @@ body.host-single-m #root-user{display:none}
    <page :open="profileSub==='pwdReset'" :z="600" oid="pwd-reset-page" data-page-node-id="YZYMeEaPVzGYe01lgkO8aj">
      <nav-bar title="重置密码" border-color="#E5E5E5" data-page-node-id="uN5V3aUyA1s8Ies2iKoBJ3" @back="navBack()"></nav-bar>
      <div class="px-4 pt-4 flex-1 overflow-y-auto" data-page-node-id="R2G08FOiNKRHjAcSdLpDgV">
-       <div class="form-card" data-page-node-id="4Deqw8BxDHcjzfHetNGVbQ">
-       <div class="form-row" data-page-node-id="IyDAzG1ccZsCBVV7tAHspk">
-         <div class="form-label" data-page-node-id="gpwzUYNslsOgC7QCVDMIcK">新密码</div>
-         <div class="login-field relative flex items-center" data-page-node-id="sneCqN2sDTunImXmA1axB0">
-           <input :type="npwdVis?'text':'password'" v-model="npwd" placeholder="请输入 6–64 位新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64" data-page-node-id="m0gs0REQGawBoqV8Z0IAVs">
-           <div class="absolute right-2.5 flex items-center gap-1" data-page-node-id="cu23NbeSinh5HhP8Wzdg6V">
-             <div v-if="npwd" data-cp @click="npwd=''" class="login-clear" data-page-node-id="XQM2C4NUrjELJwQyjDr1vE"><span v-html="luci('x','w-3 h-3 text-[#666]')" data-page-node-id="fFDpx9OtNShYK5tajKAXyD"></span></div>
-             <div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-page-node-id="jhFNtbg6b71CbPhZnn1Nkz"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')" data-page-node-id="DXENGlpXLrgASoNPYWDHST"></span></div>
-           </div>
+       <div class="form-plain" data-page-node-id="4Deqw8BxDHcjzfHetNGVbQ">
+       <form-field label="新密码">
+         <input :type="npwdVis?'text':'password'" v-model="npwd" placeholder="请输入 6–64 位新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64" data-page-node-id="m0gs0REQGawBoqV8Z0IAVs">
+         <div class="absolute right-2.5 flex items-center gap-1" data-page-node-id="cu23NbeSinh5HhP8Wzdg6V">
+           <div v-if="npwd" data-cp @click="npwd=''" class="login-clear" data-page-node-id="XQM2C4NUrjELJwQyjDr1vE"><span v-html="luci('x','w-3 h-3 text-[#666]')" data-page-node-id="fFDpx9OtNShYK5tajKAXyD"></span></div>
+           <div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-page-node-id="jhFNtbg6b71CbPhZnn1Nkz"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')" data-page-node-id="DXENGlpXLrgASoNPYWDHST"></span></div>
          </div>
-       </div>
-       <div class="form-row" data-page-node-id="vdR5An01Brzqxj5B9XIo70">
-         <div class="form-label" data-page-node-id="GAd6ekIVFZ1K0D6jraRyjJ">确认新密码</div>
-         <div class="login-field relative flex items-center" data-page-node-id="IxEetMrslcXyfFRuNn5C5u">
-           <input :type="npwd2Vis?'text':'password'" v-model="npwd2" placeholder="请再次输入新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64" data-page-node-id="pKDa7ZevjJ9qWrIGVfJXsv">
-           <div class="absolute right-2.5 flex items-center gap-1" data-page-node-id="CghFCPKKqDiuWEglHyGf77">
-             <div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear" data-page-node-id="OOrU2nGWoBUgMrCsrRncDh"><span v-html="luci('x','w-3 h-3 text-[#666]')" data-page-node-id="VSRqg8Q4BtoLR1yTNKDUTk"></span></div>
-             <div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-page-node-id="N5MIdf8oQkXvCIHBxKrYLG"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')" data-page-node-id="GxGZbHdwaAEfmJiOEJEmWP"></span></div>
-           </div>
+       </form-field>
+       <form-field label="确认新密码">
+         <input :type="npwd2Vis?'text':'password'" v-model="npwd2" placeholder="请再次输入新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64" data-page-node-id="pKDa7ZevjJ9qWrIGVfJXsv">
+         <div class="absolute right-2.5 flex items-center gap-1" data-page-node-id="CghFCPKKqDiuWEglHyGf77">
+           <div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear" data-page-node-id="OOrU2nGWoBUgMrCsrRncDh"><span v-html="luci('x','w-3 h-3 text-[#666]')" data-page-node-id="VSRqg8Q4BtoLR1yTNKDUTk"></span></div>
+           <div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-page-node-id="N5MIdf8oQkXvCIHBxKrYLG"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')" data-page-node-id="GxGZbHdwaAEfmJiOEJEmWP"></span></div>
          </div>
-       </div>
+       </form-field>
        <div class="form-actions" data-page-node-id="0liZ8OmfAeEzM6a5XwMfJQ">
        <button type="button" class="login-submit" :class="canConfirmPwd?'is-on':'is-off'" :disabled="!canConfirmPwd" data-cp @click="doResetPwd" data-page-node-id="ryBh7eZuaOdrNCbycW062F">确认</button>
        </div>
@@ -1972,30 +1992,28 @@ body.host-single-m #root-user{display:none}
      <nav-bar title="绑定手机号" border-color="#E5E5E5" data-page-node-id="2NxJ8ddRS1DwB9cWtPPa7H" @back="navBack()"></nav-bar>
      <div v-if="hasPhone" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0" data-page-node-id="fiDB30Y8Uc5NaKuZQ422mu">当前已绑定：{{ boundPhone }}</div>
      <div class="px-4 pt-4 flex-1 overflow-y-auto" data-page-node-id="lnLkc9QTiVCizfFhpQiQdR">
-       <div class="form-card" data-page-node-id="3GaYnSU738REPpAuaJ1LFn">
-       <div class="form-row" data-page-node-id="S3hP6eXK1YOaIL6xN8M7Ud">
-         <div class="form-label" data-page-node-id="Ti6MOEAGCorrlsnS1AHUCA">手机号</div>
+       <div class="form-plain" data-page-node-id="3GaYnSU738REPpAuaJ1LFn">
+       <form-field label="手机号" bare>
          <div class="flex items-stretch gap-2.5" data-page-node-id="NvmHHXNEvDv7HbS4qRvz9u">
-           <div data-cp @click="openDialCode('bind')" class="login-field login-field-dial flex items-center justify-center" data-od-id="bind-dial-trigger" data-page-node-id="KXNFjXJrQx3N8rRCrVuL5X">
+           <div data-cp @click="openDialCode('bind')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="bind-dial-trigger" data-page-node-id="KXNFjXJrQx3N8rRCrVuL5X">
              <span class="text-[15px] font-semibold tabular-nums text-[#111]" data-page-node-id="KFd1YAAGVQDBCts46I5CZf">{{ bpArea }}</span>
              <span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')" data-page-node-id="1YSVvTbxdFToAs8WgSOW1l"></span>
            </div>
-           <div class="login-field flex-1 relative flex items-center min-w-0" data-page-node-id="8j1VdbfaxAgvfXtiGBZ5os">
+           <div class="ff-box flex-1 relative flex items-center min-w-0" data-page-node-id="8j1VdbfaxAgvfXtiGBZ5os">
              <input type="tel" v-model="bpPhone" placeholder="请输入手机号" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" data-page-node-id="B0InvrIHaQTFCbYpI1yJGD">
              <div v-if="bpPhone" data-cp @click="bpPhone=''" class="login-clear absolute right-2.5" data-page-node-id="P9TeqsppjMrgoddjT368pY"><span v-html="luci('x','w-3 h-3 text-[#666]')" data-page-node-id="wSfCT9KMXIQjQaokB9Cpyp"></span></div>
            </div>
          </div>
-       </div>
-       <div class="form-row" data-page-node-id="5xeaEqzi8NIBBc30j3dTTv">
-         <div class="form-label" data-page-node-id="PJl0BBBGl9BGd8nEuynDzc">验证码</div>
+       </form-field>
+       <form-field label="验证码" bare>
          <div class="flex items-stretch gap-2.5" data-page-node-id="IVFbA2J0idLHXu6MmRVJI2">
-           <div class="login-field flex-1 relative flex items-center min-w-0" data-page-node-id="lrMIdDsAXdAYkisK1D4x6t">
+           <div class="ff-box flex-1 relative flex items-center min-w-0" data-page-node-id="lrMIdDsAXdAYkisK1D4x6t">
              <input type="tel" inputmode="numeric" maxlength="6" v-model="bpCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="bpCode=bpCode.replace(/\D/g,'').slice(0,6)" data-page-node-id="jBsKT8awZnuEsn0D2xrPkB">
              <div v-if="bpCode" data-cp @click="bpCode=''" class="login-clear absolute right-2.5" data-page-node-id="ilveENo5ffkiE6Wbvxd11z"><span v-html="luci('x','w-3 h-3 text-[#666]')" data-page-node-id="yCk6giknP8Ekrk9aqZ4mQL"></span></div>
            </div>
            <button type="button" data-cp @click="sendBpCode" :disabled="!bpPhone||bpCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="bpCd>0?'is-cd':(bpPhone?'is-on':'is-off')">{{ bpCd>0?('重新获取 ('+bpCd+'s)'):'获取验证码' }}</button>
          </div>
-       </div>
+       </form-field>
        <div class="form-actions" data-page-node-id="MSWdrYJ2Mw7ualcXbxcxCs">
        <button type="button" class="login-submit" :class="(bpPhone&& bpCode)?'is-on':'is-off'" :disabled="!bpPhone||!bpCode" data-cp @click="doBindPhone" data-page-node-id="UaWtB591S1GnfbYxXDsqLu">{{ hasPhone?'确认替换':'绑定' }}</button>
        </div>
@@ -2007,24 +2025,22 @@ body.host-single-m #root-user{display:none}
      <nav-bar title="绑定邮箱" border-color="#E5E5E5" data-page-node-id="KcLDB6ziqZV5Q8AfRFVHQR" @back="navBack()"></nav-bar>
      <div v-if="hasEmail" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0" data-page-node-id="Q5hRwEHvlKih9PT0VEH13d">当前已绑定：{{ boundEmail }}</div>
      <div class="px-4 pt-4 flex-1 overflow-y-auto" data-page-node-id="7GMWcseyjThQAGn6Qag44x">
-       <div class="form-card" data-page-node-id="z2EEyQGU29IdrAldWvu16h">
-       <div class="form-row" data-page-node-id="0ZxIXfceryAwWrSXRYKVBJ">
-         <div class="form-label" data-page-node-id="fHwx5KvyK6pXHYxF54OWio">邮箱</div>
-         <div class="login-field relative flex items-center" data-page-node-id="nHP6zVRciYxBTusDqs3gmL">
+       <div class="form-plain" data-page-node-id="z2EEyQGU29IdrAldWvu16h">
+       <form-field label="邮箱" bare>
+         <div class="ff-box relative flex items-center" data-page-node-id="nHP6zVRciYxBTusDqs3gmL">
            <input type="email" v-model="beEmail" placeholder="请输入邮箱地址" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" data-page-node-id="qXs5RlsjILWnMHm5syCxpN">
            <div v-if="beEmail" data-cp @click="beEmail=''" class="login-clear absolute right-2.5" data-page-node-id="EyjCuwkHJ9QBBorj90ZoHZ"><span v-html="luci('x','w-3 h-3 text-[#666]')" data-page-node-id="jEDvUNvdLqSFFlOneJDw2f"></span></div>
          </div>
-       </div>
-       <div class="form-row" data-page-node-id="CklGxnfaOAPRDwdPgSduAb">
-         <div class="form-label" data-page-node-id="lHuYaUFX6UFkVnBEAFFWq4">验证码</div>
+       </form-field>
+       <form-field label="验证码" bare>
          <div class="flex items-stretch gap-2.5" data-page-node-id="AUDMzj1hSG29kUD8wNxEu9">
-           <div class="login-field flex-1 relative flex items-center min-w-0" data-page-node-id="l7xGLmNk1ltQDmdyWI2ymQ">
+           <div class="ff-box flex-1 relative flex items-center min-w-0" data-page-node-id="l7xGLmNk1ltQDmdyWI2ymQ">
              <input type="tel" inputmode="numeric" maxlength="6" v-model="beCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="beCode=beCode.replace(/\D/g,'').slice(0,6)" data-page-node-id="HlJ5CjHttZtoeoQOKqkAY1">
              <div v-if="beCode" data-cp @click="beCode=''" class="login-clear absolute right-2.5" data-page-node-id="OvG3pluFa4ZY8GHPwqiOTa"><span v-html="luci('x','w-3 h-3 text-[#666]')" data-page-node-id="gqAOXgSNZPIUtDva6j9B2a"></span></div>
            </div>
            <button type="button" data-cp @click="sendBeCode" :disabled="!beEmail||beCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="beCd>0?'is-cd':(beEmail?'is-on':'is-off')">{{ beCd>0?('重新获取 ('+beCd+'s)'):'获取验证码' }}</button>
          </div>
-       </div>
+       </form-field>
        <div class="form-actions" data-page-node-id="33ZoZ3ZNIkMWo9FdeBxoje">
        <button type="button" class="login-submit" :class="(beEmail&& beCode)?'is-on':'is-off'" :disabled="!beEmail||!beCode" data-cp @click="doBindEmail" data-page-node-id="gWy7pRBueT8j3hftP9X6Rv">{{ hasEmail?'确认替换':'绑定' }}</button>
        </div>
@@ -2155,44 +2171,29 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='idAdd'" :z="idSelectMode?1920:600" :swipe-close="navBack" oid="id-add-page" data-page-node-id="n4qStQsSHyCA6DlhKILZhk">
   <nav-bar :title="idEditingId?'编辑实名信息':'新增实名信息'" data-page-node-id="GFvAcOHUr8RYNJ5zsTOTuA" @back="navBack()"></nav-bar>
   <div class="flex-1 overflow-y-auto min-h-0 conf-scroll-hide px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch" data-page-node-id="bd5luBFcMdxpqNY0tICEry">
-    <div class="form-card" data-page-node-id="5F9HDsnMlIH57BNhLANiJt">
+    <div class="form-plain" data-page-node-id="5F9HDsnMlIH57BNhLANiJt">
 
       <!-- 姓名 -->
-      <div class="form-row" data-page-node-id="8YtQOs06yYE8V3EVkoni7h">
-        <div class="form-label" data-page-node-id="KfdB6Ub27EwfGF1QfAX2om"><span class="text-[#FF4343] mr-0.5" data-page-node-id="reqIdName">*</span>姓名</div>
-        <div class="login-field relative flex items-center" data-page-node-id="cs8h8yIJuQjt3PHaUeSX1D">
-          <input v-model="idName" @input="idNameErr=''" type="text" inputmode="text" maxlength="64" placeholder="请输入姓名" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="idNameErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-page-node-id="xIzlcXYy3pHKwb3tm1LEQK">
-          <span class="absolute right-2.5 text-[12px] text-[#999]" data-page-node-id="e7ntXxF8c6Oa08BnO3Kd2B">{{ idName ? idName.length : 0 }}/64</span>
-        </div>
-        <div v-if="idNameErr" class="form-hint" data-page-node-id="iLjrJ9nGFbUYVrxETofBYB">{{ idNameErr }}</div>
-      </div>
+      <form-field label="姓名" required :error="idNameErr" :counter="idName ? idName.length : 0" counter-max="64">
+        <input v-model="idName" @input="idNameErr=''" type="text" inputmode="text" maxlength="64" placeholder="请输入姓名" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" data-page-node-id="xIzlcXYy3pHKwb3tm1LEQK">
+      </form-field>
 
       <!-- 身份证 -->
-      <div class="form-row" data-page-node-id="MjerZbh4EYNDh0eP0PFJLU">
-        <div class="form-label" data-page-node-id="lPLKFEoeGNwvDWu7Cxk6YU"><span class="text-[#FF4343] mr-0.5" data-page-node-id="reqIdCard">*</span>身份证</div>
-        <div class="login-field relative flex items-center" data-page-node-id="yIIzicgMvEOVUh9h5dLNH5">
-          <input v-model="idCardNo" @input="idCardErr=''" type="text" inputmode="text" maxlength="64" placeholder="请输入证件号码" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="idCardErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-page-node-id="NIbUhg5ckEiXL5TR1SEnHb">
-          <span class="absolute right-2.5 text-[12px] text-[#999]" data-page-node-id="9B5v7OreVC8lPyUsaom9oo">{{ idCardNo ? idCardNo.length : 0 }}/64</span>
-        </div>
-        <div v-if="idCardErr" class="form-hint" data-page-node-id="4NExXkxUslCEqFZ78BqaYL">{{ idCardErr }}</div>
-      </div>
+      <form-field label="身份证" required :error="idCardErr" :counter="idCardNo ? idCardNo.length : 0" counter-max="64">
+        <input v-model="idCardNo" @input="idCardErr=''" type="text" inputmode="text" maxlength="64" placeholder="请输入证件号码" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" data-page-node-id="NIbUhg5ckEiXL5TR1SEnHb">
+      </form-field>
 
       <!-- 驾驶证 -->
-      <div class="form-row" data-page-node-id="cHGBgqHtSypmQA65JAlLta">
-        <div class="form-label" data-page-node-id="N3gelsQSmbvBVYYw024I8W"><span class="text-[#FF4343] mr-0.5" data-page-node-id="reqDriverNo">*</span>驾驶证</div>
-        <div class="login-field relative flex items-center" data-page-node-id="Ob5YW6o2SJKH4Lr6XgRNil">
-          <input v-model="driverNo" @input="driverErr=''" type="text" inputmode="text" maxlength="64" placeholder="请输入证件号码" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="driverErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-page-node-id="BsDPiXLF3Hv6Ho5x3Qgp7x">
-          <span class="absolute right-2.5 text-[12px] text-[#999]" data-page-node-id="f74cuujOMF2dkCVJbwLk6p">{{ driverNo ? driverNo.length : 0 }}/64</span>
-        </div>
-        <div v-if="driverErr" class="form-hint" data-page-node-id="nB6szQqfKnn4nGAcAMfPxr">{{ driverErr }}</div>
-      </div>
+      <form-field label="驾驶证" required :error="driverErr" :counter="driverNo ? driverNo.length : 0" counter-max="64">
+        <input v-model="driverNo" @input="driverErr=''" type="text" inputmode="text" maxlength="64" placeholder="请输入证件号码" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" data-page-node-id="BsDPiXLF3Hv6Ho5x3Qgp7x">
+      </form-field>
 
       <!-- 身份证照片 -->
       <div class="form-row" data-od-id="id-photo-group" data-page-node-id="hdeXFMVA9RcRF1hfVBybHG">
         <div class="form-label" data-page-node-id="TX3uk7W7DoCp1fjbLwTPPC"><span class="text-[#FF4343] mr-0.5" data-page-node-id="toRHMZxJnDhUdLoCFNFVwF">*</span>身份证照片</div>
         <div class="text-[11px] text-[#999] mb-2" data-page-node-id="zFL5jGyF5g9CJJSMUtpfDA">请上传清晰证件照，避免反光（最多2张）</div>
         <div class="grid grid-cols-2 gap-3" data-page-node-id="rhwlW7XDl7Z4GjHrYY1QIA">
-          <div v-for="i in 2" :key="'idp'+i" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" :style="idPhotos[i-1]?{}:{background:'#F6F7F9',border:'1.5px dashed #D9DEE7'}" data-cp @click="idPhotos[i-1]?openIdPreview('id',i-1):openIdPicker('id','add')" data-od-id="'id-photo-cell-'+i" data-page-node-id="GLtu5wPEkfj2hjmty1Tsxx">
+          <div v-for="i in 2" :key="'idp'+i" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" :style="idPhotos[i-1]?{}:{background:'#fff',border:'1.5px dashed #D9DEE7'}" data-cp @click="idPhotos[i-1]?openIdPreview('id',i-1):openIdPicker('id','add')" data-od-id="'id-photo-cell-'+i" data-page-node-id="GLtu5wPEkfj2hjmty1Tsxx">
             <template v-if="idPhotos[i-1]" data-page-node-id="C6kEIAlzocAwFkL6QdwDN5">
               <div class="absolute inset-0 flex items-center justify-center" :style="{background:'linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)'}" data-page-node-id="mkZrtaLcMdi9ANNlVzvIym">
                 <span v-html="luci('credit-card','w-8 h-8 text-white/80')" data-page-node-id="aq6RB895bCYtryeQdKFmzg"></span>
@@ -2215,7 +2216,7 @@ body.host-single-m #root-user{display:none}
         <div class="form-label" data-page-node-id="katGVczcNjoOBEGRy7otcd"><span class="text-[#FF4343] mr-0.5" data-page-node-id="snsqGjrm81N6kgECLm4voM">*</span>驾驶证照片</div>
         <div class="text-[11px] text-[#999] mb-2" data-page-node-id="mrKtmX8M8WoLeHAum3s6j3">请上传清晰证件照，避免反光（最多2张）</div>
         <div class="grid grid-cols-2 gap-3" data-page-node-id="dZBf1Pg6cvj5H7fTJRj0ng">
-          <div v-for="i in 2" :key="'drvp'+i" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" :style="driverPhotos[i-1]?{}:{background:'#F6F7F9',border:'1.5px dashed #D9DEE7'}" data-cp @click="driverPhotos[i-1]?openIdPreview('driver',i-1):openIdPicker('driver','add')" data-od-id="'driver-photo-cell-'+i" data-page-node-id="dGYA1BxV7UpGvweHk0HLGB">
+          <div v-for="i in 2" :key="'drvp'+i" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" :style="driverPhotos[i-1]?{}:{background:'#fff',border:'1.5px dashed #D9DEE7'}" data-cp @click="driverPhotos[i-1]?openIdPreview('driver',i-1):openIdPicker('driver','add')" data-od-id="'driver-photo-cell-'+i" data-page-node-id="dGYA1BxV7UpGvweHk0HLGB">
             <template v-if="driverPhotos[i-1]" data-page-node-id="5C3eSYPV50T4KYiABYHDIO">
               <div class="absolute inset-0 flex items-center justify-center" :style="{background:'linear-gradient(135deg,#17A34A 0%,#2F9E63 100%)'}" data-page-node-id="BcEZXhzzFBLgDy8ylCsHnw">
                 <span v-html="luci('file-text','w-8 h-8 text-white/80')" data-page-node-id="gFNIGJ0hQgEbVHlvLsvXKM"></span>
@@ -2445,14 +2446,14 @@ body.host-single-m #root-user{display:none}
 <div class="bg-white rounded-2xl p-4 mt-4" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-page-node-id="mPoz2FoY5Fpfl6R0YnrWF9">
 <div class="text-[14px] font-semibold text-[#111] mb-3" data-page-node-id="cRdAxDniaJBluNwB2ZMZG7">充值金额</div>
 <div class="grid grid-cols-2 gap-3" data-page-node-id="QlHSZEyFQMS5kvmooTePuC">
-<div v-for="(amt,i) in walletTopupAmounts" :key="i" data-cp @click="selectTopupAmount(amt)" class="py-3 rounded-xl text-center cursor-pointer" :style="topupAmount===amt?{background:'#EBF1FD',color:'#2B3F5F',border:'1.5px solid #2B3F5F'}:{background:'#F7F8FA',color:'#333',border:'1px solid #EBEDF0'}" data-page-node-id="7SP9AmIHXECyJ81Cx5Ehz2">
+<div v-for="(amt,i) in walletTopupAmounts" :key="i" data-cp @click="selectTopupAmount(amt)" class="py-3 rounded-xl text-center cursor-pointer" :style="topupAmount===amt?{background:'#EBF1FD',color:'#2B3F5F',border:'1.5px solid #2B3F5F'}:{background:'#fff',color:'#333',border:'1px solid #EBEDF0'}" data-page-node-id="7SP9AmIHXECyJ81Cx5Ehz2">
 <div class="text-[15px] font-semibold" data-page-node-id="vOAA4aPObcGtJPwjyje9BV">{{ fmtRp(amt,2) }}</div>
 <div v-if="walletTopupBonus[amt]" class="text-[10px] mt-0.5 font-medium" style="color:#FF6A00" data-page-node-id="XXHHyGP8dgqI1614NN0tmu">赠送 {{ fmtRp(walletTopupBonus[amt]) }}</div>
 </div>
 </div>
 <div class="mt-3" data-page-node-id="ehSGm00RqEgnlH4G2aCL3K" v-if="rechargeCustomFlag">
 <div class="text-[13px] text-[#666] mb-2" data-page-node-id="HSEW33n82dZ4PAFnG0bhLI">自定义金额</div>
-<div class="login-field flex items-center px-3" data-page-node-id="QVFzDxrGaNAGbrcb5jN7jh"><span class="text-[15px] text-[#999] mr-1 shrink-0" data-page-node-id="qD0wgIpIzYRcw4WP4dnQnP">Rp</span><input v-model="topupCustom" type="number" class="flex-1 text-[15px]" placeholder="请输入充值金额" style="height:44px" @input="onCustomAmountInput($event)" data-page-node-id="uAL5Mfwpz9tXXv37V1LwFF"></div>
+<div class="ff-box flex items-center px-3" data-page-node-id="QVFzDxrGaNAGbrcb5jN7jh"><span class="text-[15px] text-[#999] mr-1 shrink-0" data-page-node-id="qD0wgIpIzYRcw4WP4dnQnP">Rp</span><input v-model="topupCustom" type="number" class="flex-1 text-[15px]" placeholder="请输入充值金额" style="height:44px" @input="onCustomAmountInput($event)" data-page-node-id="uAL5Mfwpz9tXXv37V1LwFF"></div>
 </div>
 </div>
 <button data-cp @click="confirmTopup" class="h-12 w-full mt-4 rounded-xl text-white text-[15px] font-semibold cursor-pointer active:opacity-90 transition-opacity flex items-center justify-center" style="background:var(--accent)" data-page-node-id="HF6cAjqyz7nJppLVlJalwk" v-if="rechargeEnabledFlag">充值</button>
@@ -3471,16 +3472,19 @@ body.host-single-m #root-user{display:none}
 <page :open="vehOV==='edit'" :z="500" :swipe-close="()=>goBack()">
 <nav-bar title="编辑车辆" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-28 hide-scroll">
-<div class="form-card mb-3">
+<div class="form-plain mb-3">
 <div class="form-row"><div class="form-label">车架号</div><div class="text-[15px] font-semibold text-[#111] py-1">{{ dv.vin }}</div></div>
 <div class="form-row"><div class="form-label">状态</div><div class="text-[15px] font-semibold py-1" :style="{color:dv.online?'#17A34A':'#D97706'}">{{ dv.online?'在线':'离线' }} · {{ vehStatusLabel(dv.status) }}</div></div>
-<div class="form-row"><div class="form-label">车型</div>
-<div data-cp @click="vehShowModelSheet=true" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD">
+<form-field label="车型" box-class="ff-select">
+<div data-cp @click="vehShowModelSheet=true" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]">
 <div class="w-11 h-11 rounded-lg bg-white flex items-center justify-center mr-3 shrink-0" style="border:1px solid #E5E5E5"><span v-html="luci('bike','w-6 h-6 text-[var(--accent)]')"></span></div>
 <span class="flex-1 text-[15px]" :style="editModel?{color:'#111',fontWeight:500}:{color:'#999'}">{{ editModel||'选择型号' }}</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
-</div></div>
-<div class="form-row" v-if="editSelectedProtocol==='TCP'"><div class="form-label">中控编号</div><div class="login-field relative flex items-center"><input v-model="editCtrl" type="text" maxlength="20" :placeholder="'请输入中控编号'" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]"></div></div>
+</div>
+</form-field>
+<form-field v-if="editSelectedProtocol==='TCP'" label="中控编号">
+<input v-model="editCtrl" type="text" maxlength="20" :placeholder="'请输入中控编号'" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]">
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5">
@@ -3492,15 +3496,21 @@ body.host-single-m #root-user{display:none}
 <page :open="vehOV==='add'" :z="500" :swipe-close="()=>{vehOV=null;addModel='';addVin='';addCtrl=''}">
 <nav-bar title="新增车辆" border-color="#E5E5E5" @back="goBack();vehOV=null;addModel='';addVin='';addCtrl=''"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-28 hide-scroll">
-<div class="form-card">
-<div class="form-row"><div class="form-label">车型</div>
-<div data-cp @click="vehShowModelSheet=true" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD">
+<div class="form-plain">
+<form-field label="车型" box-class="ff-select">
+<div data-cp @click="vehShowModelSheet=true" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]">
 <div class="w-11 h-11 rounded-lg bg-white flex items-center justify-center mr-3 shrink-0" style="border:1px solid #E5E5E5"><span v-html="luci('bike','w-6 h-6 text-[var(--accent)]')"></span></div>
 <span class="flex-1 text-[15px]" :style="addModel?{color:'#111',fontWeight:500}:{color:'#999'}">{{ addModel||'选择型号' }}</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
-</div></div>
-<div class="form-row"><div class="form-label">车架号</div><div class="login-field relative flex items-center" :style="!addModel?{opacity:0.5,pointerEvents:'none'}:null"><input v-model="addVin" type="text" :placeholder="'请输入车架号'" :disabled="!addModel" class="flex-1 min-w-0 pl-3.5 pr-2 py-3.5 text-[15px]"><button data-cp @click="scanVin" type="button" class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mr-1.5 cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button></div></div>
-<div class="form-row" v-if="selectedProtocol==='TCP'"><div class="form-label">中控编号</div><div class="login-field relative flex items-center" :style="!addModel?{opacity:0.5,pointerEvents:'none'}:null"><input v-model="addCtrl" type="text" maxlength="20" :placeholder="'请输入中控编号'" :disabled="!addModel" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]"></div></div>
+</div>
+</form-field>
+<form-field label="车架号" :disabled="!addModel">
+<input v-model="addVin" type="text" :placeholder="'请输入车架号'" :disabled="!addModel" class="flex-1 min-w-0 pl-3.5 pr-2 py-3.5 text-[15px]">
+<button data-cp @click="scanVin" type="button" class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mr-1.5 cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button>
+</form-field>
+<form-field v-if="selectedProtocol==='TCP'" label="中控编号" :disabled="!addModel">
+<input v-model="addCtrl" type="text" maxlength="20" :placeholder="'请输入中控编号'" :disabled="!addModel" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]">
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5">
@@ -3578,7 +3588,7 @@ body.host-single-m #root-user{display:none}
 <!-- ═══ MANUAL INPUT SHEET ═══ -->
 <bottom-sheet :open="showManualInput" :title="scanTarget==='battNo'?'输入电池编号':'输入车辆编号'" :mask-z="1891" @close="showManualInput=false"><div class="px-5 pb-2">
 <div class="text-[12px] text-[#999] text-center mb-4">{{ scanTarget==='battNo'?'请输入电池铭牌上的电池编号':'请输入车辆铭牌上的车架号' }}</div>
-<div class="login-field relative"><input v-model="manualVin" type="text" maxlength="32" :placeholder="scanTarget==='battNo'?'请输入电池编号':'请输入车架号'" class="w-full pl-4 pr-3 py-3.5 text-[15px]"></div>
+<div class="ff-box relative"><input v-model="manualVin" type="text" maxlength="32" :placeholder="scanTarget==='battNo'?'请输入电池编号':'请输入车架号'" class="w-full pl-4 pr-3 py-3.5 text-[15px]"></div>
 <div class="flex gap-3 mt-4">
 <div data-cp @click="showManualInput=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;background:#fff">取消</div>
 <div data-cp @click="confirmManualVin" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer active:opacity-90" style="background:var(--accent)">确认</div>
@@ -3778,15 +3788,16 @@ body.host-single-m #root-user{display:none}
 <page :open="ordersOV==='battEdit'" :z="500" :swipe-close="()=>goBack()" oid="battery-edit-page">
 <nav-bar title="编辑电池" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-28 hide-scroll">
-<div class="form-card mb-3">
+<div class="form-plain mb-3">
 <div class="form-row"><div class="form-label">电池编号</div><div class="text-[15px] font-semibold text-[#111] py-1">{{ curBatt.battNo }}</div></div>
 <div class="form-row"><div class="form-label">状态</div><div class="text-[15px] font-semibold py-1" :style="{color:curBatt.online?'#17A34A':'#D97706'}">{{ curBatt.online?'在线':'离线' }} · {{ curBatt.status }}</div></div>
-<div class="form-row"><div class="form-label">电池型号</div>
-<div data-cp @click="battShowModelSheet=true" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD">
+<form-field label="电池型号" box-class="ff-select">
+<div data-cp @click="battShowModelSheet=true" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]">
 <div class="w-11 h-11 rounded-lg bg-white flex items-center justify-center mr-3 shrink-0" style="border:1px solid #E5E5E5"><span v-html="luci('battery-charging','w-6 h-6 text-[var(--accent)]')"></span></div>
 <span class="flex-1 text-[15px]" :style="battEditModel?{color:'#111',fontWeight:500}:{color:'#999'}">{{ battEditModel||'选择电池型号' }}</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
-</div></div>
+</div>
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5">
@@ -3949,14 +3960,18 @@ body.host-single-m #root-user{display:none}
 <page :open="ordersOV==='battAdd'" :z="500" :swipe-close="closeBattAdd" oid="battery-add-page">
 <nav-bar :title="'新增电池'" border-color="#E5E5E5" @back="closeBattAdd"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-28 hide-scroll">
-<div class="form-card">
-<div class="form-row"><div class="form-label">{{ '电池型号' }}</div>
-<div data-cp @click="battShowModelSheet=true" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD">
+<div class="form-plain">
+<form-field label="电池型号" box-class="ff-select">
+<div data-cp @click="battShowModelSheet=true" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]">
 <div class="w-11 h-11 rounded-lg bg-white flex items-center justify-center mr-3 shrink-0" style="border:1px solid #E5E5E5"><span v-html="luci('battery-charging','w-6 h-6 text-[var(--accent)]')"></span></div>
 <span class="flex-1 text-[15px]" :style="battAddModel?{color:'#111',fontWeight:500}:{color:'#999'}">{{ battAddModel||'选择电池型号' }}</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
-</div></div>
-<div class="form-row"><div class="form-label">{{ '电池编号' }}</div><div class="login-field relative flex items-center" :style="!battAddModel?{opacity:0.5,pointerEvents:'none'}:null"><input v-model="battAddNo" type="text" maxlength="64" :placeholder="'请输入电池编号'" :disabled="!battAddModel" class="flex-1 min-w-0 pl-3.5 pr-2 py-3.5 text-[15px]"><button data-cp @click="scanBattNo" type="button" class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mr-1.5 cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button></div></div>
+</div>
+</form-field>
+<form-field label="电池编号" :disabled="!battAddModel">
+<input v-model="battAddNo" type="text" maxlength="64" :placeholder="'请输入电池编号'" :disabled="!battAddModel" class="flex-1 min-w-0 pl-3.5 pr-2 py-3.5 text-[15px]">
+<button data-cp @click="scanBattNo" type="button" class="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mr-1.5 cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button>
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5">
@@ -4282,6 +4297,10 @@ body.host-single-m #root-user{display:none}
 <div class="text-[13px] text-[#999] mb-1">赠送金额</div>
 <div class="flex items-center rounded-xl px-3.5 py-3" style="background:#F6F7F9;border:1px solid #E5E5E5"><span class="text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="roRefundForm.giftAmount" type="number" min="0" step="0.01" placeholder="0" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2"></div>
 <div class="text-[12px] text-[#999] mt-1">可退 {{ fmtRp(curRechargeOrder.giftAmount) }}</div>
+</div>
+<div class="mb-3">
+<div class="text-[13px] text-[#999] mb-1">退款原因</div>
+<div class="relative"><textarea v-model="roRefundForm.reason" maxlength="255" placeholder="请输入退款原因" class="w-full p-4 pb-8 rounded-xl text-[15px] outline-none resize-none min-h-[90px] placeholder:text-[#999]" style="background:#F6F7F9;border:1px solid #E5E5E5;font-family:inherit"></textarea><div class="absolute right-3 bottom-2 text-[12px] text-[#999] pointer-events-none">{{ (roRefundForm.reason||'').length }}/255</div></div>
 </div>
 <div class="mt-2">
 <button data-cp @click="roSubmitRefund" class="w-full py-3.5 rounded-xl text-[15px] font-semibold text-white border-none cursor-pointer" style="background:var(--accent)">确认</button>
@@ -4662,7 +4681,7 @@ body.host-single-m #root-user{display:none}
     <page :open="profileSub==='pwdVerify'" :z="600" oid="pwd-verify-page">
       <nav-bar title="修改密码" border-color="#E5E5E5" @back="goBack"></nav-bar>
       <div class="px-4 pt-4 flex-1 overflow-y-auto flex flex-col">
-        <div class="form-card">
+        <div class="form-plain">
         <template v-if="pwdChannel==='phone'">
           <div class="form-row">
             <div class="form-label">手机号</div>
@@ -4675,16 +4694,15 @@ body.host-single-m #root-user{display:none}
             <div class="text-[15px] font-medium text-[#222] py-1" data-od-id="pwd-email-readonly">{{ boundEmail }}</div>
           </div>
         </template>
-        <div class="form-row">
-          <div class="form-label">验证码</div>
+        <form-field label="验证码" bare>
           <div class="flex items-stretch gap-2.5">
-            <div class="login-field flex-1 relative flex items-center min-w-0">
+            <div class="ff-box flex-1 relative flex items-center min-w-0">
               <input type="tel" inputmode="numeric" maxlength="6" v-model="pwdCode" :placeholder="'请输入验证码'" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="pwdCode=pwdCode.replace(/\D/g,'').slice(0,6)">
               <div v-if="pwdCode" data-cp @click="pwdCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div>
             </div>
             <button type="button" data-cp @click="sendPwdCode(pwdChannel)" :disabled="pwdCd>0||(pwdChannel==='phone'?!hasPhone:!hasEmail)" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="pwdCd>0?'is-cd':((pwdChannel==='phone'?hasPhone:hasEmail)?'is-on':'is-off')">{{ pwdCd>0?'重新获取 (' + (pwdCd) + 's)':'获取验证码' }}</button>
           </div>
-        </div>
+        </form-field>
         <div class="form-actions">
         <button type="button" class="login-submit" :class="pwdCode?'is-on':'is-off'" :disabled="!pwdCode" data-cp @click="nextPwdVerify">下一步</button>
         </div>
@@ -4703,29 +4721,21 @@ body.host-single-m #root-user{display:none}
    <page :open="profileSub==='pwdReset'" :z="600" oid="pwd-reset-page">
      <nav-bar title="重置密码" border-color="#E5E5E5" @back="goBack"></nav-bar>
      <div class="px-4 pt-4 flex-1 overflow-y-auto">
-       <div class="form-card">
-       <div class="form-row">
-         <div class="form-label">新密码</div>
-         <div class="login-field relative flex items-center">
-           <input :type="npwdVis?'text':'password'" v-model="npwd" :placeholder="'请输入新密码'" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="32">
-           <div class="absolute right-2.5 flex items-center gap-1">
-             <div v-if="npwd" data-cp @click="npwd=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div>
-              <div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')"></span></div>
-            </div>
+       <div class="form-plain">
+       <form-field label="新密码" :error="pwdErr.npwd">
+         <input :type="npwdVis?'text':'password'" v-model="npwd" :placeholder="'请输入新密码'" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="32">
+         <div class="absolute right-2.5 flex items-center gap-1">
+           <div v-if="npwd" data-cp @click="npwd=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div>
+            <div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')"></span></div>
           </div>
-          <div v-if="pwdErr.npwd" class="form-hint text-[#DC2626]">{{ pwdErr.npwd }}</div>
-        </div>
-       <div class="form-row">
-         <div class="form-label">确认密码</div>
-         <div class="login-field relative flex items-center">
-           <input :type="npwd2Vis?'text':'password'" v-model="npwd2" :placeholder="'请再次输入密码'" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="32">
-           <div class="absolute right-2.5 flex items-center gap-1">
-             <div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div>
-              <div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')"></span></div>
-            </div>
+       </form-field>
+       <form-field label="确认密码" :error="pwdErr.npwd2">
+         <input :type="npwd2Vis?'text':'password'" v-model="npwd2" :placeholder="'请再次输入密码'" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="32">
+         <div class="absolute right-2.5 flex items-center gap-1">
+           <div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div>
+            <div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')"></span></div>
           </div>
-          <div v-if="pwdErr.npwd2" class="form-hint text-[#DC2626]">{{ pwdErr.npwd2 }}</div>
-        </div>
+       </form-field>
        <div class="form-actions">
        <button type="button" class="login-submit" :class="canConfirmPwd?'is-on':'is-off'" :disabled="!canConfirmPwd" data-cp @click="doResetPwd">确认</button>
        </div>
@@ -4737,30 +4747,28 @@ body.host-single-m #root-user{display:none}
      <nav-bar title="绑定手机号" border-color="#E5E5E5" @back="goBack"></nav-bar>
      <div v-if="hasPhone" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">已绑定手机号{{ boundPhone }}</div>
      <div class="px-4 pt-4 flex-1 overflow-y-auto">
-       <div class="form-card">
-       <div class="form-row">
-         <div class="form-label">手机号</div>
+       <div class="form-plain">
+       <form-field label="手机号" bare>
          <div class="flex items-stretch gap-2.5">
-           <div data-cp @click="openDialCode('bind')" class="login-field login-field-dial flex items-center justify-center" data-od-id="bind-dial-trigger">
+           <div data-cp @click="openDialCode('bind')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="bind-dial-trigger">
              <span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ bpArea }}</span>
              <span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span>
            </div>
-           <div class="login-field flex-1 relative flex items-center min-w-0">
+           <div class="ff-box flex-1 relative flex items-center min-w-0">
              <input type="tel" v-model="bpPhone" :placeholder="'请输入手机号'" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]">
              <div v-if="bpPhone" data-cp @click="bpPhone=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div>
            </div>
          </div>
-       </div>
-       <div class="form-row">
-         <div class="form-label">验证码</div>
+       </form-field>
+       <form-field label="验证码" bare>
          <div class="flex items-stretch gap-2.5">
-           <div class="login-field flex-1 relative flex items-center min-w-0">
+           <div class="ff-box flex-1 relative flex items-center min-w-0">
              <input type="tel" inputmode="numeric" maxlength="6" v-model="bpCode" :placeholder="'请输入验证码'" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="bpCode=bpCode.replace(/\D/g,'').slice(0,6)">
              <div v-if="bpCode" data-cp @click="bpCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div>
            </div>
            <button type="button" data-cp @click="sendBpCode" :disabled="!bpPhone||bpCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="bpCd>0?'is-cd':(bpPhone?'is-on':'is-off')">{{ bpCd>0?'重新获取 (' + (bpCd) + 's)':'获取验证码' }}</button>
          </div>
-       </div>
+       </form-field>
        <div class="form-actions">
        <button type="button" class="login-submit" :class="(bpPhone&&bpCode)?'is-on':'is-off'" :disabled="!bpPhone||!bpCode" data-cp @click="doBindPhone">{{ hasPhone?'确认替换':'绑定' }}</button>
        </div>
@@ -4772,24 +4780,22 @@ body.host-single-m #root-user{display:none}
      <nav-bar title="绑定邮箱" border-color="#E5E5E5" @back="goBack"></nav-bar>
      <div v-if="hasEmail" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">已绑定邮箱{{ boundEmail }}</div>
      <div class="px-4 pt-4 flex-1 overflow-y-auto">
-       <div class="form-card">
-       <div class="form-row">
-         <div class="form-label">邮箱</div>
-         <div class="login-field relative flex items-center">
+       <div class="form-plain">
+       <form-field label="邮箱" bare>
+         <div class="ff-box relative flex items-center">
            <input type="email" v-model="beEmail" :placeholder="'请输入邮箱'" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]">
            <div v-if="beEmail" data-cp @click="beEmail=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div>
          </div>
-       </div>
-       <div class="form-row">
-         <div class="form-label">验证码</div>
+       </form-field>
+       <form-field label="验证码" bare>
          <div class="flex items-stretch gap-2.5">
-           <div class="login-field flex-1 relative flex items-center min-w-0">
+           <div class="ff-box flex-1 relative flex items-center min-w-0">
              <input type="tel" inputmode="numeric" maxlength="6" v-model="beCode" :placeholder="'请输入验证码'" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="beCode=beCode.replace(/\D/g,'').slice(0,6)">
              <div v-if="beCode" data-cp @click="beCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div>
            </div>
            <button type="button" data-cp @click="sendBeCode" :disabled="!beEmail||beCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="beCd>0?'is-cd':(beEmail?'is-on':'is-off')">{{ beCd>0?'重新获取 (' + (beCd) + 's)':'获取验证码' }}</button>
          </div>
-       </div>
+       </form-field>
        <div class="form-actions">
        <button type="button" class="login-submit" :class="(beEmail&&beCode)?'is-on':'is-off'" :disabled="!beEmail||!beCode" data-cp @click="doBindEmail">{{ hasEmail?'确认替换':'绑定' }}</button>
        </div>
@@ -4812,10 +4818,13 @@ body.host-single-m #root-user{display:none}
 
 <page :open="profileOV==='model'" :z="500" :swipe-close="()=>goBack()">
 <nav-bar title="车型管理" border-color="#E5E5E5" @back="goBack"></nav-bar>
-<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
-<div class="rounded-full flex items-center gap-1.5 mb-3" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px;height:46px">
+<!-- 筛选条件（通栏白底） -->
+<div class="bg-white shrink-0 px-5 pt-3 pb-2">
+<div class="rounded-full flex items-center gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px;height:46px">
 <span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span><input v-model="mQ" :placeholder="'搜索车型名称'" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
+</div>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
 <transition-group v-if="mFilter.length" name="item">
 <div v-for="(m,i) in mFilter" :key="m.name" class="bg-white rounded-xl mb-2.5 overflow-hidden" :style="{border:'1px solid #E5E5E5',boxShadow:'0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)',transitionDelay:i*50+'ms'}">
 <div class="p-4">
@@ -4843,10 +4852,13 @@ body.host-single-m #root-user{display:none}
 
 <page :open="profileOV==='battModel'" :z="500" :swipe-close="()=>goBack()">
 <nav-bar title="电池型号管理" border-color="#E5E5E5" @back="goBack"></nav-bar>
-<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
-<div class="rounded-full flex items-center gap-1.5 mb-3" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px;height:46px">
+<!-- 筛选条件（通栏白底） -->
+<div class="bg-white shrink-0 px-5 pt-3 pb-2">
+<div class="rounded-full flex items-center gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px;height:46px">
 <span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span><input v-model="bmQ" :placeholder="'搜索电池型号名称'" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
+</div>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
 <transition-group v-if="bmFilter.length" name="item">
 <div v-for="(m,i) in bmFilter" :key="m.name" class="bg-white rounded-xl mb-2.5 overflow-hidden" :style="{border:'1px solid #E5E5E5',boxShadow:'0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)',transitionDelay:i*50+'ms'}">
 <div class="p-4">
@@ -4874,10 +4886,13 @@ body.host-single-m #root-user{display:none}
 
 <page :open="profileOV==='package'" :z="500" :swipe-close="()=>goBack()">
 <nav-bar title="套餐管理" border-color="#E5E5E5" @back="goBack"><template #right><span v-if="can('package.add')" class="text-sm font-medium text-[var(--link)] cursor-pointer shrink-0" data-cp @click="openPackageAdd">新增</span></template></nav-bar>
-<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
-<div class="rounded-full flex items-center gap-1.5 mb-3" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px;height:46px">
+<!-- 筛选条件（通栏白底） -->
+<div class="bg-white shrink-0 px-5 pt-3 pb-2">
+<div class="rounded-full flex items-center gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px;height:46px">
 <span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span><input v-model="pkgQ" :placeholder="'搜索套餐名称'" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
+</div>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
 <transition-group v-if="pkgFilter.length" name="item">
 <div v-for="(m,i) in pkgFilter" :key="m.name" class="bg-white rounded-xl mb-2.5 overflow-hidden" :style="{border:'1px solid #E5E5E5',boxShadow:'0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)',transitionDelay:i*50+'ms'}">
 <div class="p-4">
@@ -4905,13 +4920,22 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='mEdit'" :z="510" :swipe-close="()=>goBack()">
 <nav-bar title="编辑车型" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-24 hid">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row"><div class="form-label">车型名称</div><div class="text-[15px] font-semibold text-[#111] py-1">{{ fm.name }}</div></div>
-<div class="form-row"><div class="form-label">租赁方案</div>
-<div class="flex flex-wrap gap-2"><div v-for="p in modelPlanOpts" :key="p.v" data-cp @click="fm.plans[p.v]=!fm.plans[p.v]" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fm.plans[p.v]?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid '+(fE[p.v]?'#DC2626':'#EBEDF0')}">{{ {planHour:'时租',planDay:'日租',planWeek:'周租',planMonth:'月租'}[p.l] }}</div></div></div>
-<template v-for="p in modelPlanOpts" :key="'pr-'+p.v"><div v-if="fm.plans[p.v]" class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>{{ {priceHour:'时租',priceDay:'日租',priceWeek:'周租',priceMonth:'月租'}[modelPriceKey[p.v]] }}</div><div class="login-field relative flex items-center" :style="fE[p.v]?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span><input v-model.number="fm[modelPriceKey[p.v]]" type="number" min="0" @input="vClr(p.v)" class="flex-1 bg-transparent border-none text-[15px] font-medium outline-none px-2 py-3.5 text-[#333]"></div><div v-if="fE[p.v]" class="form-hint text-[#DC2626]">{{ fE[p.v] }}</div></div></template>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>押金</div><div class="login-field relative flex items-center" :style="fE.deposit?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span><input v-model.number="fm.deposit" type="number" min="0" @input="vClr('deposit')" class="flex-1 bg-transparent border-none text-[15px] font-medium outline-none px-2 py-3.5"></div><div v-if="fE.deposit" class="form-hint text-[#DC2626]">{{ fE.deposit }}</div></div>
-<div class="form-row"><div class="form-label">排序</div><div class="login-field relative flex items-center"><input v-model.number="fm.sort" type="number" min="0" @input="vClr('sort')" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]"></div><div v-if="fE.sort" class="form-hint text-[#DC2626]">{{ fE.sort }}</div></div>
+<form-field label="租赁方案" bare>
+<div class="flex flex-wrap gap-2"><div v-for="p in modelPlanOpts" :key="p.v" data-cp @click="fm.plans[p.v]=!fm.plans[p.v]" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fm.plans[p.v]?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid '+(fE[p.v]?'#DC2626':'#EBEDF0')}">{{ {planHour:'时租',planDay:'日租',planWeek:'周租',planMonth:'月租'}[p.l] }}</div></div>
+</form-field>
+<template v-for="p in modelPlanOpts" :key="'pr-'+p.v"><form-field v-if="fm.plans[p.v]" :label="{priceHour:'时租',priceDay:'日租',priceWeek:'周租',priceMonth:'月租'}[modelPriceKey[p.v]]" required :error="fE[p.v]">
+<span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span>
+<input v-model.number="fm[modelPriceKey[p.v]]" type="number" min="0" @input="vClr(p.v)" class="flex-1 px-2 py-3.5 text-[15px] font-medium text-[#333]">
+</form-field></template>
+<form-field label="押金" required :error="fE.deposit">
+<span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span>
+<input v-model.number="fm.deposit" type="number" min="0" @input="vClr('deposit')" class="flex-1 px-2 py-3.5 text-[15px] font-medium text-[#333]">
+</form-field>
+<form-field label="排序" :error="fE.sort">
+<input v-model.number="fm.sort" type="number" min="0" @input="vClr('sort')" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]">
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5"><button data-cp @click="saveModel" :disabled="modelSaving" class="w-full h-[50px] flex items-center justify-center rounded-xl text-lg font-bold text-white border-none cursor-pointer disabled:opacity-50 transition-colors" style="background:var(--accent)">保存</button></div>
@@ -4920,13 +4944,22 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='bmEdit'" :z="510" :swipe-close="()=>goBack()">
 <nav-bar title="编辑电池型号" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-24 hid">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row"><div class="form-label">电池型号名称</div><div class="text-[15px] font-semibold text-[#111] py-1">{{ fbm.name }}</div></div>
-<div class="form-row"><div class="form-label">租赁方案</div>
-<div class="flex flex-wrap gap-2"><div v-for="p in modelPlanOpts" :key="p.v" data-cp @click="fbm.plans[p.v]=!fbm.plans[p.v]" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fbm.plans[p.v]?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid '+(fE[p.v]?'#DC2626':'#EBEDF0')}">{{ {planHour:'时租',planDay:'日租',planWeek:'周租',planMonth:'月租'}[p.l] }}</div></div></div>
-<template v-for="p in modelPlanOpts" :key="'br-'+p.v"><div v-if="fbm.plans[p.v]" class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>{{ {priceHour:'时租',priceDay:'日租',priceWeek:'周租',priceMonth:'月租'}[modelPriceKey[p.v]] }}</div><div class="login-field relative flex items-center" :style="fE[p.v]?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span><input v-model.number="fbm[modelPriceKey[p.v]]" type="number" min="0" @input="vClr(p.v)" class="flex-1 bg-transparent border-none text-[15px] font-medium outline-none px-2 py-3.5 text-[#333]"></div><div v-if="fE[p.v]" class="form-hint text-[#DC2626]">{{ fE[p.v] }}</div></div></template>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>押金</div><div class="login-field relative flex items-center" :style="fE.deposit?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span><input v-model.number="fbm.deposit" type="number" min="0" @input="vClr('deposit')" class="flex-1 bg-transparent border-none text-[15px] font-medium outline-none px-2 py-3.5"></div><div v-if="fE.deposit" class="form-hint text-[#DC2626]">{{ fE.deposit }}</div></div>
-<div class="form-row"><div class="form-label">排序</div><div class="login-field relative flex items-center"><input v-model.number="fbm.sort" type="number" min="0" @input="vClr('sort')" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]"></div><div v-if="fE.sort" class="form-hint text-[#DC2626]">{{ fE.sort }}</div></div>
+<form-field label="租赁方案" bare>
+<div class="flex flex-wrap gap-2"><div v-for="p in modelPlanOpts" :key="p.v" data-cp @click="fbm.plans[p.v]=!fbm.plans[p.v]" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fbm.plans[p.v]?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid '+(fE[p.v]?'#DC2626':'#EBEDF0')}">{{ {planHour:'时租',planDay:'日租',planWeek:'周租',planMonth:'月租'}[p.l] }}</div></div>
+</form-field>
+<template v-for="p in modelPlanOpts" :key="'br-'+p.v"><form-field v-if="fbm.plans[p.v]" :label="{priceHour:'时租',priceDay:'日租',priceWeek:'周租',priceMonth:'月租'}[modelPriceKey[p.v]]" required :error="fE[p.v]">
+<span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span>
+<input v-model.number="fbm[modelPriceKey[p.v]]" type="number" min="0" @input="vClr(p.v)" class="flex-1 px-2 py-3.5 text-[15px] font-medium text-[#333]">
+</form-field></template>
+<form-field label="押金" required :error="fE.deposit">
+<span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span>
+<input v-model.number="fbm.deposit" type="number" min="0" @input="vClr('deposit')" class="flex-1 px-2 py-3.5 text-[15px] font-medium text-[#333]">
+</form-field>
+<form-field label="排序" :error="fE.sort">
+<input v-model.number="fbm.sort" type="number" min="0" @input="vClr('sort')" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]">
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5"><button data-cp @click="saveBattModel" :disabled="battModelSaving" class="w-full h-[50px] flex items-center justify-center rounded-xl text-lg font-bold text-white border-none cursor-pointer disabled:opacity-50 transition-colors" style="background:var(--accent)">保存</button></div>
@@ -4935,46 +4968,54 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='pkgEdit'" :z="510" :swipe-close="()=>goBack()">
 <nav-bar title="编辑套餐" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-24 hid">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row"><div class="form-label">套餐名称</div><div class="text-[15px] font-semibold text-[#111] py-1">{{ fpk.name }}</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>关联车型</div>
-<div data-cp @click="openPkgPicker('vehicle')" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD">
+<form-field label="关联车型" required box-class="ff-select">
+<div data-cp @click="openPkgPicker('vehicle')" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]">
 <div class="w-11 h-11 rounded-lg bg-white flex items-center justify-center mr-3 shrink-0" style="border:1px solid #E5E5E5"><span v-html="luci('bike','w-6 h-6 text-[var(--accent)]')"></span></div>
 <span class="flex-1 text-[15px]" :style="fpk.vehicleModel?{color:'#111',fontWeight:500}:{color:'#999'}">{{ fpk.vehicleModel||'选择车型' }}</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
-</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>关联电池</div>
-<div data-cp @click="openPkgPicker('battery')" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD">
+</div>
+</form-field>
+<form-field label="关联电池" required box-class="ff-select">
+<div data-cp @click="openPkgPicker('battery')" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]">
 <div class="w-11 h-11 rounded-lg bg-white flex items-center justify-center mr-3 shrink-0" style="border:1px solid #E5E5E5"><span v-html="luci('battery-charging','w-6 h-6 text-[var(--accent)]')"></span></div>
 <span class="flex-1 text-[15px]" :style="fpk.batteryModel?{color:'#111',fontWeight:500}:{color:'#999'}">{{ fpk.batteryModel||'选择电池型号' }}</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
-</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>套餐主图</div>
-<div data-cp @click="fpk.mainImg=!fpk.mainImg" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:2px dashed #E5E5E5">
+</div>
+</form-field>
+<form-field label="套餐主图" required hint="尺寸：454px × 454px" box-class="ff-upload py-5">
+<div data-cp @click="fpk.mainImg=!fpk.mainImg" class="flex flex-col items-center justify-center cursor-pointer transition-colors active:opacity-90">
 <template v-if="fpk.mainImg"><div class="w-20 h-20 rounded-xl flex items-center justify-center" style="background:linear-gradient(145deg,var(--accent) 0%,#22324A 100%)"><span v-html="luci('image','w-9 h-9 text-white')"></span></div></template>
 <template v-else><span v-html="luci('camera','w-6 h-6 text-[#999]')"></span><span class="text-[13px] text-[#999] mt-1">点击上传</span></template>
 </div>
-<div class="form-hint text-[#999] leading-relaxed">尺寸：454px × 454px</div>
-</div>
-<div class="form-row"><div class="form-label">缩略图</div>
-<div data-cp @click="fpk.thumbImg=!fpk.thumbImg" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:2px dashed #E5E5E5">
+</form-field>
+<form-field label="缩略图" hint="尺寸：170px × 170px" box-class="ff-upload py-5">
+<div data-cp @click="fpk.thumbImg=!fpk.thumbImg" class="flex flex-col items-center justify-center cursor-pointer transition-colors active:opacity-90">
 <template v-if="fpk.thumbImg"><div class="w-16 h-16 rounded-xl flex items-center justify-center" style="background:linear-gradient(145deg,var(--accent) 0%,#22324A 100%)"><span v-html="luci('image','w-7 h-7 text-white')"></span></div></template>
 <template v-else><span v-html="luci('image','w-6 h-6 text-[#999]')"></span><span class="text-[13px] text-[#999] mt-1">点击上传</span></template>
 </div>
-<div class="form-hint text-[#999] leading-relaxed">尺寸：170px × 170px</div>
-</div>
-<div class="form-row"><div class="form-label">租赁方案</div>
-<div class="flex flex-wrap gap-2"><div v-for="p in modelPlanOpts" :key="p.v" data-cp @click="fpk.plans[p.v]=!fpk.plans[p.v]" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.plans[p.v]?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid '+(fE[p.v]?'#DC2626':'#EBEDF0')}">{{ {planHour:'时租',planDay:'日租',planWeek:'周租',planMonth:'月租'}[p.l] }}</div></div></div>
-<template v-for="p in modelPlanOpts" :key="'bp-'+p.v"><div v-if="fpk.plans[p.v]" class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>{{ {priceHour:'时租',priceDay:'日租',priceWeek:'周租',priceMonth:'月租'}[modelPriceKey[p.v]] }}</div><div class="login-field relative flex items-center" :style="fE[p.v]?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span><input v-model.number="fpk[modelPriceKey[p.v]]" type="number" min="0" @input="vClr(p.v)" class="flex-1 bg-transparent border-none text-[15px] font-medium outline-none px-2 py-3.5 text-[#333]"></div><div v-if="fE[p.v]" class="form-hint text-[#DC2626]">{{ fE[p.v] }}</div></div></template>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>押金</div><div class="login-field relative flex items-center" :style="fE.deposit?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span><input v-model.number="fpk.deposit" type="number" min="0" @input="vClr('deposit')" class="flex-1 bg-transparent border-none text-[15px] font-medium outline-none px-2 py-3.5"></div><div v-if="fE.deposit" class="form-hint text-[#DC2626]">{{ fE.deposit }}</div></div>
-<div class="form-row"><div class="form-label">排序</div><div class="login-field relative flex items-center"><input v-model.number="fpk.sort" type="number" min="0" @input="vClr('sort')" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]"></div><div v-if="fE.sort" class="form-hint text-[#DC2626]">{{ fE.sort }}</div></div>
-<div class="form-row"><div class="form-label">状态</div><div class="flex gap-2"><div data-cp @click="fpk.status='上架'" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.status==='上架'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid #EBEDF0'}">上架</div><div data-cp @click="fpk.status='下架'" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.status==='下架'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid #EBEDF0'}">下架</div></div></div>
-<div class="form-row"><div class="form-label">备注</div>
-<div class="relative">
-<textarea v-model="fpk.remark" maxlength="255" :placeholder="'请输入备注'" class="w-full p-3.5 pb-8 text-[15px] rounded-xl" style="border:1px solid #E5E5E5;background:#fff;min-height:90px;resize:none;line-height:1.5"></textarea>
-<div class="absolute right-3 bottom-2 text-[12px] text-[#999] pointer-events-none">{{ (fpk.remark||'').length }}/255</div>
-</div>
-</div>
+</form-field>
+<form-field label="租赁方案" bare>
+<div class="flex flex-wrap gap-2"><div v-for="p in modelPlanOpts" :key="p.v" data-cp @click="fpk.plans[p.v]=!fpk.plans[p.v]" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.plans[p.v]?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid '+(fE[p.v]?'#DC2626':'#EBEDF0')}">{{ {planHour:'时租',planDay:'日租',planWeek:'周租',planMonth:'月租'}[p.l] }}</div></div>
+</form-field>
+<template v-for="p in modelPlanOpts" :key="'bp-'+p.v"><form-field v-if="fpk.plans[p.v]" :label="{priceHour:'时租',priceDay:'日租',priceWeek:'周租',priceMonth:'月租'}[modelPriceKey[p.v]]" required :error="fE[p.v]">
+<span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span>
+<input v-model.number="fpk[modelPriceKey[p.v]]" type="number" min="0" @input="vClr(p.v)" class="flex-1 px-2 py-3.5 text-[15px] font-medium text-[#333]">
+</form-field></template>
+<form-field label="押金" required :error="fE.deposit">
+<span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span>
+<input v-model.number="fpk.deposit" type="number" min="0" @input="vClr('deposit')" class="flex-1 px-2 py-3.5 text-[15px] font-medium text-[#333]">
+</form-field>
+<form-field label="排序" :error="fE.sort">
+<input v-model.number="fpk.sort" type="number" min="0" @input="vClr('sort')" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]">
+</form-field>
+<form-field label="状态" bare>
+<div class="flex gap-2"><div data-cp @click="fpk.status='上架'" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.status==='上架'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #EBEDF0'}">上架</div><div data-cp @click="fpk.status='下架'" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.status==='下架'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #EBEDF0'}">下架</div></div>
+</form-field>
+<form-field label="备注" :counter="(fpk.remark||'').length" counter-max="255" box-class="is-area">
+<textarea v-model="fpk.remark" maxlength="255" :placeholder="'请输入备注'" class="w-full p-3.5 pb-8 text-[15px]" style="min-height:90px;resize:none;line-height:1.5"></textarea>
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5"><button data-cp @click="savePackage" :disabled="packageSaving" class="w-full h-[50px] flex items-center justify-center rounded-xl text-lg font-bold text-white border-none cursor-pointer disabled:opacity-50 transition-colors" style="background:var(--accent)">保存</button></div>
@@ -4983,46 +5024,56 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='pkgAdd'" :z="510" :swipe-close="()=>goBack()">
 <nav-bar title="新增套餐" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-24 hid">
-<div class="form-card">
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>套餐名称</div><div class="login-field relative flex items-center" :style="fE.name?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><input v-model="fpk.name" type="text" maxlength="64" :placeholder="'请输入套餐名称'" @input="vClr('name')" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]"><span class="absolute right-3.5 text-[12px] text-[#999] pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ (fpk.name||'').length }}/64</span></div><div v-if="fE.name" class="form-hint text-[#DC2626]">{{ fE.name }}</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>关联车型</div>
-<div data-cp @click="openPkgPicker('vehicle')" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD">
+<div class="form-plain">
+<form-field label="套餐名称" required :error="fE.name" :counter="(fpk.name||'').length" counter-max="64">
+<input v-model="fpk.name" type="text" maxlength="64" :placeholder="'请输入套餐名称'" @input="vClr('name')" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]">
+</form-field>
+<form-field label="关联车型" required box-class="ff-select">
+<div data-cp @click="openPkgPicker('vehicle')" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]">
 <div class="w-11 h-11 rounded-lg bg-white flex items-center justify-center mr-3 shrink-0" style="border:1px solid #E5E5E5"><span v-html="luci('bike','w-6 h-6 text-[var(--accent)]')"></span></div>
 <span class="flex-1 text-[15px]" :style="fpk.vehicleModel?{color:'#111',fontWeight:500}:{color:'#999'}">{{ fpk.vehicleModel||'选择车型' }}</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
-</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>关联电池</div>
-<div data-cp @click="openPkgPicker('battery')" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD">
+</div>
+</form-field>
+<form-field label="关联电池" required box-class="ff-select">
+<div data-cp @click="openPkgPicker('battery')" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]">
 <div class="w-11 h-11 rounded-lg bg-white flex items-center justify-center mr-3 shrink-0" style="border:1px solid #E5E5E5"><span v-html="luci('battery-charging','w-6 h-6 text-[var(--accent)]')"></span></div>
 <span class="flex-1 text-[15px]" :style="fpk.batteryModel?{color:'#111',fontWeight:500}:{color:'#999'}">{{ fpk.batteryModel||'选择电池型号' }}</span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
-</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>套餐主图</div>
-<div data-cp @click="fpk.mainImg=!fpk.mainImg" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:2px dashed #E5E5E5">
+</div>
+</form-field>
+<form-field label="套餐主图" required hint="尺寸：454px × 454px" box-class="ff-upload py-5">
+<div data-cp @click="fpk.mainImg=!fpk.mainImg" class="flex flex-col items-center justify-center cursor-pointer transition-colors active:opacity-90">
 <template v-if="fpk.mainImg"><div class="w-20 h-20 rounded-xl flex items-center justify-center" style="background:linear-gradient(145deg,var(--accent) 0%,#22324A 100%)"><span v-html="luci('image','w-9 h-9 text-white')"></span></div></template>
 <template v-else><span v-html="luci('camera','w-6 h-6 text-[#999]')"></span><span class="text-[13px] text-[#999] mt-1">点击上传</span></template>
 </div>
-<div class="form-hint text-[#999] leading-relaxed">尺寸：454px × 454px</div>
-</div>
-<div class="form-row"><div class="form-label">缩略图</div>
-<div data-cp @click="fpk.thumbImg=!fpk.thumbImg" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:2px dashed #E5E5E5">
+</form-field>
+<form-field label="缩略图" hint="尺寸：170px × 170px" box-class="ff-upload py-5">
+<div data-cp @click="fpk.thumbImg=!fpk.thumbImg" class="flex flex-col items-center justify-center cursor-pointer transition-colors active:opacity-90">
 <template v-if="fpk.thumbImg"><div class="w-16 h-16 rounded-xl flex items-center justify-center" style="background:linear-gradient(145deg,var(--accent) 0%,#22324A 100%)"><span v-html="luci('image','w-7 h-7 text-white')"></span></div></template>
 <template v-else><span v-html="luci('image','w-6 h-6 text-[#999]')"></span><span class="text-[13px] text-[#999] mt-1">点击上传</span></template>
 </div>
-<div class="form-hint text-[#999] leading-relaxed">尺寸：170px × 170px</div>
-</div>
-<div class="form-row"><div class="form-label">租赁方案</div>
-<div class="flex flex-wrap gap-2"><div v-for="p in modelPlanOpts" :key="p.v" data-cp @click="fpk.plans[p.v]=!fpk.plans[p.v]" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.plans[p.v]?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid '+(fE[p.v]?'#DC2626':'#EBEDF0')}">{{ {planHour:'时租',planDay:'日租',planWeek:'周租',planMonth:'月租'}[p.l] }}</div></div></div>
-<template v-for="p in modelPlanOpts" :key="'ba-'+p.v"><div v-if="fpk.plans[p.v]" class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>{{ {priceHour:'时租',priceDay:'日租',priceWeek:'周租',priceMonth:'月租'}[modelPriceKey[p.v]] }}</div><div class="login-field relative flex items-center" :style="fE[p.v]?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span><input v-model.number="fpk[modelPriceKey[p.v]]" type="number" min="0" @input="vClr(p.v)" class="flex-1 bg-transparent border-none text-[15px] font-medium outline-none px-2 py-3.5 text-[#333]"></div><div v-if="fE[p.v]" class="form-hint text-[#DC2626]">{{ fE[p.v] }}</div></div></template>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>押金</div><div class="login-field relative flex items-center" :style="fE.deposit?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span><input v-model.number="fpk.deposit" type="number" min="0" @input="vClr('deposit')" class="flex-1 bg-transparent border-none text-[15px] font-medium outline-none px-2 py-3.5"></div><div v-if="fE.deposit" class="form-hint text-[#DC2626]">{{ fE.deposit }}</div></div>
-<div class="form-row"><div class="form-label">排序</div><div class="login-field relative flex items-center"><input v-model.number="fpk.sort" type="number" min="0" @input="vClr('sort')" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]"></div><div v-if="fE.sort" class="form-hint text-[#DC2626]">{{ fE.sort }}</div></div>
-<div class="form-row"><div class="form-label">状态</div><div class="flex gap-2"><div data-cp @click="fpk.status='上架'" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.status==='上架'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid #EBEDF0'}">上架</div><div data-cp @click="fpk.status='下架'" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.status==='下架'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid #EBEDF0'}">下架</div></div></div>
-<div class="form-row"><div class="form-label">备注</div>
-<div class="relative">
-<textarea v-model="fpk.remark" maxlength="255" :placeholder="'请输入备注'" class="w-full p-3.5 pb-8 text-[15px] rounded-xl" style="border:1px solid #E5E5E5;background:#fff;min-height:90px;resize:none;line-height:1.5"></textarea>
-<div class="absolute right-3 bottom-2 text-[12px] text-[#999] pointer-events-none">{{ (fpk.remark||'').length }}/255</div>
-</div>
-</div>
+</form-field>
+<form-field label="租赁方案" bare>
+<div class="flex flex-wrap gap-2"><div v-for="p in modelPlanOpts" :key="p.v" data-cp @click="fpk.plans[p.v]=!fpk.plans[p.v]" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.plans[p.v]?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid '+(fE[p.v]?'#DC2626':'#EBEDF0')}">{{ {planHour:'时租',planDay:'日租',planWeek:'周租',planMonth:'月租'}[p.l] }}</div></div>
+</form-field>
+<template v-for="p in modelPlanOpts" :key="'ba-'+p.v"><form-field v-if="fpk.plans[p.v]" :label="{priceHour:'时租',priceDay:'日租',priceWeek:'周租',priceMonth:'月租'}[modelPriceKey[p.v]]" required :error="fE[p.v]">
+<span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span>
+<input v-model.number="fpk[modelPriceKey[p.v]]" type="number" min="0" @input="vClr(p.v)" class="flex-1 px-2 py-3.5 text-[15px] font-medium text-[#333]">
+</form-field></template>
+<form-field label="押金" required :error="fE.deposit">
+<span class="pl-3.5 text-[14px] font-medium text-[#333]">Rp</span>
+<input v-model.number="fpk.deposit" type="number" min="0" @input="vClr('deposit')" class="flex-1 px-2 py-3.5 text-[15px] font-medium text-[#333]">
+</form-field>
+<form-field label="排序" :error="fE.sort">
+<input v-model.number="fpk.sort" type="number" min="0" @input="vClr('sort')" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]">
+</form-field>
+<form-field label="状态" bare>
+<div class="flex gap-2"><div data-cp @click="fpk.status='上架'" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.status==='上架'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #EBEDF0'}">上架</div><div data-cp @click="fpk.status='下架'" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fpk.status==='下架'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #EBEDF0'}">下架</div></div>
+</form-field>
+<form-field label="备注" :counter="(fpk.remark||'').length" counter-max="255" box-class="is-area">
+<textarea v-model="fpk.remark" maxlength="255" :placeholder="'请输入备注'" class="w-full p-3.5 pb-8 text-[15px]" style="min-height:90px;resize:none;line-height:1.5"></textarea>
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5"><button data-cp @click="submitPackageAdd" :disabled="packageSaving" class="w-full h-[50px] flex items-center justify-center rounded-xl text-lg font-bold text-white border-none cursor-pointer disabled:opacity-50 transition-colors" style="background:var(--accent)">保存</button></div>
@@ -5043,10 +5094,13 @@ body.host-single-m #root-user{display:none}
 
 <page :open="profileOV==='account'" :z="500" :swipe-close="()=>goBack()">
 <nav-bar title="账号管理" border-color="#E5E5E5" @back="goBack"><template #right><span v-if="can('account.add')" class="text-sm font-medium text-[var(--link)] cursor-pointer shrink-0" data-cp @click="openAccAdd()">新增</span></template></nav-bar>
-<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
-<div class="rounded-full flex items-center gap-1.5 mb-3" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px;height:46px">
+<!-- 筛选条件（通栏白底） -->
+<div class="bg-white shrink-0 px-5 pt-3 pb-2">
+<div class="rounded-full flex items-center gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px;height:46px">
 <span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span><input v-model="aQ" :placeholder="'搜索账号/姓名/手机号'" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
+</div>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
 <transition-group v-if="aFilter.length" name="item">
 <kv-card v-for="(a,i) in aFilter" :key="a.account" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" :style="{transitionDelay:i*50+'ms'}" data-cp @click="openAccDetail(a)">
 <template #title><span class="min-w-0 truncate">{{ a.account }}</span></template>
@@ -5085,23 +5139,33 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='aAdd'" :z="510" :swipe-close="()=>goBack()">
 <nav-bar title="新增账号" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-24 hid">
-<div class="form-card">
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>账号</div><div class="login-field relative flex items-center" :style="fE.account?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><input v-model="fa.account" maxlength="20" @input="onAccInput" @blur="onAccBlur" :placeholder="'请输入账号'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]"><span class="absolute right-3.5 text-[12px] text-[#999] pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ (fa.account||'').length }}/20</span></div><div v-if="fE.account" class="form-hint text-[#DC2626]">{{ fE.account }}</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>姓名</div><div class="login-field relative flex items-center" :style="[accBasicDisabled?{background:'#F0F1F3'}:null,fE.name?{boxShadow:'inset 0 0 0 1px #DC2626'}:null]"><input v-model="fa.name" maxlength="64" @input="vClr('name')" :placeholder="'请输入姓名'" :disabled="accBasicDisabled" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]"><span class="absolute right-3.5 text-[12px] text-[#999] pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ (fa.name||'').length }}/64</span></div><div v-if="fE.name" class="form-hint text-[#DC2626]">{{ fE.name }}</div></div>
-<div class="form-row"><div class="form-label">手机号</div>
-<div class="flex items-stretch gap-2.5" :style="accBasicDisabled?{pointerEvents:'none',opacity:.75}:{}">
-<div data-cp @click="!accBasicDisabled&&openDialCode('account')" class="login-field login-field-dial flex items-center justify-center" :style="accBasicDisabled?{background:'#F0F1F3'}:null" data-od-id="acc-add-dial-trigger">
+<div class="form-plain">
+<form-field label="账号" required :error="fE.account" :counter="(fa.account||'').length" counter-max="20">
+<input v-model="fa.account" maxlength="20" @input="onAccInput" @blur="onAccBlur" :placeholder="'请输入账号'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]">
+</form-field>
+<form-field label="姓名" required :error="fE.name" :counter="(fa.name||'').length" counter-max="64" :disabled="accBasicDisabled">
+<input v-model="fa.name" maxlength="64" @input="vClr('name')" :placeholder="'请输入姓名'" :disabled="accBasicDisabled" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]">
+</form-field>
+<form-field label="手机号" bare :error="fE.phone">
+<div class="flex items-stretch gap-2.5">
+<div data-cp @click="!accBasicDisabled&&openDialCode('account')" class="ff-box login-field-dial flex items-center justify-center" :class="accBasicDisabled?'is-disabled':''" data-od-id="acc-add-dial-trigger">
 <span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ fa.code }}</span>
 <span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span>
 </div>
-<div class="login-field flex-1 relative flex items-center min-w-0" :style="[accBasicDisabled?{background:'#F0F1F3'}:null,fE.phone?{boxShadow:'inset 0 0 0 1px #DC2626'}:null]">
+<div class="ff-box flex-1 relative flex items-center min-w-0" :class="accBasicDisabled?'is-disabled':''">
 <input v-model="fa.phone" type="tel" @input="vClr('phone')" :placeholder="'请输入手机号'" :disabled="accBasicDisabled" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]">
 </div>
-</div><div v-if="fE.phone" class="form-hint text-[#DC2626]">{{ fE.phone }}</div></div>
-<div class="form-row"><div class="form-label">邮箱</div><div class="login-field relative flex items-center" :style="[accBasicDisabled?{background:'#F0F1F3'}:null,fE.email?{boxShadow:'inset 0 0 0 1px #DC2626'}:null]"><input v-model="fa.email" type="email" @input="vClr('email')" :placeholder="'请输入邮箱'" :disabled="accBasicDisabled" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]"></div><div v-if="fE.email" class="form-hint text-[#DC2626]">{{ fE.email }}</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>职位</div>
-<div class="flex flex-wrap gap-2"><div v-for="r in allRoles" :key="r" data-cp @click="togRole(fa.roles,r);vClr('roles')" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fa.roles.includes(r)?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid '+(fE.roles?'#DC2626':'#EBEDF0')}">{{ r }}</div></div><div v-if="fE.roles" class="form-hint text-[#DC2626]">{{ fE.roles }}</div></div>
-<div class="form-row"><div class="form-label">备注</div><div class="login-field relative flex items-center" :style="[accBasicDisabled?{background:'#F0F1F3'}:null,fE.remark?{boxShadow:'inset 0 0 0 1px #DC2626'}:null]"><input v-model="fa.remark" maxlength="255" @input="vClr('remark')" :placeholder="'请输入备注'" :disabled="accBasicDisabled" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]"><span class="absolute right-3.5 text-[12px] text-[#999] pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ (fa.remark||'').length }}/255</span></div><div v-if="fE.remark" class="form-hint text-[#DC2626]">{{ fE.remark }}</div></div>
+</div>
+</form-field>
+<form-field label="邮箱" :error="fE.email" :disabled="accBasicDisabled">
+<input v-model="fa.email" type="email" @input="vClr('email')" :placeholder="'请输入邮箱'" :disabled="accBasicDisabled" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]">
+</form-field>
+<form-field label="职位" required bare :error="fE.roles">
+<div class="flex flex-wrap gap-2"><div v-for="r in allRoles" :key="r" data-cp @click="togRole(fa.roles,r);vClr('roles')" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fa.roles.includes(r)?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid '+(fE.roles?'#DC2626':'#EBEDF0')}">{{ r }}</div></div>
+</form-field>
+<form-field label="备注" :error="fE.remark" :counter="(fa.remark||'').length" counter-max="255" :disabled="accBasicDisabled">
+<input v-model="fa.remark" maxlength="255" @input="vClr('remark')" :placeholder="'请输入备注'" :disabled="accBasicDisabled" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]">
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5"><button data-cp @click="saveAccAdd" :disabled="accSaving" class="w-full h-[50px] flex items-center justify-center rounded-xl text-lg font-bold text-white border-none cursor-pointer disabled:opacity-50 transition-colors" style="background:var(--accent)">保存</button></div>
@@ -5110,23 +5174,31 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='aEdit'" :z="510" :swipe-close="()=>goBack()">
 <nav-bar title="编辑账号" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-24 hid">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>账号</div><div class="text-[15px] font-semibold text-[#111] py-1">{{ fa.account }}</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>姓名</div><div class="login-field relative flex items-center" :style="fE.name?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><input v-model="fa.name" maxlength="64" @input="vClr('name')" :placeholder="'请输入姓名'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]"><span class="absolute right-3.5 text-[12px] text-[#999] pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ (fa.name||'').length }}/64</span></div><div v-if="fE.name" class="form-hint text-[#DC2626]">{{ fE.name }}</div></div>
-<div class="form-row"><div class="form-label">手机号</div>
+<form-field label="姓名" required :error="fE.name" :counter="(fa.name||'').length" counter-max="64">
+<input v-model="fa.name" maxlength="64" @input="vClr('name')" :placeholder="'请输入姓名'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]">
+</form-field>
+<form-field label="手机号" bare :error="fE.phone">
 <div class="flex items-stretch gap-2.5">
-<div data-cp @click="openDialCode('account')" class="login-field login-field-dial flex items-center justify-center" data-od-id="acc-edit-dial-trigger">
+<div data-cp @click="openDialCode('account')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="acc-edit-dial-trigger">
 <span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ fa.code }}</span>
 <span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span>
 </div>
-<div class="login-field flex-1 relative flex items-center min-w-0" :style="fE.phone?{boxShadow:'inset 0 0 0 1px #DC2626'}:null">
+<div class="ff-box flex-1 relative flex items-center min-w-0">
 <input v-model="fa.phone" type="tel" @input="vClr('phone')" :placeholder="'请输入手机号'" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]">
 </div>
-</div><div v-if="fE.phone" class="form-hint text-[#DC2626]">{{ fE.phone }}</div></div>
-<div class="form-row"><div class="form-label">邮箱</div><div class="login-field relative flex items-center" :style="fE.email?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><input v-model="fa.email" type="email" @input="vClr('email')" :placeholder="'请输入邮箱'" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]"></div><div v-if="fE.email" class="form-hint text-[#DC2626]">{{ fE.email }}</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>职位</div>
-<div class="flex flex-wrap gap-2"><div v-for="r in allRoles" :key="r" data-cp @click="togRole(fa.roles,r);vClr('roles')" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fa.roles.includes(r)?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid '+(fE.roles?'#DC2626':'#EBEDF0')}">{{ r }}</div></div><div v-if="fE.roles" class="form-hint text-[#DC2626]">{{ fE.roles }}</div></div>
-<div class="form-row"><div class="form-label">备注</div><div class="login-field relative flex items-center" :style="fE.remark?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><input v-model="fa.remark" maxlength="255" @input="vClr('remark')" :placeholder="'请输入备注'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]"><span class="absolute right-3.5 text-[12px] text-[#999] pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ (fa.remark||'').length }}/255</span></div><div v-if="fE.remark" class="form-hint text-[#DC2626]">{{ fE.remark }}</div></div>
+</div>
+</form-field>
+<form-field label="邮箱" :error="fE.email">
+<input v-model="fa.email" type="email" @input="vClr('email')" :placeholder="'请输入邮箱'" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]">
+</form-field>
+<form-field label="职位" required bare :error="fE.roles">
+<div class="flex flex-wrap gap-2"><div v-for="r in allRoles" :key="r" data-cp @click="togRole(fa.roles,r);vClr('roles')" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="fa.roles.includes(r)?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid '+(fE.roles?'#DC2626':'#EBEDF0')}">{{ r }}</div></div>
+</form-field>
+<form-field label="备注" :error="fE.remark" :counter="(fa.remark||'').length" counter-max="255">
+<input v-model="fa.remark" maxlength="255" @input="vClr('remark')" :placeholder="'请输入备注'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]">
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5"><button data-cp @click="saveAccEdit" :disabled="accSaving" class="w-full h-[50px] flex items-center justify-center rounded-xl text-lg font-bold text-white border-none cursor-pointer disabled:opacity-50 transition-colors" style="background:var(--accent)">保存</button></div>
@@ -5134,10 +5206,13 @@ body.host-single-m #root-user{display:none}
 
 <page :open="profileOV==='pos'" :z="500" :swipe-close="()=>goBack()">
 <nav-bar title="职位管理" border-color="#E5E5E5" @back="goBack"></nav-bar>
-<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
-<div class="rounded-full flex items-center gap-1.5 mb-3" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px;height:46px">
+<!-- 筛选条件（通栏白底） -->
+<div class="bg-white shrink-0 px-5 pt-3 pb-2">
+<div class="rounded-full flex items-center gap-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:14px;padding-right:4px;height:46px">
 <span v-html="luci('search','w-4 h-4 text-[#999] shrink-0')"></span><input v-model="pQ" :placeholder="'搜索职位名称'" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
+</div>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
 <transition-group v-if="pFilter.length" name="item">
 <kv-card v-for="(p,i) in pFilter" :key="p.name" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" :style="{transitionDelay:i*50+'ms'}" data-cp @click="openPosDetail(p)">
 <template #title><span class="min-w-0 truncate">{{ p.name }}</span></template>
@@ -5175,10 +5250,14 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='pAdd'||profileSub==='pEdit'" :z="510" :swipe-close="()=>goBack()">
 <nav-bar :title="profileSub==='pAdd'?'新增职位':'编辑职位'" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-24 hid">
-<div class="form-card mb-3">
+<div class="form-plain mb-3">
 <div class="form-row"><div class="form-label">上级职位</div><div class="text-[15px] font-medium text-[#111] py-1">{{ fp.parent }}</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>职位名称</div><div class="login-field relative flex items-center" :style="fE.name?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><input v-model="fp.name" maxlength="64" @input="vClr('name')" :placeholder="'请输入职位名称'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]"><span class="absolute right-3.5 text-[12px] text-[#999] pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ (fp.name||'').length }}/64</span></div><div v-if="fE.name" class="form-hint text-[#DC2626]">{{ fE.name }}</div></div>
-<div class="form-row"><div class="form-label">备注</div><div class="login-field relative flex items-center"><input v-model="fp.remark" maxlength="255" :placeholder="'请输入备注'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]"><span class="absolute right-3.5 text-[12px] text-[#999] pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ (fp.remark||'').length }}/255</span></div></div>
+<form-field label="职位名称" required :error="fE.name" :counter="(fp.name||'').length" counter-max="64">
+<input v-model="fp.name" maxlength="64" @input="vClr('name')" :placeholder="'请输入职位名称'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]">
+</form-field>
+<form-field label="备注" :counter="(fp.remark||'').length" counter-max="255">
+<input v-model="fp.remark" maxlength="255" :placeholder="'请输入备注'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]">
+</form-field>
 </div>
 <div v-for="sec in [{l:'平台端权限',t:pTreeP},{l:'商户端权限',t:pTreeM}]" :key="sec.l">
 <div class="flex justify-between items-center mb-2 px-0.5"><span class="text-sm font-semibold">{{ sec.l }}</span><span class="text-[13px] font-medium text-[var(--link)] cursor-pointer" data-cp @click="selAll(sec.t)">全选</span></div>
@@ -5197,7 +5276,7 @@ body.host-single-m #root-user{display:none}
 <page :open="profileOV==='cs'" :z="500" :swipe-close="()=>goBack()">
 <nav-bar title="客服信息" border-color="#E5E5E5" @back="goBack"><template #right><span v-if="can('cs_info.add')" class="text-sm font-medium cursor-pointer shrink-0" :style="{color:'var(--link)'}" data-cp @click="openCsEdit(-1)">新增</span></template></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
- <div class="form-card mb-3">
+ <div class="form-plain mb-3">
   <div class="form-row">
    <div class="flex items-center justify-between">
     <span class="text-sm font-semibold">客服电话</span>
@@ -5224,32 +5303,37 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='csEdit'" :z="510" :swipe-close="()=>goBack()">
 <nav-bar :title="csIdx===-1?'新增客服':'编辑客服'" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-24 hid">
-<div class="form-card">
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>客服电话</div>
+<div class="form-plain">
+<form-field label="客服电话" required bare :error="fE.phone">
 <div class="flex items-stretch gap-2.5">
-<div data-cp @click="openDialCode('cs')" class="login-field login-field-dial flex items-center justify-center" data-od-id="cs-dial-trigger">
+<div data-cp @click="openDialCode('cs')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="cs-dial-trigger">
 <span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ fc.code }}</span>
 <span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span>
 </div>
-<div class="login-field flex-1 relative flex items-center min-w-0" :style="fE.phone?{boxShadow:'inset 0 0 0 1px #DC2626'}:null">
+<div class="ff-box flex-1 relative flex items-center min-w-0" :class="fE.phone?'is-error':''">
 <input v-model="fc.phone" @input="vClr('phone')" type="tel" :placeholder="'请输入客服电话号码'" class="w-full pl-3.5 pr-3 py-3.5 text-[15px]">
 </div>
-</div><div v-if="fE.phone" class="form-hint text-[#DC2626]">{{ fE.phone }}</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>开始时间</div>
+</div>
+</form-field>
+<form-field label="开始时间" required bare>
 <div class="flex items-center gap-2">
-<div role="button" data-cp @click.stop="openHmPicker('start')" class="login-field flex items-center justify-center min-w-[64px] px-3 cursor-pointer select-none active:bg-[#EEE]" data-od-id="cs-start-hour"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ p2(fc.sh) }}</span></div>
+<div role="button" data-cp @click.stop="openHmPicker('start')" class="ff-box flex items-center justify-center min-w-[64px] px-3 cursor-pointer select-none active:opacity-80" data-od-id="cs-start-hour"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ p2(fc.sh) }}</span></div>
 <span class="text-sm font-medium text-[#111]">时</span>
-<div role="button" data-cp @click.stop="openHmPicker('start')" class="login-field flex items-center justify-center min-w-[64px] px-3 cursor-pointer select-none active:bg-[#EEE]" data-od-id="cs-start-min"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ p2(fc.sm) }}</span></div>
+<div role="button" data-cp @click.stop="openHmPicker('start')" class="ff-box flex items-center justify-center min-w-[64px] px-3 cursor-pointer select-none active:opacity-80" data-od-id="cs-start-min"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ p2(fc.sm) }}</span></div>
 <span class="text-sm font-medium text-[#111]">分</span>
-</div></div>
-<div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>结束时间</div>
+</div>
+</form-field>
+<form-field label="结束时间" required bare :error="fE.time">
 <div class="flex items-center gap-2">
-<div role="button" data-cp @click.stop="openHmPicker('end')" class="login-field flex items-center justify-center min-w-[64px] px-3 cursor-pointer select-none active:bg-[#EEE]" :style="fE.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="cs-end-hour"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ p2(fc.eh) }}</span></div>
+<div role="button" data-cp @click.stop="openHmPicker('end')" class="ff-box flex items-center justify-center min-w-[64px] px-3 cursor-pointer select-none active:opacity-80" :class="fE.time?'is-error':''" data-od-id="cs-end-hour"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ p2(fc.eh) }}</span></div>
 <span class="text-sm font-medium text-[#111]">时</span>
-<div role="button" data-cp @click.stop="openHmPicker('end')" class="login-field flex items-center justify-center min-w-[64px] px-3 cursor-pointer select-none active:bg-[#EEE]" :style="fE.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="cs-end-min"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ p2(fc.em) }}</span></div>
+<div role="button" data-cp @click.stop="openHmPicker('end')" class="ff-box flex items-center justify-center min-w-[64px] px-3 cursor-pointer select-none active:opacity-80" :class="fE.time?'is-error':''" data-od-id="cs-end-min"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ p2(fc.em) }}</span></div>
 <span class="text-sm font-medium text-[#111]">分</span>
-</div><div v-if="fE.time" class="form-hint text-[#DC2626]">{{ fE.time }}</div></div>
-<div class="form-row"><div class="form-label">备注</div><div class="login-field relative flex items-center"><input v-model="fc.remark" maxlength="255" :placeholder="'请输入备注'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]"><span class="absolute right-3.5 text-[12px] text-[#999] pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ (fc.remark||'').length }}/255</span></div></div>
+</div>
+</form-field>
+<form-field label="备注" :counter="(fc.remark||'').length" counter-max="255">
+<input v-model="fc.remark" maxlength="255" :placeholder="'请输入备注'" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]">
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5"><button data-cp @click="saveCs" :disabled="csSaving" class="w-full h-[50px] flex items-center justify-center rounded-xl text-lg font-bold text-white border-none cursor-pointer disabled:opacity-50 transition-colors" style="background:var(--accent)">保存</button></div>
@@ -5258,13 +5342,13 @@ body.host-single-m #root-user{display:none}
 <page :open="profileOV==='config'" :z="500" :swipe-close="()=>goBack()">
 <nav-bar title="订单配置" border-color="#E5E5E5" @back="goBack"><template #right><span v-if="can('order_config.edit')" class="text-sm font-medium cursor-pointer shrink-0" :style="cfgSaving?{color:'#999',pointerEvents:'none'}:{color:'var(--link)'}" data-cp @click="saveCfg">保存</span></template></nav-bar>
  <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
- <div class="form-card" data-od-id="order-config-form">
+ <div class="form-plain" data-od-id="order-config-form">
   <!-- 一、订单状态流转 -->
   <div class="od-sec">订单状态流转</div>
   <div class="form-row">
    <div class="flex flex-wrap items-center gap-x-1.5 gap-y-2 text-sm font-semibold leading-relaxed">
     <span>订单结束前</span>
-    <div class="login-field mini relative flex items-center w-[60px] shrink-0"><input v-model.number="cfg.pre" type="number" min="1" @input="cfgErr.pre=''" class="w-full px-2 py-2 text-[15px] font-semibold text-center tabular-nums" data-od-id="cfg-pre-input"></div>
+    <div class="ff-box mini relative flex items-center w-[60px] shrink-0"><input v-model.number="cfg.pre" type="number" min="1" @input="cfgErr.pre=''" class="w-full px-2 py-2 text-[15px] font-semibold text-center tabular-nums" data-od-id="cfg-pre-input"></div>
     <span>天，自动变更为「待还车」状态</span>
    </div>
    <div v-if="cfgErr.pre" class="form-hint text-[#DC2626]">{{ cfgErr.pre }}</div>
@@ -5272,7 +5356,7 @@ body.host-single-m #root-user{display:none}
   <div class="form-row">
    <div class="flex flex-wrap items-center gap-x-1.5 gap-y-2 text-sm font-semibold leading-relaxed">
     <span>订单超期</span>
-    <div class="login-field mini relative flex items-center w-[60px] shrink-0"><input v-model.number="cfg.breach" type="number" min="1" @input="cfgErr.breach=''" class="w-full px-2 py-2 text-[15px] font-semibold text-center tabular-nums text-[#DC2626]" data-od-id="cfg-breach-input"></div>
+    <div class="ff-box mini relative flex items-center w-[60px] shrink-0"><input v-model.number="cfg.breach" type="number" min="1" @input="cfgErr.breach=''" class="w-full px-2 py-2 text-[15px] font-semibold text-center tabular-nums text-[#DC2626]" data-od-id="cfg-breach-input"></div>
     <span>天，自动变更为「已违约」状态</span>
    </div>
    <div v-if="cfgErr.breach" class="form-hint text-[#DC2626]">{{ cfgErr.breach }}</div>
@@ -5334,14 +5418,14 @@ body.host-single-m #root-user{display:none}
       <div class="form-row">
        <div class="flex flex-wrap items-center gap-x-1.5 gap-y-2 text-sm font-semibold leading-relaxed">
         <span>到期前</span>
-        <div class="login-field mini relative flex items-center w-[60px] shrink-0"><input v-model.number="cfg.renewAdvanceDays" type="number" min="0" max="30" :disabled="!cfg.renewAuto" class="w-full px-2 py-2 text-[15px] font-semibold text-center tabular-nums"></div>
+        <div class="ff-box mini relative flex items-center w-[60px] shrink-0"><input v-model.number="cfg.renewAdvanceDays" type="number" min="0" max="30" :disabled="!cfg.renewAuto" class="w-full px-2 py-2 text-[15px] font-semibold text-center tabular-nums"></div>
         <span>天自动续租</span>
        </div>
       </div>
       <div class="form-row">
        <div class="flex flex-wrap items-center gap-x-1.5 gap-y-2 text-sm font-semibold leading-relaxed">
         <span>连续扣款失败</span>
-        <div class="login-field mini relative flex items-center w-[60px] shrink-0"><input v-model.number="cfg.renewFailThreshold" type="number" min="1" max="10" :disabled="!cfg.renewAuto" class="w-full px-2 py-2 text-[15px] font-semibold text-center tabular-nums"></div>
+        <div class="ff-box mini relative flex items-center w-[60px] shrink-0"><input v-model.number="cfg.renewFailThreshold" type="number" min="1" max="10" :disabled="!cfg.renewAuto" class="w-full px-2 py-2 text-[15px] font-semibold text-center tabular-nums"></div>
         <span>次后关闭订单自动续租</span>
        </div>
       </div>
@@ -5368,7 +5452,7 @@ body.host-single-m #root-user{display:none}
 <page :open="profileOV==='recharge'" :z="500" :swipe-close="()=>goBack()">
 <nav-bar title="充值配置" border-color="#E5E5E5" @back="goBack"><template #right><span v-if="can('recharge.add')" class="text-sm font-medium cursor-pointer shrink-0" :style="{color:'var(--link)'}" data-cp @click="openRechargeEdit(-1)">新增</span></template></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hid">
- <div class="form-card mb-3">
+ <div class="form-plain mb-3">
   <div class="form-row">
    <div class="flex items-center justify-between">
     <span class="text-sm font-semibold">充值功能</span>
@@ -5405,23 +5489,21 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='rechargeEdit'" :z="510" :swipe-close="()=>goBack()">
 <nav-bar :title="rechargeIdx===-1?'新增充值配置':'编辑充值配置'" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <div class="flex-1 overflow-y-auto px-4 pt-4 pb-24 hid">
- <div class="form-card">
-  <div class="form-row"><div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>充值金额</div>
-   <div class="login-field flex items-center" :style="rfcErr.amount?{boxShadow:'inset 0 0 0 1px #DC2626'}:null">
-    <span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
-    <input v-model.number="rfc.amount" type="number" min="0" @input="rfcErr.amount=''" placeholder="0" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5">
-   </div>
-   <div v-if="rfcErr.amount" class="form-hint text-[#DC2626]">{{ rfcErr.amount }}</div>
-  </div>
-  <div class="form-row"><div class="form-label">赠送金额</div>
-   <div class="login-field flex items-center">
-    <span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
-    <input v-model.number="rfc.giftAmount" type="number" min="0" placeholder="0" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5">
-   </div>
-  </div>
-  <div class="form-row"><div class="form-label">状态</div><div class="flex gap-2"><div data-cp @click="rfc.status=1" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="rfc.status===1?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid #EBEDF0'}">启用</div><div data-cp @click="rfc.status=0" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="rfc.status===0?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F7F8FA',color:'#666',border:'1px solid #EBEDF0'}">禁用</div></div></div>
-  <div class="form-row"><div class="form-label">备注</div>
-   <div class="login-field relative flex items-center"><input v-model="rfc.remark" maxlength="255" placeholder="请输入备注" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]"><span class="absolute right-3.5 text-[12px] text-[#999] pointer-events-none" style="top:50%;transform:translateY(-50%)">{{ (rfc.remark||'').length }}/255</span></div></div>
+ <div class="form-plain">
+  <form-field label="充值金额" required :error="rfcErr.amount">
+   <span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+   <input v-model.number="rfc.amount" type="number" min="0" @input="rfcErr.amount=''" placeholder="请输入充值金额" class="flex-1 px-2 py-3.5 text-[16px] font-medium placeholder:text-[#999]">
+  </form-field>
+  <form-field label="赠送金额">
+   <span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+   <input v-model.number="rfc.giftAmount" type="number" min="0" placeholder="请输入赠送金额" class="flex-1 px-2 py-3.5 text-[16px] font-medium placeholder:text-[#999]">
+  </form-field>
+  <form-field label="状态" bare>
+   <div class="flex gap-2"><div data-cp @click="rfc.status=1" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="rfc.status===1?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #EBEDF0'}">启用</div><div data-cp @click="rfc.status=0" class="px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-all" :style="rfc.status===0?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#fff',color:'#666',border:'1px solid #EBEDF0'}">禁用</div></div>
+  </form-field>
+  <form-field label="备注" :counter="(rfc.remark||'').length" counter-max="255">
+   <input v-model="rfc.remark" maxlength="255" placeholder="请输入备注" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]">
+  </form-field>
  </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5"><button data-cp @click="saveRecharge" :disabled="rechargeSaving" class="w-full h-[50px] flex items-center justify-center rounded-xl text-lg font-bold text-white border-none cursor-pointer disabled:opacity-50 transition-colors" style="background:var(--accent)">保存</button></div>
@@ -5433,7 +5515,7 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="用户管理" border-color="#E5E5E5" @back="goBack"></nav-bar>
 <!-- 筛选条件（通栏白底） -->
 <div class="bg-white shrink-0 px-5 pt-3 pb-2">
-  <div class="flex-1 rounded-full flex items-center py-1.5" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:6px;padding-right:4px">
+  <div class="flex-1 rounded-full flex items-center" style="background:#F6F7F9;border:1px solid #E5E5E5;padding-left:6px;padding-right:4px;height:46px">
     <div class="relative shrink-0" data-cp @click.stop>
       <button data-cp @click="uSearchScopeOpen=!uSearchScopeOpen" type="button" class="flex items-center gap-1.5 text-[12px] font-medium text-[#333] bg-transparent border-0 outline-none pl-2 pr-2.5 mr-1.5 py-1 cursor-pointer" style="border-right:1px solid #E5E5E5">
         <span class="truncate max-w-[60px]">{{ uSearchScopeLabel }}</span>
@@ -5444,7 +5526,6 @@ body.host-single-m #root-user{display:none}
       </div>
     </div>
     <input v-model="uQ" type="text" :placeholder="uSearchPH" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]" @keyup.enter="uDoSearch">
-    
   </div>
 </div>
 <div class="bg-white shrink-0" style="padding:10px 20px 8px">
@@ -6164,7 +6245,25 @@ function registerSheetKit(app){
     /* 行级分隔线的三态：null=继承卡片；true/false=显式开关（裸属性得到空串 ''，按 HTML 语义视为 true） */
     computed:{kvLineOn:function(){var d=this.divider;if(d===undefined||d===null)return null;return d===''?true:!!d},kvLineClass:function(){var on=this.kvLineOn;return on===null?'':(on?'':'kv-noline')},kvLineStyle:function(){return this.kvLineOn===true?'border-top:1px dashed #E5E5E5;margin-top:-1px':''}},
     methods:{kvCopy:function(){this.$emit('copy',this.copyText||this.value)}},
-    template:'<div class="kv-row flex py-2" :class="[align===\'top\'?\'items-start\':\'items-center\',kvLineClass]" :style="kvLineStyle"><span class="shrink-0 text-[13px]" style="color:#999" :class="labelClass" :style="{width:labelWidth||kvLabelWidth}"><slot name="key">{{ label }}</slot></span><span class="flex-1 min-w-0 text-right pl-3 text-[13px] truncate" style="color:#111" :class="valueClass" :style="valueStyle||{}"><slot name="value">{{ value }}</slot></span><span v-if="copyable" class="shrink-0 pl-1.5" data-cp @click.stop="kvCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></div>'
+    template:'<div class="kv-row flex py-2" :class="[align===\'top\'?\'items-start\':\'items-center\',kvLineClass]" :style="kvLineStyle"><span class="shrink-0 text-[13px]" style="color:#999" :class="labelClass" :style="{width:labelWidth||kvLabelWidth}"><slot name="key">{{ label }}</slot></span><span class="flex-1 min-w-0 text-right pl-3 text-[13px] truncate" style="color:#333333" :class="valueClass" :style="valueStyle||{}"><slot name="value">{{ value }}</slot></span><span v-if="copyable" class="shrink-0 pl-1.5" data-cp @click.stop="kvCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></div>'
+  });
+  /* FormField：页面级表单字段外壳（label + 状态容器 + 计数 + 错误/提示）。
+     用法：<form-field label="套餐名称" required :error="fE.name" :counter="(fpk.name||'').length" counter-max="64">
+             <input v-model="fpk.name" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]" placeholder="请输入套餐名称">
+           </form-field>
+     props: label / required / error / hint / counter / counterMax / disabled / readonly / bare / oid / boxClass（额外容器类，如多行框传 box-class="is-area"）；
+     bare：无容器模式（不渲染白底 .ff-box，只保留 label/错误提示）——胶囊组等「成组选择」不要白底卡时用，如 <form-field label="租赁方案" bare>；
+     ⚠️ bare 是裸属性（值为空串 ''，按 HTML 语义视同 true）；显式关闭写 :bare="false"（同 kv-row 的 divider 三态）；
+     slots: default（输入元素，或 .ff-select 选择行 / .ff-upload 上传框 / textarea）/ label（自定义标签，如需要时）。
+     状态：disabled → .ff-box.is-disabled（深灰底 + 灰字）；error 非空 → .ff-box.is-error；聚焦不改变外观（按需求不加选中/高亮态，无 JS）。
+     ⚠️ 布尔 prop 一律 {default:false}（不声明类型），避免 '' 被布尔转换（同 bottom-sheet 的 open 陷阱）；
+     ⚠️ 取值绑定 / 校验 / 内层 :disabled 表达式全部留在调用方，本组件只负责外观（只换壳不改逻辑）。 */
+  app.component('form-field',{
+    name:'form-field',
+    props:{label:{type:String,default:''},required:{default:false},error:{type:String,default:''},hint:{type:String,default:''},counter:{default:null},counterMax:{default:''},disabled:{default:false},readonly:{default:false},bare:{default:false},oid:{type:String,default:''},boxClass:{type:String,default:''}},
+    /* bare 三态：裸属性（''）按 HTML 语义视为 true；:bare="false" 关闭（同 kv-row 的 divider 处理） */
+    computed:{bareOn:function(){var b=this.bare;return b===''?true:!!b}},
+    template:'<div class="ff-row" :data-od-id="oid||undefined"><div v-if="label||$slots.label" class="ff-label"><slot name="label"><span v-if="required" class="ff-star">*</span><span>{{ label }}</span></slot></div><div :class="bareOn?\'ff-bare\':[\'ff-box\',boxClass,disabled?\'is-disabled\':\'\',error?\'is-error\':\'\']"><slot></slot><span v-if="counter!==null&&counter!==undefined" class="ff-counter">{{ counter }}{{ counterMax?(\'/\'+counterMax):\'\' }}</span></div><div v-if="error" class="ff-hint is-err">{{ error }}</div><div v-else-if="hint" class="ff-hint">{{ hint }}</div></div>'
   });
    /* TabBar：底部导航（图标+文字，active 高亮，支持权限 hidden 与自定义 go）。
       用法：<tab-bar :items="[{key:'home',icon:'home',label:'首页',activeWhen:tab==='home',hidden:!can('home.view'),go:function(){setTab('home')}}]" :show="!showLogin" active-color="#2B3F5F" @select="setTab"></tab-bar>;
@@ -9097,7 +9196,7 @@ const roOV=ref('');            // '' | 'list' | 'detail' | 'refunds'
 const curRechargeOrder=ref(null);
 const roRefundMod=ref(false);  // 退款表单弹窗
 const roRefundConfirm=ref(false); // 退款确认弹窗
-const roRefundForm=ref({amount:null,giftAmount:null});
+const roRefundForm=ref({amount:null,giftAmount:null,reason:''});
 const roRefunds=ref([]);       // 退款记录
 const rechargeOrders=CZ_ORDERS;
 function roPayStatusTag(s){var m={UNPAID:{l:'待支付',c:'#FF8C1B'},PAYING:{l:'支付中',c:'#1A82F4'},PAID:{l:'已支付',c:'#17A34A'},REFUNDING:{l:'退款中',c:'#8B5CF6'},PARTIAL_REFUND:{l:'部分退款',c:'#E6A23C'},FULL_REFUND:{l:'全部退款',c:'#FF4343'},CANCELLED:{l:'已取消',c:'#999'}};return m[s]||{l:s,c:'#999'}}
@@ -9110,7 +9209,7 @@ function roCanRefund(){var s=curRechargeOrder.value&&curRechargeOrder.value.payS
 function roCanRefundRecords(){var s=curRechargeOrder.value&&curRechargeOrder.value.payStatus;return ['REFUNDING','PARTIAL_REFUND','FULL_REFUND'].indexOf(s)!==-1}
 function roOpenRefunds(){if(!can('recharge_order.refund.list')){deny();return}navOpen();var o=curRechargeOrder.value;roRefunds.value=[{applyTime:'2026-08-10 09:12:00',rechargeAmount:o.refundAmount||0,giftAmount:o.refundGiftAmount||0,operator:'zhang.wei',refundReason:'客户要求退款',refundStatus:'REFUNDING',refundTime:o.payStatus==='FULL_REFUND'?'2026-08-11 11:00:00':''}];roOV.value='refunds'}
 function roRefundTotal(){var a=Number(roRefundForm.value.amount)||0,b=Number(roRefundForm.value.giftAmount)||0;return a+b}
-function roOpenRefund(){if(!can('recharge_order.refund.create')){deny();return}if(!roCanRefund())return;roRefundForm.value={amount:null,giftAmount:null};roRefundMod.value=true}
+function roOpenRefund(){if(!can('recharge_order.refund.create')){deny();return}if(!roCanRefund())return;roRefundForm.value={amount:null,giftAmount:null,reason:''};roRefundMod.value=true}
 function roSubmitRefund(){var a=Number(roRefundForm.value.amount)||0,b=Number(roRefundForm.value.giftAmount)||0,o=curRechargeOrder.value;if(a<=0&&b<=0){toast('请输入退款金额','warn');return}if(a>o.amount){toast('充值金额超出可退金额','warn');return}if(b>o.giftAmount){toast('赠送金额超出可退金额','warn');return}roRefundConfirm.value=true}
 const roRefundLoading=ref(false); function roConfirmRefund(){if(roRefundLoading.value)return;roRefundLoading.value=true;setTimeout(()=>{roRefundLoading.value=false;var o=curRechargeOrder.value;o.payStatus='REFUNDING';roRefundConfirm.value=false;toast('退款申请已提交','success')},600)}
 const roCancelMod=ref(false);
