@@ -60,6 +60,17 @@ body.host-single-m #root-user{display:none}
 .sw-map .road-h{height:14px;left:0;right:0}
 .sw-map .road-v{width:14px;top:0;bottom:0}
 .sw-maplbl{position:absolute;font-size:9px;color:#6B7A66;background:rgba(255,255,255,.85);border-radius:3px;padding:1px 4px;white-space:nowrap;font-weight:500}
+/* ── 门店地址选点：可拖拽假地图（世界层 = 容器 2×2，靠 transform 平移并吸附候选点） ── */
+.sm-world{position:absolute;left:-50%;top:-50%;width:200%;height:200%;will-change:transform}
+.sm-road-h,.sm-road-v{position:absolute;background:rgba(255,255,255,.6)}
+.sm-road-h{height:16px;left:0;right:0}
+.sm-road-v{width:16px;top:0;bottom:0}
+.sm-roadlbl{position:absolute;font-size:10px;color:#6B7A66;background:rgba(255,255,255,.85);border-radius:3px;padding:1px 5px;white-space:nowrap;font-weight:500}
+.sm-poi{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;pointer-events:none}
+.sm-poi .pdot{width:9px;height:9px;border-radius:50%;background:#15B88C;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.sm-poi .pnm{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;font-size:10px;color:#455A4C;background:rgba(255,255,255,.9);border-radius:4px;padding:1px 5px;max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.sm-poi.on .pdot{background:#FF6A00;width:12px;height:12px}
+.sm-loc-btn{position:absolute;right:12px;bottom:12px;width:38px;height:38px;border-radius:12px;background:#fff;border:none;box-shadow:0 1px 5px rgba(0,0,0,.15);color:#2B3F5F;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:20}
 .sw-station{position:absolute;display:flex;flex-direction:column;align-items:center;cursor:pointer;transform:translate(-50%,-50%)}
 .sw-station .pin{position:relative;width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.18)}
 .sw-station .pin .num{position:absolute;right:-5px;top:-5px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:#fff;border:1px solid #15B88C;color:#15B88C;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
@@ -227,6 +238,12 @@ body.host-single-m #root-user{display:none}
 .login-brand-mark{width:4.5rem;height:4.5rem;border-radius:1.25rem;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--accent) 0%,var(--accent) 100%);box-shadow:0 8px 20px rgba(43,63,95,.28);color:#fff}
 .form-hint{font-size:12px;color:var(--danger);margin-top:4px}
 .set-hd{font-size:13px;font-weight:500;color:#999;margin-bottom:8px;padding-left:4px}
+/* ── 时/分滚轮（营业时间选择器，与租车端 track-wheel 同款） ── */
+.track-wheel-col{flex:1;height:180px;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;mask-image:linear-gradient(to bottom,transparent,black 28%,black 72%,transparent);-webkit-mask-image:linear-gradient(to bottom,transparent,black 28%,black 72%,transparent)}
+.track-wheel-col::-webkit-scrollbar{display:none}
+.track-wheel-item{height:36px;display:flex;align-items:center;justify-content:center;scroll-snap-align:center;font-size:16px;color:#999;flex-shrink:0}
+.track-wheel-item.is-on{color:#111;font-weight:600;font-size:17px}
+.track-wheel-mask{position:absolute;left:0;right:0;top:50%;height:36px;margin-top:-18px;pointer-events:none;border-top:1px solid #E5E5E5;border-bottom:1px solid #E5E5E5;background:rgba(43,63,95,.04)}
 /* ── 过渡动画与滚动类 ── */
 .fd-enter-active,.fd-leave-active{transition:opacity .25s}
 .fd-enter-from,.fd-leave-to{opacity:0}
@@ -279,6 +296,11 @@ body.host-single-m #root-user{display:none}
 .sheet-title{font-size:17px;font-weight:600;color:#111;display:inline-block;max-width:calc(100% - 72px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-sizing:border-box;padding:0 56px}
 .sheet-x{position:absolute;right:16px;top:calc(50% - 20px);transform:translateY(-50%);width:32px;height:32px;border-radius:9999px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#999;user-select:none}
 .sheet-x:active{background:#F6F7F9}
+.sheet-head-b{display:flex;align-items:center;padding:14px 16px}
+.sheet-head-b .sheet-title{max-width:none;padding:0;flex:1;text-align:center}
+.sheet-btn{font-size:15px;cursor:pointer;user-select:none;flex-shrink:0}
+.sheet-btn-cancel{color:#999}
+.sheet-btn-confirm{color:var(--accent);font-weight:600}
 .sheet-scroll{flex:1;overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .sheet-scroll::-webkit-scrollbar{display:none}
 /* 内容行 token：搜索框（与租车 index.html 同款） */
@@ -294,6 +316,20 @@ body.host-single-m #root-user{display:none}
 .sheet-footer{position:relative;flex-shrink:0}
 .sh-enter-active,.sh-leave-active{transition:transform .3s cubic-bezier(.32,.72,0,1)}
 .sh-enter-from,.sh-leave-to{transform:translateY(100%)}
+/* ═══ KV 卡片共享组件 token（registerSheetKit·见 AGENTS.md「kv-card / kv-row」） ═══ */
+/* 分隔线默认只画在「相邻两行之间」：首行上方、末行下方天然不画（无需 :last-child，混入非 kv-row 内容也不误画）
+   margin-top:-1px 抵消 border 的 1px 占位，保证带分隔线的行高与不带线时严格一致（统一 32px） */
+.kv-card-div>.kv-row+.kv-row{border-top:1px dashed #E5E5E5;margin-top:-1px}
+/* 行级关闭：kv-row 传 :divider="false"（4 个类选择器，特异性高于上一条，稳定覆盖） */
+.kv-card-div>.kv-row.kv-noline{border-top:none}
+/* ═══ 分区间距（标题栏 / kv行 / 自定义内容 / footer 可任意组合）═══
+   ① 标题栏 → 首块：6(标题栏 mb-1.5) + 8 = 14px（首块是自定义内容时由本规则补 8px；是 kv-row 时由行自带 padding-top）
+   ② 任意内容 → footer：footer 恒有 8px 顶距（前面是 kv行时为 行padding-bottom(8) + 8 = 16px，与行↔行(8+8)一致；
+      前面是自定义内容时同样补 8px，避免 footer 的 border-top 贴住上方内容）
+   ③ kv行 → 自定义内容、自定义内容之间：由内容自带间距，组件不干预
+   无标题栏时 ① 不命中，顶距由卡片 py-3.5 决定；footer 仅在传入 #footer 插槽时渲染。 */
+.kv-head+*:not(.kv-row){padding-top:8px}
+.kv-foot{padding-top:8px}
 </style>
 </head>
 <body>
@@ -966,15 +1002,11 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="我的电池" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
 <empty-state v-if="!batteryList.length" icon="battery-charging" text="暂无电池" root-class="flex flex-col items-center justify-center text-center pt-24" circle-class="w-16 h-16 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-8 h-8 text-[#BBB]" text-class="text-[15px] font-semibold text-[#333]"></empty-state>
-<div v-for="b in batteryList" :key="b.id" data-cp @click="openBatteryDetail(b)" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3 cursor-pointer active:opacity-90" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'battery-item-'+b.id">
-<div class="flex items-center gap-2 pb-3" style="border-bottom:1px solid #F0F0F0">
-<span class="flex-1 text-[16px] font-bold text-[#1A1A1A]">{{ b.no }}</span>
-</div>
-<div class="pt-0.5">
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">电池位置</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ b.location }}</span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">绑定时间</span><span class="flex-1 text-right text-[14px]" style="color:#111">{{ b.bindTime }}</span></div>
-</div>
-</div>
+<kv-card v-for="b in batteryList" :key="b.id" class="mb-3 cursor-pointer active:opacity-90" data-cp @click="openBatteryDetail(b)" :data-od-id="'battery-item-'+b.id">
+<template #title><span class="min-w-0 truncate">{{ b.no }}</span></template>
+<kv-row label="电池位置" :value="b.location"></kv-row>
+<kv-row label="绑定时间" :value="b.bindTime"></kv-row>
+</kv-card>
 </div>
 </page>
 <page :open="profileOV==='station'&&curStation" :z="600" oid="station-page">
@@ -1328,14 +1360,14 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="换电记录" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
 <template v-if="swapRecordsView.length">
-<div v-for="r in swapRecordsView" :key="r.id" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'swap-record-'+r.id">
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">订单编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.orderNo || '—' }}</span><span v-if="r.orderNo&&r.orderNo!=='-'" data-cp @click="copyText(r.orderNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">电池编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.batteryId || '—' }}</span><span v-if="r.batteryId&&r.batteryId!=='-'" data-cp @click="copyText(r.batteryId)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">取电柜子</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.borrowNo || '—' }}</span><span v-if="r.borrowNo" data-cp @click="copyText(r.borrowNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
-<div v-if="r.returnNo" class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">还电柜子</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.returnNo }}</span><span data-cp @click="copyText(r.returnNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">取电时间</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px] tabular-nums" style="color:#111">{{ r.borrowTime || '—' }}</span></div>
-<div v-if="r.returnTime" class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">还电时间</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px] tabular-nums" style="color:#111">{{ r.returnTime }}</span></div>
-</div>
+<kv-card v-for="r in swapRecordsView" :key="r.id" class="mb-3" :data-od-id="'swap-record-'+r.id">
+<kv-row label="订单编号" :value="r.orderNo || '—'" :copyable="!!(r.orderNo&&r.orderNo!=='-')" @copy="t=>copyText(t)"></kv-row>
+<kv-row label="电池编号" :value="r.batteryId || '—'" :copyable="!!(r.batteryId&&r.batteryId!=='-')" @copy="t=>copyText(t)"></kv-row>
+<kv-row label="取电柜子" :value="r.borrowNo || '—'" :copyable="!!r.borrowNo" @copy="t=>copyText(t)"></kv-row>
+<kv-row v-if="r.returnNo" label="还电柜子" :value="r.returnNo" copyable @copy="t=>copyText(t)"></kv-row>
+<kv-row label="取电时间" :value="r.borrowTime || '—'" value-class="tabular-nums"></kv-row>
+<kv-row v-if="r.returnTime" label="还电时间" :value="r.returnTime" value-class="tabular-nums"></kv-row>
+</kv-card>
 </template>
 <empty-state v-else icon="scroll-text" text="暂无记录" root-class="flex flex-col items-center justify-center text-center" style="padding-top:150px" circle-class="contents" icon-class="w-20 h-20 text-[#C6CDD8]" text-class="text-[15px] font-semibold text-[#333] mt-5" data-od-id="swap-records-empty"></empty-state>
 </div>
@@ -1348,18 +1380,14 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
 <template v-if="activeCards.length">
-<div v-for="c in activeCards" :key="c.id" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'card-item-'+c.id">
-<div class="flex items-center gap-2 pb-3" style="border-bottom:1px solid #F0F0F0">
-<span class="flex-1 min-w-0 truncate text-[16px] font-bold text-[#1A1A1A]">{{ c.name }}</span>
-<span class="text-[13px] font-medium shrink-0" style="color:#FF8A00">生效中</span>
-</div>
-<div class="pt-0.5">
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">剩余次数</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ c.times }}</span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">可借电池</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ c.batteries }}</span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">有效期</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ c.days }}天</span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">有效期至</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ c.expire }}</span></div>
-</div>
-</div>
+<kv-card v-for="c in activeCards" :key="c.id" class="mb-3" :data-od-id="'card-item-'+c.id">
+<template #title><span class="min-w-0 truncate">{{ c.name }}</span></template>
+<template #extra><span class="text-[13px] font-medium shrink-0" style="color:#FF8A00">生效中</span></template>
+<kv-row label="剩余次数" :value="c.times"></kv-row>
+<kv-row label="可借电池" :value="c.batteries"></kv-row>
+<kv-row label="有效期" :value="c.days + '天'"></kv-row>
+<kv-row label="有效期至" :value="c.expire"></kv-row>
+</kv-card>
 </template>
 <div v-else class="flex flex-col items-center justify-center text-center" style="padding-top:150px" data-od-id="card-pack-empty">
 <div class="relative">
@@ -1374,18 +1402,14 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="失效套餐" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
 <template v-if="expiredCards.length">
-<div v-for="c in expiredCards" :key="c.id" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'card-expired-'+c.id">
-<div class="flex items-center gap-2 pb-3" style="border-bottom:1px solid #F0F0F0">
-<span class="flex-1 min-w-0 truncate text-[16px] font-bold text-[#1A1A1A]">{{ c.name }}</span>
-<span class="text-[13px] font-medium shrink-0" style="color:#999">已失效</span>
-</div>
-<div class="pt-0.5">
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">剩余次数</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ c.times }}</span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">可借电池</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ c.batteries }}</span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">有效期</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ c.days }}天</span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">有效期至</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ c.expire }}</span></div>
-</div>
-</div>
+<kv-card v-for="c in expiredCards" :key="c.id" class="mb-3" :data-od-id="'card-expired-'+c.id">
+<template #title><span class="min-w-0 truncate">{{ c.name }}</span></template>
+<template #extra><span class="text-[13px] font-medium shrink-0" style="color:#999">已失效</span></template>
+<kv-row label="剩余次数" :value="c.times"></kv-row>
+<kv-row label="可借电池" :value="c.batteries"></kv-row>
+<kv-row label="有效期" :value="c.days + '天'"></kv-row>
+<kv-row label="有效期至" :value="c.expire"></kv-row>
+</kv-card>
 </template>
 <empty-state v-else icon="clipboard-list" text="暂无失效套餐" root-class="flex flex-col items-center justify-center text-center" style="padding-top:150px" circle-class="contents" icon-class="w-20 h-20 text-[#C6CDD8]" text-class="text-[15px] font-semibold text-[#333] mt-5" data-od-id="card-expired-empty"></empty-state>
 </div>
@@ -1408,21 +1432,14 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
 <template v-if="planOrdersView.length">
-<div v-for="o in planOrdersView" :key="o.id" data-cp @click="openPlanOrder(o)" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3 cursor-pointer active:bg-[#FAFAFA]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'plan-order-'+o.id">
-<div class="flex items-center gap-2 pb-3" style="border-bottom:1px solid #F0F0F0">
-<span class="flex-1 min-w-0 truncate text-[16px] font-bold text-[#1A1A1A]">{{ o.name }}</span>
-<span class="text-[13px] font-medium shrink-0" :style="'color:'+o.color">{{ o.status }}</span>
-</div>
-<div class="pt-0.5">
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">有效期</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ o.days }}天</span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">换电次数</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ o.times }}</span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">可借电池</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ o.batteries }}</span></div>
-</div>
-<div class="flex items-center justify-between pt-3 pb-1.5" style="border-top:1px solid #F0F0F0">
-<span class="text-[13px] truncate pr-3" style="color:#999">{{ o.created }}</span>
-<span class="text-[15px] font-semibold shrink-0" style="color:#FF6A00">{{ fmtRp(o.amount) }}</span>
-</div>
-</div>
+<kv-card v-for="o in planOrdersView" :key="o.id" class="mb-3 cursor-pointer active:bg-[#FAFAFA]" data-cp @click="openPlanOrder(o)" :data-od-id="'plan-order-'+o.id">
+<template #title><span class="min-w-0 truncate">{{ o.name }}</span></template>
+<template #extra><span class="text-[13px] font-medium shrink-0" :style="'color:'+o.color">{{ o.status }}</span></template>
+<kv-row label="有效期" :value="o.days + '天'"></kv-row>
+<kv-row label="换电次数" :value="o.times"></kv-row>
+<kv-row label="可借电池" :value="o.batteries"></kv-row>
+<template #footer><div class="flex items-center justify-between" style="border-top:1px solid #F0F0F0;padding-top:12px"><span class="text-[13px] truncate pr-3" style="color:#999">{{ o.created }}</span><span class="text-[15px] font-semibold shrink-0" style="color:#FF6A00">{{ fmtRp(o.amount) }}</span></div></template>
+</kv-card>
 </template>
 <empty-state v-else icon="clipboard-list" text="暂无订单" root-class="flex flex-col items-center justify-center text-center" style="padding-top:150px" circle-class="contents" icon-class="w-20 h-20 text-[#C6CDD8]" text-class="text-[15px] font-semibold text-[#333] mt-5" data-od-id="plan-orders-empty"></empty-state>
 </div>
@@ -1431,40 +1448,26 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="订单详情" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div v-if="planOrderDetail.status==='待支付'" class="px-4 py-2.5 bg-[#FEF2F2] flex items-center shrink-0"><span class="text-[13px] text-[#DC2626] font-medium">{{ fmtCountdown(planOrderLeft) }}，超时未支付，订单将自动取消</span></div>
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-3 pb-6">
-<div class="bg-white rounded-2xl p-4 mb-3" data-od-id="pod-plan">
-<div class="flex items-center justify-between mb-2">
-<span class="text-[14px] font-bold text-[#1A1A1A]">{{ planOrderDetail.name }}</span>
-<span v-if="planOrderDetail.status!=='已取消'&&planOrderDetail.status!=='待支付'" class="text-[13px] font-medium shrink-0" style="color:#17A34A">已生效</span>
-</div>
-<div class="text-[13px] space-y-2.5">
-<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">有效期</span><span class="flex-1 text-right text-[#333]">{{ planOrderDetail.days }}天</span></div>
-<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">换电次数</span><span class="flex-1 text-right text-[#333]">{{ planOrderDetail.times }}</span></div>
-<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">可借电池</span><span class="flex-1 text-right text-[#333]">{{ planOrderDetail.batteries }}</span></div>
-</div>
-</div>
-<div class="bg-white rounded-2xl p-4 mb-3" data-od-id="pod-order">
-<div class="flex items-center justify-between mb-2">
-<span class="text-[14px] font-bold text-[#1A1A1A]">订单信息</span>
-<span class="text-[14px] font-medium" :style="'color:'+planOrderDetail.color">{{ planOrderDetail.status }}</span>
-</div>
-<div class="text-[13px] space-y-2.5">
-<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">订单编号</span><span class="flex-1 text-right text-[#333]">{{ planOrderDetail.orderNo }}</span></div>
-<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">创建时间</span><span class="flex-1 text-right text-[#333]">{{ planOrderDetail.created }}</span></div>
-<div v-if="planOrderDetail.cancelTime" class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">取消时间</span><span class="flex-1 text-right text-[#333]">{{ planOrderDetail.cancelTime }}</span></div>
-<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">订单金额</span><span class="flex-1 text-right text-[#333]">{{ fmtRp(planOrderDetail.amount) }}</span></div>
-<div v-if="planOrderDetail.paidTime" class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">实付金额</span><span class="flex-1 text-right text-[#333]">{{ fmtRp(planOrderDetail.amount) }}</span></div>
-<div v-if="planOrderDetail.paidTime" class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">支付时间</span><span class="flex-1 text-right text-[#333]">{{ planOrderDetail.paidTime }}</span></div>
-</div>
-</div>
-<div v-if="planOrderDetail.status==='已退款'" class="bg-white rounded-2xl p-4 mb-3" data-od-id="pod-refund">
-<div class="flex items-center justify-between mb-2">
-<span class="text-[14px] font-bold text-[#1A1A1A]">退款信息</span>
-</div>
-<div class="text-[13px] space-y-2.5">
-<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">退款金额</span><span class="flex-1 text-right text-[#333]">{{ fmtRp(planOrderDetail.amount) }}</span></div>
-<div class="flex items-center gap-2"><span class="text-[#999] w-16 flex-shrink-0">退款时间</span><span class="flex-1 text-right text-[#333]">{{ planOrderDetail.refundTime }}</span></div>
-</div>
-</div>
+<kv-card class="mb-3" data-od-id="pod-plan">
+<template #title><span class="min-w-0 truncate">{{ planOrderDetail.name }}</span></template>
+<template #extra><span v-if="planOrderDetail.status!=='已取消'&&planOrderDetail.status!=='待支付'" class="text-[13px] font-medium shrink-0" style="color:#17A34A">已生效</span></template>
+<kv-row label="有效期" :value="planOrderDetail.days + '天'"></kv-row>
+<kv-row label="换电次数" :value="planOrderDetail.times"></kv-row>
+<kv-row label="可借电池" :value="planOrderDetail.batteries"></kv-row>
+</kv-card>
+<kv-card title="订单信息" class="mb-3" data-od-id="pod-order">
+<template #extra><span class="text-[14px] font-medium shrink-0" :style="'color:'+planOrderDetail.color">{{ planOrderDetail.status }}</span></template>
+<kv-row label="订单编号" :value="planOrderDetail.orderNo"></kv-row>
+<kv-row label="创建时间" :value="planOrderDetail.created"></kv-row>
+<kv-row v-if="planOrderDetail.cancelTime" label="取消时间" :value="planOrderDetail.cancelTime"></kv-row>
+<kv-row label="订单金额" :value="fmtRp(planOrderDetail.amount)"></kv-row>
+<kv-row v-if="planOrderDetail.paidTime" label="实付金额" :value="fmtRp(planOrderDetail.amount)"></kv-row>
+<kv-row v-if="planOrderDetail.paidTime" label="支付时间" :value="planOrderDetail.paidTime"></kv-row>
+</kv-card>
+<kv-card v-if="planOrderDetail.status==='已退款'" title="退款信息" class="mb-3" data-od-id="pod-refund">
+<kv-row label="退款金额" :value="fmtRp(planOrderDetail.amount)"></kv-row>
+<kv-row label="退款时间" :value="planOrderDetail.refundTime"></kv-row>
+</kv-card>
 <div v-if="planOrderDetail.status==='待支付'" class="flex justify-center py-3">
 <span class="text-[14px] font-medium cursor-pointer select-none text-[var(--accent)] active:opacity-70" data-cp @click="showCancelPlanTip=true">取消订单</span>
 </div>
@@ -1731,23 +1734,19 @@ body.host-single-m #root-user{display:none}
 <empty-state v-if="!battList.length" icon="battery-charging" text="暂无电池" :sub="battEmptySub">
 <div v-if="battQ||battFilterActive" data-cp @click="battQ='';battFilterReset();battFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="batt-empty-reset">清空筛选</div>
 </empty-state>
-<div v-for="b in battList" :key="b.no" data-cp @click="openBattDetail(b.no)" class="bg-white rounded-xl p-4 mb-2.5 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :data-od-id="'batt-item-'+b.no">
-<div class="text-[15px] font-semibold mb-1.5">电池编号：{{ b.no }}</div>
-<div class="flex justify-between items-center text-[13px] mb-1.5">
-<span class="truncate min-w-0 pr-2">归属：{{ battLocLabel(b) }}</span>
-<div class="flex gap-3 shrink-0">
-<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.net(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.net(b))}"></span>{{ BATT_TEXT.net(b) }}</span>
-<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.cab(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.cab(b))}"></span>{{ BATT_TEXT.cab(b) }}</span>
+<kv-card v-for="b in battList" :key="b.no" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openBattDetail(b.no)" :data-od-id="'batt-item-'+b.no">
+<template #title><span class="min-w-0 truncate">{{ b.no }}</span></template>
+<template #extra><span class="text-[13px] font-medium shrink-0" :style="{color:dotColor(BATT_DOT.net(b))}">{{ BATT_TEXT.net(b) }}</span></template>
+<kv-row label="当前归属" :value="battLocLabel(b)"></kv-row>
+<kv-row label="电量" :value="b.soc+'%'" value-class="tabular-nums" :value-style="{color:socColor(b.soc)}"></kv-row>
+<kv-row label="在柜状态" :value="BATT_TEXT.cab(b)" :value-style="{color:dotColor(BATT_DOT.cab(b))}"></kv-row>
+<kv-row label="租用状态" :value="BATT_TEXT.rent(b)" :value-style="{color:dotColor(BATT_DOT.rent(b))}"></kv-row>
+<kv-row v-if="battStateOf(b)" label="电池状态" :value="battStateOf(b)" :value-style="{color:battStateColor(b)}"></kv-row>
+</kv-card>
 </div>
-</div>
-<div class="flex justify-between items-center text-[13px]">
-<span class="flex items-center gap-1 shrink-0 tabular-nums" :style="{color:socColor(b.soc)}"><span v-html="luci(socIcon(b.soc),'w-3 h-3')"></span>{{ b.soc }}%</span>
-<div class="flex gap-3 shrink-0">
-<span v-if="battStateOf(b)" class="flex items-center gap-1 text-[12px]" :style="{color:battStateColor(b)}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:battStateColor(b)}"></span>{{ battStateOf(b) }}</span>
-<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(BATT_DOT.rent(b))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(BATT_DOT.rent(b))}"></span>{{ BATT_TEXT.rent(b) }}</span>
-</div>
-</div>
-</div>
+<!-- 新增电池入口（与机柜列表同一套右下悬浮钮：仅新增电池，故只放一个加号） -->
+<div class="absolute right-5 z-[80] flex flex-col items-center gap-3" style="bottom:105px">
+<div data-cp @click="openBattAdd()" class="w-14 h-14 bg-[#2B3F5F] text-white rounded-full flex items-center justify-center cursor-pointer active:scale-95 transition-transform" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)" data-od-id="batt-add-fab"><span v-html="luci('plus','w-5 h-5')"></span></div>
 </div>
 </div>
 <div v-if="tab==='cab'&&!profileOV&&!profileSub" class="absolute inset-0 flex flex-col" data-od-id="merchant-cab">
@@ -1767,24 +1766,15 @@ body.host-single-m #root-user{display:none}
 <empty-state v-if="!cabList.length" icon="box" text="暂无换电柜" :sub="cabEmptySub">
 <div v-if="cabQ||cabFilterActive" data-cp @click="cabQ='';cabFilterReset();cabFilterConfirm()" class="mt-4 h-9 px-5 rounded-full flex items-center text-[13px] font-medium cursor-pointer" style="background:#EEF1F8;color:#2B3F5F" data-od-id="cab-empty-reset">清空筛选</div>
 </empty-state>
-<div v-for="c in cabList" :key="c.no" data-cp @click="openCabDetail(c.no)" class="bg-white rounded-xl p-4 mb-2.5 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" :data-od-id="'cab-item-'+c.no">
-<div class="text-[15px] font-semibold mb-1.5">机柜编号：{{ c.no }}</div>
-<div class="flex justify-between items-center text-[13px] mb-1.5">
-<span class="truncate min-w-0 pr-2">站点：{{ cabStationLabel(c) }}</span>
-<div class="flex gap-3 shrink-0">
-<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.net(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.net(c))}"></span>{{ CAB_TEXT.net(c) }}</span>
-<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.biz(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.biz(c))}"></span>{{ CAB_TEXT.biz(c) }}</span>
-</div>
-</div>
-<div class="flex justify-between items-center text-[13px]">
-<span class="truncate min-w-0 pr-2">仓门 {{ c.doors }} · 电池 {{ battCountOf(c) }}</span>
-<div class="flex gap-3 shrink-0">
-<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.enabled(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.enabled(c))}"></span>{{ CAB_TEXT.enabled(c) }}</span>
-<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.alarm(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.alarm(c))}"></span>{{ CAB_TEXT.alarm(c) }}</span>
-<span class="flex items-center gap-1 text-[12px]" :style="{color:dotColor(CAB_DOT.fault(c))}"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.fault(c))}"></span>{{ CAB_TEXT.fault(c) }}</span>
-</div>
-</div>
-</div>
+<kv-card v-for="c in cabList" :key="c.no" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openCabDetail(c.no)" :data-od-id="'cab-item-'+c.no">
+<template #title><span class="min-w-0 truncate">{{ c.no }}</span></template>
+<template #extra><span class="text-[13px] font-medium shrink-0" :style="{color:dotColor(CAB_DOT.net(c))}">{{ CAB_TEXT.net(c) }}</span></template>
+<kv-row label="当前站点" :value="cabStationLabel(c)"></kv-row>
+<kv-row label="运营状态" :value="CAB_TEXT.biz(c)" :value-style="{color:dotColor(CAB_DOT.biz(c))}"></kv-row>
+<kv-row label="启用状态" :value="CAB_TEXT.enabled(c)" :value-style="{color:dotColor(CAB_DOT.enabled(c))}"></kv-row>
+<kv-row label="告警状态" :value="CAB_TEXT.alarm(c)" :value-style="{color:dotColor(CAB_DOT.alarm(c))}"></kv-row>
+<kv-row label="故障状态" :value="CAB_TEXT.fault(c)" :value-style="{color:dotColor(CAB_DOT.fault(c))}"></kv-row>
+</kv-card>
 </div>
 <div class="absolute right-5 z-[80] flex flex-col items-center gap-3" style="bottom:105px">
 <div data-cp @click="openCabAdd()" class="w-14 h-14 bg-[#2B3F5F] text-white rounded-full flex items-center justify-center cursor-pointer active:scale-95 transition-transform" style="box-shadow:0 4px 12px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.12)" data-od-id="cab-add-fab"><span v-html="luci('plus','w-5 h-5')"></span></div>
@@ -1874,6 +1864,11 @@ body.host-single-m #root-user{display:none}
 <div class="mb-3">
 <div class="text-[13px] font-semibold text-[#999] px-1 mb-1.5">常用功能</div>
 <div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5">
+<div data-cp @click="openFranchiseeList()" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border-bottom:1px solid #EDEDED" data-od-id="mine-franchisee-entry">
+<div class="w-7 h-7 flex items-center justify-center mr-3 text-[#666]"><span v-html="luci('building-2','w-5 h-5')"></span></div>
+<span class="flex-1 text-[15px] font-medium" style="color:#111">切换加盟商</span>
+<div class="flex items-center gap-1 min-w-0"><span class="text-[13px] text-[#666] mr-1 truncate max-w-[110px]">{{ curFranchisee.name }}</span><span v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span></div>
+</div>
 <div data-cp @click="openStoreList()" class="flex items-center px-4 py-3.5 cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border-bottom:1px solid #EDEDED" data-od-id="mine-store-entry">
 <div class="w-7 h-7 flex items-center justify-center mr-3 text-[#666]"><span v-html="luci('store','w-5 h-5')"></span></div>
 <span class="flex-1 text-[15px] font-medium" style="color:#111">门店管理</span>
@@ -1899,34 +1894,20 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
 <empty-state v-if="!curCab" icon="box" text="换电柜不存在" sub="该换电柜可能已被移除" root-class="flex flex-col items-center justify-center py-16" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
 <template v-if="curCab">
-<div class="bg-white rounded-2xl px-4 py-3.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold mb-1.5" style="color:#111">机柜信息</div>
-<div class="flex items-center py-2">
-<span class="text-[13px] shrink-0" style="color:#999">机柜编号</span>
-<span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ curCab.no }}</span>
-<span v-if="curCab.no" class="shrink-0 pl-1.5" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyCabNo()" data-od-id="cab-code-copy"></span>
-</div>
-<div class="flex items-center py-2">
-<span class="text-[13px] shrink-0" style="color:#999">机柜名称</span>
-<span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ curCab.name }}</span>
-</div>
-<div data-cp @click="curCab.stationId&&openStationDetail(curCab.stationId)" class="flex items-center py-2 cursor-pointer active:opacity-70" data-od-id="cab-station-entry">
-<span class="text-[13px] shrink-0" style="color:#999">当前站点</span>
-<span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:var(--link)">{{ stationNameOf(curCab.stationId) }}</span>
-</div>
-<div class="flex items-center py-2">
-<span class="text-[13px] shrink-0" style="color:#999">当前地址</span>
-<span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ stationAddrOf(curCab.stationId) }}</span>
-</div>
-<div class="grid grid-cols-4 gap-x-1 gap-y-3.5 mt-4">
-<div v-for="s in cabStateCells" :key="s.label" class="text-center">
-<div class="text-[14px] font-bold" :style="{color:s.color}">{{ s.value }}</div>
-<div class="text-[11px] mt-1" style="color:#999">{{ s.label }}</div>
-</div>
-</div>
-</div>
-<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold mb-3" style="color:#111">机柜控制</div>
+<!-- 机柜信息（对标「换电柜」列表卡：标题取机柜编号 + 复制入口，联网状态放 #extra，其余为标签/值行） -->
+<kv-card class="mb-3" :copyable="!!curCab.no" :copy-text="curCab.no" @copy="copyCabNo()">
+<template #title><span class="min-w-0 truncate">{{ curCab.no }}</span></template>
+<template #extra><span class="text-[13px] font-medium shrink-0" :style="{color:dotColor(CAB_DOT.net(curCab))}">{{ CAB_TEXT.net(curCab) }}</span></template>
+<kv-row label="机柜名称" :value="curCab.name"></kv-row>
+<!-- 当前站点：无站点归属（stationId 空）→ 显示 -，且不可点、不带链接色（与列表卡「当前站点」的 - 口径一致） -->
+<kv-row label="当前站点" :value="curCab.stationId?stationNameOf(curCab.stationId):'-'" :value-style="curCab.stationId?{color:'var(--link)'}:null" :class="curCab.stationId?'cursor-pointer active:opacity-70':''" data-cp @click="curCab.stationId&&openStationDetail(curCab.stationId)" data-od-id="cab-station-entry"></kv-row>
+<kv-row label="当前地址" :value="curCab.stationId?stationAddrOf(curCab.stationId):'-'"></kv-row>
+<kv-row label="运营状态" :value="CAB_TEXT.biz(curCab)" :value-style="{color:dotColor(CAB_DOT.biz(curCab))}"></kv-row>
+<kv-row label="启用状态" :value="CAB_TEXT.enabled(curCab)" :value-style="{color:dotColor(CAB_DOT.enabled(curCab))}"></kv-row>
+<kv-row label="告警状态" :value="CAB_TEXT.alarm(curCab)" :value-style="{color:dotColor(CAB_DOT.alarm(curCab))}"></kv-row>
+<kv-row label="故障状态" :value="CAB_TEXT.fault(curCab)" :value-style="{color:dotColor(CAB_DOT.fault(curCab))}"></kv-row>
+</kv-card>
+<kv-card title="机柜控制" class="mb-3">
 <div class="grid grid-cols-4 gap-2">
 <div data-cp @click="cabAskEnabled(curCab.no)" :class="cabOnline?'':'op-disabled'" class="flex flex-col items-center gap-1.5 cursor-pointer active:opacity-70" data-od-id="cab-op-enabled">
 <div class="w-10 h-10 rounded-full flex items-center justify-center" :style="{background:curCab.enabled?'#DC2626':'#2F6FEB'}"><span v-html="luci(curCab.enabled?'minus':'play','w-5 h-5 text-white')"></span></div>
@@ -1945,9 +1926,8 @@ body.host-single-m #root-user{display:none}
 <span class="text-[11px] font-medium" style="color:#666">空仓全开</span>
 </div>
 </div>
-</div>
-<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold mb-3" style="color:#111">机柜服务</div>
+</kv-card>
+<kv-card title="机柜服务" class="mb-3">
 <div class="grid grid-cols-4 gap-2">
 <div data-cp @click="openCabRec('cabAlarm')" class="flex flex-col items-center gap-2 py-1 cursor-pointer active:opacity-70" data-od-id="cab-entry-alarm">
 <span v-html="luci('siren','w-7 h-7 text-[#FF8A00]')"></span>
@@ -1966,9 +1946,8 @@ body.host-single-m #root-user{display:none}
 <span class="text-[13px] font-medium" style="color:#111">机柜图片</span>
 </div>
 </div>
-</div>
-<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold mb-3.5" style="color:#111">仓位状态</div>
+</kv-card>
+<kv-card title="仓位状态" class="mb-3">
 <div class="grid grid-cols-3 gap-2.5">
 <div v-for="s in cabSlots" :key="s.no" data-cp @click="openDoorInfo(s.no)" class="h-[72px] rounded-xl flex flex-col items-center justify-center gap-1.5 cursor-pointer transition-colors" :style="(s.tone?'background:#fff;border:1px solid #E5E5E5':(s.occupied?'background:#2B3F5F;border:1px solid #2B3F5F':'background:#fff;border:1px dashed #D5DBE5'))+(s.doorOpen?';box-shadow:0 0 0 2px #FF8A00':'')+(s.disabled?';opacity:.62':'')" :data-od-id="'cab-slot-'+curCab.no+'-'+s.no">
 <span class="text-[13px] font-semibold" :style="{color:s.tone?'#111':(s.occupied?'#FFFFFF':'#999')}">{{ s.no }}</span>
@@ -1979,7 +1958,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div>
+</kv-card>
 </template>
 </div>
 </page>
@@ -1996,7 +1975,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </page>
-<!-- 编辑换电柜（对标租车商户端「编辑车辆」：编号只读，名称与机柜图片可编辑） -->
+<!-- 编辑换电柜（对标租车商户端「编辑车辆」：编号只读，名称 / 站点 / 机柜图片可编辑） -->
 <page :open="mPage==='cabEdit'" :z="600" :swipe-close="closeCabEdit" oid="mcab-edit-page">
 <nav-bar title="编辑换电柜" border-color="#E5E5E5" @back="closeCabEdit()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
@@ -2011,6 +1990,19 @@ body.host-single-m #root-user{display:none}
 <div class="login-field relative flex items-center">
 <input v-model="cabEditName" type="text" maxlength="64" placeholder="请输入机柜名称" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
 <span class="absolute right-2.5 text-[12px] text-[#999]">{{ cabEditName ? cabEditName.length : 0 }}/64</span>
+</div>
+</div>
+<!-- 站点：与「新增换电柜」同一套选择器与弹窗（弹窗按作用域读写新增/编辑各自的取值；站点无图故不放图标块）
+     回显已选站点：上行站点名称 + 下行站点地址（未选 → 灰色「选择站点」占位） -->
+<div class="form-row">
+<div class="form-label">站点</div>
+<div data-cp @click="openCabStationPick('edit')" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD" data-od-id="cab-edit-station">
+<span class="flex-1 min-w-0">
+<span v-if="cabEditStationId" class="block text-[15px] font-medium truncate" style="color:#111">{{ stationNameOf(cabEditStationId) }}</span>
+<span v-if="cabEditStationId" class="block text-[12px] mt-0.5 truncate" style="color:#999">{{ stationAddrOf(cabEditStationId) }}</span>
+<span v-else class="block text-[15px]" style="color:#999">选择站点</span>
+</span>
+<span class="shrink-0" v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
 </div>
 </div>
 <div class="form-row">
@@ -2049,34 +2041,14 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
 <template v-if="cabRecList.length">
-<div v-for="(r,i) in cabRecList" :key="i" class="bg-white rounded-xl overflow-hidden mb-2.5" style="border:1px solid #E5E5E5" :data-od-id="'cab-rec-'+(mPage==='cabAlarm'?'alarm':'fault')+'-'+i">
-<div class="px-4 py-2.5">
-<div class="flex items-center justify-between gap-3 py-1.5">
-<span class="text-[13px] shrink-0" style="color:#999">机柜编号</span>
-<span class="text-[13px] min-w-0 truncate text-right" style="color:#111">{{ curCab?curCab.no:'—' }}</span>
-</div>
-<div class="flex items-center justify-between gap-3 py-1.5">
-<span class="text-[13px] shrink-0" style="color:#999">当前状态</span>
-<span class="text-[13px] shrink-0" :style="{color:(r.status==null?0:r.status)===1?'#999':'var(--danger)'}">{{ recStatusLabel(r) }}</span>
-</div>
-<div class="flex items-center justify-between gap-3 py-1.5">
-<span class="text-[13px] shrink-0" style="color:#999">仓位</span>
-<span class="text-[13px] min-w-0 truncate text-right" style="color:#111"><template v-if="r.doorId">仓门 {{ r.doorId }}</template><template v-if="r.powerSn"> · 电池 {{ r.powerSn }}</template><template v-if="!r.doorId&&!r.powerSn">整柜</template></span>
-</div>
-<div class="flex items-center justify-between gap-3 py-1.5">
-<span class="text-[13px] shrink-0" style="color:#999">{{ mPage==='cabAlarm'?'告警内容':'故障内容' }}</span>
-<span class="text-[13px] min-w-0 truncate text-right" style="color:var(--danger)">{{ r.content }}</span>
-</div>
-<div class="flex items-center justify-between gap-3 py-1.5">
-<span class="text-[13px] shrink-0" style="color:#999">开始时间</span>
-<span class="text-[13px] tabular-nums shrink-0" style="color:#111">{{ r.startTime }}</span>
-</div>
-<div v-if="(r.status==null?0:r.status)===1" class="flex items-center justify-between gap-3 py-1.5">
-<span class="text-[13px] shrink-0" style="color:#999">结束时间</span>
-<span class="text-[13px] tabular-nums shrink-0" style="color:#111">{{ r.endTime }}</span>
-</div>
-</div>
-</div>
+<kv-card v-for="(r,i) in cabRecList" :key="i" class="mb-2.5" :data-od-id="'cab-rec-'+(mPage==='cabAlarm'?'alarm':'fault')+'-'+i">
+<kv-row label="机柜编号" :value="curCab?curCab.no:'—'"></kv-row>
+<kv-row label="当前状态" :value="recStatusLabel(r)" :value-style="{color:(r.status==null?0:r.status)===1?'#999':'var(--danger)'}"></kv-row>
+<kv-row label="仓位"><template #value><template v-if="r.doorId">仓门 {{ r.doorId }}</template><template v-if="r.powerSn"> · 电池 {{ r.powerSn }}</template><template v-if="!r.doorId&&!r.powerSn">整柜</template></template></kv-row>
+<kv-row :label="mPage==='cabAlarm'?'告警内容':'故障内容'" :value="r.content" :value-style="{color:'var(--danger)'}"></kv-row>
+<kv-row label="开始时间" :value="r.startTime" value-class="tabular-nums"></kv-row>
+<kv-row v-if="(r.status==null?0:r.status)===1" label="结束时间" :value="r.endTime" value-class="tabular-nums"></kv-row>
+</kv-card>
 </template>
 <empty-state v-else icon="shield-check" :text="recEmptyText" :sub="recEmptySub" circle-class="w-14 h-14 rounded-full bg-[#ECFDF3] flex items-center justify-center mb-3" icon-class="w-6 h-6 text-[#16A34A]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1" :data-od-id="'cab-rec-empty-'+(mPage==='cabAlarm'?'alarm':'fault')"></empty-state>
 </div>
@@ -2100,35 +2072,18 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
 <template v-if="cabUseList.length">
-<div v-for="(r,i) in cabUseList" :key="i" class="bg-white rounded-xl overflow-hidden mb-2.5" style="border:1px solid #E5E5E5" :data-od-id="'cab-use-'+i">
-<div class="px-4 py-2.5">
-<div class="flex items-center justify-between gap-3 py-1.5">
-<span class="text-[13px] shrink-0" style="color:#999">操作人</span>
-<span class="text-[13px] min-w-0 truncate text-right" style="color:#111">{{ cabUseOperator(r) }}</span>
-</div>
-<div class="flex items-center justify-between gap-3 py-1.5">
-<span class="text-[13px] shrink-0" style="color:#999">操作内容</span>
-<span class="text-[13px] min-w-0 truncate text-right" style="color:#111">{{ r.content }}</span>
-</div>
-<div class="flex items-center justify-between gap-3 py-1.5">
-<span class="text-[13px] shrink-0" style="color:#999">操作平台</span>
-<span class="text-[13px] shrink-0" style="color:#111">{{ cabUseSourceLabel(r.sourceType) }}</span>
-</div>
-<div class="flex items-center justify-between gap-3 py-1.5">
-<span class="text-[13px] shrink-0" style="color:#999">操作结果</span>
-<span class="text-[13px] shrink-0" :style="{color:r.result===0?'var(--danger)':'#111'}">{{ cabUseResultLabel(r) }}</span>
-</div>
-<div class="flex items-center justify-between gap-3 py-1.5">
-<span class="text-[13px] shrink-0" style="color:#999">操作时间</span>
-<span class="text-[13px] tabular-nums shrink-0" style="color:#111">{{ r.createTime }}</span>
-</div>
-</div>
-</div>
+<kv-card v-for="(r,i) in cabUseList" :key="i" class="mb-2.5" :data-od-id="'cab-use-'+i">
+<kv-row label="操作人" :value="cabUseOperator(r)"></kv-row>
+<kv-row label="操作内容" :value="r.content"></kv-row>
+<kv-row label="操作平台" :value="cabUseSourceLabel(r.sourceType)"></kv-row>
+<kv-row label="操作结果" :value="cabUseResultLabel(r)" :value-style="{color:r.result===0?'var(--danger)':'#111'}"></kv-row>
+<kv-row label="操作时间" :value="r.createTime" value-class="tabular-nums"></kv-row>
+</kv-card>
 </template>
 <empty-state v-else icon="file-text" text="暂无使用记录" :sub="useQ?'没有符合搜索条件的记录':'该柜暂无操作记录'" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1" data-od-id="cab-use-empty"></empty-state>
 </div>
 </page>
-<!-- 新增换电柜（对标租车「新增车辆」：编号可输入/扫码、名称选填、机柜图片最多10张） -->
+<!-- 新增换电柜（对标租车「新增车辆」：编号可输入/扫码、名称选填、站点选填（选择器对标「选择车型」）、机柜图片最多10张） -->
 <page :open="mPage==='cabAdd'" :z="600" :swipe-close="closeCabAdd" oid="mcab-add-page">
 <nav-bar title="新增换电柜" border-color="#E5E5E5" @back="closeCabAdd()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
@@ -2146,6 +2101,19 @@ body.host-single-m #root-user{display:none}
 <div class="login-field relative flex items-center">
 <input v-model="cabAddName" type="text" maxlength="64" placeholder="请输入机柜名称" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
 <span class="absolute right-2.5 text-[12px] text-[#999]">{{ cabAddName ? cabAddName.length : 0 }}/64</span>
+</div>
+</div>
+<!-- 站点：选择器形态对标租车「新增车辆 → 车型」（虚线强调框 + 选中值/占位文案 + 右箭头），站点无图故不放图标块，点开底部「选择站点」弹窗
+     回显已选站点：上行站点名称 + 下行站点地址（未选 → 灰色「选择站点」占位） -->
+<div class="form-row">
+<div class="form-label">站点</div>
+<div data-cp @click="openCabStationPick('add')" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD" data-od-id="cab-add-station">
+<span class="flex-1 min-w-0">
+<span v-if="cabAddStationId" class="block text-[15px] font-medium truncate" style="color:#111">{{ stationNameOf(cabAddStationId) }}</span>
+<span v-if="cabAddStationId" class="block text-[12px] mt-0.5 truncate" style="color:#999">{{ stationAddrOf(cabAddStationId) }}</span>
+<span v-else class="block text-[15px]" style="color:#999">选择站点</span>
+</span>
+<span class="shrink-0" v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
 </div>
 </div>
 <div class="form-row">
@@ -2166,6 +2134,25 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="absolute bottom-7 left-5 right-5 z-[20]">
 <button data-cp @click="submitCabAdd()" class="w-full h-[50px] flex items-center justify-center rounded-xl text-[16px] font-semibold border-none cursor-pointer transition-colors active:opacity-90" style="background:#2B3F5F;color:#fff" data-od-id="cab-add-submit">保存</button>
+</div>
+</page>
+<!-- 新增电池（对标「新增换电柜」的极简版：只有一个必填字段——电池编号，可输入 / 扫码录入；无名称、无归属等字段） -->
+<page :open="mPage==='battAdd'" :z="600" :swipe-close="closeBattAdd" oid="mbatt-add-page">
+<nav-bar title="新增电池" border-color="#E5E5E5" @back="closeBattAdd()"></nav-bar>
+<div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
+<div class="form-card">
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>电池编号</div>
+<div class="login-field relative flex items-center">
+<input v-model="battAddNo" @input="battAddNoErr=''" type="text" maxlength="64" placeholder="请输入电池编号" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="battAddNoErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="batt-add-no">
+<button type="button" data-cp @click="openBattAddScan()" class="absolute right-2.5 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent" title="扫码录入" data-od-id="batt-add-scan"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button>
+</div>
+<div v-if="battAddNoErr" class="form-hint">{{ battAddNoErr }}</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-7 left-5 right-5 z-[20]">
+<button data-cp @click="submitBattAdd()" class="w-full h-[50px] flex items-center justify-center rounded-xl text-[16px] font-semibold border-none cursor-pointer transition-colors active:opacity-90" style="background:#2B3F5F;color:#fff" data-od-id="batt-add-submit">保存</button>
 </div>
 </page>
 <!-- 扫码录入机柜编号（对标租车商户端「新增车辆」扫码页：全屏取景 + 键盘/相册/手电筒） -->
@@ -2200,7 +2187,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </bottom-sheet>
 <!-- 机柜图片拍照/相册选择器 -->
-<bottom-sheet :open="showCabImgPicker" title="添加机柜图片" :mask-z="750" oid="cab-img-picker-mask" panel-oid="cab-img-picker-sheet" @close="()=>showCabImgPicker=false">
+<bottom-sheet :open="showCabImgPicker" :title="'添加'+cabImgLabel" :mask-z="750" oid="cab-img-picker-mask" panel-oid="cab-img-picker-sheet" @close="()=>showCabImgPicker=false">
 <div class="px-5 pt-1">
 <div class="grid grid-cols-2 gap-2.5">
 <div data-cp @click="pickCabImgSource('camera')" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1.5px solid #E5E5E5">
@@ -2221,9 +2208,29 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="cabImgActionDelete()" class="py-3.5 text-center text-[15px] text-[#FF4343] cursor-pointer active:bg-[#F6F7F9]">删除图片</div>
 </div>
 </bottom-sheet>
+<!-- 选择站点（对标租车「新增车辆 → 选择车型」弹窗：弹窗内搜索 + 站点列表；新增 / 编辑换电柜共用
+     重开弹窗自动恢复选中态（当前已选行高亮 + 勾选 + 自动滚入可视区）；再次点击已选站点 = 清除归属） -->
+<bottom-sheet :open="cabStationSheet" title="选择站点" :mask-z="750" max-h="65%" oid="cab-station-mask" panel-oid="cab-station-sheet" @close="closeCabStationPick()">
+<div class="sheet-search">
+<span v-html="luci('search','w-4 h-4 text-[#999]')"></span>
+<input v-model="cabStationQ" type="text" placeholder="搜索站点名称" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
+</div>
+<div class="flex-1 overflow-y-auto pb-8">
+<div v-for="s in cabStationOptions" :key="s.id" data-cp @click="pickCabStation(s.id)" class="flex items-center px-5 py-4 cursor-pointer active:bg-[#F6F7F9]" :style="cabStationSel===s.id?{background:'#EBF1FD',borderBottom:'1px solid #EDEDED'}:{borderBottom:'1px solid #EDEDED'}" :data-od-id="'cab-station-'+s.id">
+<!-- 站点无图：列表行只用「名称 + 地址」文本，行首不放图标；当前已选行 = 高亮底 + 名称强调色 + 勾选（弹窗重开自动恢复选中态） -->
+<div class="flex-1 min-w-0">
+<div class="text-[15px] font-medium truncate" :style="cabStationSel===s.id?{color:'var(--accent)'}:{color:'#111'}">{{ s.name }}</div>
+<div class="text-[12px] mt-0.5 truncate" style="color:#999">{{ s.addr }}</div>
+</div>
+<span v-if="cabStationSel===s.id" v-html="luci('check','w-4 h-4 text-[var(--accent)]')"></span>
+<span v-else v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
+</div>
+<empty-state v-if="!cabStationOptions.length" icon="map-pin" text="未找到站点" sub="换个关键词试试" root-class="flex flex-col items-center justify-center py-10" circle-class="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-[#F0F0F0]" icon-class="w-6 h-6 text-[#BBB]" text-class="text-[13px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
+</div>
+</bottom-sheet>
 <!-- 机柜图片大图预览 -->
 <page :open="showCabImgPreview" :z="2500" trans="fd" bg="#000" oid="cab-img-preview" @close="showCabImgPreview=false">
-<image-viewer :src="cabImgPreviewItem?{color:'#2B3F5F',label:'机柜图片',time:cabImgPreviewItem.time}:null" tip="点击空白处关闭" @close="showCabImgPreview=false"></image-viewer>
+<image-viewer :src="cabImgPreviewItem?{color:'#2B3F5F',label:cabImgLabel,time:cabImgPreviewItem.time}:null" tip="点击空白处关闭" @close="showCabImgPreview=false"></image-viewer>
 </page>
 <page :open="mPage==='battDetail'" :z="600" oid="mbatt-detail-page">
 <nav-bar title="电池详情" border-color="#E5E5E5" @back="closePage()"></nav-bar>
@@ -2252,40 +2259,29 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-<!-- 电池信息（对标换电柜详情「机柜信息」：标题 + 标签/值行 + 状态网格） -->
-<div class="bg-white rounded-2xl px-4 py-3.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold mb-1.5" style="color:#111">电池信息</div>
-<div class="flex items-center py-2">
-<span class="text-[13px] shrink-0" style="color:#999">电池编号</span>
-<span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ curBatt.no }}</span>
-<span v-if="curBatt.no" class="shrink-0 pl-1.5" v-html="luci('copy','w-4 h-4 text-[#999] cursor-pointer active:text-[var(--accent)]')" data-cp @click="copyBattNo()" data-od-id="batt-code-copy"></span>
-</div>
-<div class="flex items-center py-2">
-<span class="text-[13px] shrink-0" style="color:#999">当前归属</span>
-<span class="text-[13px] flex-1 min-w-0 truncate text-right pl-3" style="color:#111">{{ battLocLabel(curBatt) }}</span>
-</div>
-<div class="grid grid-cols-4 gap-x-1 gap-y-3.5 mt-4">
-<div v-for="s in battStateCells" :key="s.label" class="text-center">
-<div class="text-[14px] font-bold" :style="{color:s.color}">{{ s.value }}</div>
-<div class="text-[11px] mt-1" style="color:#999">{{ s.label }}</div>
-</div>
-</div>
-</div>
-<!-- 电池参数（4 列「值在上、标签在下」网格，字号/间距与「电池信息」状态网格一致；电量与健康度按 3 阶梯色标着色） -->
-<div class="bg-white rounded-2xl px-4 py-3.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold mb-1.5" style="color:#111">电池参数</div>
-<div class="grid grid-cols-4 gap-x-1 gap-y-3.5 mt-4">
+<!-- 电池信息（对标「电池」列表卡：标题取电池编号 + 复制入口，联网状态放 #extra，其余状态为标签/值行） -->
+<kv-card class="mb-3" :copyable="!!curBatt.no" :copy-text="curBatt.no" @copy="t=>copyText(t)">
+<template #title><span class="min-w-0 truncate">{{ curBatt.no }}</span></template>
+<template #extra><span class="text-[13px] font-medium shrink-0" :style="{color:dotColor(BATT_DOT.net(curBatt))}">{{ BATT_TEXT.net(curBatt) }}</span></template>
+<kv-row label="当前归属" :value="battLocLabel(curBatt)"></kv-row>
+<kv-row label="在柜状态" :value="BATT_TEXT.cab(curBatt)" :value-style="{color:dotColor(BATT_DOT.cab(curBatt))}"></kv-row>
+<kv-row label="租用状态" :value="BATT_TEXT.rent(curBatt)" :value-style="{color:dotColor(BATT_DOT.rent(curBatt))}"></kv-row>
+<kv-row v-if="battStateOf(curBatt)" label="电池状态" :value="battStateOf(curBatt)" :value-style="{color:battStateColor(curBatt)}"></kv-row>
+</kv-card>
+<!-- 电池参数（4 列「值在上、标签在下」网格，字号/间距与「电池信息」各卡一致；电量与健康度按 3 阶梯色标着色） -->
+<kv-card title="电池参数" class="mb-3">
+<div class="grid grid-cols-4 gap-x-1 gap-y-3.5">
 <div class="text-center">
 <div class="text-[14px] font-bold tabular-nums" :style="{color:socColor(curBatt.soc)}">{{ curBatt.soc }}%</div>
-<div class="text-[11px] mt-1" style="color:#999">当前电量</div>
+<div class="text-[11px] mt-1" style="color:#999">电量</div>
 </div>
 <div class="text-center">
 <div class="text-[14px] font-bold tabular-nums" style="color:#111">{{ battVolt(curBatt) }}</div>
-<div class="text-[11px] mt-1" style="color:#999">当前电压</div>
+<div class="text-[11px] mt-1" style="color:#999">电压</div>
 </div>
 <div class="text-center">
 <div class="text-[14px] font-bold tabular-nums" style="color:#111">{{ battAmp(curBatt) }}</div>
-<div class="text-[11px] mt-1" style="color:#999">当前电流</div>
+<div class="text-[11px] mt-1" style="color:#999">电流</div>
 </div>
 <div class="text-center">
 <div class="text-[14px] font-bold tabular-nums" :style="{color:socColor(curBatt.health)}">{{ curBatt.health }}%</div>
@@ -2296,27 +2292,25 @@ body.host-single-m #root-user{display:none}
 <div class="text-[11px] mt-1" style="color:#999">循环次数</div>
 </div>
 </div>
-</div>
+</kv-card>
 <!-- 电池控制（对标换电柜详情「机柜控制」：仅放电控制一个操作） -->
-<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold mb-3" style="color:#111">电池控制</div>
+<kv-card title="电池控制" class="mb-3">
 <div class="grid grid-cols-4 gap-2">
 <div data-cp @click="battAskDischarge()" class="flex flex-col items-center gap-1.5 cursor-pointer active:opacity-70" data-od-id="batt-op-discharge">
 <div class="w-10 h-10 rounded-full flex items-center justify-center" :style="{background:battDischargeOn(curBatt)?'#DC2626':'#16A34A'}"><span v-html="luci(battDischargeOn(curBatt)?'zap-off':'zap','w-5 h-5 text-white')"></span></div>
 <span class="text-[11px] font-medium" style="color:#666">{{ battDischargeOn(curBatt)?'禁止放电':'允许放电' }}</span>
 </div>
 </div>
-</div>
+</kv-card>
 <!-- 电池服务（对标换电柜详情「机柜服务」：仅「租借记录」一个入口） -->
-<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold mb-3" style="color:#111">电池服务</div>
+<kv-card title="电池服务" class="mb-3">
 <div class="grid grid-cols-4 gap-2">
 <div data-cp @click="openBattRentRec()" class="flex flex-col items-center gap-2 py-1 cursor-pointer active:opacity-70" data-od-id="batt-entry-rentrec">
 <span v-html="luci('file-text','w-7 h-7 text-[#2F6FEB]')"></span>
 <span class="text-[13px] font-medium" style="color:#111">租借记录</span>
 </div>
 </div>
-</div>
+</kv-card>
 </template>
 </div>
 </page>
@@ -2340,15 +2334,15 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
 <template v-if="battRentList.length">
-<div v-for="(r,i) in battRentList" :key="i" class="bg-white rounded-2xl px-4 pt-3.5 pb-1.5 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'batt-rent-'+i">
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">租借用户</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ rentUser(r) }}</span><span data-cp @click="copyField('租借用户',rentUser(r))" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">订单编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.swapOrderNo || '—' }}</span><span v-if="r.swapOrderNo" data-cp @click="copyField('订单编号',r.swapOrderNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">电池编号</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ curBatt.no }}</span><span data-cp @click="copyField('电池编号',curBatt.no)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">取电柜子</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.borrowNo || '—' }}</span><span v-if="r.borrowNo" data-cp @click="copyField('取电柜子',r.borrowNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
-<div v-if="r.returnNo" class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">还电柜子</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px]" style="color:#111">{{ r.returnNo }}</span><span data-cp @click="copyField('还电柜子',r.returnNo)" class="shrink-0 cursor-pointer active:opacity-60 pl-1.5" style="color:#BBB"><span v-html="luci('copy','w-4 h-4')"></span></span></div>
-<div class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">取电时间</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px] tabular-nums" style="color:#111">{{ r.borrowTime || '—' }}</span></div>
-<div v-if="r.returnTime" class="flex items-start py-2"><span class="shrink-0 text-[14px]" style="color:#999">还电时间</span><span class="flex-1 min-w-0 truncate text-right pl-3 text-[14px] tabular-nums" style="color:#111">{{ r.returnTime }}</span></div>
-</div>
+<kv-card v-for="(r,i) in battRentList" :key="i" class="mb-3" :data-od-id="'batt-rent-'+i">
+<kv-row label="租借用户" :value="rentUser(r)" copyable @copy="t=>copyField('租借用户',t)"></kv-row>
+<kv-row label="订单编号" :value="r.swapOrderNo || '—'" :copyable="!!r.swapOrderNo" @copy="t=>copyField('订单编号',t)"></kv-row>
+<kv-row label="电池编号" :value="curBatt.no" copyable @copy="t=>copyField('电池编号',t)"></kv-row>
+<kv-row label="取电柜子" :value="r.borrowNo || '—'" :copyable="!!r.borrowNo" @copy="t=>copyField('取电柜子',t)"></kv-row>
+<kv-row v-if="r.returnNo" label="还电柜子" :value="r.returnNo" copyable @copy="t=>copyField('还电柜子',t)"></kv-row>
+<kv-row label="取电时间" :value="r.borrowTime || '—'" value-class="tabular-nums"></kv-row>
+<kv-row v-if="r.returnTime" label="还电时间" :value="r.returnTime" value-class="tabular-nums"></kv-row>
+</kv-card>
 </template>
 <empty-state v-else icon="file-text" text="暂无租借记录" :sub="battRentEmptySub" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1" data-od-id="batt-rentrec-empty"></empty-state>
 </div>
@@ -2434,11 +2428,8 @@ body.host-single-m #root-user{display:none}
 <div class="text-[11px] mt-1.5" style="color:#999">共 {{ batteries.length }} 块电池</div>
 </div>
 </div>
-<div class="bg-white rounded-2xl px-4 pt-4 pb-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="flex items-center justify-between mb-4">
-<span class="text-[13px] font-semibold" style="color:#111">近 7 日换电趋势</span>
-<span class="text-[11px]" style="color:#999">峰值 {{ dashTrendMax }} 次</span>
-</div>
+<kv-card title="近 7 日换电趋势" class="mb-3">
+<template #extra><span class="text-[11px]" style="color:#999">峰值 {{ dashTrendMax }} 次</span></template>
 <div class="flex items-end gap-2.5">
 <div v-for="t in dashTrend" :key="t.d" class="flex-1 flex flex-col items-center">
 <span class="text-[10px] mb-1.5" style="color:#666">{{ t.v }}</span>
@@ -2448,9 +2439,8 @@ body.host-single-m #root-user{display:none}
 <span class="text-[10px] mt-1.5" style="color:#999">{{ t.d.slice(3) }}</span>
 </div>
 </div>
-</div>
-<div class="bg-white rounded-2xl px-4 pt-4 pb-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold mb-4" style="color:#111">机柜状态分布</div>
+</kv-card>
+<kv-card title="机柜状态分布" class="mb-3">
 <div class="flex items-center gap-5">
 <div class="w-[92px] h-[92px] rounded-full shrink-0" :style="{background:donut(dashCabDist)}"></div>
 <div class="flex-1">
@@ -2460,9 +2450,8 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div>
-<div class="bg-white rounded-2xl px-4 pt-4 pb-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="text-[13px] font-semibold mb-4" style="color:#111">电池状态分布</div>
+</kv-card>
+<kv-card title="电池状态分布" class="mb-3">
 <div class="flex items-center gap-5">
 <div class="w-[92px] h-[92px] rounded-full shrink-0" :style="{background:donut(dashBattDist)}"></div>
 <div class="flex-1">
@@ -2472,9 +2461,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div>
-<div class="bg-white rounded-2xl px-4 pt-4 pb-2" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="flex items-center justify-between"><span class="text-[13px] font-semibold" style="color:#111">告警统计</span><span class="text-[11px]" style="color:#999">共 {{ alarmList.length }} 条</span></div>
+</kv-card>
+<kv-card title="告警统计" class="mb-3">
+<template #extra><span class="text-[11px]" style="color:#999">共 {{ alarmList.length }} 条</span></template>
 <empty-state v-if="!alarmList.length" icon="shield-check" text="暂无告警" root-class="flex flex-col items-center justify-center py-8" circle-class="w-11 h-11 rounded-full flex items-center justify-center mb-3 bg-[#E9F7EF]" icon-class="w-5 h-5 text-[#16A34A]" text-class="text-[13px] font-semibold text-[#333]"></empty-state>
 <div v-for="(a,i) in alarmList" :key="a.type+a.no" data-cp @click="a.no.indexOf('BT')===0?openBattDetail(a.no):openCabDetail(a.no)" class="flex items-start gap-2.5 py-3 cursor-pointer active:opacity-70" :style="i?'border-top:1px solid #F0F0F0':''">
 <span class="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" :style="{background:dotColor(a.level)}"></span>
@@ -2484,12 +2473,21 @@ body.host-single-m #root-user{display:none}
 </div>
 <span class="text-[11px] shrink-0" style="color:#BBB">{{ a.time }}</span>
 </div>
+</kv-card>
+</div>
+</page>
+<page :open="mPage==='franchisees'" :z="600" oid="mfranchisee-page">
+<nav-bar title="切换加盟商" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
+<div v-for="f in franchisees" :key="f.id" data-cp @click="pickFranchisee(f.id)" class="bg-white rounded-xl p-4 mb-2.5 flex items-center cursor-pointer active:bg-[#F6F7F9]" :style="{border:'1px solid #E5E5E5',boxShadow:'0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)'}" :data-od-id="'franchisee-item-'+f.id">
+<div class="flex-1 min-w-0"><div class="text-[15px] font-semibold mb-0.5">{{ f.name }}</div><div class="text-xs text-[#999] truncate">{{ f.region }}</div></div>
+<span v-if="f.id===curFranchiseeId" v-html="luci('check','w-5 h-5 text-[var(--accent)] shrink-0')"></span>
 </div>
 </div>
 </page>
 <page :open="mPage==='stores'" :z="600" oid="mstore-list-page">
 <nav-bar title="门店管理" border-color="#E5E5E5" @back="closePage()">
-<span slot="right" data-cp @click="openStoreForm('')" class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F0F0F0]" data-od-id="store-add"><span v-html="luci('plus','w-5 h-5 text-[#2B3F5F]')"></span></span>
+<template #right><span data-cp @click="openStoreForm('')" class="text-sm font-medium whitespace-nowrap cursor-pointer active:opacity-70" style="color:var(--link)" data-od-id="store-add">新增</span></template>
 </nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
 <div class="flex items-center gap-2 h-10 rounded-xl px-3 mb-3" style="background:#fff;border:1px solid #E5E5E5">
@@ -2497,111 +2495,241 @@ body.host-single-m #root-user{display:none}
 <input v-model="storeQ" type="text" placeholder="搜索门店名称 / 地址" class="flex-1 h-full bg-transparent text-[13px] outline-none" style="color:#111;border:0">
 <span v-if="storeQ" data-cp @click="storeQ=''" class="cursor-pointer shrink-0"><span v-html="luci('x','w-4 h-4 text-[#CCC]')"></span></span>
 </div>
-<div class="text-[12px] mb-2.5" style="color:#999">共 {{ storeView.length }} 家门店</div>
 <empty-state v-if="!storeView.length" icon="store" text="暂无门店" sub="可点击右上角新增门店" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
-<div v-for="s in storeView" :key="s.id" data-cp @click="openStoreDetail(s.id)" class="bg-white rounded-2xl px-4 pt-3.5 pb-3 mb-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'store-item-'+s.id">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#EEF1F8,#E1E8F4)"><span v-html="luci('store','w-5 h-5 text-[#2B3F5F]')"></span></div>
-<div class="flex-1 min-w-0">
-<div class="text-[15px] font-bold truncate" style="color:#111">{{ s.name }}</div>
-<div class="text-[12px] mt-1 truncate" style="color:#999">{{ s.addr }}</div>
-</div>
-<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
-</div>
-<div class="flex items-center gap-2 mt-3 pt-2.5" style="border-top:1px solid #F0F0F0">
-<span class="text-[11px]" style="color:#999">关联站点</span>
-<span class="text-[12px] font-medium" :style="{color:s.stationId?'#2B3F5F':'#BBB'}">{{ s.stationId?stationNameOf(s.stationId):'未关联' }}</span>
-<div class="flex-1"></div>
-<span class="text-[11px]" style="color:#999">{{ s.hours||'—' }}</span>
-</div>
-</div>
+<kv-card v-for="s in storeView" :key="s.id" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openStoreDetail(s.id)" :data-od-id="'store-item-'+s.id">
+<template #title><span class="min-w-0 truncate">{{ s.name }}</span></template>
+<kv-row label="门店地址" :value="s.addr"></kv-row>
+<kv-row label="营业时间" :value="s.hours||'—'"></kv-row>
+<kv-row label="关联站点" :value="s.stationId?stationNameOf(s.stationId):'未关联'"></kv-row>
+<template #footer><div class="card-actions -mx-4 -mb-3.5 rounded-b-2xl overflow-hidden"><div class="card-action-btn" style="color:var(--link)" data-cp @click.stop="openStoreForm(s.id)" :data-od-id="'store-edit-'+s.id">编辑</div></div></template>
+</kv-card>
 </div>
 </page>
 <page :open="mPage==='storeDetail'" :z="600" oid="mstore-detail-page">
-<nav-bar title="门店详情" border-color="#E5E5E5" @back="closePage()"></nav-bar>
-<div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll">
+<nav-bar title="门店详情" border-color="#E5E5E5" @back="closePage()"><template #right><span v-if="curStore" data-cp @click="openStoreForm(curStore.id)" class="text-sm font-medium whitespace-nowrap cursor-pointer active:opacity-70" style="color:var(--link)" data-od-id="store-edit-btn">编辑</span></template></nav-bar>
+<div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
 <empty-state v-if="!curStore" icon="store" text="门店不存在" sub="该门店可能已被移除" root-class="flex flex-col items-center justify-center py-16" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
 <template v-if="curStore">
-<div class="bg-white rounded-2xl px-4 pt-4 pb-1 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="flex items-center gap-3 pb-4" style="border-bottom:1px solid #F0F0F0">
-<div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#EEF1F8,#E1E8F4)"><span v-html="luci('store','w-5 h-5 text-[#2B3F5F]')"></span></div>
-<div class="flex-1 min-w-0"><div class="text-[16px] font-bold truncate" style="color:#111">{{ curStore.name }}</div><div class="text-[12px] mt-1 truncate" style="color:#999">{{ curStore.addr }}</div></div>
-</div>
-<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">门店名称</span><span class="text-[13px] font-medium" style="color:#111">{{ curStore.name }}</span></div>
-<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">联系电话</span><span class="text-[13px] font-medium" style="color:#111">{{ curStore.phone||'—' }}</span></div>
-<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">营业时间</span><span class="text-[13px] font-medium" style="color:#111">{{ curStore.hours||'—' }}</span></div>
-<div class="flex items-center justify-between py-3"><span class="text-[13px]" style="color:#999">关联站点</span><span class="text-[13px] font-medium" :style="{color:curStore.stationId?'#2B3F5F':'#BBB'}">{{ curStore.stationId?stationNameOf(curStore.stationId):'未关联' }}</span></div>
-</div>
-<div class="bg-white rounded-2xl px-4 py-4 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="flex items-center justify-between mb-3">
-<span class="text-[13px] font-semibold" style="color:#111">关联站点</span>
-<span class="text-[11px]" style="color:#999">门店与站点 1:1</span>
-</div>
-<div v-if="curStore.stationId" data-cp @click="openStationDetail(curStore.stationId)" class="rounded-xl px-4 py-3.5 flex items-center gap-3 cursor-pointer active:opacity-80" style="background:#F6F7F9" data-od-id="store-linked-station">
-<div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#FFF4E6,#FFE9CC)"><span v-html="luci('map-pin','w-4 h-4 text-[#FF8A00]')"></span></div>
-<div class="flex-1 min-w-0"><div class="text-[14px] font-semibold truncate" style="color:#111">{{ stationNameOf(curStore.stationId) }}</div><div class="text-[12px] mt-0.5 truncate" style="color:#999">绑定换电柜 {{ cabsOfStation(curStore.stationId).length }} 台</div></div>
-<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
-</div>
-<div v-else class="rounded-xl px-4 py-4 text-center" style="background:#FFF8EC;border:1px dashed #F3D9B0">
-<div class="text-[12px]" style="color:#B8791F">该门店暂未关联站点，请先关联站点</div>
-<div data-cp @click="openStoreForm(curStore.id)" class="mt-3 h-9 px-4 inline-flex items-center rounded-full text-[12px] font-semibold cursor-pointer" style="background:#FF8A00;color:#fff" data-od-id="store-link-now">去关联站点</div>
+<kv-card class="mb-3">
+<template #title><span class="min-w-0 truncate">{{ curStore.name }}</span></template>
+<kv-row label="门店地址" :value="curStore.addr" align="top" value-class="whitespace-normal break-words"></kv-row>
+<kv-row label="联系人" :value="curStore.contact||'—'"></kv-row>
+<kv-row label="联系电话" :value="curStore.phone||'—'"></kv-row>
+<kv-row label="营业时间" :value="curStore.hours||'—'"></kv-row>
+<kv-row label="关键业务" :value="(curStore.services&&curStore.services.length)?curStore.services.join('、'):'—'" align="top" value-class="whitespace-normal break-words"></kv-row>
+<kv-row label="关联站点">
+<template #value>
+<span v-if="curStore.stationId" data-cp @click="openStationDetail(curStore.stationId)" class="cursor-pointer active:opacity-70" style="color:var(--link)" data-od-id="store-station-link">{{ stationNameOf(curStore.stationId) }}</span>
+<span v-else>未关联</span>
+</template>
+</kv-row>
+</kv-card>
+<!-- 门店封面：仅 1 张，点击看大图（复用图片预览页，cabImgKind='store' → 标签「门店封面」） -->
+<kv-card title="门店封面" class="mb-3">
+<div v-if="storePhotoView.length" class="w-[96px]">
+<div v-for="(p,pi) in storePhotoView" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer active:opacity-85" data-cp @click="openStoreDetailImg(pi)" :data-od-id="'store-photo-'+pi">
+<div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
 </div>
 </div>
+<div v-else class="rounded-xl px-4 py-5 text-center text-[12px]" style="background:#F6F7F9;color:#999">暂无门店封面</div>
+</kv-card>
 </template>
 </div>
-<div v-if="curStore" class="absolute left-0 right-0 bottom-0 px-5 pb-6 pt-3" style="background:rgba(255,255,255,.96);border-top:1px solid #F0F0F0;backdrop-filter:blur(10px)">
-<div data-cp @click="openStoreForm(curStore.id)" class="h-12 rounded-full flex items-center justify-center text-[15px] font-semibold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="store-edit-btn">编辑门店</div>
+</page>
+<!-- 新增 / 编辑门店（对标「新增换电柜」：卡片式表单行 + 底部固定保存按钮；相册复用机柜图片弹窗、营业时间走时/分滚轮、地址走地图选点页） -->
+<page :open="mPage==='storeForm'" :z="600" :swipe-close="closeStoreForm" oid="mstore-form-page">
+<nav-bar title="门店信息" border-color="#E5E5E5" @back="closeStoreForm()"></nav-bar>
+<div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
+<div class="form-card">
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>门店名称</div>
+<div class="login-field relative flex items-center">
+<input v-model="storeForm.name" @input="storeErr.name=''" type="text" maxlength="64" placeholder="请输入门店名称" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="storeErr.name?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-name">
+<span class="absolute right-2.5 text-[12px] text-[#999]">{{ (storeForm.name||'').length }}/64</span>
+</div>
+<div v-if="storeErr.name" class="form-hint">{{ storeErr.name }}</div>
+</div>
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>营业时间</div>
+<div class="flex items-center gap-2">
+<div role="button" data-cp @click="openStoreHmPick('from')" class="login-field flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="storeErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-from"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.from }}</span></div>
+<span class="shrink-0" v-html="luci('arrow-right','w-4 h-4 text-[#BBB]')"></span>
+<div role="button" data-cp @click="openStoreHmPick('to')" class="login-field flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="storeErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-to"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.to }}</span></div>
+<span v-html="luci('clock','w-4 h-4 text-[#BBB]')"></span>
+</div>
+<div v-if="storeErr.time" class="form-hint">{{ storeErr.time }}</div>
+</div>
+<div class="form-row">
+<div class="form-label">联系人</div>
+<div class="login-field relative flex items-center">
+<input v-model="storeForm.contact" @input="storeErr.contact=''" type="text" maxlength="64" placeholder="请输入联系人姓名" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="storeErr.contact?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-contact">
+<span class="absolute right-2.5 text-[12px] text-[#999]">{{ (storeForm.contact||'').length }}/64</span>
+</div>
+<div v-if="storeErr.contact" class="form-hint">{{ storeErr.contact }}</div>
+</div>
+<div class="form-row">
+<div class="form-label">联系电话</div>
+<div class="flex items-stretch gap-2.5">
+<div data-cp @click="openDialCode('store')" class="login-field login-field-dial flex items-center justify-center" data-od-id="store-form-dial"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.dial||'+86' }}</span><span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#9CA3AF]')"></span></div>
+<div class="login-field flex-1 relative flex items-center min-w-0">
+<input v-model="storeForm.phone" @input="storeErr.phone=''" type="tel" maxlength="20" placeholder="请输入联系电话" class="w-full pl-3.5 pr-3 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="storeErr.phone?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-phone">
+</div>
+</div>
+<div v-if="storeErr.phone" class="form-hint">{{ storeErr.phone }}</div>
+</div>
+<div class="form-row">
+<div class="form-label">关联站点</div>
+<div data-cp @click="openStoreStationPick()" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD" data-od-id="store-form-station">
+<span class="flex-1 min-w-0">
+<span v-if="storeForm.stationId" class="block text-[15px] font-medium truncate" style="color:#111">{{ stationNameOf(storeForm.stationId) }}</span>
+<span v-if="storeForm.stationId" class="block text-[12px] mt-0.5 truncate" style="color:#999">{{ stationAddrOf(storeForm.stationId) }}</span>
+<span v-else class="block text-[15px]" style="color:#999">选择关联站点</span>
+</span>
+<span class="shrink-0" v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
+</div>
+</div>
+<div class="form-row">
+<div class="form-label">关键业务</div>
+<div class="flex flex-wrap items-center gap-x-5 gap-y-3">
+<div v-for="sv in M_STORE_SERVICES" :key="sv" data-cp @click="toggleStoreService(sv)" class="flex items-center gap-1.5 cursor-pointer" :data-od-id="'store-form-service-'+sv">
+<span class="w-4 h-4 rounded flex items-center justify-center shrink-0" :style="storeForm.services.indexOf(sv)>-1?{background:'var(--accent)',border:'1px solid var(--accent)'}:{background:'#fff',border:'1px solid #D9DEE7'}"><span v-if="storeForm.services.indexOf(sv)>-1" v-html="luci('check','w-3 h-3 text-white')"></span></span>
+<span class="text-[14px]" :style="storeForm.services.indexOf(sv)>-1?{color:'#111',fontWeight:'500'}:{color:'#666'}">{{ sv }}</span>
+</div>
+</div>
+</div>
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>门店封面</div>
+<div class="grid grid-cols-3 gap-2.5">
+<div v-for="(p,pi) in cabImgList" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" data-cp @click="openCabImgPreview(pi)">
+<div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
+<div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openCabImgMore(pi)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
+</div>
+<div v-if="cabImgList.length<cabImgMax" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#F6F7F9;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="store-form-img">
+<span v-html="luci('plus','w-6 h-6')"></span>
+<span class="text-[12px] mt-1">{{ cabImgAddLabel }}</span>
+<span v-if="cabImgKind==='cab'" class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabImgList.length }}/10</span>
+</div>
+</div>
+<div v-if="storeErr.photos" class="form-hint">{{ storeErr.photos }}</div>
+</div>
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>门店地址</div>
+<div class="login-field relative flex items-center">
+<input :value="storeForm.addr" @input="onAddrInput('store',$event)" @focus="storeAddrSugOpen=true" @blur="closeAddrSug('store')" type="text" placeholder="请输入地址或选择地址" class="w-full pl-3.5 pr-20 py-3 text-[15px]" :style="storeErr.addr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-addr">
+<div class="absolute right-2.5 flex items-center gap-1">
+<div v-if="storeForm.addr" data-cp @click="clearAddr('store')" class="w-7 h-7 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-od-id="store-form-addr-clear"><span v-html="luci('x','w-4 h-4')"></span></div>
+<div data-cp @click="openStoreMap('store')" class="w-8 h-8 flex items-center justify-center cursor-pointer shrink-0" style="color:#2B3F5F" data-od-id="store-form-addr-map" title="地图选择地址"><span v-html="luci('map-pin','w-[18px] h-[18px]')"></span></div>
+</div>
+</div>
+<!-- 输入即联想：候选地址内联下拉（表单内容区是滚动容器，浮层会被裁剪，故内联撑高） -->
+<div v-if="storeAddrSugOpen&&storeAddrSugList.length" class="mt-1.5 bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="store-form-addr-sug">
+<div v-for="(p,pi) in storeAddrSugList" :key="'sa'+pi" data-cp @mousedown.prevent @click="pickAddrSug('store',p)" class="flex items-start gap-3 px-3.5 py-3 cursor-pointer active:bg-[#F6F7F9]" :style="pi?{borderTop:'1px solid #F2F3F5'}:null" :data-od-id="'store-form-addr-sug-'+pi">
+<span class="flex-1 min-w-0">
+<span class="block text-[14px] truncate" style="color:#111">{{ p.name }}</span>
+<span class="block text-[12px] mt-0.5 truncate" style="color:#999">{{ p.addr }}</span>
+</span>
+<span class="shrink-0 text-[11px] pt-0.5" style="color:#BBB">{{ p.dist }}</span>
+</div>
+</div>
+<div v-if="storeErr.addr" class="form-hint">{{ storeErr.addr }}</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-7 left-5 right-5 z-[20]">
+<button data-cp @click="saveStore()" class="w-full h-[50px] flex items-center justify-center rounded-xl text-[16px] font-semibold border-none cursor-pointer transition-colors active:opacity-90" style="background:#2B3F5F;color:#fff" data-od-id="store-form-submit">保存</button>
+</div>
+</page>
+<!-- 选择地址（地图拖拽取点 + 候选地址列表 + 右下 Fab 使用当前定位；确认后回填门店表单地址框） -->
+<page :open="mPage==='storeMap'" :z="700" oid="mstore-map-page">
+<nav-bar title="选择地址" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<div ref="storeMapBox" class="flex-1 min-h-0 relative overflow-hidden select-none" style="background:#EAEFE7;touch-action:none" @pointerdown="storeMapDown" @pointermove="storeMapMove" @pointerup="storeMapUp" @pointercancel="storeMapUp">
+<div class="sm-world" :style="storeMapWorldStyle">
+<div class="sm-road-h" style="top:12%"></div>
+<div class="sm-road-h" style="top:38%"></div>
+<div class="sm-road-h" style="top:64%"></div>
+<div class="sm-road-h" style="top:88%"></div>
+<div class="sm-road-v" style="left:14%"></div>
+<div class="sm-road-v" style="left:36%"></div>
+<div class="sm-road-v" style="left:58%"></div>
+<div class="sm-road-v" style="left:80%"></div>
+<span class="sm-roadlbl" style="left:16%;top:6%">黄河中路</span>
+<span class="sm-roadlbl" style="left:60%;top:34%">航空港街道</span>
+<span class="sm-roadlbl" style="left:16%;top:60%">西航港大道</span>
+<span class="sm-roadlbl" style="left:60%;top:86%">双流西站广场</span>
+<div v-for="(p,pi) in storeMapPoints" :key="'mp'+pi" class="sm-poi" :class="storeMapDraft===p.addr?'on':''" :style="{left:p.lx+'%',top:p.ly+'%'}">
+<span class="pdot"></span>
+<span class="pnm">{{ p.name }}</span>
+</div>
+</div>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-9 h-9 rounded-full flex items-center justify-center text-white" style="background:#FF6A00;box-shadow:0 2px 10px rgba(0,0,0,.28)"><span v-html="luci('map-pin','w-5 h-5')"></span></div>
+</div>
+<!-- 当前定位：地图右下 Fab 触发（未就绪时依次拉起 定位授权 → 定位服务，就绪后直接取定位地址） -->
+<button data-cp @pointerdown.stop @click="mUseStoreLoc()" class="sm-loc-btn" data-od-id="store-map-loc-fab" title="使用当前定位"><span v-html="luci('crosshair','w-5 h-5')"></span></button>
+</div>
+<div class="shrink-0 bg-white" style="border-top:1px solid #F0F0F0">
+<div class="overflow-y-auto hide-scroll pt-2 pb-2" style="max-height:34vh">
+<div v-for="(p,pi) in storeMapPoints" :key="p.addr" data-cp @click="pickStoreMapPoint(p)" class="flex items-center gap-3 px-5 py-3 cursor-pointer active:bg-[#F6F7F9]" :data-od-id="'store-map-point-'+pi">
+<div class="flex-1 min-w-0">
+<div class="text-[14px] font-medium truncate" :style="storeMapDraft===p.addr?{color:'var(--accent)'}:{color:'#111'}">{{ p.name }}</div>
+<div class="text-[12px] mt-0.5 truncate" style="color:#999">{{ p.addr }}</div>
+</div>
+<span class="text-[11px] shrink-0" style="color:#BBB">{{ p.dist }}</span>
+<span v-if="storeMapDraft===p.addr" v-html="luci('check','w-4 h-4 text-[var(--accent)]')"></span>
+</div>
+</div>
+<div class="px-4 pt-2" style="padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))">
+<button data-cp @click="confirmStoreMap()" class="w-full h-[48px] flex items-center justify-center rounded-xl text-[16px] font-semibold border-none cursor-pointer active:opacity-90" style="background:#2B3F5F;color:#fff" data-od-id="store-map-confirm">确认</button>
+</div>
 </div>
 </page>
 <page :open="mPage==='stations'" :z="600" oid="mstation-list-page">
 <nav-bar title="站点管理" border-color="#E5E5E5" @back="closePage()">
-<span slot="right" data-cp @click="openStationForm('')" class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer active:bg-[#F0F0F0]" data-od-id="station-add"><span v-html="luci('plus','w-5 h-5 text-[#2B3F5F]')"></span></span>
+<template #right><span data-cp @click="openStationForm('')" class="text-sm font-medium whitespace-nowrap cursor-pointer active:opacity-70" style="color:var(--link)" data-od-id="station-add">新增</span></template>
 </nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
 <div class="flex items-center gap-2 h-10 rounded-xl px-3 mb-3" style="background:#fff;border:1px solid #E5E5E5">
 <span v-html="luci('search','w-4 h-4 text-[#BBB]')"></span>
-<input v-model="stationQ" type="text" placeholder="搜索站点名称 / 地址" class="flex-1 h-full bg-transparent text-[13px] outline-none" style="color:#111;border:0">
+<input v-model="stationQ" type="text" placeholder="搜索站点名称" class="flex-1 h-full bg-transparent text-[13px] outline-none" style="color:#111;border:0">
 <span v-if="stationQ" data-cp @click="stationQ=''" class="cursor-pointer shrink-0"><span v-html="luci('x','w-4 h-4 text-[#CCC]')"></span></span>
 </div>
-<div class="text-[12px] mb-2.5" style="color:#999">共 {{ stationView.length }} 个站点</div>
 <empty-state v-if="!stationView.length" icon="map-pin" text="暂无站点" sub="可点击右上角新增站点" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
-<div v-for="s in stationView" :key="s.id" data-cp @click="openStationDetail(s.id)" class="bg-white rounded-2xl px-4 pt-3.5 pb-3 mb-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :data-od-id="'station-item-'+s.id">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#FFF4E6,#FFE9CC)"><span v-html="luci('map-pin','w-5 h-5 text-[#FF8A00]')"></span></div>
-<div class="flex-1 min-w-0">
-<div class="text-[15px] font-bold truncate" style="color:#111">{{ s.name }}</div>
-<div class="text-[12px] mt-1 truncate" style="color:#999">{{ s.addr }}</div>
-</div>
-<span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
-</div>
-<div class="flex items-center gap-2 mt-3 pt-2.5" style="border-top:1px solid #F0F0F0">
-<span class="text-[11px]" style="color:#999">所属门店</span>
-<span class="text-[12px] font-medium" :style="{color:storeOfStation(s.id)?'#2B3F5F':'#BBB'}">{{ storeOfStation(s.id)?storeOfStation(s.id).name:'未关联' }}</span>
-<div class="flex-1"></div>
-<span class="text-[11px]" style="color:#999">绑定柜 {{ cabsOfStation(s.id).length }} 台</span>
-</div>
-</div>
+<kv-card v-for="s in stationView" :key="s.id" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openStationDetail(s.id)" :data-od-id="'station-item-'+s.id">
+<template #title><span class="min-w-0 truncate">{{ s.name }}</span></template>
+<kv-row label="站点地址" :value="s.addr"></kv-row>
+<kv-row label="营业时间" :value="s.hours||'—'"></kv-row>
+<kv-row label="换电柜" :value="cabsOfStation(s.id).length + ' 台'"></kv-row>
+<kv-row label="所属门店" :value="storeOfStation(s.id)?storeOfStation(s.id).name:'未关联'"></kv-row>
+<template #footer><div class="card-actions -mx-4 -mb-3.5 rounded-b-2xl overflow-hidden"><div class="card-action-btn" style="color:var(--link)" data-cp @click.stop="openStationForm(s.id)" :data-od-id="'station-edit-'+s.id">编辑</div></div></template>
+</kv-card>
 </div>
 </page>
 <page :open="mPage==='stationDetail'" :z="600" oid="mstation-detail-page">
-<nav-bar :title="curStation?curStation.name:'站点详情'" border-color="#E5E5E5" @back="closePage()"></nav-bar>
+<nav-bar title="站点详情" border-color="#E5E5E5" @back="closePage()"><template #right><span v-if="curStation" data-cp @click="openStationForm(curStation.id)" class="text-sm font-medium whitespace-nowrap cursor-pointer active:opacity-70" style="color:var(--link)" data-od-id="station-edit-btn">编辑</span></template></nav-bar>
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-28 hide-scroll">
 <empty-state v-if="!curStation" icon="map-pin" text="站点不存在" sub="该站点可能已被移除" root-class="flex flex-col items-center justify-center py-16" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
 <template v-if="curStation">
-<div class="bg-white rounded-2xl px-4 pt-4 pb-1 mb-3" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="flex items-center gap-3 pb-4" style="border-bottom:1px solid #F0F0F0">
-<div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style="background:linear-gradient(145deg,#FFF4E6,#FFE9CC)"><span v-html="luci('map-pin','w-5 h-5 text-[#FF8A00]')"></span></div>
-<div class="flex-1 min-w-0"><div class="text-[16px] font-bold truncate" style="color:#111">{{ curStation.name }}</div><div class="text-[12px] mt-1 truncate" style="color:#999">{{ curStation.addr }}</div></div>
+<kv-card class="mb-3">
+<template #title><span class="min-w-0 truncate">{{ curStation.name }}</span></template>
+<kv-row label="站点编号" :value="curStation.id"></kv-row>
+<kv-row label="站点地址" :value="curStation.addr" align="top" value-class="whitespace-normal break-words"></kv-row>
+<kv-row label="联系人" :value="curStation.contact||'—'"></kv-row>
+<kv-row label="联系方式" :value="curStation.phone||'—'"></kv-row>
+<kv-row label="营业时间" :value="curStation.hours||'—'"></kv-row>
+<kv-row label="换电柜" :value="cabsOfStation(curStation.id).length + ' 台'"></kv-row>
+<kv-row label="所属门店" :value="storeOfStation(curStation.id)?storeOfStation(curStation.id).name:'未关联门店'"></kv-row>
+</kv-card>
+<!-- 站点封面：仅 1 张，点击看大图（复用图片预览页，cabImgKind='station' → 标签「站点封面」） -->
+<kv-card title="站点封面" class="mb-3">
+<div v-if="stationPhotoView.length" class="w-[96px]">
+<div v-for="(p,pi) in stationPhotoView" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer active:opacity-85" data-cp @click="openStationDetailImg(pi)" :data-od-id="'station-photo-'+pi">
+<div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
 </div>
-<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">站点编号</span><span class="text-[13px] font-medium" style="color:#111">{{ curStation.id }}</span></div>
-<div class="flex items-center justify-between py-3" style="border-bottom:1px solid #F0F0F0"><span class="text-[13px]" style="color:#999">所属门店</span><span class="text-[13px] font-medium" :style="{color:storeOfStation(curStation.id)?'#2B3F5F':'#BBB'}">{{ storeOfStation(curStation.id)?storeOfStation(curStation.id).name:'未关联门店' }}</span></div>
-<div class="flex items-center justify-between py-3"><span class="text-[13px]" style="color:#999">绑定换电柜</span><span class="text-[13px] font-semibold" style="color:#2B3F5F">{{ cabsOfStation(curStation.id).length }} 台</span></div>
 </div>
-<div class="bg-white rounded-2xl px-4 pt-4 pb-2" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)">
-<div class="flex items-center justify-between mb-2">
-<span class="text-[13px] font-semibold" style="color:#111">绑定换电柜</span>
-<span data-cp @click="openBindCab(curStation.id)" class="text-[12px] font-medium cursor-pointer" style="color:#2F6FEB" data-od-id="station-bind-entry">管理绑定</span>
-</div>
+<div v-else class="rounded-xl px-4 py-5 text-center text-[12px]" style="background:#F6F7F9;color:#999">暂无站点封面</div>
+</kv-card>
+<kv-card title="换电柜" class="mb-3">
+<template #extra><span data-cp @click="openBindCab(curStation.id)" class="text-[12px] font-medium cursor-pointer shrink-0" style="color:#2F6FEB" data-od-id="station-bind-entry">管理绑定</span></template>
 <empty-state v-if="!cabsOfStation(curStation.id).length" icon="box" text="暂未绑定换电柜" sub="点击「管理绑定」为该站点绑定换电柜" root-class="flex flex-col items-center justify-center py-8" circle-class="w-11 h-11 rounded-full flex items-center justify-center mb-3 bg-[#F0F0F0]" icon-class="w-5 h-5 text-[#BBB]" text-class="text-[13px] font-semibold text-[#333]" sub-class="text-[11px] text-[#999] mt-1"></empty-state>
 <div v-for="(c,ci) in cabsOfStation(curStation.id)" :key="c.no" data-cp @click="openCabDetail(c.no)" class="flex items-center gap-3 py-3 cursor-pointer active:opacity-70" :style="ci?'border-top:1px solid #F0F0F0':''" :data-od-id="'station-cab-'+c.no">
 <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:#EEF1F8"><span v-html="luci('box','w-4 h-4 text-[#2B3F5F]')"></span></div>
@@ -2612,12 +2740,11 @@ body.host-single-m #root-user{display:none}
 <span class="flex items-center gap-1.5 shrink-0"><span class="w-1.5 h-1.5 rounded-full" :style="{background:dotColor(CAB_DOT.biz(c))}"></span><span class="text-[11px]" :style="{color:dotColor(CAB_DOT.biz(c))}">{{ CAB_TEXT.biz(c) }}</span></span>
 <span v-html="luci('chevron-right','w-4 h-4 text-[#CCC]')"></span>
 </div>
-</div>
+</kv-card>
 </template>
 </div>
-<div v-if="curStation" class="absolute left-0 right-0 bottom-0 px-5 pb-6 pt-3 flex gap-2.5" style="background:rgba(255,255,255,.96);border-top:1px solid #F0F0F0;backdrop-filter:blur(10px)">
-<div data-cp @click="openStationForm(curStation.id)" class="flex-1 h-12 rounded-full flex items-center justify-center text-[15px] font-semibold cursor-pointer active:opacity-80" style="background:#EEF1F8;color:#2B3F5F" data-od-id="station-edit-btn">编辑站点</div>
-<div data-cp @click="openBindCab(curStation.id)" class="flex-1 h-12 rounded-full flex items-center justify-center text-[15px] font-semibold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="station-bind-btn">绑定换电柜</div>
+<div v-if="curStation" class="absolute left-0 right-0 bottom-0 px-5 pb-6 pt-3" style="background:rgba(255,255,255,.96);border-top:1px solid #F0F0F0;backdrop-filter:blur(10px)">
+<div data-cp @click="openBindCab(curStation.id)" class="w-full h-12 rounded-full flex items-center justify-center text-[15px] font-semibold text-white cursor-pointer active:opacity-90" style="background:linear-gradient(135deg,#33456B,#22304E)" data-od-id="station-bind-btn">绑定换电柜</div>
 </div>
 </page>
 <bottom-sheet :open="showCabFilter" title="全部筛选" :mask-z="600" max-h="65%" oid="cab-filter-sheet" panel-oid="cab-filter-panel" @close="closeCabFilter()">
@@ -2751,34 +2878,135 @@ body.host-single-m #root-user{display:none}
 </div>
 </bottom-sheet>
 <confirm-dialog :open="!!mConfirm" :z="1100" oid="m-confirm-dialog" :title="mConfirm?mConfirm.title:''" :desc="mConfirm?mConfirm.desc:''" :loading="mConfirmLoading" :confirm-bg="'linear-gradient(135deg,#33456B,#22304E)'" @close="mConfirmClose()" @confirm="mConfirmOk()"></confirm-dialog>
-<bottom-sheet :open="showStoreForm" type="B" title="门店信息" oid="store-form-sheet" panel-oid="store-form-panel" @close="showStoreForm=false" @confirm="saveStore()">
-<div class="px-5 pb-5">
-<div class="text-[13px] font-semibold mb-2" style="color:#111">门店名称</div>
-<input v-model="storeForm.name" type="text" placeholder="请输入门店名称" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
-<div class="text-[13px] font-semibold mb-2" style="color:#111">门店地址</div>
-<input v-model="storeForm.addr" type="text" placeholder="请输入门店地址" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
-<div class="text-[13px] font-semibold mb-2" style="color:#111">联系电话</div>
-<input v-model="storeForm.phone" type="text" placeholder="请输入联系电话" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
-<div class="text-[13px] font-semibold mb-2" style="color:#111">营业时间</div>
-<input v-model="storeForm.hours" type="text" placeholder="如 08:00 - 20:00" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
-<div class="text-[13px] font-semibold mb-1" style="color:#111">关联站点</div>
-<div class="text-[11px] mb-2.5" style="color:#999">门店与站点 1:1，已被其他门店关联的站点不可选</div>
-<div class="flex flex-wrap gap-2">
-<div data-cp @click="storeForm.stationId=''" class="h-8 px-3 rounded-full text-[12px] font-medium flex items-center cursor-pointer" :style="!storeForm.stationId?'background:#2B3F5F;color:#fff':'background:#F6F7F9;color:#666;border:1px solid #E5E5E5'">不关联</div>
-<div v-for="o in storeStationOptions(storeForm.id)" :key="o.value" data-cp @click="pickStoreStation(o.value)" class="h-8 px-3 rounded-full text-[12px] font-medium flex items-center cursor-pointer" :style="storeForm.stationId===o.value?'background:#2B3F5F;color:#fff':(o.disabled?'background:#F6F7F9;color:#BBB;border:1px dashed #E5E5E5':'background:#F6F7F9;color:#666;border:1px solid #E5E5E5')" :data-od-id="'store-station-'+o.value">{{ o.label }}</div>
+<!-- 门店地址「当前定位」两层校验链：定位授权（App 级）→ 定位服务（系统级），均就绪才取值 -->
+<confirm-dialog :open="mShowLocAppAuth" z="2010" oid="m-loc-app-auth-modal" title="允许“雅迪换电”使用你的位置信息吗？" desc="您的位置信息将用于定位门店地址" :cancel-text="'不允许'" :confirm-text="'允许'" confirm-bg="var(--accent)" @close="mDenyLocAppAuth()" @confirm="mAllowLocAppAuth()"></confirm-dialog>
+<confirm-dialog :open="mShowLocAuth" z="1800" oid="m-loc-service-modal" title="定位服务" desc="请在系统设置中开启定位服务，以自动获取门店地址" :cancel-text="'取消'" :confirm-text="'去开启'" confirm-bg="var(--accent)" @close="mCancelLocService()" @confirm="mAllowLocAuth()"></confirm-dialog>
+<!-- 门店关联站点（门店表单用：已被其他门店关联的站点禁用；再次点击已选 = 取消关联） -->
+<bottom-sheet :open="storeStationSheet" title="选择关联站点" :mask-z="750" max-h="65%" oid="store-station-mask" panel-oid="store-station-sheet" @close="closeStoreStationPick()">
+<div class="sheet-search">
+<span v-html="luci('search','w-4 h-4 text-[#999]')"></span>
+<input v-model="storeStationQ" type="text" placeholder="搜索站点名称" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
-<div v-if="storeFormErr" class="text-[12px] mt-3" style="color:#DC2626">{{ storeFormErr }}</div>
+<div class="flex-1 overflow-y-auto pb-8">
+<div v-if="!storeStationQ" data-cp @click="storeForm.stationId='';storeStationSheet=false" class="flex items-center px-5 py-4 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="store-station-none">
+<div class="flex-1 min-w-0"><div class="text-[15px] font-medium truncate" :style="!storeForm.stationId?{color:'var(--accent)'}:{color:'#111'}">暂不关联站点</div><div class="text-[12px] mt-0.5 truncate" style="color:#999">门店可先不关联，后续再补</div></div>
+<span v-if="!storeForm.stationId" v-html="luci('check','w-4 h-4 text-[var(--accent)]')"></span>
 </div>
-</bottom-sheet>
-<bottom-sheet :open="showStationForm" type="B" title="站点信息" oid="station-form-sheet" panel-oid="station-form-panel" @close="showStationForm=false" @confirm="saveStation()">
-<div class="px-5 pb-5">
-<div class="text-[13px] font-semibold mb-2" style="color:#111">站点名称</div>
-<input v-model="stationForm.name" type="text" placeholder="请输入站点名称" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
-<div class="text-[13px] font-semibold mb-2" style="color:#111">站点地址</div>
-<input v-model="stationForm.addr" type="text" placeholder="请输入站点地址" class="w-full h-11 rounded-xl px-3.5 text-[13px] outline-none mb-4" style="background:#F6F7F9;border:1px solid #E5E5E5;color:#111">
-<div v-if="stationFormErr" class="text-[12px]" style="color:#DC2626">{{ stationFormErr }}</div>
+<div v-for="o in storeStationList" :key="o.value" data-cp @click="pickStoreStation(o)" class="flex items-center px-5 py-4 cursor-pointer active:bg-[#F6F7F9]" :class="o.disabled?'opacity-45':''" :style="storeForm.stationId===o.value?{background:'#EBF1FD',borderBottom:'1px solid #EDEDED'}:{borderBottom:'1px solid #EDEDED'}" :data-od-id="'store-station-row-'+o.value">
+<div class="flex-1 min-w-0">
+<div class="text-[15px] font-medium truncate" :style="storeForm.stationId===o.value?{color:'var(--accent)'}:{color:'#111'}">{{ o.label }}</div>
+<div class="text-[12px] mt-0.5 truncate" style="color:#999">{{ o.disabled?'已被其他门店关联':stationAddrOf(o.value) }}</div>
+</div>
+<span v-if="storeForm.stationId===o.value" v-html="luci('check','w-4 h-4 text-[var(--accent)]')"></span>
+<span v-else-if="!o.disabled" v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
+</div>
+<empty-state v-if="!storeStationList.length" icon="map-pin" text="未找到站点" sub="换个关键词试试" root-class="flex flex-col items-center justify-center py-10" circle-class="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-[#F0F0F0]" icon-class="w-6 h-6 text-[#BBB]" text-class="text-[13px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
 </div>
 </bottom-sheet>
+<!-- 营业时间选择（时/分/秒三滚轮，B 型；开始与结束时间共用，滚动停 80ms 吸附到整行；取值与回显统一 HH:MM:SS） -->
+<bottom-sheet :open="storeHmPick" :title="storeHmPick==='to'?'结束时间':'开始时间'" type="B" :mask-z="750" oid="store-hm-mask" panel-oid="store-hm-sheet" @close="cancelStoreHmPick" @confirm="confirmStoreHmPick">
+<div class="relative px-2 pb-8">
+<div class="track-wheel-mask"></div>
+<div class="flex items-stretch gap-0.5">
+<div class="track-wheel-col" ref="storeHmWheelHour" @scroll="onStoreHmScroll('hour',$event)">
+<div style="height:72px"></div>
+<div v-for="h in trackHours" :key="'sth'+h" class="track-wheel-item" :class="{'is-on':storeHmDraft.hour===h}" data-cp @click="setStoreHmHour(h)">{{ p2(h) }}时</div>
+<div style="height:72px"></div>
+</div>
+<div class="track-wheel-col" ref="storeHmWheelMin" @scroll="onStoreHmScroll('min',$event)">
+<div style="height:72px"></div>
+<div v-for="mi in storeHmMins" :key="'stm'+mi" class="track-wheel-item" :class="{'is-on':storeHmDraft.min===mi}" data-cp @click="setStoreHmMin(mi)">{{ p2(mi) }}分</div>
+<div style="height:72px"></div>
+</div>
+<div class="track-wheel-col" ref="storeHmWheelSec" @scroll="onStoreHmScroll('sec',$event)">
+<div style="height:72px"></div>
+<div v-for="se in storeHmSecs" :key="'sts'+se" class="track-wheel-item" :class="{'is-on':storeHmDraft.sec===se}" data-cp @click="setStoreHmSec(se)">{{ p2(se) }}秒</div>
+<div style="height:72px"></div>
+</div>
+</div>
+</div>
+</bottom-sheet>
+<!-- 新增/编辑站点（对标门店表单：全屏页 + 六项必填字段；营业时间滚轮、封面弹窗、地址联想与地图选点均为门店/站点共用件） -->
+<page :open="mPage==='stationForm'" :z="600" :swipe-close="closeStationForm" oid="mstation-form-page">
+<nav-bar :title="stationForm.id?'编辑站点':'新增站点'" border-color="#E5E5E5" @back="closeStationForm()"></nav-bar>
+<div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
+<div class="form-card">
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>站点名称</div>
+<div class="login-field relative flex items-center">
+<input v-model="stationForm.name" @input="stationErr.name=''" type="text" maxlength="64" placeholder="请输入站点名称" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="stationErr.name?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-name">
+<span class="absolute right-2.5 text-[12px] text-[#999]">{{ (stationForm.name||'').length }}/64</span>
+</div>
+<div v-if="stationErr.name" class="form-hint">{{ stationErr.name }}</div>
+</div>
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>营业时间</div>
+<div class="flex items-center gap-2">
+<div role="button" data-cp @click="openStoreHmPick('from','station')" class="login-field flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="stationErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-from"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.from }}</span></div>
+<span class="shrink-0" v-html="luci('arrow-right','w-4 h-4 text-[#BBB]')"></span>
+<div role="button" data-cp @click="openStoreHmPick('to','station')" class="login-field flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="stationErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-to"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.to }}</span></div>
+<span v-html="luci('clock','w-4 h-4 text-[#BBB]')"></span>
+</div>
+<div v-if="stationErr.time" class="form-hint">{{ stationErr.time }}</div>
+</div>
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>联系人</div>
+<div class="login-field relative flex items-center">
+<input v-model="stationForm.contact" @input="stationErr.contact=''" type="text" maxlength="64" placeholder="请输入" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="stationErr.contact?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-contact">
+<span class="absolute right-2.5 text-[12px] text-[#999]">{{ (stationForm.contact||'').length }}/64</span>
+</div>
+<div v-if="stationErr.contact" class="form-hint">{{ stationErr.contact }}</div>
+</div>
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>联系方式</div>
+<div class="flex items-stretch gap-2.5">
+<div data-cp @click="openDialCode('station')" class="login-field login-field-dial flex items-center justify-center" data-od-id="station-form-dial"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.dial||'+86' }}</span><span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#9CA3AF]')"></span></div>
+<div class="login-field flex-1 relative flex items-center min-w-0">
+<input v-model="stationForm.phone" @input="stationErr.phone=''" type="tel" maxlength="20" placeholder="请输入" class="w-full pl-3.5 pr-3 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="stationErr.phone?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-phone">
+</div>
+</div>
+<div v-if="stationErr.phone" class="form-hint">{{ stationErr.phone }}</div>
+</div>
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>站点封面</div>
+<div class="grid grid-cols-3 gap-2.5">
+<div v-for="(p,pi) in cabImgList" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" data-cp @click="openCabImgPreview(pi)">
+<div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
+<div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openCabImgMore(pi)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
+</div>
+<div v-if="cabImgList.length<cabImgMax" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#F6F7F9;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="station-form-img">
+<span v-html="luci('plus','w-6 h-6')"></span>
+<span class="text-[12px] mt-1">{{ cabImgAddLabel }}</span>
+</div>
+</div>
+<div v-if="stationErr.photos" class="form-hint">{{ stationErr.photos }}</div>
+</div>
+<div class="form-row">
+<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>站点地址</div>
+<div class="login-field relative flex items-center">
+<input :value="stationForm.addr" @input="onAddrInput('station',$event)" @focus="stationAddrSugOpen=true" @blur="closeAddrSug('station')" type="text" placeholder="请输入地址或选择地址" class="w-full pl-3.5 pr-20 py-3 text-[15px]" :style="stationErr.addr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-addr">
+<div class="absolute right-2.5 flex items-center gap-1">
+<div v-if="stationForm.addr" data-cp @click="clearAddr('station')" class="w-7 h-7 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-od-id="station-form-addr-clear"><span v-html="luci('x','w-4 h-4')"></span></div>
+<div data-cp @click="openStoreMap('station')" class="w-8 h-8 flex items-center justify-center cursor-pointer shrink-0" style="color:#2B3F5F" data-od-id="station-form-addr-map" title="地图选择地址"><span v-html="luci('map-pin','w-[18px] h-[18px]')"></span></div>
+</div>
+</div>
+<div v-if="stationAddrSugOpen&&stationAddrSugList.length" class="mt-1.5 bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="station-form-addr-sug">
+<div v-for="(p,pi) in stationAddrSugList" :key="'sta'+pi" data-cp @mousedown.prevent @click="pickAddrSug('station',p)" class="flex items-start gap-3 px-3.5 py-3 cursor-pointer active:bg-[#F6F7F9]" :style="pi?{borderTop:'1px solid #F2F3F5'}:null" :data-od-id="'station-form-addr-sug-'+pi">
+<span class="flex-1 min-w-0">
+<span class="block text-[14px] truncate" style="color:#111">{{ p.name }}</span>
+<span class="block text-[12px] mt-0.5 truncate" style="color:#999">{{ p.addr }}</span>
+</span>
+<span class="shrink-0 text-[11px] pt-0.5" style="color:#BBB">{{ p.dist }}</span>
+</div>
+</div>
+<div v-if="stationErr.addr" class="form-hint">{{ stationErr.addr }}</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-7 left-5 right-5 z-[20]">
+<button data-cp @click="saveStation()" class="w-full h-[50px] flex items-center justify-center rounded-xl text-[16px] font-semibold border-none cursor-pointer transition-colors active:opacity-90" style="background:#2B3F5F;color:#fff" data-od-id="station-form-submit">保存</button>
+</div>
+</page>
 <bottom-sheet :open="showBindCab" type="B" title="绑定换电柜" oid="bind-cab-sheet" panel-oid="bind-cab-panel" @close="showBindCab=false" @confirm="showBindCab=false">
 <div class="px-5 pb-5">
 <div class="text-[12px] mb-3.5" style="color:#999">当前站点：{{ stationNameOf(bindStationId) }} · 点击切换绑定 / 解绑</div>
@@ -3099,6 +3327,20 @@ body.host-single-m #root-user{display:none}
 <div class="demo-ops-chip" data-cp @click="firstLogin=false" :class="!firstLogin?'is-on':''">否</div>
 </div>
 </div>
+<div v-if="!showLogin&&mPage==='storeMap'" class="demo-ops-section" data-od-id="demo-m-loc-app-auth">
+<div class="demo-ops-label">定位授权</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="mLocAppAuth=true" :class="mLocAppAuth?'is-on':''">已授权</div>
+<div class="demo-ops-chip" data-cp @click="mLocAppAuth=false" :class="!mLocAppAuth?'is-on':''">未授权</div>
+</div>
+</div>
+<div v-if="!showLogin&&mPage==='storeMap'" class="demo-ops-section" data-od-id="demo-m-loc-service">
+<div class="demo-ops-label">定位服务</div>
+<div class="demo-ops-chips">
+<div class="demo-ops-chip" data-cp @click="mLocAuth=true" :class="mLocAuth?'is-on':''">已开启</div>
+<div class="demo-ops-chip" data-cp @click="mLocAuth=false" :class="!mLocAuth?'is-on':''">未开启</div>
+</div>
+</div>
 <template v-if="!showLogin&&((tab==='cab'&&!mPage)||(tab==='batt'&&!mPage)||(tab==='home'&&!mPage)||mPage==='stores'||mPage==='stations'||mPage==='cabAlarm'||mPage==='cabFault'||mPage==='cabUsage'||mPage==='cabImgs'||mPage==='battRentRec')">
 <div class="demo-ops-section" data-od-id="demo-list-data">
 <div class="demo-ops-label">列表数据</div>
@@ -3240,6 +3482,31 @@ function registerSheetKit(app){
     props:{icon:{type:String,default:'inbox'},text:{type:String,default:''},sub:{type:String,default:''},rootClass:{type:String,default:'flex flex-col items-center justify-center py-16'},circleClass:{type:String,default:'w-16 h-16 rounded-full bg-[#EBF1FD] flex items-center justify-center mb-4'},iconClass:{type:String,default:'w-8 h-8 text-[var(--accent)]'},textClass:{type:String,default:'text-[15px] font-semibold text-[#111] mb-1'},subClass:{type:String,default:'text-[13px] text-[#999] text-center mt-1'}},
     template:'<div :class="rootClass"><div v-if="icon" :class="circleClass"><span v-html="luci(icon,iconClass)"></span></div><div v-if="text" :class="textClass">{{ text }}</div><div v-if="sub" :class="subClass">{{ sub }}</div><slot></slot></div>'
   });
+  /* KvCard：信息卡片外壳（键值行式）。props: title / divider(Boolean，默认关闭) / labelWidth('4rem') / copyable / copyText；
+     slots: title(优先于 title prop) / extra(状态·动作，高度须≤16px) / footer(传入才渲染) / default。
+     用法：<kv-card title="门店信息" label-width="5rem"><kv-row label="门店名称" :value="s.name"></kv-row></kv-card>
+     divider 默认 false：卡片默认不画行间分隔线，调用点一律不要加 divider（确需某张卡开启时才显式传）；
+     单行虚线可用 kv-row 的 :divider="true" 单独开启。 */
+  app.component('kv-card',{
+    name:'kv-card',
+    props:{title:{type:String,default:''},divider:{type:Boolean,default:false},labelWidth:{type:String,default:'4rem'},copyable:{type:Boolean,default:false},copyText:{type:String,default:''}},
+    emits:['copy'],
+    provide:function(){return{kvLabelWidth:this.labelWidth,kvDivider:this.divider}},
+    methods:{kvTitleCopy:function(){this.$emit('copy',this.copyText||this.title)}},
+    template:'<div class="kv-card bg-white rounded-2xl px-4 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :class="divider?\'kv-card-div\':\'\'"><div v-if="title||$slots.title||$slots.extra" class="kv-head flex items-center justify-between mb-1.5"><span class="flex items-center gap-1.5 min-w-0 flex-1"><span class="min-w-0 truncate text-[15px] font-semibold" style="color:#111" :title="title"><slot name="title">{{ title }}</slot></span><span v-if="copyable" class="shrink-0" data-cp @click.stop="kvTitleCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></span><slot name="extra"></slot></div><slot></slot><div v-if="$slots.footer" class="kv-foot"><slot name="footer"></slot></div></div>'
+  });
+  /* KvRow：键值行。props: label(⚠️不能叫 key) / value / copyable / copyText / labelWidth / labelClass / valueClass / valueStyle
+     / divider(该行上方是否画线：不写=跟随卡片；:divider="true" 强制画；:divider="false" 强制不画) / align('center'|'top')；
+     slots: key / value；emits: copy(payload = copyText || value)。行高恒 32px → 行内图标 ≤16px。 */
+  app.component('kv-row',{
+    name:'kv-row',
+    props:{label:{type:String,default:''},value:{default:''},copyable:{type:Boolean,default:false},copyText:{type:String,default:''},labelWidth:{type:String,default:''},labelClass:{type:String,default:''},valueClass:{type:String,default:''},valueStyle:{default:null},divider:{default:undefined},align:{type:String,default:'center'}},
+    inject:{kvLabelWidth:{default:'4rem'},kvDivider:{default:false}},
+    emits:['copy'],
+    computed:{kvLineOn:function(){var d=this.divider;if(d===undefined||d===null)return null;return d===''?true:!!d},kvLineClass:function(){var on=this.kvLineOn;return on===null?'':(on?'':'kv-noline')},kvLineStyle:function(){return this.kvLineOn===true?'border-top:1px dashed #E5E5E5;margin-top:-1px':''}},
+    methods:{kvCopy:function(){this.$emit('copy',this.copyText||this.value)}},
+    template:'<div class="kv-row flex py-2" :class="[align===\'top\'?\'items-start\':\'items-center\',kvLineClass]" :style="kvLineStyle"><span class="shrink-0 text-[13px]" style="color:#999" :class="labelClass" :style="{width:labelWidth||kvLabelWidth}"><slot name="key">{{ label }}</slot></span><span class="flex-1 min-w-0 text-right pl-3 text-[13px] truncate" style="color:#111" :class="valueClass" :style="valueStyle||{}"><slot name="value">{{ value }}</slot></span><span v-if="copyable" class="shrink-0 pl-1.5" data-cp @click.stop="kvCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></div>'
+  });
   /* TabBar：底部导航（图标+文字，active 高亮，支持权限 hidden 与自定义 go） */
   app.component('tab-bar',{
     name:'tab-bar',
@@ -3336,7 +3603,7 @@ function authState(bus,ext){
   var loginCdTimer=null;
   var dialQ=Vue.ref(''),dialPickerSource=Vue.ref(null);
   var showDialPicker=Vue.computed(function(){return !!dialPickerSource.value});
-  var activeDialCode=Vue.computed(function(){return loginDial.value});
+  var activeDialCode=Vue.computed(function(){var src=dialPickerSource.value;if((src==='store'||src==='station')&&ext&&typeof ext.storeDial==='function')return ext.storeDial(src)||loginDial.value;return loginDial.value});
   var dialCodes=[
     {flag:'🇨🇳',name:'中国',code:'+86'},{flag:'🇮🇩',name:'印度尼西亚',code:'+62'},{flag:'🇬🇧',name:'英国',code:'+44'},
     {flag:'🇺🇸',name:'美国',code:'+1'},{flag:'🇸🇬',name:'新加坡',code:'+65'},{flag:'🇲🇾',name:'马来西亚',code:'+60'},
@@ -3389,7 +3656,7 @@ function authState(bus,ext){
   function saveNickname(){if(!nickValid.value)return;profileNickname.value=nickDraft.value.trim();toastPush('昵称已保存');navBack()}
   function openDialCode(src){dialQ.value='';dialPickerSource.value=src||'login'}
   function closeDialPicker(){dialPickerSource.value=null;dialQ.value=''}
-  function pickDial(c){if(dialPickerSource.value==='bind'){bpArea.value=c.code}else{loginDial.value=c.code}closeDialPicker()}
+  function pickDial(c){var src=dialPickerSource.value;if(src==='store'||src==='station'){if(ext&&typeof ext.pickStoreDial==='function')ext.pickStoreDial(c.code,src)}else if(src==='bind'){bpArea.value=c.code}else{loginDial.value=c.code}closeDialPicker()}
   function setLoginMode(m){loginMode.value=m;loginSub.value='password';loginPwd.value='';loginCode.value='';loginErr.phone='';loginErr.pwd='';loginErr.code='';loginErr.email='';loginErr.account='';if(loginCdTimer){clearInterval(loginCdTimer);loginCdTimer=null}loginCd.value=0}
   function setLoginSub(s){loginSub.value=s;loginPwd.value='';loginCode.value='';loginErr.phone='';loginErr.pwd='';loginErr.code='';loginErr.email='';loginErr.account='';if(loginCdTimer){clearInterval(loginCdTimer);loginCdTimer=null}loginCd.value=0}
   function sendLoginCode(){if(!canSendCode.value)return;if(loginCdTimer)clearInterval(loginCdTimer);loginCd.value=60;loginCdTimer=setInterval(function(){loginCd.value--;if(loginCd.value<=0){clearInterval(loginCdTimer);loginCdTimer=null}},1000)}
@@ -3985,9 +4252,9 @@ var _ua=Vue.createApp({
     ];
     var STORE_SERVICES=['换电','租车','售后/维修','卖车/电池'];
     var storePoints=[
-      {id:1,left:'36%',top:'21%',name:'雅迪换电 · 剑南大道门店',addr:'成都市武侯区剑南大道188号1层',dist:'1.0km',hours:'9:00-19:00',services:STORE_SERVICES,cabinets:[{no:'A01',total:12,used:5,full:5},{no:'A02',total:12,used:8,full:2}]},
-      {id:2,left:'70%',top:'47%',name:'雅迪换电 · 天府三街门店',addr:'成都市高新区天府三街69号',dist:'2.1km',hours:'9:00-19:00',services:STORE_SERVICES,cabinets:[{no:'B01',total:12,used:6,full:4}]},
-      {id:3,left:'22%',top:'72%',name:'雅迪换电 · 锦城湖门店',addr:'成都市高新区锦城湖公园南门',dist:'3.2km',hours:'9:00-19:00',services:STORE_SERVICES,cabinets:[{no:'C01',total:12,used:3,full:7}]}
+      {id:1,left:'36%',top:'21%',name:'雅迪换电 · 剑南大道门店',addr:'成都市武侯区剑南大道188号1层',dist:'1.0km',hours:'09:00:00-19:00:00',services:STORE_SERVICES,cabinets:[{no:'A01',total:12,used:5,full:5},{no:'A02',total:12,used:8,full:2}]},
+      {id:2,left:'70%',top:'47%',name:'雅迪换电 · 天府三街门店',addr:'成都市高新区天府三街69号',dist:'2.1km',hours:'09:00:00-19:00:00',services:STORE_SERVICES,cabinets:[{no:'B01',total:12,used:6,full:4}]},
+      {id:3,left:'22%',top:'72%',name:'雅迪换电 · 锦城湖门店',addr:'成都市高新区锦城湖公园南门',dist:'3.2km',hours:'09:00:00-19:00:00',services:STORE_SERVICES,cabinets:[{no:'C01',total:12,used:3,full:7}]}
     ];
     /* 地图类型（对齐原首页「切换地图」）：换电 #15B88C / 还电 #FF5F00 / 门店 #1A82F4 */
     var MAP_TYPES=[
@@ -4078,7 +4345,7 @@ var _ua=Vue.createApp({
       if(!p)return;
       /* 站点详情数据：补齐营业时间/客服电话（原型固定值） */
       var cabs=(p.cabinets||[]).map(function(c,i){return {no:c.no,total:c.total,used:c.used,full:c.full,code:'CHZD06KX0123060112'+(i+1)}});
-      curStation.value={name:p.name,addr:p.addr,dist:p.dist,no:p.id,hours:'09:00-19:00',phone:'+86 1528****8288',point:p,cabinets:cabs,fromMapType:mapType.value};
+      curStation.value={name:p.name,addr:p.addr,dist:p.dist,no:p.id,hours:'09:00:00-19:00:00',phone:'+86 1528****8288',point:p,cabinets:cabs,fromMapType:mapType.value};
       curCab.value=cabs[0]||null;
       auth.navOpen('station');auth.profileOV.value='station';auth.profileSub.value=null;
     }
@@ -4086,7 +4353,7 @@ var _ua=Vue.createApp({
     function openStoreDetail(s){
       if(!s)return;
       var cabs=(s.cabinets||[]).map(function(c,i){return {no:c.no,total:c.total,used:c.used,full:c.full,code:'CHZD06KX0123060113'+(i+1)}});
-      curStation.value={name:s.name,addr:s.addr,dist:s.dist,no:s.id,hours:s.hours||'9:00-19:00',phone:'+86 1528****8288',point:s,cabinets:cabs,fromMapType:mapType.value,isStore:true};
+      curStation.value={name:s.name,addr:s.addr,dist:s.dist,no:s.id,hours:s.hours||'09:00:00-19:00:00',phone:'+86 1528****8288',point:s,cabinets:cabs,fromMapType:mapType.value,isStore:true};
       curCab.value=cabs[0]||null;
       auth.navOpen('station');auth.profileOV.value='station';auth.profileSub.value=null;
     }
@@ -4405,17 +4672,35 @@ registerSheetKit(_ua);_ua.mount(document.getElementById('root-user'));
 /* mSlots：仓位状态（total 仓门数为机柜固有属性，与状态无关；occupiedNos 有电池仓号；doorStates 按仓号的禁用/预约/非法电池细项） */
 function mSlots(total,occupiedNos,doorStates){var a=[],occ=occupiedNos||[],ds=doorStates||{};for(var i=1;i<=total;i++){var d=ds[i]||{};a.push({no:(i<10?'0':'')+i,occupied:occ.indexOf(i)!==-1,disabled:!!d.disabled,reserved:!!d.reserved,illegal:!!d.illegal,doorOpen:false})}return a}
 function mRec(time,type,note){return {time:time,type:type,note:note}}
+/* 门店关键业务（多选）：与用户端门店筛选口径一致 */
+var M_STORE_SERVICES=['换电','租车','售后/维修','卖车/电池'];
+/* 门店地理位置候选点（门店表单「选择地址」地图页取点用，按距离升序）
+   lx/ly = 假地图世界层内的百分比坐标，用于拖拽吸附与「准星居中」对齐（单一数据源，定位点也取自本表） */
+var M_STORE_ADDR_POINTS=[
+  {name:'双流航空港商圈',addr:'成都市双流区航空港街道黄河中路 88 号',dist:'120m',lx:50,ly:45},
+  {name:'空港国际城',addr:'成都市双流区空港国际城 3 号门',dist:'480m',lx:32,ly:64},
+  {name:'川大江安校区',addr:'成都市双流区川大路二段 2 号',dist:'1.2km',lx:70,ly:30},
+  {name:'双流万达广场',addr:'成都市双流区西航港大道中四段 199 号',dist:'2.1km',lx:20,ly:24},
+  {name:'双流西站',addr:'成都市双流区西航港街道双流西站广场',dist:'3.4km',lx:78,ly:72}
+];
 var M_STORES=[
-  {id:'S01',name:'雅迪换电·双流旗舰店',addr:'成都市双流区航空港街道黄河中路 88 号',phone:'028-8888 6666',hours:'08:00-22:00',stationId:'ST01'},
-  {id:'S02',name:'雅迪换电·金牛万达店',addr:'成都市金牛区金牛万达广场 B1 层',phone:'028-8666 1234',hours:'09:00-21:30',stationId:'ST02'},
-  {id:'S03',name:'雅迪换电·武侯吾悦店',addr:'成都市武侯区吾悦广场 1F 东侧',phone:'028-8777 5566',hours:'10:00-22:00',stationId:'ST03'},
-  {id:'S04',name:'雅迪换电·高新天府店',addr:'成都市高新区天府三街 199 号',phone:'028-8555 7788',hours:'08:30-21:00',stationId:''}
+  {id:'S01',name:'雅迪换电·双流旗舰店',addr:'成都市双流区航空港街道黄河中路 88 号',contact:'王经理',phone:'028-8888 6666',hours:'08:00:00-22:00:00',stationId:'ST01',services:['换电','租车'],photos:[{id:'SP01-1',time:'2026-09-20 10:12:33'}]},
+  {id:'S02',name:'雅迪换电·金牛万达店',addr:'成都市金牛区金牛万达广场 B1 层',contact:'李经理',phone:'028-8666 1234',hours:'09:00:00-21:30:00',stationId:'ST02',services:['换电'],photos:[]},
+  {id:'S03',name:'雅迪换电·武侯吾悦店',addr:'成都市武侯区吾悦广场 1F 东侧',contact:'张经理',phone:'028-8777 5566',hours:'10:00:00-22:00:00',stationId:'ST03',services:['换电','售后/维修'],photos:[]},
+  {id:'S04',name:'雅迪换电·高新天府店',addr:'成都市高新区天府三街 199 号',contact:'赵经理',phone:'028-8555 7788',hours:'08:30:00-21:00:00',stationId:'',services:['换电','租车','卖车/电池'],photos:[]}
 ];
 var M_STATIONS=[
-  {id:'ST01',name:'双流航空港站',addr:'成都市双流区黄河中路 88 号 1F 门口'},
-  {id:'ST02',name:'金牛万达站',addr:'成都市金牛区金牛万达 B1 停车场 P2 区'},
-  {id:'ST03',name:'武侯吾悦站',addr:'成都市武侯区吾悦广场东侧广场'},
-  {id:'ST04',name:'高新天府站',addr:'成都市高新区天府三街 199 号 1F'}
+  {id:'ST01',name:'双流航空港站',addr:'成都市双流区黄河中路 88 号 1F 门口',hours:'08:00:00-22:00:00',contact:'王经理',phone:'028-8888 6666',photos:[{id:'STP01-1',time:'2026-09-20 10:12:33'}]},
+  {id:'ST02',name:'金牛万达站',addr:'成都市金牛区金牛万达 B1 停车场 P2 区',hours:'09:00:00-21:30:00',contact:'李经理',phone:'028-8666 1234',photos:[]},
+  {id:'ST03',name:'武侯吾悦站',addr:'成都市武侯区吾悦广场东侧广场',hours:'10:00:00-22:00:00',contact:'张经理',phone:'028-8777 5566',photos:[]},
+  {id:'ST04',name:'高新天府站',addr:'成都市高新区天府三街 199 号 1F',hours:'08:30:00-21:00:00',contact:'赵经理',phone:'028-8555 7788',photos:[]}
+];
+/* 加盟商（对标租车商户端「切换门店」）：当前登录商户可切换的加盟商，层级为 加盟商 → 门店 → 站点 → 换电柜 → 电池；
+   切换只改「当前加盟商」上下文（原型不做数据过滤，门店/站点等仍为同一份演示数据） */
+var M_FRANCHISEES=[
+  {id:'F01',name:'双流区运营商',region:'四川省成都市双流区'},
+  {id:'F02',name:'金牛区运营商',region:'四川省成都市金牛区'},
+  {id:'F03',name:'武侯区运营商',region:'四川省成都市武侯区'}
 ];
 /* 柜级告警/故障记录（纯记录，字段对齐文档）：content = AlarmFaultMap 中文名（界面只展示名称、不展示编码）、
    doorId = 仓门号、powerSn = 电池SN、startTime = 触发时间、status = 0 告警中/故障中、1 已解除、endTime = 解除时间；
@@ -4460,9 +4745,13 @@ function mCabUses(doorA,doorB){
   ]
 }
 var M_CABINETS=[
-  {no:'K7A3F9D2M5Q8T1B4',name:'双流航空港站 1 号柜',stationId:'ST01',model:'YD-C12',doors:12,bizOnline:true,netOnline:true,fault:true,alarm:false,enabled:true,faults:mAbnRecs(FAULT_TYPES,{doors:['01','02','05','08'],batts:['BT-2026-0001','BT-2026-0002','BT-2026-0003','BT-2026-0004']}),flow:'98.989 M',power:'6.89 kw.h',createdAt:'2023-03-20 18:26:22',updatedAt:'2024-09-18 10:52:31',slots:mSlots(12,[1,2,5,8],{1:{reserved:true},8:{illegal:true}})},
-  {no:'R8B4L1E6N3G9U2C5',name:'双流航空港站 2 号柜',stationId:'ST01',model:'YD-C08',doors:8,bizOnline:true,netOnline:false,fault:false,alarm:true,enabled:true,alarms:mAbnRecs(DOOR_ALARM_TYPES,{doors:['01','02','03','04','05','06','07','08']}),flow:'42.310 M',power:'3.24 kw.h',createdAt:'2023-05-08 09:14:06',updatedAt:'2024-09-19 10:52:44',slots:mSlots(8,[1])},
-  {no:'M9H5T2F7P4S1V6D3',name:'金牛万达站 1 号柜',stationId:'ST02',model:'YD-C12',doors:12,bizOnline:true,netOnline:true,fault:true,alarm:true,enabled:true,alarms:[{content:'电芯高温告警',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 15:36:20',status:0},{content:'柜门充电电源告警',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 15:19:47',status:1,endTime:'2026-09-19 16:16:47'},{content:'电池被盗告警',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 15:03:14',status:0},{content:'电池不识别告警',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 14:46:41',status:0},{content:'满仓告警',doorId:'',powerSn:'',startTime:'2026-09-19 14:30:08',status:1,endTime:'2026-09-19 15:27:08'},{content:'开多仓告警',doorId:'',powerSn:'',startTime:'2026-09-19 14:13:35',status:1,endTime:'2026-09-19 15:10:35'},{content:'烟雾',doorId:'',powerSn:'',startTime:'2026-09-19 13:57:02',status:0},{content:'浸水',doorId:'',powerSn:'',startTime:'2026-09-19 13:40:29',status:0}],faults:[{content:'MOS异常',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 14:18:52',status:0},{content:'超高温保护',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 13:47:16',status:1,endTime:'2026-09-19 16:08:09'}],flow:'76.502 M',power:'5.10 kw.h',createdAt:'2023-04-02 14:38:51',updatedAt:'2024-09-19 14:22:10',slots:mSlots(12,[2])},
+  /* 列表前两条为演示基准（机柜列表与电池列表口径一致：第 1 项全正常 / 第 2 项全异常）
+     第 1 条 K7A3：上线 + 在线 + 无告警 + 无故障 + 已启用（仅留 1 条已解除的故障记录，保持与「无故障」一致）
+     第 2 条 R8B4：下线 + 离线 + 有告警 + 有故障 + 未启用（告警/故障记录与状态一致，详情页次级页有数据） */
+  {no:'K7A3F9D2M5Q8T1B4',name:'双流航空港站 1 号柜',stationId:'ST01',model:'YD-C12',doors:12,bizOnline:true,netOnline:true,fault:false,alarm:false,enabled:true,faults:mAbnRecs(FAULT_TYPES.slice(0,1),{doors:['01'],batts:['BT-2026-0001']}),flow:'98.989 M',power:'6.89 kw.h',createdAt:'2023-03-20 18:26:22',updatedAt:'2024-09-18 10:52:31',slots:mSlots(12,[1,2,5,8],{5:{reserved:true},8:{illegal:true}})},
+  {no:'R8B4L1E6N3G9U2C5',name:'双流航空港站 2 号柜',stationId:'ST01',model:'YD-C08',doors:8,bizOnline:false,netOnline:false,fault:true,alarm:true,enabled:false,alarms:mAbnRecs(DOOR_ALARM_TYPES,{doors:['01','02','03','04','05','06','07','08']}),faults:mAbnRecs(FAULT_TYPES.slice(0,3),{doors:['01'],batts:['BT-2026-0005']}),flow:'42.310 M',power:'3.24 kw.h',createdAt:'2023-05-08 09:14:06',updatedAt:'2024-09-19 10:52:44',slots:mSlots(8,[1])},
+  /* 第 3 条 M9H5：演示「无站点归属」（stationId 空）→ 列表 / 详情的站点与地址一律显示 - */
+  {no:'M9H5T2F7P4S1V6D3',name:'金牛万达站 1 号柜',stationId:'',model:'YD-C12',doors:12,bizOnline:true,netOnline:true,fault:true,alarm:true,enabled:true,alarms:[{content:'电芯高温告警',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 15:36:20',status:0},{content:'柜门充电电源告警',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 15:19:47',status:1,endTime:'2026-09-19 16:16:47'},{content:'电池被盗告警',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 15:03:14',status:0},{content:'电池不识别告警',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 14:46:41',status:0},{content:'满仓告警',doorId:'',powerSn:'',startTime:'2026-09-19 14:30:08',status:1,endTime:'2026-09-19 15:27:08'},{content:'开多仓告警',doorId:'',powerSn:'',startTime:'2026-09-19 14:13:35',status:1,endTime:'2026-09-19 15:10:35'},{content:'烟雾',doorId:'',powerSn:'',startTime:'2026-09-19 13:57:02',status:0},{content:'浸水',doorId:'',powerSn:'',startTime:'2026-09-19 13:40:29',status:0}],faults:[{content:'MOS异常',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 14:18:52',status:0},{content:'超高温保护',doorId:'02',powerSn:'BT-2026-0006',startTime:'2026-09-19 13:47:16',status:1,endTime:'2026-09-19 16:08:09'}],flow:'76.502 M',power:'5.10 kw.h',createdAt:'2023-04-02 14:38:51',updatedAt:'2024-09-19 14:22:10',slots:mSlots(12,[2])},
   {no:'X1J6W4G9Q2N7Z3E8',name:'金牛万达站 2 号柜',stationId:'ST02',model:'YD-C06',doors:6,bizOnline:false,netOnline:false,fault:false,alarm:false,enabled:true,flow:'12.884 M',power:'1.02 kw.h',createdAt:'2023-06-21 11:05:33',updatedAt:'2024-09-19 11:40:02',slots:mSlots(6,[])},
   {no:'P2K7V5H1R6U9Y4F2',name:'武侯吾悦站 1 号柜',stationId:'ST03',model:'YD-C16',doors:16,bizOnline:true,netOnline:true,fault:false,alarm:true,enabled:true,alarms:mAbnRecs(BATT_ALARM_TYPES,{doors:['04','09','11'],batts:['BT-2026-0007','BT-2026-0008','BT-2026-0009']}),flow:'88.140 M',power:'7.35 kw.h',createdAt:'2023-07-19 16:47:12',updatedAt:'2024-09-19 09:05:47',slots:mSlots(16,[4,9,11],{4:{disabled:true}})},
   {no:'T3L8Q6J2S7W1Y5G4',name:'高新天府站 1 号柜',stationId:'ST04',model:'YD-C10',doors:10,bizOnline:true,netOnline:true,fault:false,alarm:false,enabled:false,flow:'5.006 M',power:'0.48 kw.h',createdAt:'2024-01-11 08:22:40',updatedAt:'2024-09-20 08:31:15',slots:mSlots(10,[])}
@@ -4487,8 +4776,11 @@ M_CABINETS.forEach(function(c,i){
   }
 });
 var M_BATTERIES=[
-  {no:'BT-2026-0001',soc:86,cycles:126,health:96,cabState:'inCab',rentState:'unrented',netOnline:true,charging:false,at:'K7A3F9D2M5Q8T1B4-01',records:[mRec('2026-09-16 14:05','charge','入柜充电，SOC 12% → 86%'),mRec('2026-09-16 09:20','return','由用户 U8812 归还至 K7A3F9D2M5Q8T1B4-01 仓位')]},
-  {no:'BT-2026-0002',soc:9,cycles:98,health:94,cabState:'inCab',rentState:'unrented',netOnline:true,charging:true,at:'K7A3F9D2M5Q8T1B4-02',records:[mRec('2026-09-18 21:10','return','由用户 U6521 归还至 K7A3F9D2M5Q8T1B4-02 仓位，开始充电'),mRec('2026-09-18 08:32','borrow','用户 U6521 于 K7A3F9D2M5Q8T1B4-02 借出')]},
+  /* 列表前两条为演示基准（电池列表与机柜列表口径一致：第 1 项全正常 / 第 2 项全异常）
+     第 1 条 0001：在线 + 柜内 + 未租用 + 已满电
+     第 2 条 0002：离线 + 异常中（柜内离线即异常，详情页「电池状态」为异常中） */
+  {no:'BT-2026-0001',soc:100,cycles:126,health:96,cabState:'inCab',rentState:'unrented',netOnline:true,charging:false,at:'K7A3F9D2M5Q8T1B4-01',records:[mRec('2026-09-16 14:05','charge','入柜充电，SOC 12% → 100%'),mRec('2026-09-16 09:20','return','由用户 U8812 归还至 K7A3F9D2M5Q8T1B4-01 仓位')]},
+  {no:'BT-2026-0002',soc:9,cycles:98,health:94,cabState:'inCab',rentState:'unrented',netOnline:false,charging:false,at:'K7A3F9D2M5Q8T1B4-02',records:[mRec('2026-09-18 21:10','return','由用户 U6521 归还至 K7A3F9D2M5Q8T1B4-02 仓位，通讯中断状态待同步'),mRec('2026-09-18 08:32','borrow','用户 U6521 于 K7A3F9D2M5Q8T1B4-02 借出')]},
   {no:'BT-2026-0003',soc:100,cycles:154,health:91,cabState:'inCab',rentState:'unrented',netOnline:true,charging:false,at:'K7A3F9D2M5Q8T1B4-05',records:[mRec('2026-09-15 18:40','charge','入柜充电，SOC 20% → 100%'),mRec('2026-09-15 12:05','return','由用户 U3390 归还至 K7A3F9D2M5Q8T1B4-05 仓位')]},
   {no:'BT-2026-0004',soc:67,cycles:212,health:88,cabState:'inCab',rentState:'unrented',netOnline:true,charging:true,at:'K7A3F9D2M5Q8T1B4-08',records:[mRec('2026-09-19 07:15','charge','入柜充电，SOC 33% → 67%'),mRec('2026-09-18 19:50','return','由用户 U7712 归还至 K7A3F9D2M5Q8T1B4-08 仓位')]},
   {no:'BT-2026-0005',soc:74,cycles:88,health:95,cabState:'inCab',rentState:'unrented',netOnline:false,charging:false,at:'R8B4L1E6N3G9U2C5-01',records:[mRec('2026-09-19 09:02','alarm','与 R8B4L1E6N3G9U2C5 柜通讯中断，状态待同步'),mRec('2026-09-17 16:20','return','由用户 U2188 归还至 R8B4L1E6N3G9U2C5-01 仓位')]},
@@ -4534,7 +4826,11 @@ var _ma=Vue.createApp({
     var toastBus=createToastBus();
     function toastPush(msg,type){toastBus.push(msg,type)}
     function toast(m){toastBus.push(m)}
-    var auth=authState(toastBus);
+    /* ext.pickStoreDial：门店 / 站点表单的「联系电话 / 联系方式」区号选择复用登录/绑定手机同一套 dial 选择页（按 src 区分目标表单） */
+    var auth=authState(toastBus,{
+      pickStoreDial:function(code,src){if(src==='station'){stationForm.dial=code}else{storeForm.dial=code}},
+      storeDial:function(src){return src==='station'?stationForm.dial:storeForm.dial}
+    });
     var navOpen=auth.navOpen,navBack=auth.navBack;
     var navReset=auth.navReset,showLogin=auth.showLogin,loggedIn=auth.loggedIn,closeLogin=auth.closeLogin,profileOV=auth.profileOV,profileSub=auth.profileSub;
     var OK_C='#16A34A',BAD_C='#DC2626',WARN_C='#FF8A00',OFF_C='#999999',NORM_C='#111111';
@@ -4544,12 +4840,17 @@ var _ma=Vue.createApp({
     var stations=Vue.ref(M_STATIONS.map(function(o){return Object.assign({},o)}));
     var cabinets=Vue.ref(JSON.parse(JSON.stringify(M_CABINETS)));
     var batteries=Vue.ref(JSON.parse(JSON.stringify(M_BATTERIES)));
+    /* 加盟商：列表 + 当前加盟商（对标租车「切换门店」的当前门店，属上下文值、不进导航快照） */
+    var franchisees=Vue.ref(M_FRANCHISEES.map(function(o){return Object.assign({},o)}));
+    var curFranchiseeId=Vue.ref(M_FRANCHISEES.length?M_FRANCHISEES[0].id:'');
+    function franchiseeOf(id){var r=franchisees.value.filter(function(f){return f.id===id})[0];return r||null}
+    var curFranchisee=Vue.computed(function(){return franchiseeOf(curFranchiseeId.value)||franchisees.value[0]||{name:'—'}});
 
     /* ── 页面级状态（注册进导航快照） ── */
     var mPage=Vue.ref('');
     var mStoreId=Vue.ref(''),mStationId=Vue.ref(''),mCabNo=Vue.ref(''),mBattNo=Vue.ref('');
     var showCabFilter=Vue.ref(false),showBattFilter=Vue.ref(false);
-    var showStoreForm=Vue.ref(false),showStationForm=Vue.ref(false),showBindCab=Vue.ref(false);
+    var showBindCab=Vue.ref(false);
     var mConfirm=Vue.ref(null),mConfirmLoading=Vue.ref(false);
     var storeQ=Vue.ref(''),stationQ=Vue.ref('');
     /* ── 列表顶部搜索（与租车车辆/电池列表同款：行内搜索胶囊，实时过滤） ── */
@@ -4573,21 +4874,23 @@ var _ma=Vue.createApp({
       alarm:function(c){return c.alarm?'有告警':'无告警'},
       enabled:function(c){return c.enabled?'已启用':'未启用'}
     };
+    /* 二元状态色标：只用 绿(ok＝是/正常) 与 红(bad＝否/异常)，不用橙(warn)、灰(off) */
     var CAB_DOT={
       biz:function(c){return c.bizOnline?'ok':'bad'},
       net:function(c){return c.netOnline?'ok':'bad'},
-      fault:function(c){return c.fault?'warn':'ok'},
-      alarm:function(c){return c.alarm?'warn':'ok'},
-      enabled:function(c){return c.enabled?'ok':'off'}
+      fault:function(c){return c.fault?'bad':'ok'},
+      alarm:function(c){return c.alarm?'bad':'ok'},
+      enabled:function(c){return c.enabled?'ok':'bad'}
     };
     var BATT_TEXT={
       cab:function(b){return b.cabState==='inCab'?'柜内':'柜外'},
       rent:function(b){return b.rentState==='rented'?'已租用':'未租用'},
       net:function(b){return b.netOnline?'在线':'离线'}
     };
+    /* 二元状态色标：同 CAB_DOT，只用 绿 / 红；「柜外 / 未租用」不算异常 → 用 value 默认色（norm） */
     var BATT_DOT={
-      cab:function(b){return b.cabState==='inCab'?'ok':'warn'},
-      rent:function(b){return b.rentState==='rented'?'ok':'warn'},
+      cab:function(b){return b.cabState==='inCab'?'ok':'norm'},
+      rent:function(b){return b.rentState==='rented'?'ok':'norm'},
       net:function(b){return b.netOnline?'ok':'bad'}
     };
     /* 电池状态（电池在仓门内的 4 态枚举）：异常中 > 预约中 > 充电中 > 已满电；其余（柜外租用等）不带 */
@@ -4602,7 +4905,8 @@ var _ma=Vue.createApp({
     }
     /* 电池状态色标（与仓门弹窗一致）：充电中 橙 / 已满电 绿 / 异常中 红 / 预约中 蓝 */
     function battStateColor(b){var lab=battStateOf(b);return lab==='充电中'?WARN_C:lab==='已满电'?OK_C:lab==='异常中'?BAD_C:'#2F6FEB'}
-    function dotColor(k){return k==='ok'?OK_C:k==='bad'?BAD_C:k==='warn'?WARN_C:OFF_C}
+    /* norm = 非异常但需按状态展示的二元值 → 用 value 默认色，不加绿/红 */
+    function dotColor(k){return k==='ok'?OK_C:k==='bad'?BAD_C:k==='warn'?WARN_C:k==='norm'?NORM_C:OFF_C}
     /* 电量色标：80%~100% 绿 / 30%~79% 黄 / 0%~29% 红 */
     function socColor(s){return s>=80?OK_C:s>=30?WARN_C:BAD_C}
     /* 电量图标（参考租车电池卡）：≥80% 满格 / 30%~79% 中格 / ≤29% 低格 */
@@ -4622,7 +4926,7 @@ var _ma=Vue.createApp({
     function stationAddrOf(id){var s=stationOf(id);return s?s.addr:'—'}
     /* 列表卡片「站点」展示：无站点归属（stationId 空或查不到站点）→ - */
     function cabStationLabel(c){var s=c?stationOf(c.stationId):null;return (s&&s.name)||'-'}
-    /* 电池列表「归属」：柜内 → 所属站点名称（无站点归属 → -）；用户持有 → 手机号 > 邮箱 > 账号 取首个可用（都没有 → -）；
+    /* 电池「当前归属」（列表卡片 / 电池详情）：柜内 → 所属站点名称（无站点归属 → -）；用户持有 → 手机号 > 邮箱 > 账号 取首个可用（都没有 → -）；
        其他（如维修中）→ at 文本，无 → - */
     function battLocLabel(b){if(!b)return '-';var at=String(b.at||'');var m=at.match(/^([A-Z0-9]+)-(\d+)$/);if(m){var c=cabOf(m[1]);var s=c?stationOf(c.stationId):null;return (s&&s.name)||'-'}if(b.holder)return b.holder.phone||b.holder.email||b.holder.account||'-';return at||'-'}
     /* 电池「当前位置」文案（地图卡片 / 当前位置页）：柜内 → 所属站点地址（无站点则站点名）；柜外（用户/维修）→ 归属 at 文本 */
@@ -4660,6 +4964,8 @@ var _ma=Vue.createApp({
       if(battRentQ.value)return '没有符合搜索条件的记录';
       return battRentAll.value.length?'':'该电池暂无租借记录'
     });
+    /* 复制图标统一入口（与用户端 copyText 一致）：点击复制图标后统一提示「复制成功」 */
+    function copyText(t){t=String(t||'');if(!t)return;try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).catch(function(){})}catch(e){}toastPush('复制成功')}
     /* 通用复制（剪贴板不可用时退化为 toast 展示内容） */
     function copyField(label,val){var t=String(val||'');if(!t)return;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t);toastPush(label+'已复制')}else{toastPush(label+'：'+t)}}catch(e){toastPush(label+'：'+t)}}
     /* 电池所在位置展示：柜内 at 为「机柜编号-仓号」→「站点名 · NN 号仓」；柜外（用户/维修）原样展示 */
@@ -4769,25 +5075,66 @@ var _ma=Vue.createApp({
     /* ── 页面打开（先 navOpen 再改状态，保证快照=来源页） ── */
     function openPage(name){navOpen();mPage.value=name}
     function closePage(){navBack()}
-    /* ── 新增换电柜（对标租车「新增车辆」：编号可输入/扫码、名称选填、机柜图片最多10张） ── */
+    /* ── 新增换电柜（对标租车「新增车辆」：编号可输入/扫码、名称选填、站点选填、机柜图片最多10张） ── */
     var cabAddNo=Vue.ref(''),cabAddName=Vue.ref(''),cabAddNoErr=Vue.ref('');
     var cabAddImgs=Vue.ref([]);
     /* 图片列表作用域：新增页 / 编辑页共用同一套「添加图片 / 更多操作 / 预览」弹窗，按作用域读写成对应列表 */
     var cabImgScope=Vue.ref('add'),cabEditImgs=Vue.ref([]);
-    var cabImgList=Vue.computed(function(){return cabImgScope.value==='edit'?cabEditImgs.value:cabAddImgs.value});
-    function cabImgSet(arr){if(cabImgScope.value==='edit'){cabEditImgs.value=arr}else{cabAddImgs.value=arr}}
-    /* ── 编辑换电柜（对标租车商户端「编辑车辆」：编号只读，名称与机柜图片可改） ── */
+    /* 图片归属：'cab'=机柜图片（最多 10 张）/ 'store'=门店封面 / 'station'=站点封面（后两者仅 1 张）——
+       门店与站点表单复用同一套「添加图片 / 更多操作 / 预览」弹窗与预览页，仅归属、张数上限与文案不同 */
+    var cabImgKind=Vue.ref('cab'),storeFormImgs=Vue.ref([]);
+    var cabImgMax=Vue.computed(function(){return cabImgKind.value==='cab'?10:1});
+    var cabImgAddLabel=Vue.computed(function(){return cabImgKind.value==='cab'?'添加图片':(cabImgKind.value==='station'?'上传站点封面':'上传封面')});
+    var cabImgList=Vue.computed(function(){
+      if(cabImgKind.value==='store')return storeFormImgs.value;
+      if(cabImgKind.value==='station')return stationFormImgs.value;
+      return cabImgScope.value==='edit'?cabEditImgs.value:cabAddImgs.value;
+    });
+    var cabImgLabel=Vue.computed(function(){return cabImgKind.value==='station'?'站点封面':(cabImgKind.value==='store'?'门店封面':'机柜图片')});
+    function cabImgSet(arr){
+      if(cabImgKind.value==='store'){storeFormImgs.value=arr;return}
+      if(cabImgKind.value==='station'){stationFormImgs.value=arr;return}
+      if(cabImgScope.value==='edit'){cabEditImgs.value=arr}else{cabAddImgs.value=arr}
+    }
+    /* 站点（对标租车「新增车辆 → 选择车型」）：新增页 / 编辑页共用同一个「选择站点」弹窗，
+       与机柜图片同一套作用域写法——弹窗按 cabStationScope 读写成新增或编辑各自的取值 */
+    var cabAddStationId=Vue.ref(''),cabEditStationId=Vue.ref('');
+    var cabStationScope=Vue.ref('add'),cabStationSheet=Vue.ref(false),cabStationQ=Vue.ref('');
+    var cabStationOptions=Vue.computed(function(){var q=(cabStationQ.value||'').trim().toLowerCase();return stations.value.filter(function(s){return !q||((s.name||'')+' '+(s.addr||'')+' '+(s.id||'')).toLowerCase().indexOf(q)>-1})});
+    /* 当前作用域已选站点 id：弹窗行高亮 / 勾选与「自动滚到已选行」都用它读，新增与编辑各自独立 */
+    var cabStationSel=Vue.computed(function(){return cabStationScope.value==='edit'?cabEditStationId.value:cabAddStationId.value});
+    function openCabStationPick(scope){cabStationScope.value=(scope==='edit'?'edit':'add');cabStationQ.value='';cabStationSheet.value=true;restoreCabStationSel()}
+    /* 恢复选中态：弹窗打开后把已选站点行居中到列表可视区。
+       只改弹窗内 .sheet-scroll 的 scrollTop（不用 scrollIntoView：它会连带滚动所有祖先，包括机身 overflow:hidden 容器——
+       拉起动画期间面板 translateY(100%) 会撑出纵向可滚区，祖先被滚走再回弹，就是那下「页面抖一下」）。
+       行与容器共用同一 transform，故动画中量到的 rect 差值仍准确，nextTick 一次定位即可、无需二次校正 */
+    function restoreCabStationSel(){
+      var id=cabStationSel.value;if(!id)return;
+      Vue.nextTick(function(){
+        var el=document.querySelector('[data-od-id="cab-station-'+id+'"]');if(!el||!el.getBoundingClientRect)return;
+        var sc=el.closest('.sheet-scroll');if(!sc||!sc.contains(el))return;
+        var er=el.getBoundingClientRect(),sr=sc.getBoundingClientRect();
+        var top=sc.scrollTop+(er.top-sr.top)-(sr.height-er.height)/2;
+        var max=sc.scrollHeight-sc.clientHeight;
+        if(top<0)top=0;if(top>max)top=max;
+        sc.scrollTop=top;
+      })
+    }
+    function closeCabStationPick(){cabStationSheet.value=false}
+    /* 再次点击已选站点 = 清除归属（与「管理绑定」的切换语义一致：站点选填，允许先不绑定） */
+    function pickCabStation(id){if(!id)return;if(cabStationScope.value==='edit'){cabEditStationId.value=(cabEditStationId.value===id?'':id)}else{cabAddStationId.value=(cabAddStationId.value===id?'':id)}cabStationSheet.value=false}
+    /* ── 编辑换电柜（对标租车商户端「编辑车辆」：编号只读，名称 / 站点 / 机柜图片可改） ── */
     var cabEditName=Vue.ref('');
-    function openCabEdit(){var c=curCab.value;if(!c)return;cabImgScope.value='edit';cabEditName.value=c.name||'';cabEditImgs.value=(c.imgs||[]).slice();openPage('cabEdit')}
-    function closeCabEdit(){if(mPage.value==='cabEdit')closePage()}
-    function saveCabEdit(){var c=curCab.value;if(!c)return;c.name=(cabEditName.value||'').trim();c.imgs=cabEditImgs.value.slice();c.updatedAt=nowRecStr();toastPush('保存成功','success');closeCabEdit()}
+    function openCabEdit(){var c=curCab.value;if(!c)return;cabImgScope.value='edit';cabImgKind.value='cab';cabEditName.value=c.name||'';cabEditStationId.value=c.stationId||'';cabEditImgs.value=(c.imgs||[]).slice();openPage('cabEdit')}
+    function closeCabEdit(){cabStationSheet.value=false;if(mPage.value==='cabEdit')closePage()}
+    function saveCabEdit(){var c=curCab.value;if(!c)return;c.name=(cabEditName.value||'').trim();c.stationId=cabEditStationId.value||'';c.imgs=cabEditImgs.value.slice();c.updatedAt=nowRecStr();toastPush('保存成功','success');closeCabEdit()}
     /* ── 机柜图片（机柜服务次级页）：列表排列 + 点击预览；原型操作「列表数据」置空走空态 ── */
     var cabImgView=Vue.computed(function(){if(demoListEmpty.value)return [];var c=curCab.value;return (c&&c.imgs)?c.imgs:[]});
     function openCabImgs(){openPage('cabImgs')}
-    function openCabImgsPreview(i){cabImgPreviewItem.value=cabImgView.value[i];showCabImgPreview.value=true}
+    function openCabImgsPreview(i){cabImgKind.value='cab';cabImgPreviewItem.value=cabImgView.value[i];showCabImgPreview.value=true}
     var showCabScan=Vue.ref(false);
     var cabScanTorch=Vue.ref(false);
-    /* 扫码来源：''=新增机柜（编号回填到表单） / 'cabList' / 'battList'=列表扫码（编号回填搜索框并过滤，对标租车） */
+    /* 扫码来源：''=新增机柜（编号回填到表单） / 'battAdd'=新增电池（编号回填到表单） / 'cabList' / 'battList'=列表扫码（编号回填搜索框并过滤，对标租车） */
     var cabScanFrom=Vue.ref('');
     var showCabManual=Vue.ref(false),cabManualNo=Vue.ref('');
     /* 原型操作「保存结果」：控制保存触发的三分支（ok 新增成功 / notFound 机柜编码不存在 / used 机柜编码已被使用） */
@@ -4795,13 +5142,15 @@ var _ma=Vue.createApp({
     var showCabImgPicker=Vue.ref(false),cabImgPickerSH=Vue.ref('');
     var showCabImgAction=Vue.ref(false),cabImgActionTarget=Vue.ref(null);
     var showCabImgPreview=Vue.ref(false),cabImgPreviewItem=Vue.ref(null);
-    function openCabAdd(){cabAddNo.value='';cabAddName.value='';cabAddNoErr.value='';cabAddImgs.value=[];cabImgScope.value='add';openPage('cabAdd')}
-    function closeCabAdd(){if(mPage.value==='cabAdd')closePage()}
+    function openCabAdd(){cabAddNo.value='';cabAddName.value='';cabAddNoErr.value='';cabAddStationId.value='';cabAddImgs.value=[];cabImgScope.value='add';cabImgKind.value='cab';cabStationSheet.value=false;openPage('cabAdd')}
+    function closeCabAdd(){cabStationSheet.value=false;if(mPage.value==='cabAdd')closePage()}
     function openCabScan(){cabScanFrom.value='';showCabScan.value=true}
     function cabListScan(){cabScanFrom.value='cabList';showCabScan.value=true}
     function battListScan(){cabScanFrom.value='battList';showCabScan.value=true}
     function closeCabScan(){showCabScan.value=false;cabScanFrom.value=''}
     function mockCabScan(){
+      /* 新增电池扫码：生成一条电池编号回填到表单（与新增机柜扫码同口径：只录编号，不写数据） */
+      if(cabScanFrom.value==='battAdd'){battAddNo.value='BT-'+new Date().getFullYear()+'-'+String(Math.floor(Math.random()*9000+1000));battAddNoErr.value='';showCabScan.value=false;cabScanFrom.value='';toastPush('扫码成功，编号已录入');return}
       /* 列表扫码：命中该列表的一条真实编号并回填搜索框（对标租车列表扫码——填搜索词并过滤） */
       if(cabScanFrom.value==='cabList'||cabScanFrom.value==='battList'){
         var isCab=cabScanFrom.value==='cabList';
@@ -4815,7 +5164,8 @@ var _ma=Vue.createApp({
     function confirmCabManual(){var v=(cabManualNo.value||'').trim();if(!v)return;cabAddNo.value=v;cabAddNoErr.value='';showCabManual.value=false;showCabScan.value=false}
     function openCabImgPicker(sh){cabImgPickerSH.value=sh||'add';showCabImgPicker.value=true}
     function pickCabImgSource(src){var label=src==='camera'?'拍照':'相册';if(cabImgPickerSH.value==='reupload'){toastPush(label+'：已替换当前图片');doCabImgReupload()}else{toastPush(label+'：已选中一张图片');commitCabImg()}showCabImgPicker.value=false}
-    function commitCabImg(){var arr=cabImgList.value.slice();if(arr.length>=10){toastPush('最多上传10张');return}arr.push({id:Date.now()+'-'+Math.random().toString(36).slice(2,7),time:new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-')});cabImgSet(arr)}
+    /* 门店封面仅 1 张：再次上传直接替换（机柜图片仍为最多 10 张） */
+    function commitCabImg(){var item={id:Date.now()+'-'+Math.random().toString(36).slice(2,7),time:new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-')};if(cabImgKind.value!=='cab'){cabImgSet([item]);return}var arr=cabImgList.value.slice();if(arr.length>=cabImgMax.value){toastPush('最多上传10张');return}arr.push(item);cabImgSet(arr)}
     function openCabImgPreview(i){cabImgPreviewItem.value=cabImgList.value[i];showCabImgPreview.value=true}
     function openCabImgMore(i){cabImgActionTarget.value=i;showCabImgAction.value=true}
     function cabImgActionReupload(){if(cabImgActionTarget.value==null)return;showCabImgAction.value=false;openCabImgPicker('reupload')}
@@ -4825,11 +5175,36 @@ var _ma=Vue.createApp({
       /* 保存结果三分支由原型操作「保存结果」控制：失败两分支仅 toast 提示并停留当前页，不写入数据 */
       if(demoCabAddResult.value==='notFound'){toastPush('机柜编码不存在','error');return}
       if(demoCabAddResult.value==='used'){toastPush('机柜编码已被使用','error');return}
-      var now=nowRecStr();var rec={no:no,name:(cabAddName.value||'').trim(),stationId:'',model:'',doors:0,bizOnline:false,netOnline:false,fault:false,alarm:false,enabled:true,slots:[],imgs:cabAddImgs.value.slice(),createdAt:now,updatedAt:now,flow:'0 M',power:'0 kw.h'};cabinets.value.unshift(rec);toastPush('新增成功','success');closeCabAdd()}
+      var now=nowRecStr();var rec={no:no,name:(cabAddName.value||'').trim(),stationId:cabAddStationId.value||'',model:'',doors:0,bizOnline:false,netOnline:false,fault:false,alarm:false,enabled:true,slots:[],imgs:cabAddImgs.value.slice(),createdAt:now,updatedAt:now,flow:'0 M',power:'0 kw.h'};cabinets.value.unshift(rec);toastPush('新增成功','success');closeCabAdd()}
+    /* ── 新增电池（对标「新增换电柜」的极简版：仅电池编号一个字段，编号可输入 / 扫码录入） ── */
+    var battAddNo=Vue.ref(''),battAddNoErr=Vue.ref('');
+    function openBattAdd(){battAddNo.value='';battAddNoErr.value='';openPage('battAdd')}
+    function closeBattAdd(){if(mPage.value==='battAdd')closePage()}
+    /* 扫码复用机柜扫码页：来源标记 'battAdd'，扫到的编号回填本表单 */
+    function openBattAddScan(){cabScanFrom.value='battAdd';showCabScan.value=true}
+    function submitBattAdd(){var no=(battAddNo.value||'').trim();if(!no){battAddNoErr.value='请输入电池编号';return}
+      if(battOf(no)){battAddNoErr.value='电池编号已存在';return}
+      /* 新电池按「柜外 · 未租用 · 离线 · 允许放电」入库，电量/循环次数留 0、健康度 100，列表与详情按空值正常渲染 */
+      var now=nowRecStr();var rec={no:no,soc:0,cycles:0,health:100,cabState:'outCab',rentState:'unrented',netOnline:false,charging:false,at:'',discharge:true,createdAt:now,updatedAt:now};batteries.value.unshift(rec);toastPush('新增成功','success');closeBattAdd()}
     function openDashboard(){openPage('dashboard')}
+    function openFranchiseeList(){openPage('franchisees')}
+    /* 切换加盟商（对标租车「切换门店」）：改当前加盟商后返回；切到同一项不提示 */
+    function pickFranchisee(id){
+      var f=franchiseeOf(id);if(!f)return;
+      var changed=f.id!==curFranchiseeId.value;
+      curFranchiseeId.value=f.id;
+      closePage();
+      if(changed)toastPush('已切换到 '+f.name);
+    }
     function openStoreList(){openPage('stores')}
     function openStationList(){openPage('stations')}
     function openStoreDetail(id){navOpen();mStoreId.value=id;mPage.value='storeDetail'}
+    /* 门店封面（详情页展示）：复用图片大图预览页（cabImgKind='store' → 标签「门店封面」） */
+    var storePhotoView=Vue.computed(function(){var s=curStore.value;return (s&&s.photos)?s.photos:[]});
+    function openStoreDetailImg(i){cabImgKind.value='store';cabImgPreviewItem.value=storePhotoView.value[i];showCabImgPreview.value=true}
+    /* 站点封面（详情页展示）：同一套图片预览页（cabImgKind='station' → 标签「站点封面」） */
+    var stationPhotoView=Vue.computed(function(){var s=curStation.value;return (s&&s.photos)?s.photos:[]});
+    function openStationDetailImg(i){cabImgKind.value='station';cabImgPreviewItem.value=stationPhotoView.value[i];showCabImgPreview.value=true}
     function openStationDetail(id){navOpen();mStationId.value=id;mPage.value='stationDetail'}
     function openCabDetail(no){navOpen();mCabNo.value=no;mPage.value='cabDetail'}
     function openBattDetail(no){navOpen();mBattNo.value=no;mPage.value='battDetail'}
@@ -4848,31 +5223,6 @@ var _ma=Vue.createApp({
         var stC=st==='充电中'?WARN_C:st==='已满电'?OK_C:st==='异常中'?BAD_C:st==='预约中'?'#2F6FEB':(b?socColor(b.soc):'#BBB');
         return {no:s.no,occupied:s.occupied,disabled:s.disabled,doorOpen:s.doorOpen,soc:b?b.soc:null,tone:b?socColor(b.soc):'',state:st,stateColor:stC}
       })
-    });
-    /* 机柜状态网格（值在上、标签在下；正常深色、异常红、告警橙）
-       告警 / 故障 / 使用记录入口在下方「机柜服务」卡片，网格本身不可点 */
-    var cabStateCells=Vue.computed(function(){
-      var c=curCab.value;if(!c)return [];
-      return [
-        {label:'联网状态',value:CAB_TEXT.net(c),color:c.netOnline?NORM_C:BAD_C},
-        {label:'运营状态',value:CAB_TEXT.biz(c),color:c.bizOnline?NORM_C:BAD_C},
-        {label:'启用状态',value:CAB_TEXT.enabled(c),color:c.enabled?NORM_C:BAD_C},
-        {label:'告警状态',value:CAB_TEXT.alarm(c),color:c.alarm?WARN_C:NORM_C},
-        {label:'故障状态',value:CAB_TEXT.fault(c),color:c.fault?BAD_C:NORM_C}
-      ]
-    });
-    /* 电池信息网格（值在上、标签在下，对标机柜状态网格）：联网 / 在柜 / 租用 / 电池状态（柜外不显示电池状态） */
-    var battStateCells=Vue.computed(function(){
-      var b=curBatt.value;if(!b)return [];
-      var cells=[
-        {label:'联网状态',value:BATT_TEXT.net(b),color:dotColor(BATT_DOT.net(b))},
-        {label:'在柜状态',value:BATT_TEXT.cab(b),color:dotColor(BATT_DOT.cab(b))},
-        {label:'租用状态',value:BATT_TEXT.rent(b),color:dotColor(BATT_DOT.rent(b))}
-      ];
-      /* 电池状态属「柜内」概念：柜外（租用中 / 维修中等）不展示该格 */
-      var st=b.cabState==='inCab'?battStateOf(b):'';
-      if(st)cells.push({label:'电池状态',value:st,color:battStateColor(b)});
-      return cells
     });
     /* 机柜告警/故障列表（纯记录）：来源 = 当前柜的 alarms / faults
        筛选：keyWord 模糊匹配（柜子SN / 内容 / 仓门 / 电池SN）+ status 快捷筛选（0=告警中/故障中、1=已解除、''=全部，默认 0） */
@@ -5012,62 +5362,304 @@ var _ma=Vue.createApp({
     function cabAskOpenAll(no){var c=cabOf(no);if(!c)return;if(!doorReady(c,'远程开仓'))return;mAsk('仓门全开','确认远程打开全部 '+c.doors+' 个仓门？（含仓内仍有电池的仓门）',function(){(c.slots||[]).forEach(function(s){s.doorOpen=true});toastPush(c.no+' 仓门全开指令已下发')})}
     function cabAskOpenEmpty(no){var c=cabOf(no);if(!c)return;if(!doorReady(c,'远程开仓'))return;var n=(c.slots||[]).filter(function(s){return !s.occupied}).length;if(!n){toastPush('该柜暂无可开仓的空仓');return}mAsk('空仓全开','确认远程打开全部 '+n+' 个空仓的仓门？',function(){(c.slots||[]).filter(function(s){return !s.occupied}).forEach(function(s){s.doorOpen=true});toastPush(c.no+' 空仓全开指令已下发（'+n+' 个）')})}
 
-    /* ── 门店 / 站点表单（门店 1:1 站点；已被其他门店占用的站点禁用） ── */
-    var storeForm=Vue.reactive({id:'',name:'',addr:'',phone:'',hours:'',stationId:''});
-    var storeFormErr=Vue.ref('');
-    var stationForm=Vue.reactive({id:'',name:'',addr:''});
-    var stationFormErr=Vue.ref('');
+    /* ── 门店表单（全屏页，对标「新增换电柜」：名称 / 营业时间（时/分/秒三滚轮，值 HH:MM:SS）/ 联系人（选填）/ 联系电话（区号 + 选填）/ 关联站点（弹窗）/ 关键业务（多选）/ 门店封面（复用图片弹窗，仅 1 张）/ 门店地址（输入联想 + 地图选点 + 定位） ── */
+    var storeForm=Vue.reactive({id:'',name:'',addr:'',contact:'',phone:'',dial:'+86',from:'',to:'',stationId:'',services:[]});
+    var storeErr=Vue.reactive({name:'',time:'',contact:'',phone:'',photos:'',addr:''});
+    var stationForm=Vue.reactive({id:'',name:'',addr:'',contact:'',phone:'',dial:'+86',from:'',to:''});
+    var stationErr=Vue.reactive({name:'',time:'',contact:'',phone:'',photos:'',addr:''});
+    var stationFormImgs=Vue.ref([]);
     var bindStationId=Vue.ref('');
     function stationTaken(stationId,storeId){var owner=stores.value.filter(function(s){return s.stationId===stationId})[0];return !!(owner&&owner.id!==storeId)}
-    function openStoreForm(id){var s=id?storeOf(id):null;storeForm.id=s?s.id:'';storeForm.name=s?s.name:'';storeForm.addr=s?s.addr:'';storeForm.phone=s?s.phone:'';storeForm.hours=s?s.hours:'';storeForm.stationId=s?(s.stationId||''):'';storeFormErr.value='';showStoreForm.value=true}
-    function pickStoreStation(stationId){var owner=stores.value.filter(function(s){return s.stationId===stationId})[0];if(owner&&owner.id!==storeForm.id){toastPush('该站点已被「'+owner.name+'」关联');return}storeForm.stationId=(storeForm.stationId===stationId?'':stationId)}
-    function saveStore(){
-      var f=storeForm;
-      if(!String(f.name||'').trim()){storeFormErr.value='请输入门店名称';toastPush('请输入门店名称');return}
-      if(!String(f.addr||'').trim()){storeFormErr.value='请输入门店地址';toastPush('请输入门店地址');return}
-      storeFormErr.value='';
-      if(f.stationId&&stationTaken(f.stationId,f.id)){toastPush('该站点已被其他门店关联');return}
-      if(f.id){var s=storeOf(f.id);if(s){s.name=f.name.trim();s.addr=f.addr.trim();s.phone=f.phone;s.hours=f.hours;s.stationId=f.stationId}}
-      else{var nid='S'+String(stores.value.length+1).padStart(2,'0');stores.value.push({id:nid,name:f.name.trim(),addr:f.addr.trim(),phone:f.phone,hours:f.hours,stationId:f.stationId})}
-      showStoreForm.value=false;toastPush(f.id?'门店信息已保存':'门店已新增')
+    function storeClearErr(){Object.keys(storeErr).forEach(function(k){storeErr[k]=''})}
+    function openStoreForm(id){
+      var s=id?storeOf(id):null;
+      storeForm.id=s?s.id:'';
+      storeForm.name=s?(s.name||''):'';
+      storeForm.addr=s?(s.addr||''):'';
+      storeForm.contact=s?(s.contact||''):'';
+      var ph=s?String(s.phone||'').trim():'';
+      var phm=ph.match(/^(\+\d{1,4})[\s-]+(.*)$/);
+      storeForm.dial=phm?phm[1]:'+86';
+      storeForm.phone=phm?phm[2]:ph;
+      var hm=s?String(s.hours||'').split('-'):[];
+      storeForm.from=hhmmss(hm[0])||'08:00:00';
+      storeForm.to=hhmmss(hm[1])||'22:00:00';
+      storeForm.stationId=s?(s.stationId||''):'';
+      storeForm.services=s?(s.services||[]).slice():[];
+      /* 门店封面：图片弹窗按 cabImgKind='store' 读写 storeFormImgs（单张），保存时整体写回门店记录 */
+      storeFormImgs.value=s?(s.photos||[]).slice():[];
+      storeClearErr();
+      cabImgKind.value='store';cabImgScope.value='add';
+      storeStationQ.value='';storeStationSheet.value=false;storeHmPick.value=null;storeMapDraft.value='';
+      storeAddrSugOpen.value=false;storeMapDragging.value=false;storeMapDrag=null;storeMapOff.x=0;storeMapOff.y=0;
+      openPage('storeForm');
     }
-    function openStationForm(id){var s=id?stationOf(id):null;stationForm.id=s?s.id:'';stationForm.name=s?s.name:'';stationForm.addr=s?s.addr:'';stationFormErr.value='';showStationForm.value=true}
+    function closeStoreForm(){storeStationSheet.value=false;storeHmPick.value=null;if(mPage.value==='storeForm')closePage()}
+    function toggleStoreService(sv){var arr=storeForm.services.slice();var i=arr.indexOf(sv);if(i>-1)arr.splice(i,1);else arr.push(sv);storeForm.services=arr}
+    /* 营业时间：B 型弹窗内时/分/秒三滚轮（吸附逻辑与租车端一致：滚动停 80ms 后取整到 36px 一行）；取值统一 HH:MM:SS */
+    var trackHours=[];for(var hh=0;hh<24;hh++)trackHours.push(hh);
+    var p2=function(n){return n<10?'0'+n:''+n};
+    var storeHmMins=[];for(var mi2=0;mi2<60;mi2++)storeHmMins.push(mi2);
+    var storeHmSecs=[];for(var se2=0;se2<60;se2++)storeHmSecs.push(se2);
+    var storeHmPick=Vue.ref(null),storeHmDraft=Vue.reactive({hour:8,min:0,sec:0}),hmTarget=Vue.ref('store');
+    /* 营业时间弹窗门店 / 站点共用：按 hmTarget（'store'|'station'）读写成对应表单与其错误对象 */
+    function hmForm(){return hmTarget.value==='station'?stationForm:storeForm}
+    function hmErr(){return hmTarget.value==='station'?stationErr:storeErr}
+    var storeHmWheelHour=Vue.ref(null),storeHmWheelMin=Vue.ref(null),storeHmWheelSec=Vue.ref(null),storeHmTimers={};
+    /* 营业时间归一化：'8:00' / '08:00:00' → '08:00:00'（时分秒三级、补零）；非法值返回 '' */
+    function hhmmss(v){
+      var seg=String(v==null?'':v).trim().split(':');
+      var h=parseInt(seg[0],10),mi=parseInt(seg[1],10),se=parseInt(seg[2],10);
+      if(isNaN(h)||isNaN(mi))return '';
+      if(isNaN(se))se=0;
+      return p2(Math.min(Math.max(h,0),23))+':'+p2(Math.min(Math.max(mi,0),59))+':'+p2(Math.min(Math.max(se,0),59));
+    }
+    function storeHmValue(){return p2(storeHmDraft.hour)+':'+p2(storeHmDraft.min)+':'+p2(storeHmDraft.sec)}
+    function openStoreHmPick(which,target){
+      hmTarget.value=target||'store';
+      var f=hmForm();
+      var cur=hhmmss(which==='to'?f.to:f.from);
+      var seg=cur?cur.split(':'):[];
+      var h=seg.length?parseInt(seg[0],10):(which==='to'?22:8);
+      var mi=seg.length?parseInt(seg[1],10):0;
+      var se=seg.length?parseInt(seg[2],10):0;
+      if(isNaN(h))h=(which==='to'?22:8);
+      if(isNaN(mi))mi=0;
+      if(isNaN(se))se=0;
+      storeHmDraft.hour=Math.min(Math.max(h,0),23);storeHmDraft.min=Math.min(Math.max(mi,0),59);storeHmDraft.sec=Math.min(Math.max(se,0),59);
+      storeHmPick.value=(which==='to'?'to':'from');
+      hmErr().time='';
+      Vue.nextTick(function(){scrollStoreHmToDraft()});
+    }
+    function setStoreHmHour(h){storeHmDraft.hour=h;Vue.nextTick(function(){scrollStoreHmToDraft()})}
+    function setStoreHmMin(m){storeHmDraft.min=m;Vue.nextTick(function(){scrollStoreHmToDraft()})}
+    function setStoreHmSec(s){storeHmDraft.sec=s;Vue.nextTick(function(){scrollStoreHmToDraft()})}
+    function cancelStoreHmPick(){storeHmPick.value=null}
+    function confirmStoreHmPick(){var v=storeHmValue(),f=hmForm();if(storeHmPick.value==='to'){f.to=v}else{f.from=v}storeHmPick.value=null}
+    function scrollStoreHmToDraft(){if(storeHmWheelHour.value)storeHmWheelHour.value.scrollTop=Math.max(0,trackHours.indexOf(storeHmDraft.hour))*36;if(storeHmWheelMin.value)storeHmWheelMin.value.scrollTop=Math.max(0,storeHmMins.indexOf(storeHmDraft.min))*36;if(storeHmWheelSec.value)storeHmWheelSec.value.scrollTop=Math.max(0,storeHmSecs.indexOf(storeHmDraft.sec))*36}
+    function onStoreHmScroll(kind,e){
+      clearTimeout(storeHmTimers[kind]);
+      storeHmTimers[kind]=setTimeout(function(){
+        var el=e.target,idx=Math.round(el.scrollTop/36);
+        el.scrollTop=idx*36;
+        if(kind==='hour')storeHmDraft.hour=trackHours[Math.min(Math.max(idx,0),23)];
+        if(kind==='min')storeHmDraft.min=storeHmMins[Math.min(Math.max(idx,0),storeHmMins.length-1)];
+        if(kind==='sec')storeHmDraft.sec=storeHmSecs[Math.min(Math.max(idx,0),storeHmSecs.length-1)];
+      },80);
+    }
+    /* 关联站点：底部弹窗选择（已被其他门店关联的站点禁用；再次点击已选 = 取消关联） */
+    var storeStationSheet=Vue.ref(false),storeStationQ=Vue.ref('');
+    var storeStationList=Vue.computed(function(){
+      var q=(storeStationQ.value||'').trim().toLowerCase();
+      return storeStationOptions(storeForm.id).filter(function(o){return !q||((o.label||'')+' '+(stationAddrOf(o.value)||'')).toLowerCase().indexOf(q)>-1});
+    });
+    function openStoreStationPick(){storeStationQ.value='';storeStationSheet.value=true}
+    function closeStoreStationPick(){storeStationSheet.value=false}
+    function pickStoreStation(o){if(!o||o.disabled)return;storeForm.stationId=(storeForm.stationId===o.value?'':o.value);storeStationSheet.value=false}
+    /* ── 门店地址：可编辑输入 + 输入即联想 + 地图选点（拖拽吸附）+ 当前定位（定位授权 → 定位服务 两层校验链） ── */
+    var storeMapPoints=M_STORE_ADDR_POINTS;
+    var storeMapDraft=Vue.ref('');
+    var storeAddrSugOpen=Vue.ref(false),stationAddrSugOpen=Vue.ref(false);
+    function addrForm(t){return t==='station'?stationForm:storeForm}
+    function addrErr(t){return t==='station'?stationErr:storeErr}
+    function addrSugOpen(t){return t==='station'?stationAddrSugOpen:storeAddrSugOpen}
+    /* 输入即联想：按名称/地址包含关键词过滤候选点；已精确命中候选地址时不再提示 */
+    function addrSugMake(t){
+      var form=addrForm(t);
+      return Vue.computed(function(){
+        var cur=String(form.addr||'').trim();
+        if(!cur)return [];
+        if(storeMapPoints.some(function(p){return p.addr===cur}))return [];
+        var q=cur.toLowerCase();
+        return storeMapPoints.filter(function(p){return (p.name+' '+p.addr).toLowerCase().indexOf(q)>-1});
+      });
+    }
+    var storeAddrSugList=addrSugMake('store'),stationAddrSugList=addrSugMake('station');
+    function onAddrInput(t,e){var f=addrForm(t);f.addr=e.target.value;addrErr(t).addr='';addrSugOpen(t).value=true}
+    function closeAddrSug(t){addrSugOpen(t).value=false}
+    function pickAddrSug(t,p){if(!p)return;var f=addrForm(t);f.addr=p.addr;addrErr(t).addr='';addrSugOpen(t).value=false;toastPush('已选择「'+p.name+'」')}
+    function clearAddr(t){var f=addrForm(t);f.addr='';addrErr(t).addr='';addrSugOpen(t).value=true}
+    /* 定位链状态（商户端独立一套：定位授权 = App 级，定位服务 = 系统级；两者均就绪才可取值） */
+    var mLocAppAuth=Vue.ref(false),mLocAuth=Vue.ref(false);
+    var mShowLocAppAuth=Vue.ref(false),mShowLocAuth=Vue.ref(false);
+    var mLocReady=Vue.computed(function(){return mLocAppAuth.value&&mLocAuth.value});
+    /* 定位到的门店地址直接复用候选点（单一数据源）；mLocWant = 本次定位由用户主动发起，就绪后自动续跑 */
+    var mStoreLoc=storeMapPoints[2];
+    var mLocWant=false;
+    function mAllowLocAppAuth(){mLocAppAuth.value=true;mShowLocAppAuth.value=false;if(!mLocAuth.value){mShowLocAuth.value=true;return}mLocSettle()}
+    function mDenyLocAppAuth(){mShowLocAppAuth.value=false;mLocWant=false}
+    function mCancelLocService(){mShowLocAuth.value=false;mLocWant=false}
+    function mAllowLocAuth(){if(!mLocAppAuth.value){mShowLocAuth.value=false;mShowLocAppAuth.value=true;return}mLocAuth.value=true;mShowLocAuth.value=false;mLocSettle()}
+    function mLocSettle(){if(!mLocWant)return;mLocWant=false;mApplyStoreLoc()}
+    function mUseStoreLoc(){
+      if(!mLocAppAuth.value){mLocWant=true;mShowLocAppAuth.value=true;return}
+      if(!mLocAuth.value){mLocWant=true;mShowLocAuth.value=true;return}
+      mApplyStoreLoc();
+    }
+    /* 定位生效：地图页只改草稿并居中（仍需确认后回填表单） */
+    function mApplyStoreLoc(){storeMapDraft.value=mStoreLoc.addr;storeMapCenterOn(mStoreLoc)}
+    /* 地图选点：世界层为容器 2×2（left/top -50%），候选点 (lx%,ly%) 居中的偏移 x=W*(1-lx/50)、y=H*(1-ly/50) */
+    var storeMapBox=Vue.ref(null),storeMapOff=Vue.reactive({x:0,y:0}),storeMapDragging=Vue.ref(false),storeMapDrag=null;
+    var storeMapWorldStyle=Vue.computed(function(){
+      return {transform:'translate('+storeMapOff.x+'px,'+storeMapOff.y+'px)',transition:storeMapDragging.value?'none':'transform .35s cubic-bezier(.22,.61,.36,1)'}
+    });
+    function storeMapSize(){var el=storeMapBox.value;if(!el)return null;var r=el.getBoundingClientRect();return r.width?{w:r.width,h:r.height}:null}
+    function storeMapClamp(v,lim){return Math.min(Math.max(v,-lim),lim)}
+    function storeMapPointOf(addr){return storeMapPoints.filter(function(p){return p.addr===addr})[0]||null}
+    function storeMapCenterOn(p){var sz=storeMapSize();if(!sz||!p)return;storeMapOff.x=storeMapClamp(sz.w*(1-p.lx/50),sz.w);storeMapOff.y=storeMapClamp(sz.h*(1-p.ly/50),sz.h)}
+    /* 页面过渡/字体加载会造成容器尺寸微调，尺寸变化时按当前选中候选点重新居中（保证准星始终对准选中点） */
+    var storeMapRo=null,storeMapLastSize=null;
+    function storeMapWatchSize(){
+      if(storeMapRo){storeMapRo.disconnect();storeMapRo=null}
+      storeMapLastSize=storeMapSize();
+      if(!window.ResizeObserver||!storeMapBox.value)return;
+      storeMapRo=new ResizeObserver(function(){
+        if(!storeMapBox.value){storeMapRo.disconnect();storeMapRo=null;return}
+        var sz=storeMapSize();
+        if(storeMapDragging.value||!sz)return;
+        if(storeMapLastSize&&sz.w===storeMapLastSize.w&&sz.h===storeMapLastSize.h)return;
+        storeMapLastSize=sz;
+        storeMapCenterOn(storeMapPointOf(storeMapDraft.value)||mStoreLoc);
+      });
+      storeMapRo.observe(storeMapBox.value);
+    }
+    function storeMapDown(e){var sz=storeMapSize();if(!sz)return;storeMapDragging.value=true;storeMapDrag={px:e.clientX,py:e.clientY,ox:storeMapOff.x,oy:storeMapOff.y,w:sz.w,h:sz.h};try{e.currentTarget.setPointerCapture(e.pointerId)}catch(ex){}}
+    function storeMapMove(e){var d=storeMapDrag;if(!d)return;storeMapOff.x=storeMapClamp(d.ox+(e.clientX-d.px),d.w);storeMapOff.y=storeMapClamp(d.oy+(e.clientY-d.py),d.h)}
+    /* 松手吸附：取当前正对中心点的最近候选地址并平滑归位（拖动中不实时跟随，避免高频重算与卡顿） */
+    function storeMapUp(){
+      var d=storeMapDrag;storeMapDrag=null;storeMapDragging.value=false;
+      if(!d)return;
+      var cx=(1-storeMapOff.x/d.w)*50,cy=(1-storeMapOff.y/d.h)*50,best=null,bd=1e9;
+      storeMapPoints.forEach(function(p){var dd=Math.pow(p.lx-cx,2)+Math.pow(p.ly-cy,2);if(dd<bd){bd=dd;best=p}});
+      if(!best)return;
+      storeMapDraft.value=best.addr;storeMapCenterOn(best);
+    }
+    /* 地图选点页门店 / 站点共用：storeMapTarget 决定草稿确认后回填到哪个表单 */
+    var storeMapTarget=Vue.ref('store');
+    function openStoreMap(target){
+      storeMapTarget.value=target||'store';
+      var cur=String(addrForm(storeMapTarget.value).addr||'').trim();
+      var hit=storeMapPoints.filter(function(p){return p.addr===cur})[0];
+      addrSugOpen(storeMapTarget.value).value=false;
+      /* 命中候选 → 回显选中并居中该点；未命中（已清空 / 手输地址）→ 不预选中，地图回到用户当前定位 */
+      storeMapDraft.value=hit?hit.addr:'';
+      openPage('storeMap');
+      Vue.nextTick(function(){storeMapCenterOn(hit||mStoreLoc);storeMapWatchSize()});
+    }
+    function pickStoreMapPoint(p){if(!p)return;storeMapDraft.value=p.addr;storeMapCenterOn(p)}
+    function confirmStoreMap(){
+      var v=storeMapDraft.value||'';
+      if(!v){toastPush('请在地图上选择地址');return}
+      var t=storeMapTarget.value,f=addrForm(t);
+      f.addr=v;addrErr(t).addr='';addrSugOpen(t).value=false;
+      if(mPage.value==='storeMap')closePage();
+    }
+    function saveStore(){
+      var f=storeForm;storeClearErr();
+      if(!String(f.name||'').trim()){storeErr.name='请输入门店名称';toastPush('请输入门店名称');return}
+      var hf=hhmmss(f.from),ht=hhmmss(f.to);
+      if(!hf||!ht){storeErr.time='请选择营业时间';toastPush('请选择营业时间');return}
+      if(hf>=ht){storeErr.time='结束时间需晚于开始时间';toastPush('结束时间需晚于开始时间');return}
+      if(String(f.contact||'').trim().length>64){storeErr.contact='联系人不能超过 64 个字符';toastPush('联系人不能超过 64 个字符');return}
+      var phoneRaw=String(f.phone||'').trim();
+      if(phoneRaw&&!/^[0-9+\- ]{6,20}$/.test(phoneRaw)){storeErr.phone='联系电话格式不正确';toastPush('联系电话格式不正确');return}
+      var phoneFull=phoneRaw?(String(f.dial||'+86').trim()+' '+phoneRaw):'';
+      if(!storeFormImgs.value.length){storeErr.photos='请上传门店封面';toastPush('请上传门店封面');return}
+      if(!String(f.addr||'').trim()){storeErr.addr='请输入或选择门店地址';toastPush('请输入门店地址');return}
+      if(f.stationId&&stationTaken(f.stationId,f.id)){toastPush('该站点已被其他门店关联');return}
+      var hours=hf+'-'+ht,photos=storeFormImgs.value.slice();
+      if(f.id){
+        var s=storeOf(f.id);
+        if(s){s.name=f.name.trim();s.addr=f.addr.trim();s.contact=String(f.contact||'').trim();s.phone=phoneFull;s.hours=hours;s.stationId=f.stationId;s.services=f.services.slice();s.photos=photos}
+      }else{
+        var nid='S'+String(stores.value.length+1).padStart(2,'0');
+        stores.value.push({id:nid,name:f.name.trim(),addr:f.addr.trim(),contact:String(f.contact||'').trim(),phone:phoneFull,hours:hours,stationId:f.stationId,services:f.services.slice(),photos:photos});
+      }
+      toastPush(f.id?'门店信息已保存':'门店已新增','success');
+      if(mPage.value==='storeForm')closePage();
+    }
+    /* ── 新增/编辑站点（对标门店表单：名称 / 营业时间 / 联系人 / 联系方式 / 站点封面 / 站点地址，六项均必填） ── */
+    function stationErrClear(){Object.keys(stationErr).forEach(function(k){stationErr[k]=''})}
+    function openStationForm(id){
+      var s=id?stationOf(id):null;
+      stationForm.id=s?s.id:'';
+      stationForm.name=s?(s.name||''):'';
+      stationForm.addr=s?(s.addr||''):'';
+      stationForm.contact=s?(s.contact||''):'';
+      var ph=s?String(s.phone||'').trim():'';
+      var phm=ph.match(/^(\+\d{1,4})[\s-]+(.*)$/);
+      stationForm.dial=phm?phm[1]:'+86';
+      stationForm.phone=phm?phm[2]:ph;
+      var hm=s?String(s.hours||'').split('-'):[];
+      stationForm.from=hhmmss(hm[0])||'08:00:00';
+      stationForm.to=hhmmss(hm[1])||'22:00:00';
+      stationFormImgs.value=s?(s.photos||[]).slice():[];
+      stationErrClear();
+      cabImgKind.value='station';cabImgScope.value='add';
+      stationAddrSugOpen.value=false;
+      openPage('stationForm');
+    }
+    function closeStationForm(){cabImgKind.value='cab';if(mPage.value==='stationForm')closePage()}
     function saveStation(){
-      var f=stationForm;
-      if(!String(f.name||'').trim()){stationFormErr.value='请输入站点名称';toastPush('请输入站点名称');return}
-      if(!String(f.addr||'').trim()){stationFormErr.value='请输入站点地址';toastPush('请输入站点地址');return}
-      stationFormErr.value='';
-      if(f.id){var s=stationOf(f.id);if(s){s.name=f.name.trim();s.addr=f.addr.trim()}}
-      else{var nid='ST'+String(stations.value.length+1).padStart(2,'0');stations.value.push({id:nid,name:f.name.trim(),addr:f.addr.trim()})}
-      showStationForm.value=false;toastPush(f.id?'站点信息已保存':'站点已新增')
+      var f=stationForm;stationErrClear();
+      if(!String(f.name||'').trim()){stationErr.name='请输入站点名称';toastPush('请输入站点名称');return}
+      var hf=hhmmss(f.from),ht=hhmmss(f.to);
+      if(!hf||!ht){stationErr.time='请选择营业时间';toastPush('请选择营业时间');return}
+      if(hf>=ht){stationErr.time='结束时间需晚于开始时间';toastPush('结束时间需晚于开始时间');return}
+      if(!String(f.contact||'').trim()){stationErr.contact='请输入联系人';toastPush('请输入联系人');return}
+      if(String(f.contact||'').trim().length>64){stationErr.contact='联系人不能超过 64 个字符';toastPush('联系人不能超过 64 个字符');return}
+      var phoneRaw=String(f.phone||'').trim();
+      if(!phoneRaw){stationErr.phone='请输入联系方式';toastPush('请输入联系方式');return}
+      if(!/^[0-9+\- ]{6,20}$/.test(phoneRaw)){stationErr.phone='联系方式格式不正确';toastPush('联系方式格式不正确');return}
+      if(!stationFormImgs.value.length){stationErr.photos='请上传站点封面';toastPush('请上传站点封面');return}
+      if(!String(f.addr||'').trim()){stationErr.addr='请输入或选择站点地址';toastPush('请输入站点地址');return}
+      var hours=hf+'-'+ht,phoneFull=String(f.dial||'+86').trim()+' '+phoneRaw,photos=stationFormImgs.value.slice();
+      if(f.id){
+        var s=stationOf(f.id);
+        if(s){s.name=f.name.trim();s.addr=f.addr.trim();s.contact=String(f.contact||'').trim();s.phone=phoneFull;s.hours=hours;s.photos=photos}
+      }else{
+        var nid='ST'+String(stations.value.length+1).padStart(2,'0');
+        stations.value.push({id:nid,name:f.name.trim(),addr:f.addr.trim(),contact:String(f.contact||'').trim(),phone:phoneFull,hours:hours,photos:photos});
+      }
+      toastPush(f.id?'站点信息已保存':'站点已新增','success');
+      if(mPage.value==='stationForm')closePage();
     }
     function openBindCab(stationId){bindStationId.value=stationId;showBindCab.value=true}
     function cabBindStation(no){var c=cabOf(no);if(!c)return;c.stationId=(c.stationId===bindStationId.value?'':bindStationId.value);toastPush(c.stationId?('已绑定至 '+stationNameOf(c.stationId)):'已解绑站点')}
     function storeStationOptions(storeId){return stations.value.map(function(s){return {value:s.id,label:s.name,disabled:stationTaken(s.id,storeId)}})}
 
     /* ── Tab 切换：清栈并复位二级页与弹窗 ── */
-    function setTab(t){tab.value=t;settingsOpen.value=false;mPage.value='';storeQ.value='';stationQ.value='';cabQ.value='';battQ.value='';showCabFilter.value=false;showBattFilter.value=false;showDoorInfo.value=false;showStoreForm.value=false;showStationForm.value=false;showBindCab.value=false;auth.navReset()}
+    function setTab(t){tab.value=t;settingsOpen.value=false;mPage.value='';storeQ.value='';stationQ.value='';cabQ.value='';battQ.value='';showCabFilter.value=false;showBattFilter.value=false;showDoorInfo.value=false;showBindCab.value=false;cabStationSheet.value=false;storeStationSheet.value=false;storeHmPick.value=null;auth.navReset()}
 
     /* 页面级 ref 注册进导航快照（数据类 ref 不注册） */
-    auth.addNavRefs([tab,mPage,mStoreId,mStationId,mCabNo,mBattNo,showCabFilter,showBattFilter,showDoorInfo,curSlotNo,showStoreForm,showStationForm,showBindCab,mConfirm,storeQ,stationQ,cabQ,battQ]);
+    auth.addNavRefs([tab,mPage,mStoreId,mStationId,mCabNo,mBattNo,showCabFilter,showBattFilter,showDoorInfo,curSlotNo,showBindCab,mConfirm,storeQ,stationQ,cabQ,battQ]);
     /* 注意：auth 与 sideSetup 的键先铺底，业务键最后覆盖——
        共享内核里已有 curStore（用户端地图选中门店），若业务键在前会被其空值覆盖，
        导致门店详情页 curStore 恒为 ''（页面永远显示「门店不存在」）。 */
     return Object.assign({},auth,sideSetup('换电商户端',toastBus),{
       tab,setTab,settingsOpen,toasts:toastBus.list,toast,
-      stores,stations,cabinets,batteries,
-      mPage,mStoreId,mStationId,mCabNo,mBattNo,showCabFilter,showBattFilter,showDoorInfo,curSlotNo,showStoreForm,showStationForm,showBindCab,mConfirm,mConfirmLoading,
+      stores,stations,cabinets,batteries,franchisees,curFranchiseeId,curFranchisee,
+      mPage,mStoreId,mStationId,mCabNo,mBattNo,showCabFilter,showBattFilter,showDoorInfo,curSlotNo,showBindCab,mConfirm,mConfirmLoading,
       cabFilter,battFilter,cabDraft,battDraft,cabFilterCount,cabFilterActive,cabEmptySub,battFilterCount,battFilterActive,battEmptySub,
-      cabList,battList,curStore,curStation,curCab,curBatt,cabSlots,cabStateCells,battStateCells,cabRecList,cabRecAll,recQ,recStatus,recStatusTabs,recEmptyText,recEmptySub,recStatusLabel,cabUseList,useQ,cabUseOperator,cabUseSourceLabel,cabUseResultLabel,openCabUsage,cabUseScope,cabUseScopeOpen,cabUseScopeOpts,cabUseScopeLabel,cabUsePH,setCabUseScope,curSlot,curSlotBatt,doorEnableTag,doorBattTag,doorVolt,doorAmp,cabOnline,cabUsable,bizUsable,curDoorUsable,storeQ,stationQ,storeView,stationView,
+      cabList,battList,curStore,curStation,curCab,curBatt,cabSlots,cabRecList,cabRecAll,recQ,recStatus,recStatusTabs,recEmptyText,recEmptySub,recStatusLabel,cabUseList,useQ,cabUseOperator,cabUseSourceLabel,cabUseResultLabel,openCabUsage,cabUseScope,cabUseScopeOpen,cabUseScopeOpts,cabUseScopeLabel,cabUsePH,setCabUseScope,curSlot,curSlotBatt,doorEnableTag,doorBattTag,doorVolt,doorAmp,cabOnline,cabUsable,bizUsable,curDoorUsable,storeQ,stationQ,storeView,stationView,
       cabQ,battQ,
-      stationNameOf,stationAddrOf,storeNameOf,battAtLabel,cabStationLabel,battLocLabel,battLocText,M_TRACK_POIS,battTrackStart,battTrackEnd,openBattLoc,openBattTrack,openBattRentRec,battRentQ,battRentClear,battRentList,battRentEmptySub,battRentScope,battRentScopeOpen,battRentScopeOpts,battRentScopeLabel,battRentPH,setBattRentScope,copyField,rentUser,storeOfStation,cabsOfStation,stationsOfStore,battCountOf,cabOf,battOf,slotOf,freeSlotOf,
-      openPage,closePage,openDashboard,openStoreList,openStationList,openStoreDetail,openStationDetail,openCabDetail,openBattDetail,openCabRec,
+      stationNameOf,stationAddrOf,storeNameOf,battAtLabel,cabStationLabel,battLocLabel,battLocText,M_TRACK_POIS,battTrackStart,battTrackEnd,openBattLoc,openBattTrack,openBattRentRec,battRentQ,battRentClear,battRentList,battRentEmptySub,battRentScope,battRentScopeOpen,battRentScopeOpts,battRentScopeLabel,battRentPH,setBattRentScope,copyField,copyText,rentUser,storeOfStation,cabsOfStation,stationsOfStore,battCountOf,cabOf,battOf,slotOf,freeSlotOf,
+      openPage,closePage,openDashboard,openFranchiseeList,pickFranchisee,openStoreList,openStationList,openStoreDetail,openStationDetail,openCabDetail,openBattDetail,openCabRec,
       openCabAdd,closeCabAdd,openCabScan,closeCabScan,mockCabScan,cabListScan,battListScan,cabScanFrom,openCabManual,confirmCabManual,cabScanTorch,showCabScan,showCabManual,cabManualNo,submitCabAdd,demoCabAddResult,cabAddNo,cabAddName,cabAddNoErr,cabAddImgs,
-      cabImgList,cabEditImgs,cabEditName,openCabEdit,closeCabEdit,saveCabEdit,openCabImgs,cabImgView,openCabImgsPreview,showCabImgPicker,openCabImgPicker,pickCabImgSource,openCabImgPreview,openCabImgMore,showCabImgAction,cabImgActionReupload,cabImgActionDelete,showCabImgPreview,cabImgPreviewItem,
+      cabAddStationId,cabEditStationId,cabStationSheet,cabStationQ,cabStationOptions,cabStationSel,openCabStationPick,closeCabStationPick,pickCabStation,
+      cabImgList,cabImgKind,cabImgLabel,cabImgMax,cabImgAddLabel,storeFormImgs,stationFormImgs,cabEditImgs,cabEditName,openCabEdit,closeCabEdit,saveCabEdit,openCabImgs,cabImgView,openCabImgsPreview,showCabImgPicker,openCabImgPicker,pickCabImgSource,openCabImgPreview,openCabImgMore,showCabImgAction,cabImgActionReupload,cabImgActionDelete,showCabImgPreview,cabImgPreviewItem,
       openCabFilter,closeCabFilter,cabDraftSet,cabFilterReset,cabFilterConfirm,openDoorInfo,closeDoorInfo,doorAskEnable,doorAskOpen,toBattDetail,copyCabNo,copyBattNo,battDischargeOn,battAskDischarge,demoLogin,demoLogout,demoListEmpty,demoSetListEmpty,anyDoorOpen,setAllDoorsOpen,setCabDim,
       openBattFilter,closeBattFilter,battDraftSet,battFilterReset,battFilterConfirm,
+      openBattAdd,closeBattAdd,openBattAddScan,submitBattAdd,battAddNo,battAddNoErr,
       mAsk,mConfirmClose,mConfirmOk,cabAskBiz,cabAskFault,cabAskAlarm,cabAskEnabled,cabAskOpenAll,cabAskOpenEmpty,
-      storeForm,storeFormErr,stationForm,stationFormErr,bindStationId,openStoreForm,pickStoreStation,saveStore,openStationForm,saveStation,openBindCab,cabBindStation,storeStationOptions,
+      storeForm,storeErr,stationForm,stationErr,bindStationId,openStoreForm,closeStoreForm,toggleStoreService,pickStoreStation,saveStore,openStationForm,closeStationForm,saveStation,openBindCab,cabBindStation,storeStationOptions,
+      storePhotoView,openStoreDetailImg,stationPhotoView,openStationDetailImg,M_STORE_SERVICES,
+      storeStationSheet,storeStationQ,storeStationList,openStoreStationPick,closeStoreStationPick,
+      storeHmPick,storeHmDraft,storeHmMins,storeHmSecs,storeHmWheelHour,storeHmWheelMin,storeHmWheelSec,trackHours,p2,hhmmss,openStoreHmPick,setStoreHmHour,setStoreHmMin,setStoreHmSec,cancelStoreHmPick,confirmStoreHmPick,onStoreHmScroll,
+      storeMapPoints,storeMapDraft,openStoreMap,pickStoreMapPoint,confirmStoreMap,
+      storeAddrSugOpen,stationAddrSugOpen,storeAddrSugList,stationAddrSugList,onAddrInput,closeAddrSug,pickAddrSug,clearAddr,
+      storeMapBox,storeMapWorldStyle,storeMapDragging,storeMapDown,storeMapMove,storeMapUp,storeMapCenterOn,
+      mLocAppAuth,mLocAuth,mLocReady,mShowLocAppAuth,mShowLocAuth,mAllowLocAppAuth,mDenyLocAppAuth,mAllowLocAuth,mCancelLocService,mUseStoreLoc,mStoreLoc,
       cabOnlineRate,inCabCount,rentedCount,todaySwapCount,todayRevenue,alarmList,cabStats,
       dashTrend,dashTrendMax,dashCabDist,dashBattDist,donut,dotColor,socColor,socIcon,battVolt,battAmp,CAB_TEXT,CAB_DOT,BATT_TEXT,BATT_DOT,battStateOf,battStateColor
     })
