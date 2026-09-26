@@ -214,10 +214,44 @@ body.host-single-m #root-user{display:none}
 .login-field-dial{min-width:5.5rem;padding:0 12px;gap:4px;cursor:pointer;flex-shrink:0}
 .login-field-dial:active{background:#EEE}
 .form-card{background:#fff;border:1px solid #E5E5E5;border-radius:12px;padding:16px 16px 8px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.form-card .form-row{margin-bottom:16px}
-.form-card .form-row:last-child{margin-bottom:8px}
-.form-card .form-label{font-size:13px;font-weight:500;color:#6B6B6B;margin-bottom:6px}
-.form-card .form-actions{margin:4px 0 8px}
+/* 页面级表单：无卡分组（字段白底浮于页面 #F6F7F9 上，见 AGENTS.md「表单字段规范」） */
+.form-plain{background:transparent;border:0;border-radius:0;box-shadow:none;padding:0}
+:is(.form-card,.form-plain) .form-row{margin-bottom:16px}
+:is(.form-card,.form-plain) .form-row:last-child{margin-bottom:8px}
+:is(.form-card,.form-plain) .form-label{font-size:13px;font-weight:500;color:#333333;margin-bottom:6px}
+:is(.form-card,.form-plain) .form-actions{margin:4px 0 8px}
+/* ═══ 表单字段 token（form-field 组件 + .ff-* 形态；状态矩阵：正常/聚焦/禁用/错误） ═══ */
+.ff-row{margin-bottom:16px}
+.ff-row:last-child{margin-bottom:8px}
+.ff-label{display:flex;align-items:center;font-size:13px;font-weight:500;color:#333333;margin-bottom:6px}
+.ff-star{color:#DC2626;margin-right:2px}
+.ff-hint{font-size:12px;margin-top:6px;color:#999;line-height:1.5}
+.ff-hint.is-err{color:#DC2626}
+.ff-box{position:relative;display:flex;align-items:center;min-height:48px;background:#fff;border:1px solid #EFEFF1;border-radius:12px;box-sizing:border-box;transition:border-color .15s,box-shadow .15s}
+/* 聚焦不加高亮/选中态：输入框获得焦点时保持常态外观（按需求） */
+.ff-box input,.ff-box select,.ff-box textarea{box-sizing:border-box;border:0!important;outline:none!important;box-shadow:none!important;background:transparent!important;-webkit-appearance:none;appearance:none;width:100%;min-width:0;font-family:inherit}
+.ff-box input::placeholder,.ff-box textarea::placeholder{color:#9CA3AF}
+.ff-box.is-error{border-color:#DC2626;box-shadow:inset 0 0 0 1px #DC2626}
+.ff-box.is-disabled{background:#E7E9EC;border-color:#DDE0E3;cursor:not-allowed;pointer-events:none}
+.ff-box.is-disabled input,.ff-box.is-disabled textarea{color:#9AA0A6;-webkit-text-fill-color:#9AA0A6;cursor:not-allowed}
+.ff-box.is-disabled input::placeholder,.ff-box.is-disabled textarea::placeholder{color:#B7BCC2}
+.ff-box.is-area{align-items:stretch}
+.ff-counter{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;color:#999;pointer-events:none}
+.ff-box.is-area .ff-counter{top:auto;bottom:8px;transform:none}
+.ff-box.is-disabled .ff-counter{color:#B7BCC2}
+.ff-select{background:#fff;border:1px solid #EFEFF1;border-radius:12px;box-sizing:border-box}
+.ff-select.is-disabled{background:#E7E9EC;border-color:#DDE0E3;cursor:not-allowed}
+.ff-select.is-disabled *{color:#9AA0A6!important}
+.ff-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;border:1px dashed #E5E5E5;border-radius:12px;box-sizing:border-box}
+.ff-bare{position:relative;display:block}
+.ff-box.mini{min-height:36px;border-radius:10px}
+/* 弹窗表单字段变体：弹窗面板是白底，字段用灰底区分（结构/底色与页面级一致，仅底色反转） */
+.ff-box-gray{background:#F6F7F9;border:1px solid #E5E5E5}
+.ff-box-gray:focus-within{border-color:#E5E5E5;box-shadow:none}
+.ff-box-gray.is-disabled{background:#E0E3E7;border-color:#D5D9DE}
+/* 弹窗内字段行距（页面级 16px / 弹窗 12px） */
+.sheet-panel .ff-row{margin-bottom:12px}
+.sheet-panel .ff-row:last-child{margin-bottom:0}
 .login-code-btn{border:none;min-width:7.25rem;min-height:48px;background:#F0F1F3;color:#9CA3AF;border-radius:12px;transition:background .15s,color .15s}
 .login-code-btn.is-cd{background:#F5F6F8;color:#6B6B6B}
 .login-code-btn:disabled,.login-code-btn.is-off{background:#F0F1F3;color:#9CA3AF;cursor:not-allowed}
@@ -681,18 +715,18 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="绑定手机号" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div v-if="hasPhone" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundPhone }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label">手机号</div>
 <div class="flex items-stretch gap-2.5">
-<div data-cp @click="openDialCode('bind')" class="login-field login-field-dial flex items-center justify-center" data-od-id="bind-dial-trigger"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ bpArea }}</span><span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span></div>
-<div class="login-field flex-1 relative flex items-center min-w-0"><input type="tel" v-model="bpPhone" placeholder="请输入手机号" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="bpPhone" data-cp @click="bpPhone=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
+<div data-cp @click="openDialCode('bind')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="bind-dial-trigger"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ bpArea }}</span><span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span></div>
+<div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" v-model="bpPhone" placeholder="请输入手机号" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="bpPhone" data-cp @click="bpPhone=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 </div>
 </div>
 <div class="form-row">
 <div class="form-label">验证码</div>
 <div class="flex items-stretch gap-2.5">
-<div class="login-field flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="bpCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="bpCode=bpCode.replace(/\D/g,'').slice(0,6)"><div v-if="bpCode" data-cp @click="bpCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
+<div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="bpCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="bpCode=bpCode.replace(/\D/g,'').slice(0,6)"><div v-if="bpCode" data-cp @click="bpCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendBpCode" :disabled="!bpPhone||bpCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="bpCd>0?'is-cd':(bpPhone?'is-on':'is-off')">{{ bpCd>0?('重新获取 ('+bpCd+'s)'):'获取验证码' }}</button>
 </div>
 </div>
@@ -706,15 +740,15 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="绑定邮箱" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div v-if="hasEmail" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundEmail }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label">邮箱</div>
-<div class="login-field relative flex items-center"><input type="email" v-model="beEmail" placeholder="请输入邮箱地址" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="beEmail" data-cp @click="beEmail=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
+<div class="ff-box relative flex items-center"><input type="email" v-model="beEmail" placeholder="请输入邮箱地址" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="beEmail" data-cp @click="beEmail=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 </div>
 <div class="form-row">
 <div class="form-label">验证码</div>
 <div class="flex items-stretch gap-2.5">
-<div class="login-field flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="beCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="beCode=beCode.replace(/\D/g,'').slice(0,6)"><div v-if="beCode" data-cp @click="beCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
+<div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="beCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="beCode=beCode.replace(/\D/g,'').slice(0,6)"><div v-if="beCode" data-cp @click="beCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendBeCode" :disabled="!beEmail||beCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="beCd>0?'is-cd':(beEmail?'is-on':'is-off')">{{ beCd>0?('重新获取 ('+beCd+'s)'):'获取验证码' }}</button>
 </div>
 </div>
@@ -727,7 +761,7 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='pwdVerify'" :z="600" oid="pwd-verify-page">
 <nav-bar title="修改密码" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="px-4 pt-4 flex-1 overflow-y-auto flex flex-col">
-<div class="form-card">
+<div class="form-plain">
 <template v-if="pwdChannel==='phone'">
 <div class="form-row">
 <div class="form-label">手机号</div>
@@ -743,7 +777,7 @@ body.host-single-m #root-user{display:none}
 <div class="form-row">
 <div class="form-label">验证码</div>
 <div class="flex items-stretch gap-2.5">
-<div class="login-field flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="pwdCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="pwdCode=pwdCode.replace(/\D/g,'').slice(0,6)"><div v-if="pwdCode" data-cp @click="pwdCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
+<div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="pwdCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="pwdCode=pwdCode.replace(/\D/g,'').slice(0,6)"><div v-if="pwdCode" data-cp @click="pwdCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendPwdCode(pwdChannel)" :disabled="pwdCd>0||(pwdChannel==='phone'?!hasPhone:!hasEmail)" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="pwdCd>0?'is-cd':((pwdChannel==='phone'?hasPhone:hasEmail)?'is-on':'is-off')">{{ pwdCd>0?('重新获取 ('+pwdCd+'s)'):'获取验证码' }}</button>
 </div>
 </div>
@@ -760,14 +794,14 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='pwdReset'" :z="600" oid="pwd-reset-page">
 <nav-bar title="重置密码" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label">新密码</div>
-<div class="login-field relative flex items-center"><input :type="npwdVis?'text':'password'" v-model="npwd" placeholder="请输入 6–64 位新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd" data-cp @click="npwd=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
+<div class="ff-box relative flex items-center"><input :type="npwdVis?'text':'password'" v-model="npwd" placeholder="请输入 6–64 位新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd" data-cp @click="npwd=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
 </div>
 <div class="form-row">
 <div class="form-label">确认新密码</div>
-<div class="login-field relative flex items-center"><input :type="npwd2Vis?'text':'password'" v-model="npwd2" placeholder="请再次输入新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
+<div class="ff-box relative flex items-center"><input :type="npwd2Vis?'text':'password'" v-model="npwd2" placeholder="请再次输入新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
 </div>
 <div class="form-actions">
 <button type="button" class="login-submit" :class="canConfirmPwd?'is-on':'is-off'" :disabled="!canConfirmPwd" data-cp @click="doResetPwd">确认</button>
@@ -778,7 +812,7 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='idDetail'&&idSingle" :z="600" oid="id-detail-page">
 <nav-bar title="实名详情" border-color="#F0F0F0" @back="navBack"><template #right><span class="text-sm font-medium text-[#2F6FEB] cursor-pointer active:opacity-70 whitespace-nowrap" data-cp @click="openIdForm">编辑</span></template></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-6" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row"><div class="form-label">姓名</div><div class="text-[15px] text-[#1A1A1A] py-1">{{ idSingle.name }}</div></div>
 <div class="form-row"><div class="form-label">身份证</div><div class="text-[15px] text-[#1A1A1A] py-1">{{ idSingle.idNo }}</div></div>
 <div class="form-row">
@@ -796,15 +830,15 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='idForm'" :z="600" oid="id-form-page">
 <nav-bar title="实名认证" border-color="#F0F0F0" @back="navBack"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>姓名</div>
-<div class="login-field relative flex items-center"><input v-model="idName" @input="idNameErr=''" type="text" maxlength="64" placeholder="请输入姓名" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="idNameErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="absolute right-2.5 text-[12px] text-[#999]">{{ idName ? idName.length : 0 }}/64</span></div>
+<div class="ff-box relative flex items-center"><input v-model="idName" @input="idNameErr=''" type="text" maxlength="64" placeholder="请输入姓名" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="idNameErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="absolute right-2.5 text-[12px] text-[#999]">{{ idName ? idName.length : 0 }}/64</span></div>
 <div v-if="idNameErr" class="form-hint">{{ idNameErr }}</div>
 </div>
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>身份证</div>
-<div class="login-field relative flex items-center"><input v-model="idCardNo" @input="idCardErr=''" type="text" maxlength="64" placeholder="请输入证件号码" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="idCardErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="absolute right-2.5 text-[12px] text-[#999]">{{ idCardNo ? idCardNo.length : 0 }}/64</span></div>
+<div class="ff-box relative flex items-center"><input v-model="idCardNo" @input="idCardErr=''" type="text" maxlength="64" placeholder="请输入证件号码" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="idCardErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="absolute right-2.5 text-[12px] text-[#999]">{{ idCardNo ? idCardNo.length : 0 }}/64</span></div>
 <div v-if="idCardErr" class="form-hint">{{ idCardErr }}</div>
 </div>
 <div class="form-row">
@@ -1327,7 +1361,7 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#999]')"></span>
 </div>
 </div>
-<div class="text-[#CCC] text-sm pt-5 shrink-0">—</div>
+<div class="text-[#CCC] text-sm pt-5 shrink-0">-</div>
 <div class="flex-1 min-w-0">
 <div class="text-[11px] text-[#999] mb-1">结束时间</div>
 <div class="flex items-center justify-between px-3 py-2.5 rounded-lg" style="border:1px solid #E5E5E5;background:#FAFAFA">
@@ -1361,11 +1395,11 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 overflow-y-auto hide-scroll px-4 pt-4 pb-6">
 <template v-if="swapRecordsView.length">
 <kv-card v-for="r in swapRecordsView" :key="r.id" class="mb-3" :data-od-id="'swap-record-'+r.id">
-<kv-row label="订单编号" :value="r.orderNo || '—'" :copyable="!!(r.orderNo&&r.orderNo!=='-')" @copy="t=>copyText(t)"></kv-row>
-<kv-row label="电池编号" :value="r.batteryId || '—'" :copyable="!!(r.batteryId&&r.batteryId!=='-')" @copy="t=>copyText(t)"></kv-row>
-<kv-row label="取电柜子" :value="r.borrowNo || '—'" :copyable="!!r.borrowNo" @copy="t=>copyText(t)"></kv-row>
+<kv-row label="订单编号" :value="r.orderNo || '-'" :copyable="!!(r.orderNo&&r.orderNo!=='-')" @copy="t=>copyText(t)"></kv-row>
+<kv-row label="电池编号" :value="r.batteryId || '-'" :copyable="!!(r.batteryId&&r.batteryId!=='-')" @copy="t=>copyText(t)"></kv-row>
+<kv-row label="取电柜子" :value="r.borrowNo || '-'" :copyable="!!r.borrowNo" @copy="t=>copyText(t)"></kv-row>
 <kv-row v-if="r.returnNo" label="还电柜子" :value="r.returnNo" copyable @copy="t=>copyText(t)"></kv-row>
-<kv-row label="取电时间" :value="r.borrowTime || '—'" value-class="tabular-nums"></kv-row>
+<kv-row label="取电时间" :value="r.borrowTime || '-'" value-class="tabular-nums"></kv-row>
 <kv-row v-if="r.returnTime" label="还电时间" :value="r.returnTime" value-class="tabular-nums"></kv-row>
 </kv-card>
 </template>
@@ -1980,14 +2014,14 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="编辑换电柜" border-color="#E5E5E5" @back="closeCabEdit()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
 <template v-if="curCab">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label">机柜编号</div>
 <div class="text-[15px] font-semibold py-1" style="color:#111">{{ curCab.no }}</div>
 </div>
 <div class="form-row">
 <div class="form-label">机柜名称</div>
-<div class="login-field relative flex items-center">
+<div class="ff-box relative flex items-center">
 <input v-model="cabEditName" type="text" maxlength="64" placeholder="请输入机柜名称" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
 <span class="absolute right-2.5 text-[12px] text-[#999]">{{ cabEditName ? cabEditName.length : 0 }}/64</span>
 </div>
@@ -2042,7 +2076,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
 <template v-if="cabRecList.length">
 <kv-card v-for="(r,i) in cabRecList" :key="i" class="mb-2.5" :data-od-id="'cab-rec-'+(mPage==='cabAlarm'?'alarm':'fault')+'-'+i">
-<kv-row label="机柜编号" :value="curCab?curCab.no:'—'"></kv-row>
+<kv-row label="机柜编号" :value="curCab?curCab.no:'-'"></kv-row>
 <kv-row label="当前状态" :value="recStatusLabel(r)" :value-style="{color:(r.status==null?0:r.status)===1?'#999':'var(--danger)'}"></kv-row>
 <kv-row label="仓位"><template #value><template v-if="r.doorId">仓门 {{ r.doorId }}</template><template v-if="r.powerSn"> · 电池 {{ r.powerSn }}</template><template v-if="!r.doorId&&!r.powerSn">整柜</template></template></kv-row>
 <kv-row :label="mPage==='cabAlarm'?'告警内容':'故障内容'" :value="r.content" :value-style="{color:'var(--danger)'}"></kv-row>
@@ -2087,10 +2121,10 @@ body.host-single-m #root-user{display:none}
 <page :open="mPage==='cabAdd'" :z="600" :swipe-close="closeCabAdd" oid="mcab-add-page">
 <nav-bar title="新增换电柜" border-color="#E5E5E5" @back="closeCabAdd()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>机柜编号</div>
-<div class="login-field relative flex items-center">
+<div class="ff-box relative flex items-center">
 <input v-model="cabAddNo" @input="cabAddNoErr=''" type="text" maxlength="64" placeholder="请输入机柜编号" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="cabAddNoErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null">
 <button type="button" data-cp @click="openCabScan()" class="absolute right-2.5 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent" title="扫码录入"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button>
 </div>
@@ -2098,7 +2132,7 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="form-row">
 <div class="form-label">机柜名称</div>
-<div class="login-field relative flex items-center">
+<div class="ff-box relative flex items-center">
 <input v-model="cabAddName" type="text" maxlength="64" placeholder="请输入机柜名称" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
 <span class="absolute right-2.5 text-[12px] text-[#999]">{{ cabAddName ? cabAddName.length : 0 }}/64</span>
 </div>
@@ -2140,10 +2174,10 @@ body.host-single-m #root-user{display:none}
 <page :open="mPage==='battAdd'" :z="600" :swipe-close="closeBattAdd" oid="mbatt-add-page">
 <nav-bar title="新增电池" border-color="#E5E5E5" @back="closeBattAdd()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>电池编号</div>
-<div class="login-field relative flex items-center">
+<div class="ff-box relative flex items-center">
 <input v-model="battAddNo" @input="battAddNoErr=''" type="text" maxlength="64" placeholder="请输入电池编号" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="battAddNoErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="batt-add-no">
 <button type="button" data-cp @click="openBattAddScan()" class="absolute right-2.5 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent" title="扫码录入" data-od-id="batt-add-scan"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button>
 </div>
@@ -2179,7 +2213,7 @@ body.host-single-m #root-user{display:none}
 <bottom-sheet :open="showCabManual" title="输入机柜编号" :mask-z="1891" oid="cab-manual-mask" panel-oid="cab-manual-sheet" @close="()=>showCabManual=false">
 <div class="px-5 pb-2">
 <div class="text-[12px] text-[#999] text-center mb-4">请输入机柜铭牌上的机柜编号</div>
-<div class="login-field relative"><input v-model="cabManualNo" type="text" maxlength="64" placeholder="请输入机柜编号" class="w-full pl-4 pr-3 py-3.5 text-[15px]"></div>
+<div class="ff-box ff-box-gray relative"><input v-model="cabManualNo" type="text" maxlength="64" placeholder="请输入机柜编号" class="w-full pl-4 pr-3 py-3.5 text-[15px]"></div>
 <div class="flex gap-3 mt-4">
 <div data-cp @click="showCabManual=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;background:#fff">取消</div>
 <div data-cp @click="confirmCabManual" class="flex-1 py-3 rounded-xl text-[15px] font-semibold text-center" :style="cabManualNo.trim()?{background:'var(--accent)',color:'#fff',cursor:'pointer'}:{background:'#E0E0E0',color:'#999',pointerEvents:'none'}">确认</div>
@@ -2215,7 +2249,7 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('search','w-4 h-4 text-[#999]')"></span>
 <input v-model="cabStationQ" type="text" placeholder="搜索站点名称" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
-<div class="flex-1 overflow-y-auto pb-8">
+<div class="flex-1 overflow-y-auto">
 <div v-for="s in cabStationOptions" :key="s.id" data-cp @click="pickCabStation(s.id)" class="flex items-center px-5 py-4 cursor-pointer active:bg-[#F6F7F9]" :style="cabStationSel===s.id?{background:'#EBF1FD',borderBottom:'1px solid #EDEDED'}:{borderBottom:'1px solid #EDEDED'}" :data-od-id="'cab-station-'+s.id">
 <!-- 站点无图：列表行只用「名称 + 地址」文本，行首不放图标；当前已选行 = 高亮底 + 名称强调色 + 勾选（弹窗重开自动恢复选中态） -->
 <div class="flex-1 min-w-0">
@@ -2336,11 +2370,11 @@ body.host-single-m #root-user{display:none}
 <template v-if="battRentList.length">
 <kv-card v-for="(r,i) in battRentList" :key="i" class="mb-3" :data-od-id="'batt-rent-'+i">
 <kv-row label="租借用户" :value="rentUser(r)" copyable @copy="t=>copyField('租借用户',t)"></kv-row>
-<kv-row label="订单编号" :value="r.swapOrderNo || '—'" :copyable="!!r.swapOrderNo" @copy="t=>copyField('订单编号',t)"></kv-row>
+<kv-row label="订单编号" :value="r.swapOrderNo || '-'" :copyable="!!r.swapOrderNo" @copy="t=>copyField('订单编号',t)"></kv-row>
 <kv-row label="电池编号" :value="curBatt.no" copyable @copy="t=>copyField('电池编号',t)"></kv-row>
-<kv-row label="取电柜子" :value="r.borrowNo || '—'" :copyable="!!r.borrowNo" @copy="t=>copyField('取电柜子',t)"></kv-row>
+<kv-row label="取电柜子" :value="r.borrowNo || '-'" :copyable="!!r.borrowNo" @copy="t=>copyField('取电柜子',t)"></kv-row>
 <kv-row v-if="r.returnNo" label="还电柜子" :value="r.returnNo" copyable @copy="t=>copyField('还电柜子',t)"></kv-row>
-<kv-row label="取电时间" :value="r.borrowTime || '—'" value-class="tabular-nums"></kv-row>
+<kv-row label="取电时间" :value="r.borrowTime || '-'" value-class="tabular-nums"></kv-row>
 <kv-row v-if="r.returnTime" label="还电时间" :value="r.returnTime" value-class="tabular-nums"></kv-row>
 </kv-card>
 </template>
@@ -2384,7 +2418,7 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#999]')"></span>
 </div>
 </div>
-<div class="shrink-0 pt-5 text-sm" style="color:#CCC">—</div>
+<div class="shrink-0 pt-5 text-sm" style="color:#CCC">-</div>
 <div class="flex-1 min-w-0">
 <div class="text-[11px] mb-1" style="color:#999">结束时间</div>
 <div class="flex items-center justify-between px-3 py-2.5 rounded-lg" style="border:1px solid #E5E5E5;background:#FAFAFA">
@@ -2499,7 +2533,7 @@ body.host-single-m #root-user{display:none}
 <kv-card v-for="s in storeView" :key="s.id" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openStoreDetail(s.id)" :data-od-id="'store-item-'+s.id">
 <template #title><span class="min-w-0 truncate">{{ s.name }}</span></template>
 <kv-row label="门店地址" :value="s.addr"></kv-row>
-<kv-row label="营业时间" :value="s.hours||'—'"></kv-row>
+<kv-row label="营业时间" :value="s.hours||'-'"></kv-row>
 <kv-row label="关联站点" :value="s.stationId?stationNameOf(s.stationId):'未关联'"></kv-row>
 <template #footer><div class="card-actions -mx-4 -mb-3.5 rounded-b-2xl overflow-hidden"><div class="card-action-btn" style="color:var(--link)" data-cp @click.stop="openStoreForm(s.id)" :data-od-id="'store-edit-'+s.id">编辑</div></div></template>
 </kv-card>
@@ -2513,10 +2547,10 @@ body.host-single-m #root-user{display:none}
 <kv-card class="mb-3">
 <template #title><span class="min-w-0 truncate">{{ curStore.name }}</span></template>
 <kv-row label="门店地址" :value="curStore.addr" align="top" value-class="whitespace-normal break-words"></kv-row>
-<kv-row label="联系人" :value="curStore.contact||'—'"></kv-row>
-<kv-row label="联系电话" :value="curStore.phone||'—'"></kv-row>
-<kv-row label="营业时间" :value="curStore.hours||'—'"></kv-row>
-<kv-row label="关键业务" :value="(curStore.services&&curStore.services.length)?curStore.services.join('、'):'—'" align="top" value-class="whitespace-normal break-words"></kv-row>
+<kv-row label="联系人" :value="curStore.contact||'-'"></kv-row>
+<kv-row label="联系电话" :value="curStore.phone||'-'"></kv-row>
+<kv-row label="营业时间" :value="curStore.hours||'-'"></kv-row>
+<kv-row label="关键业务" :value="(curStore.services&&curStore.services.length)?curStore.services.join('、'):'-'" align="top" value-class="whitespace-normal break-words"></kv-row>
 <kv-row label="关联站点">
 <template #value>
 <span v-if="curStore.stationId" data-cp @click="openStationDetail(curStore.stationId)" class="cursor-pointer active:opacity-70" style="color:var(--link)" data-od-id="store-station-link">{{ stationNameOf(curStore.stationId) }}</span>
@@ -2540,10 +2574,10 @@ body.host-single-m #root-user{display:none}
 <page :open="mPage==='storeForm'" :z="600" :swipe-close="closeStoreForm" oid="mstore-form-page">
 <nav-bar title="门店信息" border-color="#E5E5E5" @back="closeStoreForm()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>门店名称</div>
-<div class="login-field relative flex items-center">
+<div class="ff-box relative flex items-center">
 <input v-model="storeForm.name" @input="storeErr.name=''" type="text" maxlength="64" placeholder="请输入门店名称" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="storeErr.name?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-name">
 <span class="absolute right-2.5 text-[12px] text-[#999]">{{ (storeForm.name||'').length }}/64</span>
 </div>
@@ -2552,16 +2586,16 @@ body.host-single-m #root-user{display:none}
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>营业时间</div>
 <div class="flex items-center gap-2">
-<div role="button" data-cp @click="openStoreHmPick('from')" class="login-field flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="storeErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-from"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.from }}</span></div>
+<div role="button" data-cp @click="openStoreHmPick('from')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="storeErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-from"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.from }}</span></div>
 <span class="shrink-0" v-html="luci('arrow-right','w-4 h-4 text-[#BBB]')"></span>
-<div role="button" data-cp @click="openStoreHmPick('to')" class="login-field flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="storeErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-to"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.to }}</span></div>
+<div role="button" data-cp @click="openStoreHmPick('to')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="storeErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-to"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.to }}</span></div>
 <span v-html="luci('clock','w-4 h-4 text-[#BBB]')"></span>
 </div>
 <div v-if="storeErr.time" class="form-hint">{{ storeErr.time }}</div>
 </div>
 <div class="form-row">
 <div class="form-label">联系人</div>
-<div class="login-field relative flex items-center">
+<div class="ff-box relative flex items-center">
 <input v-model="storeForm.contact" @input="storeErr.contact=''" type="text" maxlength="64" placeholder="请输入联系人姓名" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="storeErr.contact?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-contact">
 <span class="absolute right-2.5 text-[12px] text-[#999]">{{ (storeForm.contact||'').length }}/64</span>
 </div>
@@ -2570,8 +2604,8 @@ body.host-single-m #root-user{display:none}
 <div class="form-row">
 <div class="form-label">联系电话</div>
 <div class="flex items-stretch gap-2.5">
-<div data-cp @click="openDialCode('store')" class="login-field login-field-dial flex items-center justify-center" data-od-id="store-form-dial"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.dial||'+86' }}</span><span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#9CA3AF]')"></span></div>
-<div class="login-field flex-1 relative flex items-center min-w-0">
+<div data-cp @click="openDialCode('store')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="store-form-dial"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.dial||'+86' }}</span><span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#9CA3AF]')"></span></div>
+<div class="ff-box flex-1 relative flex items-center min-w-0">
 <input v-model="storeForm.phone" @input="storeErr.phone=''" type="tel" maxlength="20" placeholder="请输入联系电话" class="w-full pl-3.5 pr-3 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="storeErr.phone?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-phone">
 </div>
 </div>
@@ -2614,7 +2648,7 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>门店地址</div>
-<div class="login-field relative flex items-center">
+<div class="ff-box relative flex items-center">
 <input :value="storeForm.addr" @input="onAddrInput('store',$event)" @focus="storeAddrSugOpen=true" @blur="closeAddrSug('store')" type="text" placeholder="请输入地址或选择地址" class="w-full pl-3.5 pr-20 py-3 text-[15px]" :style="storeErr.addr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-addr">
 <div class="absolute right-2.5 flex items-center gap-1">
 <div v-if="storeForm.addr" data-cp @click="clearAddr('store')" class="w-7 h-7 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-od-id="store-form-addr-clear"><span v-html="luci('x','w-4 h-4')"></span></div>
@@ -2697,7 +2731,7 @@ body.host-single-m #root-user{display:none}
 <kv-card v-for="s in stationView" :key="s.id" class="mb-2.5 cursor-pointer active:bg-[#F6F7F9]" data-cp @click="openStationDetail(s.id)" :data-od-id="'station-item-'+s.id">
 <template #title><span class="min-w-0 truncate">{{ s.name }}</span></template>
 <kv-row label="站点地址" :value="s.addr"></kv-row>
-<kv-row label="营业时间" :value="s.hours||'—'"></kv-row>
+<kv-row label="营业时间" :value="s.hours||'-'"></kv-row>
 <kv-row label="换电柜" :value="cabsOfStation(s.id).length + ' 台'"></kv-row>
 <kv-row label="所属门店" :value="storeOfStation(s.id)?storeOfStation(s.id).name:'未关联'"></kv-row>
 <template #footer><div class="card-actions -mx-4 -mb-3.5 rounded-b-2xl overflow-hidden"><div class="card-action-btn" style="color:var(--link)" data-cp @click.stop="openStationForm(s.id)" :data-od-id="'station-edit-'+s.id">编辑</div></div></template>
@@ -2713,9 +2747,9 @@ body.host-single-m #root-user{display:none}
 <template #title><span class="min-w-0 truncate">{{ curStation.name }}</span></template>
 <kv-row label="站点编号" :value="curStation.id"></kv-row>
 <kv-row label="站点地址" :value="curStation.addr" align="top" value-class="whitespace-normal break-words"></kv-row>
-<kv-row label="联系人" :value="curStation.contact||'—'"></kv-row>
-<kv-row label="联系方式" :value="curStation.phone||'—'"></kv-row>
-<kv-row label="营业时间" :value="curStation.hours||'—'"></kv-row>
+<kv-row label="联系人" :value="curStation.contact||'-'"></kv-row>
+<kv-row label="联系方式" :value="curStation.phone||'-'"></kv-row>
+<kv-row label="营业时间" :value="curStation.hours||'-'"></kv-row>
 <kv-row label="换电柜" :value="cabsOfStation(curStation.id).length + ' 台'"></kv-row>
 <kv-row label="所属门店" :value="storeOfStation(curStation.id)?storeOfStation(curStation.id).name:'未关联门店'"></kv-row>
 </kv-card>
@@ -2887,7 +2921,7 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('search','w-4 h-4 text-[#999]')"></span>
 <input v-model="storeStationQ" type="text" placeholder="搜索站点名称" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
-<div class="flex-1 overflow-y-auto pb-8">
+<div class="flex-1 overflow-y-auto">
 <div v-if="!storeStationQ" data-cp @click="storeForm.stationId='';storeStationSheet=false" class="flex items-center px-5 py-4 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="store-station-none">
 <div class="flex-1 min-w-0"><div class="text-[15px] font-medium truncate" :style="!storeForm.stationId?{color:'var(--accent)'}:{color:'#111'}">暂不关联站点</div><div class="text-[12px] mt-0.5 truncate" style="color:#999">门店可先不关联，后续再补</div></div>
 <span v-if="!storeForm.stationId" v-html="luci('check','w-4 h-4 text-[var(--accent)]')"></span>
@@ -2930,10 +2964,10 @@ body.host-single-m #root-user{display:none}
 <page :open="mPage==='stationForm'" :z="600" :swipe-close="closeStationForm" oid="mstation-form-page">
 <nav-bar :title="stationForm.id?'编辑站点':'新增站点'" border-color="#E5E5E5" @back="closeStationForm()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>站点名称</div>
-<div class="login-field relative flex items-center">
+<div class="ff-box relative flex items-center">
 <input v-model="stationForm.name" @input="stationErr.name=''" type="text" maxlength="64" placeholder="请输入站点名称" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="stationErr.name?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-name">
 <span class="absolute right-2.5 text-[12px] text-[#999]">{{ (stationForm.name||'').length }}/64</span>
 </div>
@@ -2942,16 +2976,16 @@ body.host-single-m #root-user{display:none}
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>营业时间</div>
 <div class="flex items-center gap-2">
-<div role="button" data-cp @click="openStoreHmPick('from','station')" class="login-field flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="stationErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-from"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.from }}</span></div>
+<div role="button" data-cp @click="openStoreHmPick('from','station')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="stationErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-from"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.from }}</span></div>
 <span class="shrink-0" v-html="luci('arrow-right','w-4 h-4 text-[#BBB]')"></span>
-<div role="button" data-cp @click="openStoreHmPick('to','station')" class="login-field flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="stationErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-to"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.to }}</span></div>
+<div role="button" data-cp @click="openStoreHmPick('to','station')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="stationErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-to"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.to }}</span></div>
 <span v-html="luci('clock','w-4 h-4 text-[#BBB]')"></span>
 </div>
 <div v-if="stationErr.time" class="form-hint">{{ stationErr.time }}</div>
 </div>
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>联系人</div>
-<div class="login-field relative flex items-center">
+<div class="ff-box relative flex items-center">
 <input v-model="stationForm.contact" @input="stationErr.contact=''" type="text" maxlength="64" placeholder="请输入" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="stationErr.contact?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-contact">
 <span class="absolute right-2.5 text-[12px] text-[#999]">{{ (stationForm.contact||'').length }}/64</span>
 </div>
@@ -2960,8 +2994,8 @@ body.host-single-m #root-user{display:none}
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>联系方式</div>
 <div class="flex items-stretch gap-2.5">
-<div data-cp @click="openDialCode('station')" class="login-field login-field-dial flex items-center justify-center" data-od-id="station-form-dial"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.dial||'+86' }}</span><span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#9CA3AF]')"></span></div>
-<div class="login-field flex-1 relative flex items-center min-w-0">
+<div data-cp @click="openDialCode('station')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="station-form-dial"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.dial||'+86' }}</span><span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#9CA3AF]')"></span></div>
+<div class="ff-box flex-1 relative flex items-center min-w-0">
 <input v-model="stationForm.phone" @input="stationErr.phone=''" type="tel" maxlength="20" placeholder="请输入" class="w-full pl-3.5 pr-3 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="stationErr.phone?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-phone">
 </div>
 </div>
@@ -2983,7 +3017,7 @@ body.host-single-m #root-user{display:none}
 </div>
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>站点地址</div>
-<div class="login-field relative flex items-center">
+<div class="ff-box relative flex items-center">
 <input :value="stationForm.addr" @input="onAddrInput('station',$event)" @focus="stationAddrSugOpen=true" @blur="closeAddrSug('station')" type="text" placeholder="请输入地址或选择地址" class="w-full pl-3.5 pr-20 py-3 text-[15px]" :style="stationErr.addr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-addr">
 <div class="absolute right-2.5 flex items-center gap-1">
 <div v-if="stationForm.addr" data-cp @click="clearAddr('station')" class="w-7 h-7 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-od-id="station-form-addr-clear"><span v-html="luci('x','w-4 h-4')"></span></div>
@@ -3215,18 +3249,18 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="绑定手机号" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div v-if="hasPhone" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundPhone }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label">手机号</div>
 <div class="flex items-stretch gap-2.5">
-<div data-cp @click="openDialCode('bind')" class="login-field login-field-dial flex items-center justify-center" data-od-id="bind-dial-trigger"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ bpArea }}</span><span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span></div>
-<div class="login-field flex-1 relative flex items-center min-w-0"><input type="tel" v-model="bpPhone" placeholder="请输入手机号" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="bpPhone" data-cp @click="bpPhone=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
+<div data-cp @click="openDialCode('bind')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="bind-dial-trigger"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ bpArea }}</span><span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span></div>
+<div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" v-model="bpPhone" placeholder="请输入手机号" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="bpPhone" data-cp @click="bpPhone=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 </div>
 </div>
 <div class="form-row">
 <div class="form-label">验证码</div>
 <div class="flex items-stretch gap-2.5">
-<div class="login-field flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="bpCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="bpCode=bpCode.replace(/\D/g,'').slice(0,6)"><div v-if="bpCode" data-cp @click="bpCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
+<div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="bpCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="bpCode=bpCode.replace(/\D/g,'').slice(0,6)"><div v-if="bpCode" data-cp @click="bpCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendBpCode" :disabled="!bpPhone||bpCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="bpCd>0?'is-cd':(bpPhone?'is-on':'is-off')">{{ bpCd>0?('重新获取 ('+bpCd+'s)'):'获取验证码' }}</button>
 </div>
 </div>
@@ -3240,15 +3274,15 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="绑定邮箱" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div v-if="hasEmail" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundEmail }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label">邮箱</div>
-<div class="login-field relative flex items-center"><input type="email" v-model="beEmail" placeholder="请输入邮箱地址" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="beEmail" data-cp @click="beEmail=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
+<div class="ff-box relative flex items-center"><input type="email" v-model="beEmail" placeholder="请输入邮箱地址" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="beEmail" data-cp @click="beEmail=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 </div>
 <div class="form-row">
 <div class="form-label">验证码</div>
 <div class="flex items-stretch gap-2.5">
-<div class="login-field flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="beCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="beCode=beCode.replace(/\D/g,'').slice(0,6)"><div v-if="beCode" data-cp @click="beCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
+<div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="beCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="beCode=beCode.replace(/\D/g,'').slice(0,6)"><div v-if="beCode" data-cp @click="beCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendBeCode" :disabled="!beEmail||beCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="beCd>0?'is-cd':(beEmail?'is-on':'is-off')">{{ beCd>0?('重新获取 ('+beCd+'s)'):'获取验证码' }}</button>
 </div>
 </div>
@@ -3261,7 +3295,7 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='pwdVerify'" :z="600" oid="pwd-verify-page">
 <nav-bar title="修改密码" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="px-4 pt-4 flex-1 overflow-y-auto flex flex-col">
-<div class="form-card">
+<div class="form-plain">
 <template v-if="pwdChannel==='phone'">
 <div class="form-row">
 <div class="form-label">手机号</div>
@@ -3277,7 +3311,7 @@ body.host-single-m #root-user{display:none}
 <div class="form-row">
 <div class="form-label">验证码</div>
 <div class="flex items-stretch gap-2.5">
-<div class="login-field flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="pwdCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="pwdCode=pwdCode.replace(/\D/g,'').slice(0,6)"><div v-if="pwdCode" data-cp @click="pwdCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
+<div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="pwdCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="pwdCode=pwdCode.replace(/\D/g,'').slice(0,6)"><div v-if="pwdCode" data-cp @click="pwdCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendPwdCode(pwdChannel)" :disabled="pwdCd>0||(pwdChannel==='phone'?!hasPhone:!hasEmail)" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="pwdCd>0?'is-cd':((pwdChannel==='phone'?hasPhone:hasEmail)?'is-on':'is-off')">{{ pwdCd>0?('重新获取 ('+pwdCd+'s)'):'获取验证码' }}</button>
 </div>
 </div>
@@ -3294,14 +3328,14 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='pwdReset'" :z="600" oid="pwd-reset-page">
 <nav-bar title="重置密码" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
-<div class="form-card">
+<div class="form-plain">
 <div class="form-row">
 <div class="form-label">新密码</div>
-<div class="login-field relative flex items-center"><input :type="npwdVis?'text':'password'" v-model="npwd" placeholder="请输入 6–64 位新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd" data-cp @click="npwd=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
+<div class="ff-box relative flex items-center"><input :type="npwdVis?'text':'password'" v-model="npwd" placeholder="请输入 6–64 位新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd" data-cp @click="npwd=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
 </div>
 <div class="form-row">
 <div class="form-label">确认新密码</div>
-<div class="login-field relative flex items-center"><input :type="npwd2Vis?'text':'password'" v-model="npwd2" placeholder="请再次输入新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
+<div class="ff-box relative flex items-center"><input :type="npwd2Vis?'text':'password'" v-model="npwd2" placeholder="请再次输入新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
 </div>
 <div class="form-actions">
 <button type="button" class="login-submit" :class="canConfirmPwd?'is-on':'is-off'" :disabled="!canConfirmPwd" data-cp @click="doResetPwd">确认</button>
@@ -3398,7 +3432,7 @@ body.host-single-m #root-user{display:none}
 /* ===== 共享货币 ===== */
 var MONEY=window.MONEY=Vue.reactive({cur:'IDR',sym:{CNY:'¥',IDR:'Rp',HKD:'HK$'}});
 var RATES={CNY:1,IDR:2175,HKD:1.09};
-function fmtRp(n,dec){if(n==null||n===''||n===null)return'—';var v=Number(n)||0;try{return MONEY.sym[MONEY.cur]+' '+v.toLocaleString('en-US',{minimumFractionDigits:dec==null?0:dec,maximumFractionDigits:dec==null?0:dec})}catch(e){return MONEY.sym[MONEY.cur]+' '+v}}
+function fmtRp(n,dec){if(n==null||n===''||n===null)return'-';var v=Number(n)||0;try{return MONEY.sym[MONEY.cur]+' '+v.toLocaleString('en-US',{minimumFractionDigits:dec==null?0:dec,maximumFractionDigits:dec==null?0:dec})}catch(e){return MONEY.sym[MONEY.cur]+' '+v}}
 function luci(n,c){if(!window.lucide||!n||!lucide.icons)return'';try{var p=(s)=>s.replace(/(\w)(\w*)(-|\s*)/g,(_,a,b)=>a.toUpperCase()+b.toLowerCase());var d=lucide.icons[p(n)];if(!d||d[0]!=='svg')return'';var a=d[1],cls='lucide lucide-'+n+(c?' '+c:''),sv='<svg';for(var k in a)if(a.hasOwnProperty(k))sv+=' '+k+'="'+String(a[k]).replace(/"/g,'&quot;')+'"';sv+=' class="'+cls+'">';function b(ch){var h='';for(var i=0;i<ch.length;i++){var t=ch[i][0],at=ch[i][1];h+='<'+t;for(var k in at)if(at.hasOwnProperty(k))h+=' '+k+'="'+String(at[k]).replace(/"/g,'&quot;')+'"';if(ch[i][2]&&ch[i][2].length)h+='>'+b(ch[i][2])+'</'+t+'>';else h+='/>'}return h}sv+=b(d[2])+'</svg>';return sv}catch(ex){return''}}
 /* Toast 共享内核（与 index.html 一致）：每端一份独立列表，2s 自动移除 */
 function toastPush(list,cnt,msg,type){var id=++cnt.n;list.push({id:id,msg:msg,type:type||'info'});setTimeout(function(){for(var i=0;i<list.length;i++){if(list[i].id===id){list.splice(i,1);return}}},2000)}
@@ -3493,7 +3527,7 @@ function registerSheetKit(app){
     emits:['copy'],
     provide:function(){return{kvLabelWidth:this.labelWidth,kvDivider:this.divider}},
     methods:{kvTitleCopy:function(){this.$emit('copy',this.copyText||this.title)}},
-    template:'<div class="kv-card bg-white rounded-2xl px-4 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :class="divider?\'kv-card-div\':\'\'"><div v-if="title||$slots.title||$slots.extra" class="kv-head flex items-center justify-between mb-1.5"><span class="flex items-center gap-1.5 min-w-0 flex-1"><span class="min-w-0 truncate text-[15px] font-semibold" style="color:#111" :title="title"><slot name="title">{{ title }}</slot></span><span v-if="copyable" class="shrink-0" data-cp @click.stop="kvTitleCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></span><slot name="extra"></slot></div><slot></slot><div v-if="$slots.footer" class="kv-foot"><slot name="footer"></slot></div></div>'
+    template:'<div class="kv-card bg-white rounded-2xl px-4 py-3.5" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" :class="divider?\'kv-card-div\':\'\'"><div v-if="title||$slots.title||$slots.extra" class="kv-head flex items-center justify-between mb-1.5"><span class="flex items-center gap-1.5 min-w-0 flex-1"><span class="min-w-0 truncate text-[15px] font-semibold" style="color:#333333" :title="title"><slot name="title">{{ title }}</slot></span><span v-if="copyable" class="shrink-0" data-cp @click.stop="kvTitleCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></span><slot name="extra"></slot></div><slot></slot><div v-if="$slots.footer" class="kv-foot"><slot name="footer"></slot></div></div>'
   });
   /* KvRow：键值行。props: label(⚠️不能叫 key) / value / copyable / copyText / labelWidth / labelClass / valueClass / valueStyle
      / divider(该行上方是否画线：不写=跟随卡片；:divider="true" 强制画；:divider="false" 强制不画) / align('center'|'top')；
@@ -3505,7 +3539,25 @@ function registerSheetKit(app){
     emits:['copy'],
     computed:{kvLineOn:function(){var d=this.divider;if(d===undefined||d===null)return null;return d===''?true:!!d},kvLineClass:function(){var on=this.kvLineOn;return on===null?'':(on?'':'kv-noline')},kvLineStyle:function(){return this.kvLineOn===true?'border-top:1px dashed #E5E5E5;margin-top:-1px':''}},
     methods:{kvCopy:function(){this.$emit('copy',this.copyText||this.value)}},
-    template:'<div class="kv-row flex py-2" :class="[align===\'top\'?\'items-start\':\'items-center\',kvLineClass]" :style="kvLineStyle"><span class="shrink-0 text-[13px]" style="color:#999" :class="labelClass" :style="{width:labelWidth||kvLabelWidth}"><slot name="key">{{ label }}</slot></span><span class="flex-1 min-w-0 text-right pl-3 text-[13px] truncate" style="color:#111" :class="valueClass" :style="valueStyle||{}"><slot name="value">{{ value }}</slot></span><span v-if="copyable" class="shrink-0 pl-1.5" data-cp @click.stop="kvCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></div>'
+    template:'<div class="kv-row flex py-2" :class="[align===\'top\'?\'items-start\':\'items-center\',kvLineClass]" :style="kvLineStyle"><span class="shrink-0 text-[13px]" style="color:#999" :class="labelClass" :style="{width:labelWidth||kvLabelWidth}"><slot name="key">{{ label }}</slot></span><span class="flex-1 min-w-0 text-right pl-3 text-[13px] truncate" style="color:#333333" :class="valueClass" :style="valueStyle||{}"><slot name="value">{{ value }}</slot></span><span v-if="copyable" class="shrink-0 pl-1.5" data-cp @click.stop="kvCopy" v-html="luci(\'copy\',\'w-4 h-4 text-[#999] cursor-pointer active:text-[var(--link)]\')"></span></div>'
+  });
+  /* FormField：页面级表单字段外壳（label + 状态容器 + 计数 + 错误/提示）。
+     用法：<form-field label="套餐名称" required :error="fE.name" :counter="(fpk.name||'').length" counter-max="64">
+             <input v-model="fpk.name" class="w-full pl-3.5 pr-14 py-3.5 text-[15px]" placeholder="请输入套餐名称">
+           </form-field>
+     props: label / required / error / hint / counter / counterMax / disabled / readonly / bare / oid / boxClass（额外容器类，如多行框传 box-class="is-area"；弹窗内字段传 box-class="ff-box-gray"）；
+     bare：无容器模式（不渲染白底 .ff-box，只保留 label/错误提示）——胶囊组等「成组选择」不要白底卡时用，如 <form-field label="租赁方案" bare>；
+     ⚠️ bare 是裸属性（值为空串 ''，按 HTML 语义视同 true）；显式关闭写 :bare="false"（同 kv-row 的 divider 三态）；
+     slots: default（输入元素，或 .ff-select 选择行 / .ff-upload 上传框 / textarea）/ label（自定义标签，如需要时）。
+     状态：disabled → .ff-box.is-disabled（深灰底 + 灰字）；error 非空 → .ff-box.is-error；聚焦不改变外观（按需求不加选中/高亮态，无 JS）。
+     ⚠️ 布尔 prop 一律 {default:false}（不声明类型），避免 '' 被布尔转换（同 bottom-sheet 的 open 陷阱）；
+     ⚠️ 取值绑定 / 校验 / 内层 :disabled 表达式全部留在调用方，本组件只负责外观（只换壳不改逻辑）。 */
+  app.component('form-field',{
+    name:'form-field',
+    props:{label:{type:String,default:''},required:{default:false},error:{type:String,default:''},hint:{type:String,default:''},counter:{default:null},counterMax:{default:''},disabled:{default:false},readonly:{default:false},bare:{default:false},oid:{type:String,default:''},boxClass:{type:String,default:''}},
+    /* bare 三态：裸属性（''）按 HTML 语义视为 true；:bare="false" 关闭（同 kv-row 的 divider 处理） */
+    computed:{bareOn:function(){var b=this.bare;return b===''?true:!!b}},
+    template:'<div class="ff-row" :data-od-id="oid||undefined"><div v-if="label||$slots.label" class="ff-label"><slot name="label"><span v-if="required" class="ff-star">*</span><span>{{ label }}</span></slot></div><div :class="bareOn?\'ff-bare\':[\'ff-box\',boxClass,disabled?\'is-disabled\':\'\',error?\'is-error\':\'\']"><slot></slot><span v-if="counter!==null&&counter!==undefined" class="ff-counter">{{ counter }}{{ counterMax?(\'/\'+counterMax):\'\' }}</span></div><div v-if="error" class="ff-hint is-err">{{ error }}</div><div v-else-if="hint" class="ff-hint">{{ hint }}</div></div>'
   });
   /* TabBar：底部导航（图标+文字，active 高亮，支持权限 hidden 与自定义 go） */
   app.component('tab-bar',{
@@ -4802,7 +4854,7 @@ function mRent(user,status,swapOrderNo,borrowTime,borrowNo,returnTime,returnNo){
   return {phone:u.phone||'',email:u.email||'',account:u.account||'',status:status,swapOrderNo:swapOrderNo,borrowTime:borrowTime,borrowNo:borrowNo,returnTime:returnTime,returnNo:returnNo}
 }
 /* 租借记录「用户」列：手机号 > 邮箱 > 账号 */
-function rentUser(r){return (r&&(r.phone||r.email||r.account))||'—'}
+function rentUser(r){return (r&&(r.phone||r.email||r.account))||'-'}
 var M_BATT_RENTS={
   'BT-2026-0001':[mRent('+62 812-3390',0,'SW20260922103058','2026-09-22 10:30','K7A3F9D2M5Q8T1B4','',''),mRent('+62 812-3390',1,'SW20260916081244','2026-09-16 08:12','M9H5T2F7P4S1V6D3','2026-09-16 09:20','K7A3F9D2M5Q8T1B4'),mRent('+62 865-2210',1,'SW20260913084019','2026-09-13 08:40','K7A3F9D2M5Q8T1B4','2026-09-13 11:05','K7A3F9D2M5Q8T1B4')],
   'BT-2026-0002':[mRent('+62 813-4471',1,'SW20260918083207','2026-09-18 08:32','K7A3F9D2M5Q8T1B4','2026-09-18 21:10','K7A3F9D2M5Q8T1B4')],
@@ -4844,7 +4896,7 @@ var _ma=Vue.createApp({
     var franchisees=Vue.ref(M_FRANCHISEES.map(function(o){return Object.assign({},o)}));
     var curFranchiseeId=Vue.ref(M_FRANCHISEES.length?M_FRANCHISEES[0].id:'');
     function franchiseeOf(id){var r=franchisees.value.filter(function(f){return f.id===id})[0];return r||null}
-    var curFranchisee=Vue.computed(function(){return franchiseeOf(curFranchiseeId.value)||franchisees.value[0]||{name:'—'}});
+    var curFranchisee=Vue.computed(function(){return franchiseeOf(curFranchiseeId.value)||franchisees.value[0]||{name:'-'}});
 
     /* ── 页面级状态（注册进导航快照） ── */
     var mPage=Vue.ref('');
@@ -4914,8 +4966,8 @@ var _ma=Vue.createApp({
     /* 电压 / 电流（演示态估算：只由电池自身字段推导，取值稳定不随机）
        电压：46.0V(0%) → 53.6V(100%) 随电量线性；
        电流：不区分充放电，一律取正向读数（约 2.0~9.9A） */
-    function battVolt(b){if(!b)return '—';return (46+(Number(b.soc)||0)*0.076).toFixed(1)+'V'}
-    function battAmp(b){if(!b)return '—';return (2+(Number(b.soc)||0)*0.06+(Number(b.cycles)||0)%10/10).toFixed(2)+'A'}
+    function battVolt(b){if(!b)return '-';return (46+(Number(b.soc)||0)*0.076).toFixed(1)+'V'}
+    function battAmp(b){if(!b)return '-';return (2+(Number(b.soc)||0)*0.06+(Number(b.cycles)||0)%10/10).toFixed(2)+'A'}
 
     /* ── 查询辅助 ── */
     function storeOf(id){var r=stores.value.filter(function(s){return s.id===id})[0];return r||null}
@@ -4923,7 +4975,7 @@ var _ma=Vue.createApp({
     function cabOf(no){var r=cabinets.value.filter(function(c){return c.no===no})[0];return r||null}
     function battOf(no){var r=batteries.value.filter(function(b){return b.no===no})[0];return r||null}
     function stationNameOf(id){var s=stationOf(id);return s?s.name:'未绑定站点'}
-    function stationAddrOf(id){var s=stationOf(id);return s?s.addr:'—'}
+    function stationAddrOf(id){var s=stationOf(id);return s?s.addr:'-'}
     /* 列表卡片「站点」展示：无站点归属（stationId 空或查不到站点）→ - */
     function cabStationLabel(c){var s=c?stationOf(c.stationId):null;return (s&&s.name)||'-'}
     /* 电池「当前归属」（列表卡片 / 电池详情）：柜内 → 所属站点名称（无站点归属 → -）；用户持有 → 手机号 > 邮箱 > 账号 取首个可用（都没有 → -）；
@@ -4933,8 +4985,8 @@ var _ma=Vue.createApp({
     function battLocText(b){if(!b)return '最后位置未知';var at=String(b.at||'');var m=at.match(/^([A-Z0-9]+)-(\d+)$/);if(!m)return at||'最后位置未知';var c=cabOf(m[1]);var s=c?stationOf(c.stationId):null;return (s&&(s.addr||s.name))||'最后位置未知'}
     /* 电池历史轨迹页：时间范围取该电池流转记录的起止；轨迹折线/途经点为演示数据（对标租车商户端轨迹页） */
     var M_TRACK_POIS=[{x:38,y:62,label:'中和街道'},{x:63,y:48,label:'博雅城市广场'}];
-    var battTrackStart=Vue.computed(function(){var b=curBatt.value;if(!b||!(b.records||[]).length)return '—';return b.records[b.records.length-1].time});
-    var battTrackEnd=Vue.computed(function(){var b=curBatt.value;if(!b||!(b.records||[]).length)return '—';return b.records[0].time});
+    var battTrackStart=Vue.computed(function(){var b=curBatt.value;if(!b||!(b.records||[]).length)return '-';return b.records[b.records.length-1].time});
+    var battTrackEnd=Vue.computed(function(){var b=curBatt.value;if(!b||!(b.records||[]).length)return '-';return b.records[0].time});
     function openBattLoc(){openPage('battLoc')}
     function openBattTrack(){openPage('battTrack')}
     /* 电池服务「租借记录」次级页 */
@@ -4969,8 +5021,8 @@ var _ma=Vue.createApp({
     /* 通用复制（剪贴板不可用时退化为 toast 展示内容） */
     function copyField(label,val){var t=String(val||'');if(!t)return;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t);toastPush(label+'已复制')}else{toastPush(label+'：'+t)}}catch(e){toastPush(label+'：'+t)}}
     /* 电池所在位置展示：柜内 at 为「机柜编号-仓号」→「站点名 · NN 号仓」；柜外（用户/维修）原样展示 */
-    function battAtLabel(b){var at=String((b&&b.at)||'');var m=at.match(/^([A-Z0-9]+)-(\d+)$/);if(!m)return at||'—';var c=cabOf(m[1]);return (c?stationNameOf(c.stationId)+' · ':'')+m[2]+' 号仓'}
-    function storeNameOf(id){var s=storeOf(id);return s?s.name:'—'}
+    function battAtLabel(b){var at=String((b&&b.at)||'');var m=at.match(/^([A-Z0-9]+)-(\d+)$/);if(!m)return at||'-';var c=cabOf(m[1]);return (c?stationNameOf(c.stationId)+' · ':'')+m[2]+' 号仓'}
+    function storeNameOf(id){var s=storeOf(id);return s?s.name:'-'}
     /* 门店 1:1 站点：单一真相为 store.stationId，站点侧所属门店由门店反查得出 */
     function storeOfStation(stationId){var r=stores.value.filter(function(s){return s.stationId===stationId})[0];return r||null}
     function cabsOfStation(stationId){return cabinets.value.filter(function(c){return c.stationId===stationId})}
@@ -5258,11 +5310,11 @@ var _ma=Vue.createApp({
     function setCabUseScope(v){cabUseScope.value=v;cabUseScopeOpen.value=false}
     document.addEventListener('click',function(){cabUseScopeOpen.value=false});
     function cabUseOperator(r){
-      if(!r)return '—';
+      if(!r)return '-';
       if(r.system)return '系统';
       return r.phone||r.email||r.account||'系统'
     }
-    function cabUseSourceLabel(t){return {MAINTAIN:'平台端',MERCHANT:'商家端',SYSTEM:'平台端'}[t]||t||'—'}
+    function cabUseSourceLabel(t){return {MAINTAIN:'平台端',MERCHANT:'商家端',SYSTEM:'平台端'}[t]||t||'-'}
     function cabUseResultLabel(r){return (r&&r.result===0)?'失败':'成功'}
     var cabUseList=Vue.computed(function(){
       if(demoListEmpty.value)return [];/* 原型操作「列表数据 = 空数据」 */
@@ -5289,8 +5341,8 @@ var _ma=Vue.createApp({
       return {label:lab,color:battStateColor(curSlotBatt.value)};
     });
     /* 电压 / 电流：与电池详情同源取值（电压随电量 46.0~53.6V；电流为不区分充放电的正向读数），空仓显示 — */
-    var doorVolt=Vue.computed(function(){return curSlotBatt.value?battVolt(curSlotBatt.value):'—'});
-    var doorAmp=Vue.computed(function(){return curSlotBatt.value?battAmp(curSlotBatt.value):'—'});
+    var doorVolt=Vue.computed(function(){return curSlotBatt.value?battVolt(curSlotBatt.value):'-'});
+    var doorAmp=Vue.computed(function(){return curSlotBatt.value?battAmp(curSlotBatt.value):'-'});
     function openDoorInfo(slotNo){curSlotNo.value=slotNo;showDoorInfo.value=true}
     function closeDoorInfo(){showDoorInfo.value=false}
     /* 禁用 / 启用仓门（门级启用状态：下发 ENABLE_DOOR / DISABLE_DOOR，仅影响本仓门） */
