@@ -511,14 +511,14 @@ body.host-single-m #root-user{display:none}
 <confirm-dialog :open="showLevelWarn" z="1800" oid="swap-level-warn-dialog" title="电量偏低" desc="可分配的电池电量偏低（&lt;70%），继续使用可能会影响您的续航里程。" cancel-text="取消" confirm-text="继续" confirm-bg="var(--accent)" @close="swapLevelCancel" @confirm="swapLevelContinue"></confirm-dialog>
 <confirm-dialog :open="showChoice" z="1800" oid="swap-choice-dialog" :mask-close="false" title="选择操作" :desc="choiceDesc" cancel-text="借电" confirm-text="换电" confirm-bg="var(--accent)" @close="swapChoiceBorrow" @confirm="swapChoiceSwap"></confirm-dialog>
 <option-sheet :open="storeNavSheet" title="导航" :options="storeNavOptions" :mask-z="1100" oid="store-nav-mask" panel-oid="store-nav-sheet" @select="pickStoreNav" @close="closeStoreNav"></option-sheet>
-<transition name="fd"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="login-page">
+<page :open="showLogin" :z="1900" trans="fd" oid="login-page"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden">
 <div v-show="loginView==='main'" class="flex-1 flex flex-col min-h-0 bg-[#F6F7F9]">
 <div class="pt-14 px-5 pb-1 flex items-center justify-between shrink-0">
-<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="closeLogin" data-od-id="login-close-btn"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
+<div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F]" data-cp @click="navBack()" data-od-id="login-close-btn"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
 <button type="button" class="login-lang-chip" data-cp @click="loginOpenLang" data-od-id="login-lang-btn">
-<span class="text-[#6B6B6B]"><span v-html="luci('globe','w-3.5 h-3.5')"></span></span>
-<span class="truncate" style="max-width:6rem">{{ appLangLabel }}</span>
-<span class="text-[#9CA3AF]"><span v-html="luci('chevron-down','w-3.5 h-3.5')"></span></span>
+<span class="text-[#6B6B6B]" v-html="luci('globe','w-3.5 h-3.5')"></span>
+<span class="truncate">{{ appLangLabel }}</span>
+<span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span>
 </button>
 </div>
 <div class="px-8 pt-3 pb-5 shrink-0 flex flex-col items-center" data-od-id="login-brand">
@@ -650,7 +650,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
+</div></page>
 <transition name="fd"><div v-if="showDialPicker" class="absolute inset-0 z-[1950] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="dialcode-page">
 <div class="pt-14 px-4 pb-3 flex items-center gap-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
 <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[#2B3F5F] active:bg-[#EBF1FD]" data-cp @click="closeDialPicker"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
@@ -716,20 +716,18 @@ body.host-single-m #root-user{display:none}
 <div v-if="hasPhone" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundPhone }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-plain">
-<div class="form-row">
-<div class="form-label">手机号</div>
+<form-field label="手机号" bare>
 <div class="flex items-stretch gap-2.5">
 <div data-cp @click="openDialCode('bind')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="bind-dial-trigger"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ bpArea }}</span><span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span></div>
 <div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" v-model="bpPhone" placeholder="请输入手机号" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="bpPhone" data-cp @click="bpPhone=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 </div>
-</div>
-<div class="form-row">
-<div class="form-label">验证码</div>
+</form-field>
+<form-field label="验证码" bare>
 <div class="flex items-stretch gap-2.5">
 <div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="bpCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="bpCode=bpCode.replace(/\D/g,'').slice(0,6)"><div v-if="bpCode" data-cp @click="bpCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendBpCode" :disabled="!bpPhone||bpCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="bpCd>0?'is-cd':(bpPhone?'is-on':'is-off')">{{ bpCd>0?('重新获取 ('+bpCd+'s)'):'获取验证码' }}</button>
 </div>
-</div>
+</form-field>
 <div class="form-actions">
 <button type="button" class="login-submit" :class="(bpPhone&&bpCode)?'is-on':'is-off'" :disabled="!bpPhone||!bpCode" data-cp @click="doBindPhone">{{ hasPhone?'确认替换':'绑定' }}</button>
 </div>
@@ -741,17 +739,15 @@ body.host-single-m #root-user{display:none}
 <div v-if="hasEmail" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundEmail }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-plain">
-<div class="form-row">
-<div class="form-label">邮箱</div>
+<form-field label="邮箱" bare>
 <div class="ff-box relative flex items-center"><input type="email" v-model="beEmail" placeholder="请输入邮箱地址" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="beEmail" data-cp @click="beEmail=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
-</div>
-<div class="form-row">
-<div class="form-label">验证码</div>
+</form-field>
+<form-field label="验证码" bare>
 <div class="flex items-stretch gap-2.5">
 <div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="beCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="beCode=beCode.replace(/\D/g,'').slice(0,6)"><div v-if="beCode" data-cp @click="beCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendBeCode" :disabled="!beEmail||beCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="beCd>0?'is-cd':(beEmail?'is-on':'is-off')">{{ beCd>0?('重新获取 ('+beCd+'s)'):'获取验证码' }}</button>
 </div>
-</div>
+</form-field>
 <div class="form-actions">
 <button type="button" class="login-submit" :class="(beEmail&&beCode)?'is-on':'is-off'" :disabled="!beEmail||!beCode" data-cp @click="doBindEmail">{{ hasEmail?'确认替换':'绑定' }}</button>
 </div>
@@ -774,13 +770,12 @@ body.host-single-m #root-user{display:none}
 <div class="text-[15px] font-medium text-[#222] py-1" data-od-id="pwd-email-readonly">{{ boundEmail }}</div>
 </div>
 </template>
-<div class="form-row">
-<div class="form-label">验证码</div>
+<form-field label="验证码" bare>
 <div class="flex items-stretch gap-2.5">
 <div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="pwdCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="pwdCode=pwdCode.replace(/\D/g,'').slice(0,6)"><div v-if="pwdCode" data-cp @click="pwdCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendPwdCode(pwdChannel)" :disabled="pwdCd>0||(pwdChannel==='phone'?!hasPhone:!hasEmail)" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="pwdCd>0?'is-cd':((pwdChannel==='phone'?hasPhone:hasEmail)?'is-on':'is-off')">{{ pwdCd>0?('重新获取 ('+pwdCd+'s)'):'获取验证码' }}</button>
 </div>
-</div>
+</form-field>
 <div class="form-actions">
 <button type="button" class="login-submit" :class="pwdCode?'is-on':'is-off'" :disabled="!pwdCode" data-cp @click="nextPwdVerify">下一步</button>
 </div>
@@ -795,14 +790,14 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="重置密码" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-plain">
-<div class="form-row">
-<div class="form-label">新密码</div>
-<div class="ff-box relative flex items-center"><input :type="npwdVis?'text':'password'" v-model="npwd" placeholder="请输入 6–64 位新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd" data-cp @click="npwd=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
-</div>
-<div class="form-row">
-<div class="form-label">确认新密码</div>
-<div class="ff-box relative flex items-center"><input :type="npwd2Vis?'text':'password'" v-model="npwd2" placeholder="请再次输入新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
-</div>
+<form-field label="新密码">
+<input :type="npwdVis?'text':'password'" v-model="npwd" placeholder="请输入 6–64 位新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64">
+<div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd" data-cp @click="npwd=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')"></span></div></div>
+</form-field>
+<form-field label="确认新密码">
+<input :type="npwd2Vis?'text':'password'" v-model="npwd2" placeholder="请再次输入新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64">
+<div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')"></span></div></div>
+</form-field>
 <div class="form-actions">
 <button type="button" class="login-submit" :class="canConfirmPwd?'is-on':'is-off'" :disabled="!canConfirmPwd" data-cp @click="doResetPwd">确认</button>
 </div>
@@ -812,13 +807,13 @@ body.host-single-m #root-user{display:none}
 <page :open="profileSub==='idDetail'&&idSingle" :z="600" oid="id-detail-page">
 <nav-bar title="实名详情" border-color="#F0F0F0" @back="navBack"><template #right><span class="text-sm font-medium text-[#2F6FEB] cursor-pointer active:opacity-70 whitespace-nowrap" data-cp @click="openIdForm">编辑</span></template></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-6" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
-<div class="form-plain">
+<div class="form-card">
 <div class="form-row"><div class="form-label">姓名</div><div class="text-[15px] text-[#1A1A1A] py-1">{{ idSingle.name }}</div></div>
 <div class="form-row"><div class="form-label">身份证</div><div class="text-[15px] text-[#1A1A1A] py-1">{{ idSingle.idNo }}</div></div>
 <div class="form-row">
 <div class="form-label">身份证照片</div>
 <div class="grid grid-cols-2 gap-3">
-<div v-for="i in 2" :key="'idp'+i" class="relative h-[96px] rounded-xl overflow-hidden" :class="idSingle.idPhotos&&idSingle.idPhotos[i-1]?'cursor-pointer':''" :style="idSingle.idPhotos&&idSingle.idPhotos[i-1]?{}:{background:'#F6F7F9',border:'1.5px dashed #D9DEE7'}" data-cp @click="openSavedPreview(i-1)">
+<div v-for="i in 2" :key="'idp'+i" class="relative h-[96px] rounded-xl overflow-hidden" :class="idSingle.idPhotos&&idSingle.idPhotos[i-1]?'cursor-pointer':''" :style="idSingle.idPhotos&&idSingle.idPhotos[i-1]?{}:{background:'#fff',border:'1.5px dashed #D9DEE7'}" data-cp @click="openSavedPreview(i-1)">
 <template v-if="idSingle.idPhotos&&idSingle.idPhotos[i-1]"><div class="absolute inset-0 flex items-center justify-center" :style="{background:'linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)'}"><span v-html="luci('credit-card','w-8 h-8 text-white/80')"></span></div></template>
 <template v-else><div class="absolute inset-0 flex items-center justify-center text-[#6B7280]"><span class="text-[12px]">未上传</span></div></template>
 </div>
@@ -831,21 +826,17 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="实名认证" border-color="#F0F0F0" @back="navBack"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
 <div class="form-plain">
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>姓名</div>
-<div class="ff-box relative flex items-center"><input v-model="idName" @input="idNameErr=''" type="text" maxlength="64" placeholder="请输入姓名" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="idNameErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="absolute right-2.5 text-[12px] text-[#999]">{{ idName ? idName.length : 0 }}/64</span></div>
-<div v-if="idNameErr" class="form-hint">{{ idNameErr }}</div>
-</div>
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>身份证</div>
-<div class="ff-box relative flex items-center"><input v-model="idCardNo" @input="idCardErr=''" type="text" maxlength="64" placeholder="请输入证件号码" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="idCardErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null"><span class="absolute right-2.5 text-[12px] text-[#999]">{{ idCardNo ? idCardNo.length : 0 }}/64</span></div>
-<div v-if="idCardErr" class="form-hint">{{ idCardErr }}</div>
-</div>
+<form-field label="姓名" required :error="idNameErr" :counter="idName ? idName.length : 0" counter-max="64">
+<input v-model="idName" @input="idNameErr=''" type="text" maxlength="64" placeholder="请输入姓名" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
+</form-field>
+<form-field label="身份证" required :error="idCardErr" :counter="idCardNo ? idCardNo.length : 0" counter-max="64">
+<input v-model="idCardNo" @input="idCardErr=''" type="text" maxlength="64" placeholder="请输入证件号码" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
+</form-field>
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>身份证照片</div>
 <div class="text-[11px] text-[#999] mb-2">请上传清晰证件照，避免反光（最多2张）</div>
 <div class="grid grid-cols-2 gap-3">
-<div v-for="i in 2" :key="'eddp'+i" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" :style="idPhotos[i-1]?{}:{background:'#F6F7F9',border:'1.5px dashed #D9DEE7'}" data-cp @click="idPhotos[i-1]?openIdPreview(i-1):openIdPicker('add')">
+<div v-for="i in 2" :key="'eddp'+i" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" :style="idPhotos[i-1]?{}:{background:'#fff',border:'1.5px dashed #D9DEE7'}" data-cp @click="idPhotos[i-1]?openIdPreview(i-1):openIdPicker('add')">
 <template v-if="idPhotos[i-1]">
 <div class="absolute inset-0 flex items-center justify-center" :style="{background:'linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)'}"><span v-html="luci('credit-card','w-8 h-8 text-white/80')"></span></div>
 <div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openIdMore(i-1)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
@@ -2019,18 +2010,13 @@ body.host-single-m #root-user{display:none}
 <div class="form-label">机柜编号</div>
 <div class="text-[15px] font-semibold py-1" style="color:#111">{{ curCab.no }}</div>
 </div>
-<div class="form-row">
-<div class="form-label">机柜名称</div>
-<div class="ff-box relative flex items-center">
+<form-field label="机柜名称" :counter="cabEditName ? cabEditName.length : 0" counter-max="64">
 <input v-model="cabEditName" type="text" maxlength="64" placeholder="请输入机柜名称" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
-<span class="absolute right-2.5 text-[12px] text-[#999]">{{ cabEditName ? cabEditName.length : 0 }}/64</span>
-</div>
-</div>
+</form-field>
 <!-- 站点：与「新增换电柜」同一套选择器与弹窗（弹窗按作用域读写新增/编辑各自的取值；站点无图故不放图标块）
      回显已选站点：上行站点名称 + 下行站点地址（未选 → 灰色「选择站点」占位） -->
-<div class="form-row">
-<div class="form-label">站点</div>
-<div data-cp @click="openCabStationPick('edit')" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD" data-od-id="cab-edit-station">
+<form-field label="站点" box-class="ff-select">
+<div data-cp @click="openCabStationPick('edit')" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]" data-od-id="cab-edit-station">
 <span class="flex-1 min-w-0">
 <span v-if="cabEditStationId" class="block text-[15px] font-medium truncate" style="color:#111">{{ stationNameOf(cabEditStationId) }}</span>
 <span v-if="cabEditStationId" class="block text-[12px] mt-0.5 truncate" style="color:#999">{{ stationAddrOf(cabEditStationId) }}</span>
@@ -2038,7 +2024,7 @@ body.host-single-m #root-user{display:none}
 </span>
 <span class="shrink-0" v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
 </div>
-</div>
+</form-field>
 <div class="form-row">
 <div class="form-label">机柜图片</div>
 <div class="text-[11px] text-[#999] mb-2">最多上传10张</div>
@@ -2047,7 +2033,7 @@ body.host-single-m #root-user{display:none}
 <div class="absolute inset-0 flex items-center justify-center" :style="{background:'linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)'}"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
 <div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openCabImgMore(pi)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
 </div>
-<div v-if="cabImgList.length<10" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#F6F7F9;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="cab-edit-img">
+<div v-if="cabImgList.length<10" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#fff;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="cab-edit-img">
 <span v-html="luci('plus','w-6 h-6')"></span>
 <span class="text-[12px] mt-1">添加图片</span>
 <span class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabImgList.length }}/10</span>
@@ -2122,26 +2108,17 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="新增换电柜" border-color="#E5E5E5" @back="closeCabAdd()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
 <div class="form-plain">
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>机柜编号</div>
-<div class="ff-box relative flex items-center">
-<input v-model="cabAddNo" @input="cabAddNoErr=''" type="text" maxlength="64" placeholder="请输入机柜编号" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="cabAddNoErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null">
+<form-field label="机柜编号" required :error="cabAddNoErr">
+<input v-model="cabAddNo" @input="cabAddNoErr=''" type="text" maxlength="64" placeholder="请输入机柜编号" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
 <button type="button" data-cp @click="openCabScan()" class="absolute right-2.5 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent" title="扫码录入"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button>
-</div>
-<div v-if="cabAddNoErr" class="form-hint">{{ cabAddNoErr }}</div>
-</div>
-<div class="form-row">
-<div class="form-label">机柜名称</div>
-<div class="ff-box relative flex items-center">
+</form-field>
+<form-field label="机柜名称" :counter="cabAddName ? cabAddName.length : 0" counter-max="64">
 <input v-model="cabAddName" type="text" maxlength="64" placeholder="请输入机柜名称" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
-<span class="absolute right-2.5 text-[12px] text-[#999]">{{ cabAddName ? cabAddName.length : 0 }}/64</span>
-</div>
-</div>
+</form-field>
 <!-- 站点：选择器形态对标租车「新增车辆 → 车型」（虚线强调框 + 选中值/占位文案 + 右箭头），站点无图故不放图标块，点开底部「选择站点」弹窗
      回显已选站点：上行站点名称 + 下行站点地址（未选 → 灰色「选择站点」占位） -->
-<div class="form-row">
-<div class="form-label">站点</div>
-<div data-cp @click="openCabStationPick('add')" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD" data-od-id="cab-add-station">
+<form-field label="站点" box-class="ff-select">
+<div data-cp @click="openCabStationPick('add')" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]" data-od-id="cab-add-station">
 <span class="flex-1 min-w-0">
 <span v-if="cabAddStationId" class="block text-[15px] font-medium truncate" style="color:#111">{{ stationNameOf(cabAddStationId) }}</span>
 <span v-if="cabAddStationId" class="block text-[12px] mt-0.5 truncate" style="color:#999">{{ stationAddrOf(cabAddStationId) }}</span>
@@ -2149,7 +2126,7 @@ body.host-single-m #root-user{display:none}
 </span>
 <span class="shrink-0" v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
 </div>
-</div>
+</form-field>
 <div class="form-row">
 <div class="form-label">机柜图片</div>
 <div class="grid grid-cols-3 gap-2.5">
@@ -2157,7 +2134,7 @@ body.host-single-m #root-user{display:none}
 <div class="absolute inset-0 flex items-center justify-center" :style="{background:'linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)'}"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
 <div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openCabImgMore(pi)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
 </div>
-<div v-if="cabImgList.length<10" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#F6F7F9;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="cab-add-img">
+<div v-if="cabImgList.length<10" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#fff;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="cab-add-img">
 <span v-html="luci('plus','w-6 h-6')"></span>
 <span class="text-[12px] mt-1">添加图片</span>
 <span class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabImgList.length }}/10</span>
@@ -2175,14 +2152,10 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="新增电池" border-color="#E5E5E5" @back="closeBattAdd()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
 <div class="form-plain">
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>电池编号</div>
-<div class="ff-box relative flex items-center">
-<input v-model="battAddNo" @input="battAddNoErr=''" type="text" maxlength="64" placeholder="请输入电池编号" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="battAddNoErr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="batt-add-no">
+<form-field label="电池编号" required :error="battAddNoErr">
+<input v-model="battAddNo" @input="battAddNoErr=''" type="text" maxlength="64" placeholder="请输入电池编号" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F" data-od-id="batt-add-no">
 <button type="button" data-cp @click="openBattAddScan()" class="absolute right-2.5 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-colors active:bg-[#E8EBF1]" style="border:none;background:transparent" title="扫码录入" data-od-id="batt-add-scan"><span v-html="luci('scan','w-5 h-5 text-[var(--link)]')"></span></button>
-</div>
-<div v-if="battAddNoErr" class="form-hint">{{ battAddNoErr }}</div>
-</div>
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5 z-[20]">
@@ -2213,7 +2186,9 @@ body.host-single-m #root-user{display:none}
 <bottom-sheet :open="showCabManual" title="输入机柜编号" :mask-z="1891" oid="cab-manual-mask" panel-oid="cab-manual-sheet" @close="()=>showCabManual=false">
 <div class="px-5 pb-2">
 <div class="text-[12px] text-[#999] text-center mb-4">请输入机柜铭牌上的机柜编号</div>
-<div class="ff-box ff-box-gray relative"><input v-model="cabManualNo" type="text" maxlength="64" placeholder="请输入机柜编号" class="w-full pl-4 pr-3 py-3.5 text-[15px]"></div>
+<form-field box-class="ff-box-gray">
+<input v-model="cabManualNo" type="text" maxlength="64" placeholder="请输入机柜编号" class="w-full pl-4 pr-3 py-3.5 text-[15px]">
+</form-field>
 <div class="flex gap-3 mt-4">
 <div data-cp @click="showCabManual=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;background:#fff">取消</div>
 <div data-cp @click="confirmCabManual" class="flex-1 py-3 rounded-xl text-[15px] font-semibold text-center" :style="cabManualNo.trim()?{background:'var(--accent)',color:'#fff',cursor:'pointer'}:{background:'#E0E0E0',color:'#999',pointerEvents:'none'}">确认</div>
@@ -2575,45 +2550,30 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="门店信息" border-color="#E5E5E5" @back="closeStoreForm()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
 <div class="form-plain">
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>门店名称</div>
-<div class="ff-box relative flex items-center">
-<input v-model="storeForm.name" @input="storeErr.name=''" type="text" maxlength="64" placeholder="请输入门店名称" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="storeErr.name?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-name">
-<span class="absolute right-2.5 text-[12px] text-[#999]">{{ (storeForm.name||'').length }}/64</span>
-</div>
-<div v-if="storeErr.name" class="form-hint">{{ storeErr.name }}</div>
-</div>
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>营业时间</div>
+<form-field label="门店名称" required :error="storeErr.name" :counter="(storeForm.name||'').length" counter-max="64">
+<input v-model="storeForm.name" @input="storeErr.name=''" type="text" maxlength="64" placeholder="请输入门店名称" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" data-od-id="store-form-name">
+</form-field>
+<form-field label="营业时间" required bare :error="storeErr.time">
 <div class="flex items-center gap-2">
 <div role="button" data-cp @click="openStoreHmPick('from')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="storeErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-from"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.from }}</span></div>
 <span class="shrink-0" v-html="luci('arrow-right','w-4 h-4 text-[#BBB]')"></span>
 <div role="button" data-cp @click="openStoreHmPick('to')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="storeErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-to"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.to }}</span></div>
 <span v-html="luci('clock','w-4 h-4 text-[#BBB]')"></span>
 </div>
-<div v-if="storeErr.time" class="form-hint">{{ storeErr.time }}</div>
-</div>
-<div class="form-row">
-<div class="form-label">联系人</div>
-<div class="ff-box relative flex items-center">
-<input v-model="storeForm.contact" @input="storeErr.contact=''" type="text" maxlength="64" placeholder="请输入联系人姓名" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="storeErr.contact?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-contact">
-<span class="absolute right-2.5 text-[12px] text-[#999]">{{ (storeForm.contact||'').length }}/64</span>
-</div>
-<div v-if="storeErr.contact" class="form-hint">{{ storeErr.contact }}</div>
-</div>
-<div class="form-row">
-<div class="form-label">联系电话</div>
+</form-field>
+<form-field label="联系人" :error="storeErr.contact" :counter="(storeForm.contact||'').length" counter-max="64">
+<input v-model="storeForm.contact" @input="storeErr.contact=''" type="text" maxlength="64" placeholder="请输入联系人姓名" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" data-od-id="store-form-contact">
+</form-field>
+<form-field label="联系电话" bare :error="storeErr.phone">
 <div class="flex items-stretch gap-2.5">
 <div data-cp @click="openDialCode('store')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="store-form-dial"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.dial||'+86' }}</span><span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#9CA3AF]')"></span></div>
 <div class="ff-box flex-1 relative flex items-center min-w-0">
 <input v-model="storeForm.phone" @input="storeErr.phone=''" type="tel" maxlength="20" placeholder="请输入联系电话" class="w-full pl-3.5 pr-3 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="storeErr.phone?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-phone">
 </div>
 </div>
-<div v-if="storeErr.phone" class="form-hint">{{ storeErr.phone }}</div>
-</div>
-<div class="form-row">
-<div class="form-label">关联站点</div>
-<div data-cp @click="openStoreStationPick()" class="flex items-center p-3 rounded-xl cursor-pointer active:bg-[#dce8fb]" style="border:2px dashed var(--accent);background:#EBF1FD" data-od-id="store-form-station">
+</form-field>
+<form-field label="关联站点" box-class="ff-select">
+<div data-cp @click="openStoreStationPick()" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]" data-od-id="store-form-station">
 <span class="flex-1 min-w-0">
 <span v-if="storeForm.stationId" class="block text-[15px] font-medium truncate" style="color:#111">{{ stationNameOf(storeForm.stationId) }}</span>
 <span v-if="storeForm.stationId" class="block text-[12px] mt-0.5 truncate" style="color:#999">{{ stationAddrOf(storeForm.stationId) }}</span>
@@ -2621,7 +2581,7 @@ body.host-single-m #root-user{display:none}
 </span>
 <span class="shrink-0" v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
 </div>
-</div>
+</form-field>
 <div class="form-row">
 <div class="form-label">关键业务</div>
 <div class="flex flex-wrap items-center gap-x-5 gap-y-3">
@@ -2638,7 +2598,7 @@ body.host-single-m #root-user{display:none}
 <div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
 <div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openCabImgMore(pi)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
 </div>
-<div v-if="cabImgList.length<cabImgMax" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#F6F7F9;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="store-form-img">
+<div v-if="cabImgList.length<cabImgMax" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#fff;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="store-form-img">
 <span v-html="luci('plus','w-6 h-6')"></span>
 <span class="text-[12px] mt-1">{{ cabImgAddLabel }}</span>
 <span v-if="cabImgKind==='cab'" class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabImgList.length }}/10</span>
@@ -2646,14 +2606,11 @@ body.host-single-m #root-user{display:none}
 </div>
 <div v-if="storeErr.photos" class="form-hint">{{ storeErr.photos }}</div>
 </div>
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>门店地址</div>
-<div class="ff-box relative flex items-center">
-<input :value="storeForm.addr" @input="onAddrInput('store',$event)" @focus="storeAddrSugOpen=true" @blur="closeAddrSug('store')" type="text" placeholder="请输入地址或选择地址" class="w-full pl-3.5 pr-20 py-3 text-[15px]" :style="storeErr.addr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-addr">
+<form-field label="门店地址" required :error="storeErr.addr">
+<input :value="storeForm.addr" @input="onAddrInput('store',$event)" @focus="storeAddrSugOpen=true" @blur="closeAddrSug('store')" type="text" placeholder="请输入地址或选择地址" class="w-full pl-3.5 pr-20 py-3 text-[15px]" data-od-id="store-form-addr">
 <div class="absolute right-2.5 flex items-center gap-1">
 <div v-if="storeForm.addr" data-cp @click="clearAddr('store')" class="w-7 h-7 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-od-id="store-form-addr-clear"><span v-html="luci('x','w-4 h-4')"></span></div>
 <div data-cp @click="openStoreMap('store')" class="w-8 h-8 flex items-center justify-center cursor-pointer shrink-0" style="color:#2B3F5F" data-od-id="store-form-addr-map" title="地图选择地址"><span v-html="luci('map-pin','w-[18px] h-[18px]')"></span></div>
-</div>
 </div>
 <!-- 输入即联想：候选地址内联下拉（表单内容区是滚动容器，浮层会被裁剪，故内联撑高） -->
 <div v-if="storeAddrSugOpen&&storeAddrSugList.length" class="mt-1.5 bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="store-form-addr-sug">
@@ -2665,8 +2622,7 @@ body.host-single-m #root-user{display:none}
 <span class="shrink-0 text-[11px] pt-0.5" style="color:#BBB">{{ p.dist }}</span>
 </div>
 </div>
-<div v-if="storeErr.addr" class="form-hint">{{ storeErr.addr }}</div>
-</div>
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5 z-[20]">
@@ -2965,42 +2921,28 @@ body.host-single-m #root-user{display:none}
 <nav-bar :title="stationForm.id?'编辑站点':'新增站点'" border-color="#E5E5E5" @back="closeStationForm()"></nav-bar>
 <div class="flex-1 overflow-y-auto min-h-0 hide-scroll px-4 pt-4 pb-28" style="touch-action:pan-y;-webkit-overflow-scrolling:touch">
 <div class="form-plain">
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>站点名称</div>
-<div class="ff-box relative flex items-center">
-<input v-model="stationForm.name" @input="stationErr.name=''" type="text" maxlength="64" placeholder="请输入站点名称" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="stationErr.name?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-name">
-<span class="absolute right-2.5 text-[12px] text-[#999]">{{ (stationForm.name||'').length }}/64</span>
-</div>
-<div v-if="stationErr.name" class="form-hint">{{ stationErr.name }}</div>
-</div>
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>营业时间</div>
+<form-field label="站点名称" required :error="stationErr.name" :counter="(stationForm.name||'').length" counter-max="64">
+<input v-model="stationForm.name" @input="stationErr.name=''" type="text" maxlength="64" placeholder="请输入站点名称" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" data-od-id="station-form-name">
+</form-field>
+<form-field label="营业时间" required bare :error="stationErr.time">
 <div class="flex items-center gap-2">
 <div role="button" data-cp @click="openStoreHmPick('from','station')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="stationErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-from"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.from }}</span></div>
 <span class="shrink-0" v-html="luci('arrow-right','w-4 h-4 text-[#BBB]')"></span>
 <div role="button" data-cp @click="openStoreHmPick('to','station')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="stationErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-to"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.to }}</span></div>
 <span v-html="luci('clock','w-4 h-4 text-[#BBB]')"></span>
 </div>
-<div v-if="stationErr.time" class="form-hint">{{ stationErr.time }}</div>
-</div>
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>联系人</div>
-<div class="ff-box relative flex items-center">
-<input v-model="stationForm.contact" @input="stationErr.contact=''" type="text" maxlength="64" placeholder="请输入" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="stationErr.contact?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-contact">
-<span class="absolute right-2.5 text-[12px] text-[#999]">{{ (stationForm.contact||'').length }}/64</span>
-</div>
-<div v-if="stationErr.contact" class="form-hint">{{ stationErr.contact }}</div>
-</div>
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>联系方式</div>
+</form-field>
+<form-field label="联系人" required :error="stationErr.contact" :counter="(stationForm.contact||'').length" counter-max="64">
+<input v-model="stationForm.contact" @input="stationErr.contact=''" type="text" maxlength="64" placeholder="请输入" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" data-od-id="station-form-contact">
+</form-field>
+<form-field label="联系方式" required bare :error="stationErr.phone">
 <div class="flex items-stretch gap-2.5">
 <div data-cp @click="openDialCode('station')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="station-form-dial"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.dial||'+86' }}</span><span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#9CA3AF]')"></span></div>
 <div class="ff-box flex-1 relative flex items-center min-w-0">
 <input v-model="stationForm.phone" @input="stationErr.phone=''" type="tel" maxlength="20" placeholder="请输入" class="w-full pl-3.5 pr-3 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="stationErr.phone?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-phone">
 </div>
 </div>
-<div v-if="stationErr.phone" class="form-hint">{{ stationErr.phone }}</div>
-</div>
+</form-field>
 <div class="form-row">
 <div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>站点封面</div>
 <div class="grid grid-cols-3 gap-2.5">
@@ -3008,21 +2950,18 @@ body.host-single-m #root-user{display:none}
 <div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
 <div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openCabImgMore(pi)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
 </div>
-<div v-if="cabImgList.length<cabImgMax" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#F6F7F9;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="station-form-img">
+<div v-if="cabImgList.length<cabImgMax" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#fff;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="station-form-img">
 <span v-html="luci('plus','w-6 h-6')"></span>
 <span class="text-[12px] mt-1">{{ cabImgAddLabel }}</span>
 </div>
 </div>
 <div v-if="stationErr.photos" class="form-hint">{{ stationErr.photos }}</div>
 </div>
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>站点地址</div>
-<div class="ff-box relative flex items-center">
-<input :value="stationForm.addr" @input="onAddrInput('station',$event)" @focus="stationAddrSugOpen=true" @blur="closeAddrSug('station')" type="text" placeholder="请输入地址或选择地址" class="w-full pl-3.5 pr-20 py-3 text-[15px]" :style="stationErr.addr?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-addr">
+<form-field label="站点地址" required :error="stationErr.addr">
+<input :value="stationForm.addr" @input="onAddrInput('station',$event)" @focus="stationAddrSugOpen=true" @blur="closeAddrSug('station')" type="text" placeholder="请输入地址或选择地址" class="w-full pl-3.5 pr-20 py-3 text-[15px]" data-od-id="station-form-addr">
 <div class="absolute right-2.5 flex items-center gap-1">
 <div v-if="stationForm.addr" data-cp @click="clearAddr('station')" class="w-7 h-7 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-od-id="station-form-addr-clear"><span v-html="luci('x','w-4 h-4')"></span></div>
 <div data-cp @click="openStoreMap('station')" class="w-8 h-8 flex items-center justify-center cursor-pointer shrink-0" style="color:#2B3F5F" data-od-id="station-form-addr-map" title="地图选择地址"><span v-html="luci('map-pin','w-[18px] h-[18px]')"></span></div>
-</div>
 </div>
 <div v-if="stationAddrSugOpen&&stationAddrSugList.length" class="mt-1.5 bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="station-form-addr-sug">
 <div v-for="(p,pi) in stationAddrSugList" :key="'sta'+pi" data-cp @mousedown.prevent @click="pickAddrSug('station',p)" class="flex items-start gap-3 px-3.5 py-3 cursor-pointer active:bg-[#F6F7F9]" :style="pi?{borderTop:'1px solid #F2F3F5'}:null" :data-od-id="'station-form-addr-sug-'+pi">
@@ -3033,8 +2972,7 @@ body.host-single-m #root-user{display:none}
 <span class="shrink-0 text-[11px] pt-0.5" style="color:#BBB">{{ p.dist }}</span>
 </div>
 </div>
-<div v-if="stationErr.addr" class="form-hint">{{ stationErr.addr }}</div>
-</div>
+</form-field>
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5 z-[20]">
@@ -3061,13 +2999,13 @@ body.host-single-m #root-user{display:none}
       {key:'batt',icon:'battery-charging',label:'电池',activeWhen:tab==='batt'},
       {key:'mine',icon:'user',label:'我的',activeWhen:tab==='mine'}
     ]" @select="setTab"></tab-bar><div class="sw-homebar"></div>
-<transition name="fd"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="login-page">
+<page :open="showLogin" :z="1900" trans="fd" oid="login-page"><div v-if="showLogin" class="absolute inset-0 z-[1900] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden">
 <div v-show="loginView==='main'" class="flex-1 flex flex-col min-h-0 bg-[#F6F7F9]">
 <div class="pt-14 px-5 pb-1 flex items-center justify-end shrink-0">
 <button type="button" class="login-lang-chip" data-cp @click="loginOpenLang" data-od-id="login-lang-btn">
-<span class="text-[#6B6B6B]"><span v-html="luci('globe','w-3.5 h-3.5')"></span></span>
+<span class="text-[#6B6B6B]" v-html="luci('globe','w-3.5 h-3.5')"></span>
 <span class="truncate">{{ appLangLabel }}</span>
-<span class="text-[#9CA3AF]"><span v-html="luci('chevron-down','w-3.5 h-3.5')"></span></span>
+<span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span>
 </button>
 </div>
 <div class="px-8 pt-3 pb-5 shrink-0 flex flex-col items-center" data-od-id="login-brand">
@@ -3210,7 +3148,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-</div></transition>
+</div></page>
 <transition name="fd"><div v-if="showDialPicker" class="absolute inset-0 z-[1950] bg-[#F6F7F9] flex flex-col rounded-[44px] overflow-hidden" data-od-id="dialcode-page">
 <div class="pt-14 px-4 pb-3 flex items-center gap-3 bg-white shrink-0" style="border-bottom:1px solid #E5E5E5">
 <div class="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-[var(--accent)] active:bg-[#EBF1FD]" data-cp @click="closeDialPicker"><span v-html="luci('chevron-left','w-5 h-5')"></span></div>
@@ -3250,20 +3188,18 @@ body.host-single-m #root-user{display:none}
 <div v-if="hasPhone" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundPhone }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-plain">
-<div class="form-row">
-<div class="form-label">手机号</div>
+<form-field label="手机号" bare>
 <div class="flex items-stretch gap-2.5">
 <div data-cp @click="openDialCode('bind')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="bind-dial-trigger"><span class="text-[15px] font-semibold tabular-nums text-[#111]">{{ bpArea }}</span><span class="text-[#9CA3AF]" v-html="luci('chevron-down','w-3.5 h-3.5')"></span></div>
 <div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" v-model="bpPhone" placeholder="请输入手机号" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="bpPhone" data-cp @click="bpPhone=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 </div>
-</div>
-<div class="form-row">
-<div class="form-label">验证码</div>
+</form-field>
+<form-field label="验证码" bare>
 <div class="flex items-stretch gap-2.5">
 <div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="bpCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="bpCode=bpCode.replace(/\D/g,'').slice(0,6)"><div v-if="bpCode" data-cp @click="bpCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendBpCode" :disabled="!bpPhone||bpCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="bpCd>0?'is-cd':(bpPhone?'is-on':'is-off')">{{ bpCd>0?('重新获取 ('+bpCd+'s)'):'获取验证码' }}</button>
 </div>
-</div>
+</form-field>
 <div class="form-actions">
 <button type="button" class="login-submit" :class="(bpPhone&&bpCode)?'is-on':'is-off'" :disabled="!bpPhone||!bpCode" data-cp @click="doBindPhone">{{ hasPhone?'确认替换':'绑定' }}</button>
 </div>
@@ -3275,17 +3211,15 @@ body.host-single-m #root-user{display:none}
 <div v-if="hasEmail" class="bg-[#FFF8E6] px-4 py-2.5 text-[13px] text-[#B07B00] shrink-0">当前已绑定：{{ boundEmail }}</div>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-plain">
-<div class="form-row">
-<div class="form-label">邮箱</div>
+<form-field label="邮箱" bare>
 <div class="ff-box relative flex items-center"><input type="email" v-model="beEmail" placeholder="请输入邮箱地址" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]"><div v-if="beEmail" data-cp @click="beEmail=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
-</div>
-<div class="form-row">
-<div class="form-label">验证码</div>
+</form-field>
+<form-field label="验证码" bare>
 <div class="flex items-stretch gap-2.5">
 <div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="beCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="beCode=beCode.replace(/\D/g,'').slice(0,6)"><div v-if="beCode" data-cp @click="beCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendBeCode" :disabled="!beEmail||beCd>0" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="beCd>0?'is-cd':(beEmail?'is-on':'is-off')">{{ beCd>0?('重新获取 ('+beCd+'s)'):'获取验证码' }}</button>
 </div>
-</div>
+</form-field>
 <div class="form-actions">
 <button type="button" class="login-submit" :class="(beEmail&&beCode)?'is-on':'is-off'" :disabled="!beEmail||!beCode" data-cp @click="doBindEmail">{{ hasEmail?'确认替换':'绑定' }}</button>
 </div>
@@ -3308,13 +3242,12 @@ body.host-single-m #root-user{display:none}
 <div class="text-[15px] font-medium text-[#222] py-1" data-od-id="pwd-email-readonly">{{ boundEmail }}</div>
 </div>
 </template>
-<div class="form-row">
-<div class="form-label">验证码</div>
+<form-field label="验证码" bare>
 <div class="flex items-stretch gap-2.5">
 <div class="ff-box flex-1 relative flex items-center min-w-0"><input type="tel" inputmode="numeric" maxlength="6" v-model="pwdCode" placeholder="请输入验证码" class="w-full pl-3.5 pr-9 py-3.5 text-[15px]" @input="pwdCode=pwdCode.replace(/\D/g,'').slice(0,6)"><div v-if="pwdCode" data-cp @click="pwdCode=''" class="login-clear absolute right-2.5"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div></div>
 <button type="button" data-cp @click="sendPwdCode(pwdChannel)" :disabled="pwdCd>0||(pwdChannel==='phone'?!hasPhone:!hasEmail)" class="login-code-btn shrink-0 px-3 text-[13px] font-semibold" :class="pwdCd>0?'is-cd':((pwdChannel==='phone'?hasPhone:hasEmail)?'is-on':'is-off')">{{ pwdCd>0?('重新获取 ('+pwdCd+'s)'):'获取验证码' }}</button>
 </div>
-</div>
+</form-field>
 <div class="form-actions">
 <button type="button" class="login-submit" :class="pwdCode?'is-on':'is-off'" :disabled="!pwdCode" data-cp @click="nextPwdVerify">下一步</button>
 </div>
@@ -3329,14 +3262,14 @@ body.host-single-m #root-user{display:none}
 <nav-bar title="重置密码" border-color="#E5E5E5" @back="navBack()"></nav-bar>
 <div class="px-4 pt-4 flex-1 overflow-y-auto">
 <div class="form-plain">
-<div class="form-row">
-<div class="form-label">新密码</div>
-<div class="ff-box relative flex items-center"><input :type="npwdVis?'text':'password'" v-model="npwd" placeholder="请输入 6–64 位新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd" data-cp @click="npwd=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
-</div>
-<div class="form-row">
-<div class="form-label">确认新密码</div>
-<div class="ff-box relative flex items-center"><input :type="npwd2Vis?'text':'password'" v-model="npwd2" placeholder="请再次输入新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64"><div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')"></span></div></div></div>
-</div>
+<form-field label="新密码">
+<input :type="npwdVis?'text':'password'" v-model="npwd" placeholder="请输入 6–64 位新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64">
+<div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd" data-cp @click="npwd=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwdVis=!npwdVis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwdVis?'eye-off':'eye','w-4 h-4')"></span></div></div>
+</form-field>
+<form-field label="确认新密码">
+<input :type="npwd2Vis?'text':'password'" v-model="npwd2" placeholder="请再次输入新密码" class="w-full pl-3.5 pr-12 py-3.5 text-[15px]" maxlength="64">
+<div class="absolute right-2.5 flex items-center gap-1"><div v-if="npwd2" data-cp @click="npwd2=''" class="login-clear"><span v-html="luci('x','w-3 h-3 text-[#666]')"></span></div><div data-cp @click="npwd2Vis=!npwd2Vis" class="w-8 h-8 flex items-center justify-center cursor-pointer text-[#6B6B6B]"><span v-html="luci(npwd2Vis?'eye-off':'eye','w-4 h-4')"></span></div></div>
+</form-field>
 <div class="form-actions">
 <button type="button" class="login-submit" :class="canConfirmPwd?'is-on':'is-off'" :disabled="!canConfirmPwd" data-cp @click="doResetPwd">确认</button>
 </div>
@@ -3694,6 +3627,8 @@ function authState(bus,ext){
   function resetLoginForm(){loginView.value='main';loginMode.value='phone';loginSub.value='password';loginPhone.value='';loginEmail.value='';loginAccount.value='';loginPwd.value='';loginCode.value='';loginPwdVisible.value=false;loginAgree.value=false;dialQ.value='';dialPickerSource.value=null;loginErr.phone='';loginErr.pwd='';loginErr.code='';loginErr.email='';loginErr.account='';if(loginCdTimer){clearInterval(loginCdTimer);loginCdTimer=null}loginCd.value=0}
   function openLogin(){navOpen('login');resetLoginForm();showLogin.value=true;profileSub.value=null}
   function closeLogin(){navDrop('login');showLogin.value=false;loginView.value='main';dialPickerSource.value=null;loginErr.phone='';loginErr.pwd='';loginErr.code='';loginErr.email='';loginErr.account=''}
+  /* 登录页关闭统一走 navBack()（对齐 index）；这里监听登录页关闭以保留原 closeLogin 的表单清理语义 */
+  Vue.watch(showLogin,function(v){if(!v)resetLoginForm()});
   function loginOpenLang(){loginView.value='lang'}
   function selectLangFromLogin(id){appLang.value=id;loginView.value='main'}
   function selectLang(id){appLang.value=id}

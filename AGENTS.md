@@ -71,7 +71,7 @@
 - `.sheet-search`：弹窗内搜索框，只写类名，图标/`<input>` 放插槽。
 - `.sheet-body`：内容滚动区（等价 `flex-1 overflow-y-auto min-h-0` + 隐藏滚动条类）；只额外加内边距工具类。未归一的滚动区勿顺手改（属可见变化，需单独决定）。
 - **⚠️ sheet 内容行禁止自带底部 `pb-6/7/8`**（面板 token 已含 safe-area 底距，叠加成双重底距）。例外仅：textarea 内部（给右下角计数留位）、滚轮轮体留白——属元素自身语义；**滚动区底部同样不要再加 `pb-*`**（底距统一由面板的 24px/safe-area 提供）。
-- **swap.html**：已接入同一套共享组件（`registerSheetKit` 含 `bottom-sheet`/`option-sheet`/`nav-bar`/`page`/`confirm-dialog`/`image-viewer`/`empty-state`/`tab-bar`/`loading-overlay`/`kv-card`/`kv-row`，`.sheet-*`/`.kv-*` token、`.fd/.sh` 过渡、`globalProperties.luci` 齐备）。保留手写：`loc-auth-modal`（图标在标题上方）与 `newAccCred`（单按钮结果页）；`transition name="fd"` 的全屏/登录带属非子页壳，保留。收敛情况以实际 DOM 为准，勿按旧结论汇报。
+- **swap.html**：已接入同一套共享组件（`registerSheetKit` 含 `bottom-sheet`/`option-sheet`/`nav-bar`/`page`/`confirm-dialog`/`image-viewer`/`empty-state`/`tab-bar`/`loading-overlay`/`kv-card`/`kv-row`/`form-field`，`.sheet-*`/`.kv-*`/`.ff-*` token、`.fd/.sh` 过渡、`globalProperties.luci` 齐备）。保留手写：`loc-auth-modal`（图标在标题上方）与 `newAccCred`（单按钮结果页）；其余 `transition name="fd"` 的**非子页**全屏带（区号选择、扫码等）保留。**登录页已改为 `<page :open="showLogin" :z="1900" trans="fd" oid="login-page">` 壳**（与 index 字面对齐；关闭走 `navBack()`，表单重置由 `watch(showLogin)` 兜底），语言 chip 与关闭键写法同 index（两端差异仅商户端头部 `justify-end` 无返回键，与 index 一致）。收敛情况以实际 DOM 为准，勿按旧结论汇报。
 
 联系门店号码行：单行样式、整行点击拨号、**只显示号码**（不加备注/区号）；门店页/订单页/取还信息卡片三入口共用同一弹窗。
 
@@ -155,7 +155,7 @@
 - **禁用态禁止再用** `opacity:.5/.75`、`background:'#F0F1F3'`、内联 `pointerEvents:'none'` —— 一律 `:disabled` + `.is-disabled`。
 - 弹窗内表单（`bottom-sheet`）**同样用 `form-field`**，只把输入容器换成灰底变体 `box-class="ff-box-gray"`（弹窗面板是白底，字段用 `#F6F7F9` 灰底区分；底色/结构与原弹窗一致，不改面板）。多行框加 `is-area`（`box-class="ff-box-gray is-area"`）；「可退 xxx」这类框下说明用 `:hint`；成组胶囊用 `bare`。
 - 弹窗 token：`.ff-box-gray{background:#F6F7F9;border:1px solid #E5E5E5}`（禁用更深：`.ff-box-gray.is-disabled{background:#E0E3E7;border-color:#D5D9DE}`）；`.sheet-panel .ff-row{margin-bottom:12px}`（页面级 16px / 弹窗 12px）。label 统一 13px `#333333`（弹窗原 14px semibold 标签已并入 13px 规范）。
-- 已封装的 6 个表单弹窗：手动输入编号、充值订单退款、订单退款、添加资料（双端）、改价、编辑赠送余额；筛选类弹窗的筛选标签不在本口径内。
+- 已封装的 6 个表单弹窗（index.html）：手动输入编号、充值订单退款、订单退款、添加资料（双端）、改价、编辑赠送余额；筛选类弹窗的筛选标签不在本口径内。**swap.html 已同步**：15 个页面级表单页（绑定手机/邮箱、密码验证与重置、实名新增/详情、换电柜/电池/门店/站点表单）与弹窗字段（输入机柜编号）均已 `form-field` 化（页面级白底、弹窗 `box-class="ff-box-gray"`）。
 
 ### tab-bar — 底部导航
 
