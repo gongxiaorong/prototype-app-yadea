@@ -95,6 +95,13 @@ body{font-family:var(--font-body)}
 .ff-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;border:1px dashed #E5E5E5;border-radius:12px;box-sizing:border-box}
 .ff-bare{position:relative;display:block}
 .ff-box.mini{min-height:36px;border-radius:10px}
+/* 弹窗表单字段变体：弹窗面板是白底，字段用灰底区分（结构/底色与页面级一致，仅底色反转） */
+.ff-box-gray{background:#F6F7F9;border:1px solid #E5E5E5}
+.ff-box-gray:focus-within{border-color:#E5E5E5;box-shadow:none}
+.ff-box-gray.is-disabled{background:#E0E3E7;border-color:#D5D9DE}
+/* 弹窗内字段行距（页面级 16px / 弹窗 12px） */
+.sheet-panel .ff-row{margin-bottom:12px}
+.sheet-panel .ff-row:last-child{margin-bottom:0}
 .login-code-btn{border:none;min-width:7.25rem;min-height:48px;background:#F0F1F3;color:#9CA3AF;border-radius:12px;transition:background .15s,color .15s}
 .login-code-btn.is-cd{background:#F5F6F8;color:#6B6B6B}
 .login-code-btn:disabled,.login-code-btn.is-off{background:#F0F1F3;color:#9CA3AF;cursor:not-allowed}
@@ -1656,7 +1663,7 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="docSheetTab='image'" class="flex-1 py-2 rounded-full text-[13px] font-medium text-center cursor-pointer transition-all" :style="docSheetTab==='image'?{background:'#fff',color:'#111',boxShadow:'0 1px 3px rgba(0,0,0,.06)'}:{color:'#999'}" data-page-node-id="LqcmsxlfLF4VUNisilsKlB">拍照上传</div>
 <div data-cp @click="docSheetTab='text'" class="flex-1 py-2 rounded-full text-[13px] font-medium text-center cursor-pointer transition-all" :style="docSheetTab==='text'?{background:'#fff',color:'#111',boxShadow:'0 1px 3px rgba(0,0,0,.06)'}:{color:'#999'}" data-page-node-id="BtT3WuFoK1f7tsfGJixJwC">文本资料</div>
 </div>
-<div class="sheet-body px-5 pb-8" data-page-node-id="awKbVqvU8leBrH3JityQEt">
+<div class="sheet-body px-5" data-page-node-id="awKbVqvU8leBrH3JityQEt">
 <template v-if="docSheetTab==='image'" data-page-node-id="UoBTeIceWS7uiBqNAQKAPF">
 <div class="grid grid-cols-2 gap-2.5" data-page-node-id="JDmxiudZYNeDEkkxXGCL7D">
 <div v-for="img in docImageTypes" :key="img.label" data-cp @click="addDocImage(img)" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:2px dashed #E5E5E5" data-page-node-id="Nkaj0F4X8TgYOwVq32bSfE">
@@ -1666,10 +1673,9 @@ body.host-single-m #root-user{display:none}
 </div>
 </template>
 <template v-else data-page-node-id="XV7LxWwTsNFfL5M2EeHqic">
-<div class="relative" data-page-node-id="FkrPZgT7nqwQ6QgOxrlBEv">
-<textarea v-model="docText" maxlength="255" placeholder="请输入文本资料" class="w-full p-4 pb-8 rounded-xl text-[15px] outline-none resize-none min-h-[120px]" style="border:1px solid #E5E5E5;font-family:inherit"></textarea>
-<div class="absolute right-3 bottom-2 text-[15px] leading-none text-[#999] tabular-nums pointer-events-none" data-page-node-id="WpCwCYU3wmx8xEca2qzqbE">{{docText.length}}/255</div>
-</div>
+<form-field box-class="ff-box-gray is-area" :counter="docText.length" counter-max="255" data-page-node-id="FkrPZgT7nqwQ6QgOxrlBEv">
+<textarea v-model="docText" maxlength="255" placeholder="请输入文本资料" class="w-full p-4 pb-8 text-[15px] outline-none resize-none min-h-[120px]" style="font-family:inherit"></textarea>
+</form-field>
 <div data-cp @click="addDocText" class="mt-3 w-full py-3 rounded-xl text-[15px] font-semibold text-white text-center cursor-pointer transition-colors" :style="docText.trim()?{background:'#2B3F5F'}:{background:'#E0E0E0',color:'#999',pointerEvents:'none'}" data-page-node-id="IRA1C703olBjzXNBYlil2F">确定</div>
 </template>
 </div></bottom-sheet>
@@ -2243,7 +2249,7 @@ body.host-single-m #root-user{display:none}
 
 <!-- 拍照/相册选择器 -->
 <bottom-sheet :open="showIdPicker" :title="idPickerKind==='driver'?'驾驶证照片':'身份证照片'" :mask-z="idSelectMode?1921:750" oid="id-picker-mask" panel-oid="id-picker-sheet" @close="showIdPicker=false">
-  <div class="px-5 pb-8 pt-1" data-page-node-id="Pjz0muOCcKskjIghhbaFdQ">
+  <div class="px-5 pt-1" data-page-node-id="Pjz0muOCcKskjIghhbaFdQ">
     <div class="grid grid-cols-2 gap-2.5" data-page-node-id="bhppKRFPHyuvEYBsaFWcn1">
       <div data-cp @click="pickIdSource('camera')" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1.5px solid #E5E5E5" data-page-node-id="X5ilwplr1KX7WPChRfK48Z">
         <div class="w-10 h-10 rounded-full flex items-center justify-center mb-2" style="background:#EBF1FD" data-page-node-id="zJT7jaCRsoqUuOj2IwhGmH"><span v-html="luci('camera','w-5 h-5 text-[#2B3F5F]')" data-page-node-id="WBrAJ5lNZ8IunPYbuABj29"></span></div>
@@ -2261,7 +2267,7 @@ body.host-single-m #root-user{display:none}
 
 <!-- 照片更多 ActionSheet -->
 <bottom-sheet :open="showIdAction" :title="'更多操作'" :mask-z="idSelectMode?1921:750" oid="id-action-mask" panel-oid="id-action-sheet" @close="showIdAction=false">
-  <div class="px-5 pt-1 pb-8" data-page-node-id="tXT99oTZp88Ep88m64ZZ3b">
+  <div class="px-5 pt-1" data-page-node-id="tXT99oTZp88Ep88m64ZZ3b">
     <div data-cp @click="idActionReupload" class="py-3.5 text-center text-[15px] text-[#1A1A1A] cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #F5F5F5" data-page-node-id="M9PtecKIjMzv9wR1qtUPHB">重新上传</div>
     <div data-cp @click="idActionDelete" class="py-3.5 text-center text-[15px] text-[#FF4343] cursor-pointer active:bg-[#F6F7F9]" data-page-node-id="L7MVBiGlC9CNBC9DexC8g0">删除照片</div>
   </div></bottom-sheet>
@@ -3523,7 +3529,7 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('search','w-4 h-4 text-[#999]')"></span>
 <input v-model="modelQ" type="text" :placeholder="'搜索车型'" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
-<div class="flex-1 overflow-y-auto pb-8">
+<div class="flex-1 overflow-y-auto">
 <div v-for="m in filteredModels" :key="m.name" data-cp @click="pickModel(m)" class="flex items-center px-5 py-4 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED">
 <div class="w-12 h-12 rounded-lg bg-[#EBF1FD] flex items-center justify-center mr-3 shrink-0"><span v-html="luci('bike','w-7 h-7 text-[var(--accent)]')"></span></div>
 <span class="flex-1 text-[15px] font-medium">{{ m.name }}</span>
@@ -3588,7 +3594,9 @@ body.host-single-m #root-user{display:none}
 <!-- ═══ MANUAL INPUT SHEET ═══ -->
 <bottom-sheet :open="showManualInput" :title="scanTarget==='battNo'?'输入电池编号':'输入车辆编号'" :mask-z="1891" @close="showManualInput=false"><div class="px-5 pb-2">
 <div class="text-[12px] text-[#999] text-center mb-4">{{ scanTarget==='battNo'?'请输入电池铭牌上的电池编号':'请输入车辆铭牌上的车架号' }}</div>
-<div class="ff-box relative"><input v-model="manualVin" type="text" maxlength="32" :placeholder="scanTarget==='battNo'?'请输入电池编号':'请输入车架号'" class="w-full pl-4 pr-3 py-3.5 text-[15px]"></div>
+<form-field box-class="ff-box-gray">
+<input v-model="manualVin" type="text" maxlength="32" :placeholder="scanTarget==='battNo'?'请输入电池编号':'请输入车架号'" class="w-full pl-4 pr-3 py-3.5 text-[15px]">
+</form-field>
 <div class="flex gap-3 mt-4">
 <div data-cp @click="showManualInput=false" class="flex-1 py-3 rounded-xl text-[15px] font-medium text-center cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;background:#fff">取消</div>
 <div data-cp @click="confirmManualVin" class="flex-1 py-3 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer active:opacity-90" style="background:var(--accent)">确认</div>
@@ -3985,7 +3993,7 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('search','w-4 h-4 text-[#999]')"></span>
 <input v-model="battModelQ" type="text" :placeholder="'搜索电池型号'" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
-<div class="flex-1 overflow-y-auto pb-8">
+<div class="flex-1 overflow-y-auto">
 <div v-for="m in battFilteredModels" :key="m" data-cp @click="pickBattModel(m)" class="flex items-center px-5 py-4 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED">
 <div class="w-12 h-12 rounded-lg bg-[#EBF1FD] flex items-center justify-center mr-3 shrink-0"><span v-html="luci('battery-charging','w-7 h-7 text-[var(--accent)]')"></span></div>
 <span class="flex-1 text-[15px] font-medium">{{ m }}</span>
@@ -4288,20 +4296,17 @@ body.host-single-m #root-user{display:none}
 
 <!-- ═══ RECHARGE ORDER REFUND MODAL ═══ -->
 <bottom-sheet :open="roRefundMod" title="退款" :mask-z="800" @close="roRefundMod=false"><div class="px-5">
-<div class="mb-3">
-<div class="text-[13px] text-[#999] mb-1">充值金额</div>
-<div class="flex items-center rounded-xl px-3.5 py-3" style="background:#F6F7F9;border:1px solid #E5E5E5"><span class="text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="roRefundForm.amount" type="number" min="0" step="0.01" placeholder="0" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2"></div>
-<div class="text-[12px] text-[#999] mt-1">可退 {{ fmtRp(curRechargeOrder.amount) }}</div>
-</div>
-<div class="mb-3">
-<div class="text-[13px] text-[#999] mb-1">赠送金额</div>
-<div class="flex items-center rounded-xl px-3.5 py-3" style="background:#F6F7F9;border:1px solid #E5E5E5"><span class="text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="roRefundForm.giftAmount" type="number" min="0" step="0.01" placeholder="0" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2"></div>
-<div class="text-[12px] text-[#999] mt-1">可退 {{ fmtRp(curRechargeOrder.giftAmount) }}</div>
-</div>
-<div class="mb-3">
-<div class="text-[13px] text-[#999] mb-1">退款原因</div>
-<div class="relative"><textarea v-model="roRefundForm.reason" maxlength="255" placeholder="请输入退款原因" class="w-full p-4 pb-8 rounded-xl text-[15px] outline-none resize-none min-h-[90px] placeholder:text-[#999]" style="background:#F6F7F9;border:1px solid #E5E5E5;font-family:inherit"></textarea><div class="absolute right-3 bottom-2 text-[12px] text-[#999] pointer-events-none">{{ (roRefundForm.reason||'').length }}/255</div></div>
-</div>
+<form-field label="充值金额" box-class="ff-box-gray" :hint="'可退 '+fmtRp(curRechargeOrder.amount)">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="roRefundForm.amount" type="number" min="0" step="0.01" placeholder="0" class="flex-1 px-2 py-3.5 text-[16px] font-medium">
+</form-field>
+<form-field label="赠送金额" box-class="ff-box-gray" :hint="'可退 '+fmtRp(curRechargeOrder.giftAmount)">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="roRefundForm.giftAmount" type="number" min="0" step="0.01" placeholder="0" class="flex-1 px-2 py-3.5 text-[16px] font-medium">
+</form-field>
+<form-field label="退款原因" box-class="ff-box-gray is-area" :counter="(roRefundForm.reason||'').length" counter-max="255">
+<textarea v-model="roRefundForm.reason" maxlength="255" placeholder="请输入退款原因" class="w-full p-4 pb-8 text-[15px] outline-none resize-none min-h-[90px] placeholder:text-[#999]" style="font-family:inherit"></textarea>
+</form-field>
 <div class="mt-2">
 <button data-cp @click="roSubmitRefund" class="w-full py-3.5 rounded-xl text-[15px] font-semibold text-white border-none cursor-pointer" style="background:var(--accent)">确认</button>
 </div></div></bottom-sheet>
@@ -4447,20 +4452,40 @@ body.host-single-m #root-user{display:none}
 <div v-if="refundMode==='return'" class="flex mx-5 mb-3 shrink-0 rounded-full p-0.5 relative" style="background:#F6F7F9;border:1px solid #E5E5E5"><div class="flex-1 py-2 rounded-full text-[13px] font-medium text-center select-none" style="background:#fff;color:#111;box-shadow:0 1px 3px rgba(0,0,0,.06)">押金</div></div>
 <div class="sheet-body px-5" style="max-height:52vh">
 <template v-if="refundMode!=='return'&&rTab==='rent'">
-<div class="space-y-3">
-<div v-if="rActiveChannel==='2C2P'"><div class="text-[14px] font-semibold mb-2">2C2P</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="rRent2c2p" type="number" min="0" :max="refundRentCapCh['2C2P']" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5" @input="refundChClamp(rRent2c2p,refundRentCapCh['2C2P'])" @blur="refundChBlur(rRent2c2p,refundRentCapCh['2C2P'])"></div><div class="text-[12px] text-[#999] mt-1">可退 {{ fmtRp(refundRentCapCh['2C2P'],2) }}</div></div>
-<div v-if="rActiveChannel==='WALLET'"><div class="text-[14px] font-semibold mb-2">钱包</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="rRentWallet" type="number" min="0" :max="refundRentCapCh['WALLET']" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5" @input="refundChClamp(rRentWallet,refundRentCapCh['WALLET'])" @blur="refundChBlur(rRentWallet,refundRentCapCh['WALLET'])"></div><div class="text-[12px] text-[#999] mt-1">可退 {{ fmtRp(refundRentCapCh['WALLET'],2) }}</div></div>
-<div v-if="rActiveChannel==='OFFLINE'"><div class="text-[14px] font-semibold mb-2">线下支付</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="rRentOffline" type="number" min="0" :max="refundRentCapCh['OFFLINE']" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5" @input="refundChClamp(rRentOffline,refundRentCapCh['OFFLINE'])" @blur="refundChBlur(rRentOffline,refundRentCapCh['OFFLINE'])"></div><div class="text-[12px] text-[#999] mt-1">可退 {{ fmtRp(refundRentCapCh['OFFLINE'],2) }}</div></div>
+<div>
+<form-field v-if="rActiveChannel==='2C2P'" label="2C2P" box-class="ff-box-gray" :hint="'可退 '+fmtRp(refundRentCapCh['2C2P'],2)">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="rRent2c2p" type="number" min="0" :max="refundRentCapCh['2C2P']" class="flex-1 px-2 py-3.5 text-[16px] font-medium" @input="refundChClamp(rRent2c2p,refundRentCapCh['2C2P'])" @blur="refundChBlur(rRent2c2p,refundRentCapCh['2C2P'])">
+</form-field>
+<form-field v-if="rActiveChannel==='WALLET'" label="钱包" box-class="ff-box-gray" :hint="'可退 '+fmtRp(refundRentCapCh['WALLET'],2)">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="rRentWallet" type="number" min="0" :max="refundRentCapCh['WALLET']" class="flex-1 px-2 py-3.5 text-[16px] font-medium" @input="refundChClamp(rRentWallet,refundRentCapCh['WALLET'])" @blur="refundChBlur(rRentWallet,refundRentCapCh['WALLET'])">
+</form-field>
+<form-field v-if="rActiveChannel==='OFFLINE'" label="线下支付" box-class="ff-box-gray" :hint="'可退 '+fmtRp(refundRentCapCh['OFFLINE'],2)">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="rRentOffline" type="number" min="0" :max="refundRentCapCh['OFFLINE']" class="flex-1 px-2 py-3.5 text-[16px] font-medium" @input="refundChClamp(rRentOffline,refundRentCapCh['OFFLINE'])" @blur="refundChBlur(rRentOffline,refundRentCapCh['OFFLINE'])">
+</form-field>
 </div>
 </template>
 <template v-else>
-<div class="space-y-3">
-<div v-if="rActiveChannel==='2C2P'"><div class="text-[14px] font-semibold mb-2">2C2P</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="rDep2c2p" type="number" min="0" :max="refundDepCapCh['2C2P']" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5" @input="refundChClamp(rDep2c2p,refundDepCapCh['2C2P'])" @blur="refundChBlur(rDep2c2p,refundDepCapCh['2C2P'])"></div><div class="text-[12px] text-[#999] mt-1">可退 {{ fmtRp(refundDepCapCh['2C2P'],2) }}</div></div>
-<div v-if="rActiveChannel==='WALLET'"><div class="text-[14px] font-semibold mb-2">钱包</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="rDepWallet" type="number" min="0" :max="refundDepCapCh['WALLET']" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5" @input="refundChClamp(rDepWallet,refundDepCapCh['WALLET'])" @blur="refundChBlur(rDepWallet,refundDepCapCh['WALLET'])"></div><div class="text-[12px] text-[#999] mt-1">可退 {{ fmtRp(refundDepCapCh['WALLET'],2) }}</div></div>
-<div v-if="rActiveChannel==='OFFLINE'"><div class="text-[14px] font-semibold mb-2">线下支付</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="rDepOffline" type="number" min="0" :max="refundDepCapCh['OFFLINE']" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5" @input="refundChClamp(rDepOffline,refundDepCapCh['OFFLINE'])"></div><div class="text-[12px] text-[#999] mt-1">可退 {{ fmtRp(refundDepCapCh['OFFLINE'],2) }}</div></div>
+<div>
+<form-field v-if="rActiveChannel==='2C2P'" label="2C2P" box-class="ff-box-gray" :hint="'可退 '+fmtRp(refundDepCapCh['2C2P'],2)">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="rDep2c2p" type="number" min="0" :max="refundDepCapCh['2C2P']" class="flex-1 px-2 py-3.5 text-[16px] font-medium" @input="refundChClamp(rDep2c2p,refundDepCapCh['2C2P'])" @blur="refundChBlur(rDep2c2p,refundDepCapCh['2C2P'])">
+</form-field>
+<form-field v-if="rActiveChannel==='WALLET'" label="钱包" box-class="ff-box-gray" :hint="'可退 '+fmtRp(refundDepCapCh['WALLET'],2)">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="rDepWallet" type="number" min="0" :max="refundDepCapCh['WALLET']" class="flex-1 px-2 py-3.5 text-[16px] font-medium" @input="refundChClamp(rDepWallet,refundDepCapCh['WALLET'])" @blur="refundChBlur(rDepWallet,refundDepCapCh['WALLET'])">
+</form-field>
+<form-field v-if="rActiveChannel==='OFFLINE'" label="线下支付" box-class="ff-box-gray" :hint="'可退 '+fmtRp(refundDepCapCh['OFFLINE'],2)">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="rDepOffline" type="number" min="0" :max="refundDepCapCh['OFFLINE']" class="flex-1 px-2 py-3.5 text-[16px] font-medium" @input="refundChClamp(rDepOffline,refundDepCapCh['OFFLINE'])">
+</form-field>
 </div>
 </template>
-<div class="mb-4 pt-1"><div class="text-[14px] font-semibold mb-2">退款原因</div><div class="relative"><textarea v-model="rReason" maxlength="255" placeholder="请输入退款原因" class="w-full p-4 pb-8 rounded-xl text-[15px] outline-none resize-none min-h-[90px]" style="border:1px solid #E5E5E5;font-family:inherit"></textarea><div class="absolute right-3 bottom-2 text-[12px] text-[#999] pointer-events-none">{{ (rReason||'').length }}/255</div></div></div>
+<form-field label="退款原因" box-class="ff-box-gray is-area" :counter="(rReason||'').length" counter-max="255">
+<textarea v-model="rReason" maxlength="255" placeholder="请输入退款原因" class="w-full p-4 pb-8 text-[15px] outline-none resize-none min-h-[90px]" style="font-family:inherit"></textarea>
+</form-field>
 </div>
 <div class="px-5 shrink-0"><button data-cp @click="submitRefund" :disabled="refundSaving" class="w-full py-4 rounded-xl text-[17px] font-bold text-white border-none cursor-pointer disabled:opacity-50 transition-colors" style="background:var(--accent)">确认</button></div></bottom-sheet>
 
@@ -4470,7 +4495,7 @@ body.host-single-m #root-user{display:none}
 <div data-cp @click="docSheetTab='image'" class="flex-1 py-2 rounded-full text-[13px] font-medium text-center cursor-pointer transition-all" :style="docSheetTab==='image'?{background:'#fff',color:'#111',boxShadow:'0 1px 3px rgba(0,0,0,.06)'}:{color:'#999'}">拍照上传</div>
 <div data-cp @click="docSheetTab='text'" class="flex-1 py-2 rounded-full text-[13px] font-medium text-center cursor-pointer transition-all" :style="docSheetTab==='text'?{background:'#fff',color:'#111',boxShadow:'0 1px 3px rgba(0,0,0,.06)'}:{color:'#999'}">文本资料</div>
 </div>
-<div class="flex-1 overflow-y-auto px-5 pb-8">
+<div class="flex-1 overflow-y-auto px-5">
 <template v-if="docSheetTab==='image'">
 <div class="grid grid-cols-2 gap-2.5">
 <div v-for="img in docImageTypes" :key="img.label" data-cp @click="addDocImage(img)" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:2px dashed #E5E5E5">
@@ -4480,7 +4505,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </template>
 <template v-else>
-<div class="relative"><textarea v-model="docText" maxlength="255" :placeholder="'请输入文本资料'" class="w-full p-4 pb-8 rounded-xl text-[15px] outline-none resize-none min-h-[120px]" style="border:1px solid #E5E5E5;font-family:inherit"></textarea><div class="absolute right-3 bottom-2 text-[12px] text-[#999] pointer-events-none">{{ (docText||'').length }}/255</div></div>
+<form-field box-class="ff-box-gray is-area" :counter="(docText||'').length" counter-max="255"><textarea v-model="docText" maxlength="255" :placeholder="'请输入文本资料'" class="w-full p-4 pb-8 text-[15px] outline-none resize-none min-h-[120px]" style="font-family:inherit"></textarea></form-field>
 <div data-cp @click="addDocText" class="mt-3 w-full py-3 rounded-xl text-[15px] font-semibold text-white text-center cursor-pointer transition-colors" :style="docText.trim()?{background:'var(--accent)'}:{background:'#E0E0E0',color:'#999',pointerEvents:'none'}">确认</div>
 </template>
 </div></bottom-sheet>
@@ -4497,21 +4522,41 @@ body.host-single-m #root-user{display:none}
 <!-- 租金 -->
 <template v-if="psTab==='rent'">
 <div v-if="psRentDiff" class="text-[12px] mb-2" :style="psRentDiff.cls">{{ psRentDiff.text }}</div>
-<div class="space-y-3">
-<div v-if="psActiveChannel==='2C2P'"><div class="text-[14px] font-semibold mb-2">2C2P</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="psRent2c2p" type="number" min="0" step="1" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5"></div></div>
-<div v-if="psActiveChannel==='WALLET'"><div class="text-[14px] font-semibold mb-2">钱包</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="psRentWallet" type="number" min="0" step="1" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5"></div></div>
-<div v-if="psActiveChannel==='OFFLINE'"><div class="text-[14px] font-semibold mb-2">线下支付</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="psRentOffline" type="number" min="0" step="1" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5"></div></div>
+<div>
+<form-field v-if="psActiveChannel==='2C2P'" label="2C2P" box-class="ff-box-gray">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="psRent2c2p" type="number" min="0" step="1" class="flex-1 px-2 py-3.5 text-[16px] font-medium">
+</form-field>
+<form-field v-if="psActiveChannel==='WALLET'" label="钱包" box-class="ff-box-gray">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="psRentWallet" type="number" min="0" step="1" class="flex-1 px-2 py-3.5 text-[16px] font-medium">
+</form-field>
+<form-field v-if="psActiveChannel==='OFFLINE'" label="线下支付" box-class="ff-box-gray">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="psRentOffline" type="number" min="0" step="1" class="flex-1 px-2 py-3.5 text-[16px] font-medium">
+</form-field>
 </div>
 </template>
 <template v-else>
 <div v-if="psDepDiff" class="text-[12px] mb-2" :style="psDepDiff.cls">{{ psDepDiff.text }}</div>
-<div class="space-y-3">
-<div v-if="psActiveChannel==='2C2P'"><div class="text-[14px] font-semibold mb-2">2C2P</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="psDep2c2p" type="number" min="0" step="1" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5"></div></div>
-<div v-if="psActiveChannel==='WALLET'"><div class="text-[14px] font-semibold mb-2">钱包</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="psDepWallet" type="number" min="0" step="1" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5"></div></div>
-<div v-if="psActiveChannel==='OFFLINE'"><div class="text-[14px] font-semibold mb-2">线下支付</div><div class="flex items-center rounded-xl overflow-hidden" style="border:1px solid #E5E5E5"><span class="pl-4 text-[16px] font-semibold shrink-0">Rp</span><input v-model.number="psDepOffline" type="number" min="0" step="1" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2 py-3.5"></div></div>
+<div>
+<form-field v-if="psActiveChannel==='2C2P'" label="2C2P" box-class="ff-box-gray">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="psDep2c2p" type="number" min="0" step="1" class="flex-1 px-2 py-3.5 text-[16px] font-medium">
+</form-field>
+<form-field v-if="psActiveChannel==='WALLET'" label="钱包" box-class="ff-box-gray">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="psDepWallet" type="number" min="0" step="1" class="flex-1 px-2 py-3.5 text-[16px] font-medium">
+</form-field>
+<form-field v-if="psActiveChannel==='OFFLINE'" label="线下支付" box-class="ff-box-gray">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="psDepOffline" type="number" min="0" step="1" class="flex-1 px-2 py-3.5 text-[16px] font-medium">
+</form-field>
 </div>
 </template>
-<div class="mb-2 pt-1"><div class="text-[14px] font-semibold mb-2">备注</div><div class="relative"><textarea v-model="psReason" maxlength="255" placeholder="请输入备注..." class="w-full p-4 pb-8 rounded-xl text-[15px] outline-none resize-none min-h-[80px]" style="border:1px solid #E5E5E5;font-family:inherit"></textarea><div class="absolute right-3 bottom-2 text-[12px] text-[#999] pointer-events-none">{{ (psReason||'').length }}/255</div></div></div>
+<form-field label="备注" box-class="ff-box-gray is-area" :counter="(psReason||'').length" counter-max="255">
+<textarea v-model="psReason" maxlength="255" placeholder="请输入备注..." class="w-full p-4 pb-8 text-[15px] outline-none resize-none min-h-[80px]" style="font-family:inherit"></textarea>
+</form-field>
 </div>
 <div class="px-5 shrink-0"><button data-cp @click="submitPaySplit" :disabled="!psValid" class="w-full py-4 rounded-xl text-[17px] font-bold text-white border-none cursor-pointer disabled:opacity-50" style="background:var(--accent)">确认</button></div></bottom-sheet>
 
@@ -4520,7 +4565,7 @@ body.host-single-m #root-user{display:none}
 
 <!-- ═══ 更多操作 SHEET ═══ -->
 <bottom-sheet :open="showMoreActions" title="更多操作" :mask-z="900" panel-oid="order-ops-sheet" @close="showMoreActions=false">
-<div class="pb-7 pt-1">
+<div class="pt-1">
 <div v-if="ordersOV!=='feedetail'" data-cp @click="showMoreActions=false;navOpen();ordersOV='feedetail'" class="flex items-center justify-center px-5 py-3 cursor-pointer active:bg-[#F6F7F9]" ><span class="text-[15px] font-medium">费用明细</span></div>
 <div v-if="(canPriceOperate||(feeMoreRow&&feeMoreRow.payStatus==='待支付'))&&orderPerm('operate.price_change')" data-cp @click="showMoreActions=false;openPaySplit(feeMoreRow||null)" class="flex items-center justify-center px-5 py-3 cursor-pointer active:bg-[#F6F7F9]" style="border-top:1px solid #EDEDED"><span class="text-[15px] font-medium">改价</span></div>
 <div v-if="orderPerm('operate.price_change_record')" data-cp @click="showMoreActions=false;navOpen();ordersOV='oprecords'" class="flex items-center justify-center px-5 py-3 cursor-pointer active:bg-[#F6F7F9]" style="border-top:1px solid #EDEDED"><span class="text-[15px] font-medium">改价记录</span></div>
@@ -5084,7 +5129,7 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('search','w-4 h-4 text-[#999]')"></span>
 <input v-model="pkgPickerQ" type="text" :placeholder="pkgPicker==='vehicle'?'搜索车型':'搜索电池型号'" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
-<div class="flex-1 overflow-y-auto pb-8">
+<div class="flex-1 overflow-y-auto">
 <div v-for="n in pkgPickerFiltered" :key="n" data-cp @click="pkgPick(n)" class="flex items-center px-5 py-4 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED">
 <div class="w-12 h-12 rounded-lg bg-[#EBF1FD] flex items-center justify-center mr-3 shrink-0"><span v-html="luci(pkgPicker==='vehicle'?'bike':'battery-charging','w-7 h-7 text-[var(--accent)]')"></span></div>
 <span class="flex-1 text-[15px] font-medium">{{ n }}</span>
@@ -5769,28 +5814,28 @@ body.host-single-m #root-user{display:none}
 <bottom-sheet :open="uWalletSheet" title="编辑赠送余额" :mask-z="600" max-h="82%" @close="uWalletSheet=null">
 <template v-if="uWalletSheet==='adjust'">
 <div class="px-5 py-3 sheet-body">
-<div class="text-[13px] text-[#999] mb-2">类型</div>
-<div class="flex gap-2.5 mb-4">
+<form-field label="类型" bare>
+<div class="flex gap-2.5">
 <div data-cp @click="uAdjust.txnType='ADD'" class="flex-1 py-2.5 rounded-xl text-center text-[13px] font-medium cursor-pointer transition-colors" :style="uAdjust.txnType==='ADD'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F6F7F9',color:'#666',border:'1px solid #EBEDF0'}">赠送</div>
 <div data-cp @click="uAdjust.txnType='DEDUCT'" class="flex-1 py-2.5 rounded-xl text-center text-[13px] font-medium cursor-pointer transition-colors" :style="uAdjust.txnType==='DEDUCT'?{background:'#EBF1FD',color:'var(--link)',border:'1px solid var(--link)'}:{background:'#F6F7F9',color:'#666',border:'1px solid #EBEDF0'}">扣减</div>
 </div>
-<div class="text-[13px] text-[#999] mb-2">金额</div>
-<div class="flex items-center rounded-xl px-3.5 py-3 mb-1" style="background:#F6F7F9;border:1px solid #E5E5E5">
-<span class="text-[16px] font-semibold shrink-0">Rp</span>
-<input v-model.number="uAdjust.amount" type="number" min="0" placeholder="0" class="flex-1 bg-transparent border-none text-[16px] font-medium outline-none px-2">
+</form-field>
+<form-field label="金额" box-class="ff-box-gray" :error="uAdjustErr.amount">
+<span class="pl-3.5 text-[16px] font-semibold shrink-0">Rp</span>
+<input v-model.number="uAdjust.amount" type="number" min="0" placeholder="0" class="flex-1 px-2 py-3.5 text-[16px] font-medium">
+</form-field>
+<form-field label="备注" box-class="ff-box-gray is-area" :counter="(uAdjust.remark||'').length" counter-max="255">
+<textarea v-model="uAdjust.remark" maxlength="255" rows="3" placeholder="请输入备注" class="w-full px-3.5 py-3 pb-8 text-[14px] outline-none resize-none"></textarea>
+</form-field>
 </div>
-<div v-if="uAdjustErr.amount" class="text-[12px] text-[#DC2626] mb-2">{{ uAdjustErr.amount }}</div>
-<div class="text-[13px] text-[#999] mb-2 mt-3">备注</div>
-<div class="relative"><textarea v-model="uAdjust.remark" maxlength="255" rows="3" placeholder="请输入备注" class="w-full rounded-xl px-3.5 py-3 pb-8 text-[14px] outline-none resize-none" style="background:#F6F7F9;border:1px solid #E5E5E5"></textarea><div class="absolute right-3 bottom-2 text-[12px] text-[#999] pointer-events-none">{{ (uAdjust.remark||'').length }}/255</div></div>
-</div>
-<div class="px-5 pb-7 pt-2 shrink-0">
+<div class="px-5 pt-2 shrink-0">
 <div data-cp @click="submitUAdjust" class="w-full py-3.5 rounded-xl text-white text-[15px] font-semibold text-center cursor-pointer active:opacity-80" style="background:var(--accent)">确认</div>
 </div>
 </template></bottom-sheet>
 
 <!-- ═══ 用户钱包 · 更多操作 ═══ -->
 <bottom-sheet :open="uWalletOps" title="更多操作" :mask-z="600" panel-oid="wallet-ops-sheet" @close="uWalletOps=false">
-<div class="pb-7 pt-1">
+<div class="pt-1">
 <div v-if="can('user.wallet.adjust')" data-cp @click="opsPick('adjust')" class="flex items-center justify-center px-5 py-3 cursor-pointer active:bg-[#F6F7F9]"><span class="text-[15px] font-medium">编辑赠送余额</span></div>
 </div></bottom-sheet>
 
