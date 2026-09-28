@@ -2952,17 +2952,7 @@ body.host-single-m #root-user{display:none}
 <div role="button" data-cp @click="openStoreHmPick('to','station')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="stationErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-to"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.to }}</span></div>
 </div>
 </form-field>
-<form-field label="联系人" required :error="stationErr.contact" :counter="(stationForm.contact||'').length" counter-max="64">
-<input v-model="stationForm.contact" @input="stationErr.contact=''" type="text" maxlength="64" placeholder="请输入" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" data-od-id="station-form-contact">
-</form-field>
-<form-field label="联系方式" required bare :error="stationErr.phone">
-<div class="flex items-stretch gap-2.5">
-<div data-cp @click="openDialCode('station')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="station-form-dial"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.dial||'+86' }}</span><span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#9CA3AF]')"></span></div>
-<div class="ff-box flex-1 relative flex items-center min-w-0">
-<input v-model="stationForm.phone" @input="stationErr.phone=''" type="tel" maxlength="20" placeholder="请输入" class="w-full pl-3.5 pr-3 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="stationErr.phone?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-phone">
-</div>
-</div>
-</form-field>
+<!-- 站点封面 / 站点地址：与门店表单同序（名称 → 营业时间 → 封面 → 地址 → 联系人 → 联系方式） -->
 <form-field label="站点封面" required bare :error="stationErr.photos">
 <div class="grid grid-cols-3 gap-2.5">
 <div v-for="(p,pi) in cabImgList" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" data-cp @click="openCabImgPreview(pi)">
@@ -2991,6 +2981,18 @@ body.host-single-m #root-user{display:none}
 <span class="block text-[12px] mt-0.5 truncate" style="color:#999">{{ p.addr }}</span>
 </span>
 <span class="shrink-0 text-[11px] pt-0.5" style="color:#BBB">{{ p.dist }}</span>
+</div>
+</div>
+</form-field>
+<!-- 联系人 / 联系方式：与门店表单一致，非必填（仅填写时校验格式） -->
+<form-field label="联系人" :error="stationErr.contact" :counter="(stationForm.contact||'').length" counter-max="64">
+<input v-model="stationForm.contact" @input="stationErr.contact=''" type="text" maxlength="64" placeholder="请输入" class="w-full pl-3.5 pr-14 py-3 text-[15px]" style="caret-color:#2B3F5F" data-od-id="station-form-contact">
+</form-field>
+<form-field label="联系方式" bare :error="stationErr.phone">
+<div class="flex items-stretch gap-2.5">
+<div data-cp @click="openDialCode('station')" class="ff-box login-field-dial flex items-center justify-center" data-od-id="station-form-dial"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.dial||'+86' }}</span><span v-html="luci('chevron-down','w-3.5 h-3.5 text-[#9CA3AF]')"></span></div>
+<div class="ff-box flex-1 relative flex items-center min-w-0">
+<input v-model="stationForm.phone" @input="stationErr.phone=''" type="tel" maxlength="20" placeholder="请输入" class="w-full pl-3.5 pr-3 py-3 text-[15px]" style="caret-color:#2B3F5F" :style="stationErr.phone?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-phone">
 </div>
 </div>
 </form-field>
@@ -5428,8 +5430,8 @@ var _ma=Vue.createApp({
       storeForm.dial=phm?phm[1]:'+86';
       storeForm.phone=phm?phm[2]:ph;
       var hm=s?String(s.hours||'').split('-'):[];
-      storeForm.from=hhmmss(hm[0])||'08:00:00';
-      storeForm.to=hhmmss(hm[1])||'22:00:00';
+      storeForm.from=hhmmss(hm[0])||'09:00:00';
+      storeForm.to=hhmmss(hm[1])||'18:00:00';
       storeForm.stationId=s?(s.stationId||''):'';
       storeForm.services=s?(s.services||[]).slice():[];
       /* 门店封面：图片弹窗按 cabImgKind='store' 读写 storeFormImgs（单张），保存时整体写回门店记录 */
@@ -5466,10 +5468,10 @@ var _ma=Vue.createApp({
       var f=hmForm();
       var cur=hhmmss(which==='to'?f.to:f.from);
       var seg=cur?cur.split(':'):[];
-      var h=seg.length?parseInt(seg[0],10):(which==='to'?22:8);
+      var h=seg.length?parseInt(seg[0],10):(which==='to'?18:9);
       var mi=seg.length?parseInt(seg[1],10):0;
       var se=seg.length?parseInt(seg[2],10):0;
-      if(isNaN(h))h=(which==='to'?22:8);
+      if(isNaN(h))h=(which==='to'?18:9);
       if(isNaN(mi))mi=0;
       if(isNaN(se))se=0;
       storeHmDraft.hour=Math.min(Math.max(h,0),23);storeHmDraft.min=Math.min(Math.max(mi,0),59);storeHmDraft.sec=Math.min(Math.max(se,0),59);
@@ -5639,7 +5641,7 @@ var _ma=Vue.createApp({
       toastPush(f.id?'门店信息已保存':'门店已新增','success');
       if(mPage.value==='storeForm')closePage();
     }
-    /* ── 新增/编辑站点（对标门店表单：名称 / 营业时间 / 联系人 / 联系方式 / 站点封面 / 站点地址，六项均必填） ── */
+    /* ── 新增/编辑站点（对标门店表单：名称 / 营业时间 / 站点封面 / 站点地址 必填，联系人 / 联系方式 选填） ── */
     function stationErrClear(){Object.keys(stationErr).forEach(function(k){stationErr[k]=''})}
     function openStationForm(id){
       var s=id?stationOf(id):null;
@@ -5652,8 +5654,8 @@ var _ma=Vue.createApp({
       stationForm.dial=phm?phm[1]:'+86';
       stationForm.phone=phm?phm[2]:ph;
       var hm=s?String(s.hours||'').split('-'):[];
-      stationForm.from=hhmmss(hm[0])||'08:00:00';
-      stationForm.to=hhmmss(hm[1])||'22:00:00';
+      stationForm.from=hhmmss(hm[0])||'09:00:00';
+      stationForm.to=hhmmss(hm[1])||'18:00:00';
       stationFormImgs.value=s?(s.photos||[]).slice():[];
       stationErrClear();
       cabImgKind.value='station';cabImgScope.value='add';
@@ -5668,15 +5670,13 @@ var _ma=Vue.createApp({
       var hf=hhmmss(f.from),ht=hhmmss(f.to);
       if(!hf||!ht){stationErr.time='请选择营业时间';ok=false}
       else if(hf>=ht){stationErr.time='结束时间需晚于开始时间';ok=false}
-      if(!String(f.contact||'').trim()){stationErr.contact='请输入联系人';ok=false}
-      else if(String(f.contact||'').trim().length>64){stationErr.contact='联系人不能超过 64 个字符';ok=false}
+      if(String(f.contact||'').trim().length>64){stationErr.contact='联系人不能超过 64 个字符';ok=false}
       var phoneRaw=String(f.phone||'').trim();
-      if(!phoneRaw){stationErr.phone='请输入联系方式';ok=false}
-      else if(!/^[0-9+\- ]{6,20}$/.test(phoneRaw)){stationErr.phone='联系方式格式不正确';ok=false}
+      if(phoneRaw&&!/^[0-9+\- ]{6,20}$/.test(phoneRaw)){stationErr.phone='联系方式格式不正确';ok=false}
       if(!stationFormImgs.value.length){stationErr.photos='请上传站点封面';ok=false}
       if(!String(f.addr||'').trim()){stationErr.addr='请输入或选择站点地址';ok=false}
       if(!ok){storeErrScroll('mstation-form-page');return}
-      var hours=hf+'-'+ht,phoneFull=String(f.dial||'+86').trim()+' '+phoneRaw,photos=stationFormImgs.value.slice();
+      var hours=hf+'-'+ht,phoneFull=phoneRaw?(String(f.dial||'+86').trim()+' '+phoneRaw):'',photos=stationFormImgs.value.slice();
       if(f.id){
         var s=stationOf(f.id);
         if(s){s.name=f.name.trim();s.addr=f.addr.trim();s.contact=String(f.contact||'').trim();s.phone=phoneFull;s.hours=hours;s.photos=photos}
