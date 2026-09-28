@@ -842,7 +842,7 @@ body.host-single-m #root-user{display:none}
 <input v-model="idCardNo" @input="idCardErr=''" type="text" maxlength="64" placeholder="请输入证件号码" class="w-full pl-3.5 pr-12 py-3 text-[15px]" style="caret-color:#2B3F5F">
 </form-field>
 <div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>身份证照片</div>
+<div class="form-label"><span class="text-[#DC2626] mr-0.5">*</span>身份证照片</div>
 <div class="text-[11px] text-[#999] mb-2">请上传清晰证件照，避免反光（最多2张）</div>
 <div class="grid grid-cols-2 gap-3">
 <div v-for="i in 2" :key="'eddp'+i" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" :style="idPhotos[i-1]?{}:{background:'#fff',border:'1.5px dashed #D9DEE7'}" data-cp @click="idPhotos[i-1]?openIdPreview(i-1):openIdPicker('add')">
@@ -851,7 +851,7 @@ body.host-single-m #root-user{display:none}
 <div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openIdMore(i-1)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
 </template>
 <template v-else>
-<div class="absolute inset-0 flex flex-col items-center justify-center text-[#6B7280]"><span v-html="luci('plus','w-6 h-6')"></span><span class="text-[12px] mt-1">添加图片</span></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-[#6B7280]"><span v-html="luci('plus','w-6 h-6')"></span><span class="text-[12px] mt-1">上传图片</span></div>
 </template>
 </div>
 </div>
@@ -1975,10 +1975,12 @@ body.host-single-m #root-user{display:none}
 <span v-html="luci('file-text','w-7 h-7 text-[#2F6FEB]')"></span>
 <span class="text-[13px] font-medium" style="color:#111">使用记录</span>
 </div>
+<!-- 机柜图片入口（暂时注释，恢复时删掉本注释包裹即可）：
 <div data-cp @click="openCabImgs()" class="flex flex-col items-center gap-2 py-1 cursor-pointer active:opacity-70" data-od-id="cab-entry-imgs">
 <span v-html="luci('images','w-7 h-7 text-[#7C5CFC]')"></span>
 <span class="text-[13px] font-medium" style="color:#111">机柜图片</span>
 </div>
+-->
 </div>
 </kv-card>
 <kv-card title="仓位状态" class="mb-3">
@@ -2034,6 +2036,7 @@ body.host-single-m #root-user{display:none}
 <span class="shrink-0" v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
 </div>
 </form-field>
+<!-- 机柜图片（编辑换电柜 · 暂时注释，恢复时删掉本注释包裹即可）：
 <div class="form-row">
 <div class="form-label">机柜图片</div>
 <div class="text-[11px] text-[#999] mb-2">最多上传10张</div>
@@ -2044,11 +2047,12 @@ body.host-single-m #root-user{display:none}
 </div>
 <div v-if="cabImgList.length<10" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#fff;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="cab-edit-img">
 <span v-html="luci('plus','w-6 h-6')"></span>
-<span class="text-[12px] mt-1">添加图片</span>
+<span class="text-[12px] mt-1">上传图片</span>
 <span class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabImgList.length }}/10</span>
 </div>
 </div>
 </div>
+-->
 </div>
 </template>
 </div>
@@ -2136,6 +2140,7 @@ body.host-single-m #root-user{display:none}
 <span class="shrink-0" v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
 </div>
 </form-field>
+<!-- 机柜图片（新增换电柜 · 暂时注释，恢复时删掉本注释包裹即可）：
 <div class="form-row">
 <div class="form-label">机柜图片</div>
 <div class="grid grid-cols-3 gap-2.5">
@@ -2145,11 +2150,12 @@ body.host-single-m #root-user{display:none}
 </div>
 <div v-if="cabImgList.length<10" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#fff;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="cab-add-img">
 <span v-html="luci('plus','w-6 h-6')"></span>
-<span class="text-[12px] mt-1">添加图片</span>
+<span class="text-[12px] mt-1">上传图片</span>
 <span class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabImgList.length }}/10</span>
 </div>
 </div>
 </div>
+-->
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5 z-[20]">
@@ -2205,7 +2211,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </bottom-sheet>
 <!-- 机柜图片拍照/相册选择器 -->
-<bottom-sheet :open="showCabImgPicker" :title="'添加'+cabImgLabel" :mask-z="750" oid="cab-img-picker-mask" panel-oid="cab-img-picker-sheet" @close="()=>showCabImgPicker=false">
+<bottom-sheet :open="showCabImgPicker" title="上传图片" :mask-z="750" oid="cab-img-picker-mask" panel-oid="cab-img-picker-sheet" @close="()=>showCabImgPicker=false">
 <div class="px-5 pt-1">
 <div class="grid grid-cols-2 gap-2.5">
 <div data-cp @click="pickCabImgSource('camera')" class="flex flex-col items-center justify-center py-5 rounded-xl cursor-pointer active:bg-[#F6F7F9] transition-colors" style="border:1.5px solid #E5E5E5">
@@ -2510,7 +2516,7 @@ body.host-single-m #root-user{display:none}
 <div class="flex-1 overflow-y-auto px-5 pt-4 pb-10 hide-scroll">
 <div class="flex items-center gap-2 h-10 rounded-xl px-3 mb-3" style="background:#fff;border:1px solid #E5E5E5">
 <span v-html="luci('search','w-4 h-4 text-[#BBB]')"></span>
-<input v-model="storeQ" type="text" placeholder="搜索门店名称 / 地址" class="flex-1 h-full bg-transparent text-[13px] outline-none" style="color:#111;border:0">
+<input v-model="storeQ" type="text" placeholder="搜索门店名称" class="flex-1 h-full bg-transparent text-[13px] outline-none" style="color:#111;border:0">
 <span v-if="storeQ" data-cp @click="storeQ=''" class="cursor-pointer shrink-0"><span v-html="luci('x','w-4 h-4 text-[#CCC]')"></span></span>
 </div>
 <empty-state v-if="!storeView.length" icon="store" text="暂无门店" sub="可点击右上角新增门店" root-class="flex flex-col items-center justify-center py-14" circle-class="w-14 h-14 rounded-full flex items-center justify-center mb-4 bg-[#F0F0F0]" icon-class="w-7 h-7 text-[#BBB]" text-class="text-[14px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
@@ -2518,7 +2524,7 @@ body.host-single-m #root-user{display:none}
 <template #title><span class="min-w-0 truncate">{{ s.name }}</span></template>
 <kv-row label="门店地址" :value="s.addr"></kv-row>
 <kv-row label="营业时间" :value="s.hours||'-'"></kv-row>
-<kv-row label="关联站点" :value="s.stationId?stationNameOf(s.stationId):'未关联'"></kv-row>
+<kv-row label="关联站点" :value="s.stationId?stationNameOf(s.stationId):'-'"></kv-row>
 <template #footer><div class="card-actions -mx-4 -mb-3.5 rounded-b-2xl overflow-hidden"><div class="card-action-btn" style="color:var(--link)" data-cp @click.stop="openStoreForm(s.id)" :data-od-id="'store-edit-'+s.id">编辑</div></div></template>
 </kv-card>
 </div>
@@ -2538,18 +2544,17 @@ body.host-single-m #root-user{display:none}
 <kv-row label="关联站点">
 <template #value>
 <span v-if="curStore.stationId" data-cp @click="openStationDetail(curStore.stationId)" class="cursor-pointer active:opacity-70" style="color:var(--link)" data-od-id="store-station-link">{{ stationNameOf(curStore.stationId) }}</span>
-<span v-else>未关联</span>
+<span v-else>-</span>
 </template>
 </kv-row>
 </kv-card>
-<!-- 门店封面：仅 1 张，点击看大图（复用图片预览页，cabImgKind='store' → 标签「门店封面」） -->
-<kv-card title="门店封面" class="mb-3">
-<div v-if="storePhotoView.length" class="w-[96px]">
+<!-- 门店封面：仅 1 张，点击看大图（复用图片预览页，cabImgKind='store' → 标签「门店封面」）；无封面时整卡不显示 -->
+<kv-card v-if="storePhotoView.length" title="门店封面" class="mb-3">
+<div class="w-[96px]">
 <div v-for="(p,pi) in storePhotoView" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer active:opacity-85" data-cp @click="openStoreDetailImg(pi)" :data-od-id="'store-photo-'+pi">
 <div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
 </div>
 </div>
-<div v-else class="rounded-xl px-4 py-5 text-center text-[12px]" style="background:#F6F7F9;color:#999">暂无门店封面</div>
 </kv-card>
 </template>
 </div>
@@ -2565,9 +2570,41 @@ body.host-single-m #root-user{display:none}
 <form-field label="营业时间" required bare :error="storeErr.time">
 <div class="flex items-center gap-2">
 <div role="button" data-cp @click="openStoreHmPick('from')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="storeErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-from"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.from }}</span></div>
-<span class="shrink-0" v-html="luci('arrow-right','w-4 h-4 text-[#BBB]')"></span>
+<span class="shrink-0 text-[18px] font-semibold" style="color:#BBB">~</span>
 <div role="button" data-cp @click="openStoreHmPick('to')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="storeErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="store-form-to"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ storeForm.to }}</span></div>
-<span v-html="luci('clock','w-4 h-4 text-[#BBB]')"></span>
+</div>
+</form-field>
+<form-field label="门店封面" required bare :error="storeErr.photos">
+<div class="grid grid-cols-3 gap-2.5">
+<div v-for="(p,pi) in cabImgList" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" data-cp @click="openCabImgPreview(pi)">
+<div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
+<div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openCabImgMore(pi)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
+</div>
+<div v-if="cabImgList.length<cabImgMax" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#fff;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="store-form-img">
+<span v-html="luci('plus','w-6 h-6')"></span>
+<span class="text-[12px] mt-1">{{ cabImgAddLabel }}</span>
+<span v-if="cabImgKind==='cab'" class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabImgList.length }}/10</span>
+</div>
+</div>
+</form-field>
+<form-field label="门店地址" required bare :error="storeErr.addr">
+<!-- 本行用 bare + 显式 .ff-box：.ff-box 是 flex 行容器，联想下拉若与输入框同处一个 .ff-box 内会被挤到右侧 -->
+<div class="ff-box" :class="storeErr.addr?'is-error':''">
+<input :value="storeForm.addr" @input="onAddrInput('store',$event)" @focus="storeAddrSugOpen=true" @blur="closeAddrSug('store')" type="text" placeholder="请输入地址或选择地址" class="w-full pl-3.5 pr-20 py-3 text-[15px]" data-od-id="store-form-addr">
+<div class="absolute right-2.5 flex items-center gap-1">
+<div v-if="storeForm.addr" data-cp @click="clearAddr('store')" class="w-7 h-7 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-od-id="store-form-addr-clear"><span v-html="luci('x','w-4 h-4')"></span></div>
+<div data-cp @click="openStoreMap('store')" class="w-8 h-8 flex items-center justify-center cursor-pointer shrink-0" style="color:#2B3F5F" data-od-id="store-form-addr-map" title="地图选择地址"><span v-html="luci('map-pin','w-[18px] h-[18px]')"></span></div>
+</div>
+</div>
+<!-- 输入即联想：候选地址内联下拉（表单内容区是滚动容器，浮层会被裁剪，故内联撑高） -->
+<div v-if="storeAddrSugOpen&&storeAddrSugList.length" class="mt-1.5 bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="store-form-addr-sug">
+<div v-for="(p,pi) in storeAddrSugList" :key="'sa'+pi" data-cp @mousedown.prevent @click="pickAddrSug('store',p)" class="flex items-start gap-3 px-3.5 py-3 cursor-pointer active:bg-[#F6F7F9]" :style="pi?{borderTop:'1px solid #F2F3F5'}:null" :data-od-id="'store-form-addr-sug-'+pi">
+<span class="flex-1 min-w-0">
+<span class="block text-[14px] truncate" style="color:#111">{{ p.name }}</span>
+<span class="block text-[12px] mt-0.5 truncate" style="color:#999">{{ p.addr }}</span>
+</span>
+<span class="shrink-0 text-[11px] pt-0.5" style="color:#BBB">{{ p.dist }}</span>
+</div>
 </div>
 </form-field>
 <form-field label="联系人" :error="storeErr.contact" :counter="(storeForm.contact||'').length" counter-max="64">
@@ -2581,7 +2618,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </form-field>
-<form-field label="关联站点" box-class="ff-select">
+<form-field label="关联站点" box-class="ff-select" :error="storeErr.station">
 <div data-cp @click="openStoreStationPick()" class="w-full flex items-center p-3 cursor-pointer active:bg-[#F6F7F9]" data-od-id="store-form-station">
 <span class="flex-1 min-w-0">
 <span v-if="storeForm.stationId" class="block text-[15px] font-medium truncate" style="color:#111">{{ stationNameOf(storeForm.stationId) }}</span>
@@ -2600,38 +2637,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </div>
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>门店封面</div>
-<div class="grid grid-cols-3 gap-2.5">
-<div v-for="(p,pi) in cabImgList" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" data-cp @click="openCabImgPreview(pi)">
-<div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
-<div class="absolute bottom-0 right-0 w-7 h-7 flex items-center justify-center text-white" style="background:rgba(0,0,0,.45)" data-cp @click.stop="openCabImgMore(pi)"><span v-html="luci('more-horizontal','w-4 h-4')"></span></div>
-</div>
-<div v-if="cabImgList.length<cabImgMax" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer flex flex-col items-center justify-center text-[#6B7280]" style="background:#fff;border:1.5px dashed #D9DEE7" data-cp @click="openCabImgPicker('add')" data-od-id="store-form-img">
-<span v-html="luci('plus','w-6 h-6')"></span>
-<span class="text-[12px] mt-1">{{ cabImgAddLabel }}</span>
-<span v-if="cabImgKind==='cab'" class="text-[10px] mt-0.5 text-[#B0B8C4]">{{ cabImgList.length }}/10</span>
-</div>
-</div>
-<div v-if="storeErr.photos" class="form-hint">{{ storeErr.photos }}</div>
-</div>
-<form-field label="门店地址" required :error="storeErr.addr">
-<input :value="storeForm.addr" @input="onAddrInput('store',$event)" @focus="storeAddrSugOpen=true" @blur="closeAddrSug('store')" type="text" placeholder="请输入地址或选择地址" class="w-full pl-3.5 pr-20 py-3 text-[15px]" data-od-id="store-form-addr">
-<div class="absolute right-2.5 flex items-center gap-1">
-<div v-if="storeForm.addr" data-cp @click="clearAddr('store')" class="w-7 h-7 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-od-id="store-form-addr-clear"><span v-html="luci('x','w-4 h-4')"></span></div>
-<div data-cp @click="openStoreMap('store')" class="w-8 h-8 flex items-center justify-center cursor-pointer shrink-0" style="color:#2B3F5F" data-od-id="store-form-addr-map" title="地图选择地址"><span v-html="luci('map-pin','w-[18px] h-[18px]')"></span></div>
-</div>
-<!-- 输入即联想：候选地址内联下拉（表单内容区是滚动容器，浮层会被裁剪，故内联撑高） -->
-<div v-if="storeAddrSugOpen&&storeAddrSugList.length" class="mt-1.5 bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="store-form-addr-sug">
-<div v-for="(p,pi) in storeAddrSugList" :key="'sa'+pi" data-cp @mousedown.prevent @click="pickAddrSug('store',p)" class="flex items-start gap-3 px-3.5 py-3 cursor-pointer active:bg-[#F6F7F9]" :style="pi?{borderTop:'1px solid #F2F3F5'}:null" :data-od-id="'store-form-addr-sug-'+pi">
-<span class="flex-1 min-w-0">
-<span class="block text-[14px] truncate" style="color:#111">{{ p.name }}</span>
-<span class="block text-[12px] mt-0.5 truncate" style="color:#999">{{ p.addr }}</span>
-</span>
-<span class="shrink-0 text-[11px] pt-0.5" style="color:#BBB">{{ p.dist }}</span>
-</div>
-</div>
-</form-field>
+
 </div>
 </div>
 <div class="absolute bottom-7 left-5 right-5 z-[20]">
@@ -2698,7 +2704,7 @@ body.host-single-m #root-user{display:none}
 <kv-row label="站点地址" :value="s.addr"></kv-row>
 <kv-row label="营业时间" :value="s.hours||'-'"></kv-row>
 <kv-row label="换电柜" :value="cabsOfStation(s.id).length + ' 台'"></kv-row>
-<kv-row label="所属门店" :value="storeOfStation(s.id)?storeOfStation(s.id).name:'未关联'"></kv-row>
+<kv-row label="所属门店" :value="storeOfStation(s.id)?storeOfStation(s.id).name:'-'"></kv-row>
 <template #footer><div class="card-actions -mx-4 -mb-3.5 rounded-b-2xl overflow-hidden"><div class="card-action-btn" style="color:var(--link)" data-cp @click.stop="openStationForm(s.id)" :data-od-id="'station-edit-'+s.id">编辑</div></div></template>
 </kv-card>
 </div>
@@ -2716,16 +2722,15 @@ body.host-single-m #root-user{display:none}
 <kv-row label="联系方式" :value="curStation.phone||'-'"></kv-row>
 <kv-row label="营业时间" :value="curStation.hours||'-'"></kv-row>
 <kv-row label="换电柜" :value="cabsOfStation(curStation.id).length + ' 台'"></kv-row>
-<kv-row label="所属门店" :value="storeOfStation(curStation.id)?storeOfStation(curStation.id).name:'未关联门店'"></kv-row>
+<kv-row label="所属门店" :value="storeOfStation(curStation.id)?storeOfStation(curStation.id).name:'-'"></kv-row>
 </kv-card>
-<!-- 站点封面：仅 1 张，点击看大图（复用图片预览页，cabImgKind='station' → 标签「站点封面」） -->
-<kv-card title="站点封面" class="mb-3">
-<div v-if="stationPhotoView.length" class="w-[96px]">
+<!-- 站点封面：仅 1 张，点击看大图（复用图片预览页，cabImgKind='station' → 标签「站点封面」）；无封面时整卡不显示 -->
+<kv-card v-if="stationPhotoView.length" title="站点封面" class="mb-3">
+<div class="w-[96px]">
 <div v-for="(p,pi) in stationPhotoView" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer active:opacity-85" data-cp @click="openStationDetailImg(pi)" :data-od-id="'station-photo-'+pi">
 <div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
 </div>
 </div>
-<div v-else class="rounded-xl px-4 py-5 text-center text-[12px]" style="background:#F6F7F9;color:#999">暂无站点封面</div>
 </kv-card>
 <kv-card title="换电柜" class="mb-3">
 <template #extra><span data-cp @click="openBindCab(curStation.id)" class="text-[12px] font-medium cursor-pointer shrink-0" style="color:#2F6FEB" data-od-id="station-bind-entry">管理绑定</span></template>
@@ -2881,26 +2886,22 @@ body.host-single-m #root-user{display:none}
 <!-- 门店地址「当前定位」两层校验链：定位授权（App 级）→ 定位服务（系统级），均就绪才取值 -->
 <confirm-dialog :open="mShowLocAppAuth" z="2010" oid="m-loc-app-auth-modal" title="允许“雅迪换电”使用你的位置信息吗？" desc="您的位置信息将用于定位门店地址" :cancel-text="'不允许'" :confirm-text="'允许'" confirm-bg="var(--accent)" @close="mDenyLocAppAuth()" @confirm="mAllowLocAppAuth()"></confirm-dialog>
 <confirm-dialog :open="mShowLocAuth" z="1800" oid="m-loc-service-modal" title="定位服务" desc="请在系统设置中开启定位服务，以自动获取门店地址" :cancel-text="'取消'" :confirm-text="'去开启'" confirm-bg="var(--accent)" @close="mCancelLocService()" @confirm="mAllowLocAuth()"></confirm-dialog>
-<!-- 门店关联站点（门店表单用：已被其他门店关联的站点禁用；再次点击已选 = 取消关联） -->
+<!-- 门店关联站点（门店表单用：已被其他门店关联的站点不展示；再次点击已选 = 取消关联） -->
 <bottom-sheet :open="storeStationSheet" title="选择关联站点" :mask-z="750" max-h="65%" oid="store-station-mask" panel-oid="store-station-sheet" @close="closeStoreStationPick()">
 <div class="sheet-search">
 <span v-html="luci('search','w-4 h-4 text-[#999]')"></span>
 <input v-model="storeStationQ" type="text" placeholder="搜索站点名称" class="flex-1 bg-transparent border-none text-sm outline-none min-w-0 placeholder:text-[#999]">
 </div>
 <div class="flex-1 overflow-y-auto">
-<div v-if="!storeStationQ" data-cp @click="storeForm.stationId='';storeStationSheet=false" class="flex items-center px-5 py-4 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #EDEDED" data-od-id="store-station-none">
-<div class="flex-1 min-w-0"><div class="text-[15px] font-medium truncate" :style="!storeForm.stationId?{color:'var(--accent)'}:{color:'#111'}">暂不关联站点</div><div class="text-[12px] mt-0.5 truncate" style="color:#999">门店可先不关联，后续再补</div></div>
-<span v-if="!storeForm.stationId" v-html="luci('check','w-4 h-4 text-[var(--accent)]')"></span>
-</div>
-<div v-for="o in storeStationList" :key="o.value" data-cp @click="pickStoreStation(o)" class="flex items-center px-5 py-4 cursor-pointer active:bg-[#F6F7F9]" :class="o.disabled?'opacity-45':''" :style="storeForm.stationId===o.value?{background:'#EBF1FD',borderBottom:'1px solid #EDEDED'}:{borderBottom:'1px solid #EDEDED'}" :data-od-id="'store-station-row-'+o.value">
+<div v-for="o in storeStationList" :key="o.value" data-cp @click="pickStoreStation(o)" class="flex items-center px-5 py-4 cursor-pointer active:bg-[#F6F7F9]" :style="storeForm.stationId===o.value?{background:'#EBF1FD',borderBottom:'1px solid #EDEDED'}:{borderBottom:'1px solid #EDEDED'}" :data-od-id="'store-station-row-'+o.value">
 <div class="flex-1 min-w-0">
 <div class="text-[15px] font-medium truncate" :style="storeForm.stationId===o.value?{color:'var(--accent)'}:{color:'#111'}">{{ o.label }}</div>
-<div class="text-[12px] mt-0.5 truncate" style="color:#999">{{ o.disabled?'已被其他门店关联':stationAddrOf(o.value) }}</div>
+<div class="text-[12px] mt-0.5 truncate" style="color:#999">{{ stationAddrOf(o.value) }}</div>
 </div>
 <span v-if="storeForm.stationId===o.value" v-html="luci('check','w-4 h-4 text-[var(--accent)]')"></span>
-<span v-else-if="!o.disabled" v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
+<span v-else v-html="luci('chevron-right','w-4 h-4 text-[#999]')"></span>
 </div>
-<empty-state v-if="!storeStationList.length" icon="map-pin" text="未找到站点" sub="换个关键词试试" root-class="flex flex-col items-center justify-center py-10" circle-class="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-[#F0F0F0]" icon-class="w-6 h-6 text-[#BBB]" text-class="text-[13px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
+<empty-state v-if="!storeStationList.length" icon="map-pin" text="未找到站点" :sub="storeStationQ?'换个关键词试试':'暂无可关联站点'" root-class="flex flex-col items-center justify-center py-10" circle-class="w-12 h-12 rounded-full flex items-center justify-center mb-3 bg-[#F0F0F0]" icon-class="w-6 h-6 text-[#BBB]" text-class="text-[13px] font-semibold text-[#333]" sub-class="text-[12px] text-[#999] mt-1"></empty-state>
 </div>
 </bottom-sheet>
 <!-- 营业时间选择（时/分/秒三滚轮，B 型；开始与结束时间共用，滚动停 80ms 吸附到整行；取值与回显统一 HH:MM:SS） -->
@@ -2937,9 +2938,8 @@ body.host-single-m #root-user{display:none}
 <form-field label="营业时间" required bare :error="stationErr.time">
 <div class="flex items-center gap-2">
 <div role="button" data-cp @click="openStoreHmPick('from','station')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="stationErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-from"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.from }}</span></div>
-<span class="shrink-0" v-html="luci('arrow-right','w-4 h-4 text-[#BBB]')"></span>
+<span class="shrink-0 text-[18px] font-semibold" style="color:#BBB">~</span>
 <div role="button" data-cp @click="openStoreHmPick('to','station')" class="ff-box flex items-center justify-center px-4 py-3 cursor-pointer select-none active:bg-[#EEE]" :style="stationErr.time?{boxShadow:'inset 0 0 0 1px #DC2626'}:null" data-od-id="station-form-to"><span class="text-[15px] font-semibold tabular-nums" style="color:#111">{{ stationForm.to }}</span></div>
-<span v-html="luci('clock','w-4 h-4 text-[#BBB]')"></span>
 </div>
 </form-field>
 <form-field label="联系人" required :error="stationErr.contact" :counter="(stationForm.contact||'').length" counter-max="64">
@@ -2953,8 +2953,7 @@ body.host-single-m #root-user{display:none}
 </div>
 </div>
 </form-field>
-<div class="form-row">
-<div class="form-label"><span class="text-[#FF4343] mr-0.5">*</span>站点封面</div>
+<form-field label="站点封面" required bare :error="stationErr.photos">
 <div class="grid grid-cols-3 gap-2.5">
 <div v-for="(p,pi) in cabImgList" :key="p.id" class="relative h-[96px] rounded-xl overflow-hidden cursor-pointer" data-cp @click="openCabImgPreview(pi)">
 <div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#2B3F5F 0%,#3E5678 100%)"><span v-html="luci('image','w-8 h-8 text-white/80')"></span></div>
@@ -2965,13 +2964,15 @@ body.host-single-m #root-user{display:none}
 <span class="text-[12px] mt-1">{{ cabImgAddLabel }}</span>
 </div>
 </div>
-<div v-if="stationErr.photos" class="form-hint">{{ stationErr.photos }}</div>
-</div>
-<form-field label="站点地址" required :error="stationErr.addr">
+</form-field>
+<form-field label="站点地址" required bare :error="stationErr.addr">
+<!-- 同门店地址：bare + 显式 .ff-box，避免联想下拉被 flex 行容器挤到输入框右侧（联想下拉内联撑高） -->
+<div class="ff-box" :class="stationErr.addr?'is-error':''">
 <input :value="stationForm.addr" @input="onAddrInput('station',$event)" @focus="stationAddrSugOpen=true" @blur="closeAddrSug('station')" type="text" placeholder="请输入地址或选择地址" class="w-full pl-3.5 pr-20 py-3 text-[15px]" data-od-id="station-form-addr">
 <div class="absolute right-2.5 flex items-center gap-1">
 <div v-if="stationForm.addr" data-cp @click="clearAddr('station')" class="w-7 h-7 flex items-center justify-center cursor-pointer text-[#6B6B6B]" data-od-id="station-form-addr-clear"><span v-html="luci('x','w-4 h-4')"></span></div>
 <div data-cp @click="openStoreMap('station')" class="w-8 h-8 flex items-center justify-center cursor-pointer shrink-0" style="color:#2B3F5F" data-od-id="station-form-addr-map" title="地图选择地址"><span v-html="luci('map-pin','w-[18px] h-[18px]')"></span></div>
+</div>
 </div>
 <div v-if="stationAddrSugOpen&&stationAddrSugList.length" class="mt-1.5 bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04)" data-od-id="station-form-addr-sug">
 <div v-for="(p,pi) in stationAddrSugList" :key="'sta'+pi" data-cp @mousedown.prevent @click="pickAddrSug('station',p)" class="flex items-start gap-3 px-3.5 py-3 cursor-pointer active:bg-[#F6F7F9]" :style="pi?{borderTop:'1px solid #F2F3F5'}:null" :data-od-id="'station-form-addr-sug-'+pi">
@@ -3498,9 +3499,10 @@ function registerSheetKit(app){
   app.component('form-field',{
     name:'form-field',
     props:{label:{type:String,default:''},required:{default:false},error:{type:String,default:''},hint:{type:String,default:''},counter:{default:null},counterMax:{default:''},disabled:{default:false},readonly:{default:false},bare:{default:false},oid:{type:String,default:''},boxClass:{type:String,default:''}},
-    /* bare 三态：裸属性（''）按 HTML 语义视为 true；:bare="false" 关闭（同 kv-row 的 divider 处理） */
-    computed:{bareOn:function(){var b=this.bare;return b===''?true:!!b}},
-    template:'<div class="ff-row" :data-od-id="oid||undefined"><div v-if="label||$slots.label" class="ff-label"><slot name="label"><span v-if="required" class="ff-star">*</span><span>{{ label }}</span></slot></div><div :class="bareOn?\'ff-bare\':[\'ff-box\',boxClass,disabled?\'is-disabled\':\'\',error?\'is-error\':\'\']"><slot></slot><span v-if="counter!==null&&counter!==undefined" class="ff-counter">{{ counter }}{{ counterMax?(\'/\'+counterMax):\'\' }}</span></div><div v-if="error" class="ff-hint is-err">{{ error }}</div><div v-else-if="hint" class="ff-hint">{{ hint }}</div></div>'
+    /* bare / required 三态：裸属性（''）按 HTML 语义视为 true；显式关闭写 :bare="false" / :required="false"（同 kv-row 的 divider 处理）
+       ⚠️ required 不声明 Boolean 类型（避免 '' 被布尔转换），故必须走 requiredOn 判真，否则裸写 required 不会渲染必填星号 */
+    computed:{bareOn:function(){var b=this.bare;return b===''?true:!!b},requiredOn:function(){var r=this.required;return r===''?true:!!r}},
+    template:'<div class="ff-row" :data-od-id="oid||undefined"><div v-if="label||$slots.label" class="ff-label"><slot name="label"><span v-if="requiredOn" class="ff-star">*</span><span>{{ label }}</span></slot></div><div :class="bareOn?\'ff-bare\':[\'ff-box\',boxClass,disabled?\'is-disabled\':\'\',error?\'is-error\':\'\']"><slot></slot><span v-if="counter!==null&&counter!==undefined" class="ff-counter">{{ counter }}{{ counterMax?(\'/\'+counterMax):\'\' }}</span></div><div v-if="error" class="ff-hint is-err">{{ error }}</div><div v-else-if="hint" class="ff-hint">{{ hint }}</div></div>'
   });
   /* TabBar：底部导航（图标+文字，active 高亮，支持权限 hidden 与自定义 go） */
   app.component('tab-bar',{
@@ -5097,13 +5099,13 @@ var _ma=Vue.createApp({
     /* ── 新增换电柜（对标租车「新增车辆」：编号可输入/扫码、名称选填、站点选填、机柜图片最多10张） ── */
     var cabAddNo=Vue.ref(''),cabAddName=Vue.ref(''),cabAddNoErr=Vue.ref('');
     var cabAddImgs=Vue.ref([]);
-    /* 图片列表作用域：新增页 / 编辑页共用同一套「添加图片 / 更多操作 / 预览」弹窗，按作用域读写成对应列表 */
+    /* 图片列表作用域：新增页 / 编辑页共用同一套「上传图片 / 更多操作 / 预览」弹窗，按作用域读写成对应列表 */
     var cabImgScope=Vue.ref('add'),cabEditImgs=Vue.ref([]);
     /* 图片归属：'cab'=机柜图片（最多 10 张）/ 'store'=门店封面 / 'station'=站点封面（后两者仅 1 张）——
-       门店与站点表单复用同一套「添加图片 / 更多操作 / 预览」弹窗与预览页，仅归属、张数上限与文案不同 */
+       门店与站点表单复用同一套「上传图片 / 更多操作 / 预览」弹窗与预览页，仅归属、张数上限与文案不同 */
     var cabImgKind=Vue.ref('cab'),storeFormImgs=Vue.ref([]);
     var cabImgMax=Vue.computed(function(){return cabImgKind.value==='cab'?10:1});
-    var cabImgAddLabel=Vue.computed(function(){return cabImgKind.value==='cab'?'添加图片':(cabImgKind.value==='station'?'上传站点封面':'上传封面')});
+    var cabImgAddLabel=Vue.computed(function(){return '上传图片'});
     var cabImgList=Vue.computed(function(){
       if(cabImgKind.value==='store')return storeFormImgs.value;
       if(cabImgKind.value==='station')return stationFormImgs.value;
@@ -5191,9 +5193,9 @@ var _ma=Vue.createApp({
     function doCabImgReupload(){var i=cabImgActionTarget.value;if(i==null)return;var arr=cabImgList.value.slice();if(arr[i])arr[i]={id:Date.now()+'-'+Math.random().toString(36).slice(2,7),time:new Date().toLocaleString('zh-CN',{hour12:false}).replace(/\//g,'-')};cabImgSet(arr);cabImgActionTarget.value=null}
     function cabImgActionDelete(){var i=cabImgActionTarget.value;if(i==null)return;var arr=cabImgList.value.slice();arr.splice(i,1);cabImgSet(arr);showCabImgAction.value=false;cabImgActionTarget.value=null;toastPush('图片已删除')}
     function submitCabAdd(){var no=(cabAddNo.value||'').trim();if(!no){cabAddNoErr.value='请输入机柜编号';return}
-      /* 保存结果三分支由原型操作「保存结果」控制：失败两分支仅 toast 提示并停留当前页，不写入数据 */
-      if(demoCabAddResult.value==='notFound'){toastPush('机柜编码不存在','error');return}
-      if(demoCabAddResult.value==='used'){toastPush('机柜编码已被使用','error');return}
+      /* 保存结果三分支由原型操作「保存结果」控制：失败两分支只写行内错误并停留当前页（不弹 toast），不写入数据 */
+      if(demoCabAddResult.value==='notFound'){cabAddNoErr.value='机柜编码不存在';return}
+      if(demoCabAddResult.value==='used'){cabAddNoErr.value='机柜编码已被使用';return}
       var now=nowRecStr();var rec={no:no,name:(cabAddName.value||'').trim(),stationId:cabAddStationId.value||'',model:'',doors:0,bizOnline:false,netOnline:false,fault:false,alarm:false,enabled:true,slots:[],imgs:cabAddImgs.value.slice(),createdAt:now,updatedAt:now,flow:'0 M',power:'0 kw.h'};cabinets.value.unshift(rec);toastPush('新增成功','success');closeCabAdd()}
     /* ── 新增电池（对标「新增换电柜」的极简版：仅电池编号一个字段，编号可输入 / 扫码录入） ── */
     var battAddNo=Vue.ref(''),battAddNoErr=Vue.ref('');
@@ -5383,7 +5385,7 @@ var _ma=Vue.createApp({
 
     /* ── 门店表单（全屏页，对标「新增换电柜」：名称 / 营业时间（时/分/秒三滚轮，值 HH:MM:SS）/ 联系人（选填）/ 联系电话（区号 + 选填）/ 关联站点（弹窗）/ 关键业务（多选）/ 门店封面（复用图片弹窗，仅 1 张）/ 门店地址（输入联想 + 地图选点 + 定位） ── */
     var storeForm=Vue.reactive({id:'',name:'',addr:'',contact:'',phone:'',dial:'+86',from:'',to:'',stationId:'',services:[]});
-    var storeErr=Vue.reactive({name:'',time:'',contact:'',phone:'',photos:'',addr:''});
+    var storeErr=Vue.reactive({name:'',time:'',contact:'',phone:'',photos:'',addr:'',station:''});
     var stationForm=Vue.reactive({id:'',name:'',addr:'',contact:'',phone:'',dial:'+86',from:'',to:''});
     var stationErr=Vue.reactive({name:'',time:'',contact:'',phone:'',photos:'',addr:''});
     var stationFormImgs=Vue.ref([]);
@@ -5466,11 +5468,15 @@ var _ma=Vue.createApp({
         if(kind==='sec')storeHmDraft.sec=storeHmSecs[Math.min(Math.max(idx,0),storeHmSecs.length-1)];
       },80);
     }
-    /* 关联站点：底部弹窗选择（已被其他门店关联的站点禁用；再次点击已选 = 取消关联） */
+    /* 关联站点：底部弹窗选择（已被其他门店关联的站点不展示；再次点击已选 = 取消关联）
+       注意：本门店自己已关联的站点仍会列出（stationTaken 排除自身），否则无法从列表里取消关联 */
     var storeStationSheet=Vue.ref(false),storeStationQ=Vue.ref('');
     var storeStationList=Vue.computed(function(){
       var q=(storeStationQ.value||'').trim().toLowerCase();
-      return storeStationOptions(storeForm.id).filter(function(o){return !q||((o.label||'')+' '+(stationAddrOf(o.value)||'')).toLowerCase().indexOf(q)>-1});
+      return storeStationOptions(storeForm.id).filter(function(o){
+        if(o.disabled)return false;
+        return !q||((o.label||'')+' '+(stationAddrOf(o.value)||'')).toLowerCase().indexOf(q)>-1;
+      });
     });
     function openStoreStationPick(){storeStationQ.value='';storeStationSheet.value=true}
     function closeStoreStationPick(){storeStationSheet.value=false}
@@ -5573,19 +5579,30 @@ var _ma=Vue.createApp({
       f.addr=v;addrErr(t).addr='';addrSugOpen(t).value=false;
       if(mPage.value==='storeMap')closePage();
     }
+    /* 保存校验：一次性校验全部字段（不遇错即断），{表单 oid} 用于把首个错误行滚入视野 */
+    function storeErrScroll(oid){
+      Vue.nextTick(function(){
+        var pg=document.querySelector('[data-od-id="'+oid+'"]');
+        if(!pg)return;
+        var h=pg.querySelector('.ff-hint.is-err');
+        if(h&&h.scrollIntoView)h.scrollIntoView({block:'center'});
+      });
+    }
     function saveStore(){
       var f=storeForm;storeClearErr();
-      if(!String(f.name||'').trim()){storeErr.name='请输入门店名称';toastPush('请输入门店名称');return}
+      var ok=true;
+      if(!String(f.name||'').trim()){storeErr.name='请输入门店名称';ok=false}
       var hf=hhmmss(f.from),ht=hhmmss(f.to);
-      if(!hf||!ht){storeErr.time='请选择营业时间';toastPush('请选择营业时间');return}
-      if(hf>=ht){storeErr.time='结束时间需晚于开始时间';toastPush('结束时间需晚于开始时间');return}
-      if(String(f.contact||'').trim().length>64){storeErr.contact='联系人不能超过 64 个字符';toastPush('联系人不能超过 64 个字符');return}
+      if(!hf||!ht){storeErr.time='请选择营业时间';ok=false}
+      else if(hf>=ht){storeErr.time='结束时间需晚于开始时间';ok=false}
+      if(String(f.contact||'').trim().length>64){storeErr.contact='联系人不能超过 64 个字符';ok=false}
       var phoneRaw=String(f.phone||'').trim();
-      if(phoneRaw&&!/^[0-9+\- ]{6,20}$/.test(phoneRaw)){storeErr.phone='联系电话格式不正确';toastPush('联系电话格式不正确');return}
+      if(phoneRaw&&!/^[0-9+\- ]{6,20}$/.test(phoneRaw)){storeErr.phone='联系电话格式不正确';ok=false}
+      if(!storeFormImgs.value.length){storeErr.photos='请上传门店封面';ok=false}
+      if(!String(f.addr||'').trim()){storeErr.addr='请输入或选择门店地址';ok=false}
+      if(f.stationId&&stationTaken(f.stationId,f.id)){storeErr.station='该站点已被其他门店关联';ok=false}
+      if(!ok){storeErrScroll('mstore-form-page');return}
       var phoneFull=phoneRaw?(String(f.dial||'+86').trim()+' '+phoneRaw):'';
-      if(!storeFormImgs.value.length){storeErr.photos='请上传门店封面';toastPush('请上传门店封面');return}
-      if(!String(f.addr||'').trim()){storeErr.addr='请输入或选择门店地址';toastPush('请输入门店地址');return}
-      if(f.stationId&&stationTaken(f.stationId,f.id)){toastPush('该站点已被其他门店关联');return}
       var hours=hf+'-'+ht,photos=storeFormImgs.value.slice();
       if(f.id){
         var s=storeOf(f.id);
@@ -5621,17 +5638,19 @@ var _ma=Vue.createApp({
     function closeStationForm(){cabImgKind.value='cab';if(mPage.value==='stationForm')closePage()}
     function saveStation(){
       var f=stationForm;stationErrClear();
-      if(!String(f.name||'').trim()){stationErr.name='请输入站点名称';toastPush('请输入站点名称');return}
+      var ok=true;
+      if(!String(f.name||'').trim()){stationErr.name='请输入站点名称';ok=false}
       var hf=hhmmss(f.from),ht=hhmmss(f.to);
-      if(!hf||!ht){stationErr.time='请选择营业时间';toastPush('请选择营业时间');return}
-      if(hf>=ht){stationErr.time='结束时间需晚于开始时间';toastPush('结束时间需晚于开始时间');return}
-      if(!String(f.contact||'').trim()){stationErr.contact='请输入联系人';toastPush('请输入联系人');return}
-      if(String(f.contact||'').trim().length>64){stationErr.contact='联系人不能超过 64 个字符';toastPush('联系人不能超过 64 个字符');return}
+      if(!hf||!ht){stationErr.time='请选择营业时间';ok=false}
+      else if(hf>=ht){stationErr.time='结束时间需晚于开始时间';ok=false}
+      if(!String(f.contact||'').trim()){stationErr.contact='请输入联系人';ok=false}
+      else if(String(f.contact||'').trim().length>64){stationErr.contact='联系人不能超过 64 个字符';ok=false}
       var phoneRaw=String(f.phone||'').trim();
-      if(!phoneRaw){stationErr.phone='请输入联系方式';toastPush('请输入联系方式');return}
-      if(!/^[0-9+\- ]{6,20}$/.test(phoneRaw)){stationErr.phone='联系方式格式不正确';toastPush('联系方式格式不正确');return}
-      if(!stationFormImgs.value.length){stationErr.photos='请上传站点封面';toastPush('请上传站点封面');return}
-      if(!String(f.addr||'').trim()){stationErr.addr='请输入或选择站点地址';toastPush('请输入站点地址');return}
+      if(!phoneRaw){stationErr.phone='请输入联系方式';ok=false}
+      else if(!/^[0-9+\- ]{6,20}$/.test(phoneRaw)){stationErr.phone='联系方式格式不正确';ok=false}
+      if(!stationFormImgs.value.length){stationErr.photos='请上传站点封面';ok=false}
+      if(!String(f.addr||'').trim()){stationErr.addr='请输入或选择站点地址';ok=false}
+      if(!ok){storeErrScroll('mstation-form-page');return}
       var hours=hf+'-'+ht,phoneFull=String(f.dial||'+86').trim()+' '+phoneRaw,photos=stationFormImgs.value.slice();
       if(f.id){
         var s=stationOf(f.id);
