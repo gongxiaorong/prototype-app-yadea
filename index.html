@@ -30,7 +30,8 @@ body{font-family:var(--font-body)}
 .filter-tabs::-webkit-scrollbar{display:none}
 .toast-wrap{position:absolute;top:50px;left:16px;right:16px;z-index:99999;display:flex;flex-direction:column;align-items:center;pointer-events:none}
 .toast-item{padding:10px 20px;border-radius:12px;font-size:14px;font-weight:500;color:#fff;pointer-events:auto;backdrop-filter:blur(10px);text-align:center;max-width:80%;line-height:1.4}
-.toast-success,.toast-error,.toast-info,.toast-warn{background:rgba(23,163,74,.9)}
+.toast-success,.toast-info{background:rgba(23,163,74,.9)}
+.toast-error,.toast-warn{background:rgba(255,59,48,.9)}
 .toast-enter-active{transition:all .3s cubic-bezier(.32,.72,0,1)}
 .toast-leave-active{transition:all .25s ease-in}
 .toast-enter-from{opacity:0;transform:translateY(-20px) scale(.9)}
@@ -70,6 +71,8 @@ body{font-family:var(--font-body)}
 :is(.form-card,.form-plain) .form-row:last-child{margin-bottom:8px}
 :is(.form-card,.form-plain) .form-label{font-size:13px;font-weight:500;color:#333333;margin-bottom:6px}
 :is(.form-card,.form-plain) .form-actions{margin:4px 0 8px}
+/* 表单提示 / 错误文案（两端统一：12px + 危险色 + 6px 间距；不再依赖作用域特例） */
+.form-hint{font-size:12px;color:var(--danger);margin-top:6px}
 /* ═══ 表单字段 token（form-field 组件 + .ff-* 形态；状态矩阵：正常/聚焦/禁用/错误） ═══ */
 .ff-row{margin-bottom:16px}
 .ff-row:last-child{margin-bottom:8px}
@@ -102,9 +105,9 @@ body{font-family:var(--font-body)}
 /* 弹窗内字段行距（页面级 16px / 弹窗 12px） */
 .sheet-panel .ff-row{margin-bottom:12px}
 .sheet-panel .ff-row:last-child{margin-bottom:0}
-.login-code-btn{border:none;min-width:7.25rem;min-height:48px;background:#F0F1F3;color:#9CA3AF;border-radius:12px;transition:background .15s,color .15s}
+.login-code-btn{border:none;min-width:7.25rem;min-height:48px;background:#E8E8EC;color:#A0A0A8;border-radius:12px;transition:background .15s,color .15s}
 .login-code-btn.is-cd{background:#F5F6F8;color:#6B6B6B}
-.login-code-btn:disabled,.login-code-btn.is-off{background:#F0F1F3;color:#9CA3AF;cursor:not-allowed}
+.login-code-btn:disabled,.login-code-btn.is-off{background:#E8E8EC;color:#A0A0A8;cursor:not-allowed}
 .login-lang-chip{display:inline-flex;align-items:center;gap:4px;max-width:8.5rem;height:2.25rem;padding:0 10px;border-radius:9999px;font-size:12px;font-weight:600;color:#111;background:#F5F6F8;cursor:pointer;transition:background .15s}
 .login-lang-chip:active{background:#EBECEF}
 .login-cb{width:18px;height:18px;border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1.5px solid #D0D0D0;background:#fff;transition:all .15s;margin-top:1px}
@@ -204,7 +207,6 @@ body{font-family:var(--font-body)}
 #root-user .login-code-btn.is-on{background:#EBF1FD;color:#333}
 #root-user .login-brand-mark{width:4.5rem;height:4.5rem;border-radius:1.25rem;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--accent) 0%,var(--accent) 100%);box-shadow:0 8px 20px rgba(43,63,95,.28);color:#fff}
 #root-user .login-submit.is-on{background:var(--accent);color:#fff;cursor:pointer}
-#root-user .form-hint{font-size:12px;color:var(--danger);margin-top:4px}
 #root-user .carousel-dots{display:flex;gap:6px;justify-content:center;align-items:center}
 #root-user .carousel-dot{width:6px;height:6px;border-radius:9999px;background:rgba(255,255,255,.4);transition:all .2s}
 #root-user .carousel-dot.is-active{width:18px;background:#fff}
@@ -271,7 +273,6 @@ body{font-family:var(--font-body)}
 #root-merchant .cb.on{background:var(--accent);border-color:var(--accent);color:#fff}
 #root-merchant .cb.pt{border-color:var(--accent);color:var(--link);background:#fff}
 #root-merchant .login-field.mini{min-height:36px;border-radius:10px}
-#root-merchant .form-card .form-hint{font-size:12px;margin-top:6px}
 #root-merchant .od-switch{width:44px;height:26px;border-radius:13px;background:#E5E5E5;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
 #root-merchant .od-switch.on{background:var(--link)}
 #root-merchant .od-switch i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s}
