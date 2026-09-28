@@ -5893,42 +5893,6 @@ body.host-single-m #root-user{display:none}
     </div>
   </div>
   <template v-if="demoOpsActive">
-    <div class="demo-ops-group-hd">权限控制</div>
-    <div v-if="demoIsTopTab" class="demo-ops-section" data-od-id="demo-tab-perms">
-      <div class="demo-ops-row">
-        <div class="demo-ops-label" style="margin:0">底部 Tab</div>
-        <div class="flex gap-2">
-          <span class="demo-ops-link" data-cp @click="setPermGroup(TAB_PERM_CODES,true)">全开</span>
-          <span class="demo-ops-link" data-cp @click="setPermGroup(TAB_PERM_CODES,false)">全关</span>
-        </div>
-      </div>
-      <div class="demo-ops-chips">
-        <div v-for="p in tabPermItems" :key="p.c" class="demo-ops-chip" :class="can(p.c)?'is-on':'is-off'" data-cp @click="togglePerm(p.c)" :title="p.c">{{ p.n }}<span class="demo-ops-chip-code">{{ p.c }}</span><span class="demo-ops-chip-copy" v-html="luci('copy','w-3 h-3')" data-cp @click.stop="copyPermCode(p.c)" title="复制 code+页面路径"></span></div>
-      </div>
-    </div>
-    <div class="demo-ops-section" data-od-id="demo-perm-panel">
-      <div class="demo-ops-row">
-        <div class="demo-ops-label" style="margin:0">{{ demoPagePermTitle }}</div>
-        <div class="flex gap-2" v-if="demoPagePermGroups.length">
-          <span class="demo-ops-link" data-cp @click="setPermGroup(demoPagePermCodes,true)">全开</span>
-          <span class="demo-ops-link" data-cp @click="setPermGroup(demoPagePermCodes,false)">全关</span>
-        </div>
-      </div>
-      <div v-if="!demoPagePermGroups.length" class="text-[12px] text-[#6B6B6B] leading-relaxed py-1">当前页无功能权限节点</div>
-      <div v-for="g in demoPagePermGroups" :key="g.id" class="demo-ops-perm-g">
-        <div class="demo-ops-row" v-if="demoPagePermGroups.length>1">
-          <div class="demo-ops-label" style="margin:0">{{ g.name }}</div>
-          <div class="flex gap-2">
-            <span class="demo-ops-link" data-cp @click="setPermGroup(g.codes,true)">全</span>
-            <span class="demo-ops-link" data-cp @click="setPermGroup(g.codes,false)">无</span>
-          </div>
-        </div>
-        <div class="demo-ops-chips">
-          <div v-for="p in g.items" :key="p.c" class="demo-ops-chip" :class="can(p.c)?'is-on':'is-off'" data-cp @click="togglePerm(p.c)" :title="p.c">{{ p.n }}<span class="demo-ops-chip-code">{{ p.c }}</span><span class="demo-ops-chip-copy" v-html="luci('copy','w-3 h-3')" data-cp @click.stop="copyPermCode(p.c)" title="复制 code+页面路径"></span></div>
-        </div>
-      </div>
-    </div>
-    <div class="demo-ops-group-hd">功能控制</div>
     <div v-if="!showLogin&&((tab==='vehicles'&&!vehOV)||(tab==='orders'&&(!ordersOV||ordersOV==='olist'))||roOV==='list'||uWalletView==='flow'||((profileOV==='user'||profileOV==='package'||['model','battModel','account','pos','cs','recharge'].indexOf(profileOV)!==-1)&&!profileSub))" class="demo-ops-section" data-od-id="demo-list-data">
       <div class="demo-ops-label">列表数据</div>
       <div class="demo-ops-chips">
@@ -5988,6 +5952,41 @@ body.host-single-m #root-user{display:none}
         </div>
       </div>
     </template>
+    <div class="demo-ops-group-hd">权限控制</div>
+    <div v-if="demoIsTopTab" class="demo-ops-section" data-od-id="demo-tab-perms">
+      <div class="demo-ops-row">
+        <div class="demo-ops-label" style="margin:0">底部 Tab</div>
+        <div class="flex gap-2">
+          <span class="demo-ops-link" data-cp @click="setPermGroup(TAB_PERM_CODES,true)">全开</span>
+          <span class="demo-ops-link" data-cp @click="setPermGroup(TAB_PERM_CODES,false)">全关</span>
+        </div>
+      </div>
+      <div class="demo-ops-chips">
+        <div v-for="p in tabPermItems" :key="p.c" class="demo-ops-chip" :class="can(p.c)?'is-on':'is-off'" data-cp @click="togglePerm(p.c)" :title="p.c">{{ p.n }}<span class="demo-ops-chip-code">{{ p.c }}</span><span class="demo-ops-chip-copy" v-html="luci('copy','w-3 h-3')" data-cp @click.stop="copyPermCode(p.c)" title="复制 code+页面路径"></span></div>
+      </div>
+    </div>
+    <div class="demo-ops-section" data-od-id="demo-perm-panel">
+      <div class="demo-ops-row">
+        <div class="demo-ops-label" style="margin:0">{{ demoPagePermTitle }}</div>
+        <div class="flex gap-2" v-if="demoPagePermGroups.length">
+          <span class="demo-ops-link" data-cp @click="setPermGroup(demoPagePermCodes,true)">全开</span>
+          <span class="demo-ops-link" data-cp @click="setPermGroup(demoPagePermCodes,false)">全关</span>
+        </div>
+      </div>
+      <div v-if="!demoPagePermGroups.length" class="text-[12px] text-[#6B6B6B] leading-relaxed py-1">当前页无功能权限节点</div>
+      <div v-for="g in demoPagePermGroups" :key="g.id" class="demo-ops-perm-g">
+        <div class="demo-ops-row" v-if="demoPagePermGroups.length>1">
+          <div class="demo-ops-label" style="margin:0">{{ g.name }}</div>
+          <div class="flex gap-2">
+            <span class="demo-ops-link" data-cp @click="setPermGroup(g.codes,true)">全</span>
+            <span class="demo-ops-link" data-cp @click="setPermGroup(g.codes,false)">无</span>
+          </div>
+        </div>
+        <div class="demo-ops-chips">
+          <div v-for="p in g.items" :key="p.c" class="demo-ops-chip" :class="can(p.c)?'is-on':'is-off'" data-cp @click="togglePerm(p.c)" :title="p.c">{{ p.n }}<span class="demo-ops-chip-code">{{ p.c }}</span><span class="demo-ops-chip-copy" v-html="luci('copy','w-3 h-3')" data-cp @click.stop="copyPermCode(p.c)" title="复制 code+页面路径"></span></div>
+        </div>
+      </div>
+    </div>
   </template>
 </aside>
 </div></div></section>
