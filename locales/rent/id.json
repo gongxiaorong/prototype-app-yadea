@@ -42,7 +42,9 @@
       "passwordSub": "Kata Sandi",
       "phoneMode": "Nomor Ponsel",
       "phonePlaceholder": "Masukkan nomor ponsel",
-      "privacyPolicy": "Kebijakan Privasi"
+      "privacyPolicy": "Kebijakan Privasi",
+      "accountPlaceholder": "Masukkan akun",
+      "passwordPlaceholder": "Masukkan kata sandi"
     },
     "orderStatus": {
       "breach": "Pelanggaran",
@@ -57,19 +59,15 @@
       "cancelOrder": "Batalkan Pesanan",
       "cancelTime": "Waktu Pembatalan",
       "confirmCancelDesc": "Yakin batalkan pesanan ini? Tindakan ini tidak dapat dibatalkan.",
-      "createdTime": "Waktu Dibuat",
       "deposit": "Deposit",
       "detail": "Detail Pesanan",
       "docAddButton": "Tambah Dokumen",
       "docContract": "Kontrak",
       "docDeleteTitle": "Hapus Dokumen",
       "docIdCard": "KTP",
-      "docOther": "Lainnya",
       "docSheetPhoto": "Ambil Foto",
       "docSheetText": "Materi Teks",
       "docTextPlaceholder": "Masukkan materi teks",
-      "filterConfirm": "Konfirmasi",
-      "filterDateTo": "sampai",
       "finishTime": "Waktu Selesai",
       "listTitle": "Daftar Pesanan",
       "orderCancelled": "Pesanan telah dibatalkan",
@@ -94,7 +92,20 @@
       "refundReasonUserCancel": "Pengguna membatalkan pesanan",
       "refundReasonPriceAdjust": "Pelanggan meminta kenaikan sewa dan penyesuaian saluran",
       "refundReasonCustomerRequest": "Pelanggan meminta pengembalian dana",
-      "refundReasonMerchantDiscount": "Kompensasi diskon merchant"
+      "refundReasonMerchantDiscount": "Kompensasi diskon merchant",
+      "autoRenew": "Perpanjangan Otomatis",
+      "refundProcessing": "Pengembalian Dana Diproses",
+      "pickupTime": "Waktu Pengambilan",
+      "noOrders": "Tidak ada pesanan",
+      "manualRenew": "Perpanjang Manual",
+      "offlinePayment": "Pembayaran Offline",
+      "batteryNoPlaceholder": "Masukkan nomor baterai",
+      "typeBattery": "Sewa Baterai",
+      "typeVehicle": "Sewa Kendaraan",
+      "typePackage": "Paket Kendaraan & Baterai",
+      "filterConfirm": "Konfirmasi",
+      "filterDateTo": "sampai",
+      "docOther": "Lainnya"
     },
     "profile": {
       "avatar": "Foto Profil",
@@ -109,10 +120,8 @@
       "feeDetail": "Detail Biaya",
       "inputNewEmail": "Masukkan email baru",
       "inputNewPhone": "Masukkan nomor ponsel baru",
-      "menuSettings": "Pengaturan",
       "needBindFirst": "Silakan hubungkan nomor ponsel atau email terlebih dahulu",
       "newPassword": "Kata Sandi Baru",
-      "nextStep": "Lanjut",
       "nickname": "Nama Panggilan",
       "notBound": "Belum Terhubung",
       "passwordManage": "Manajemen Kata Sandi",
@@ -139,12 +148,19 @@
       "nicknameHint": "Panjang 2–20 karakter; huruf, angka, dan simbol diperbolehkan",
       "nicknameSaved": "Nama panggilan disimpan",
       "accountFormatHint": "Harus dimulai dengan huruf; hanya huruf, angka, dan garis bawah; 4–20 karakter",
-      "confirmDeactivateDesc": "Yakin ingin menonaktifkan akun ini? Semua data akan dihapus dan tidak dapat dipulihkan."
+      "confirmDeactivateDesc": "Yakin ingin menonaktifkan akun ini? Semua data akan dihapus dan tidak dapat dipulihkan.",
+      "docTypesHint": "Anda dapat mengunggah KTP, SIM, kontrak, dll.",
+      "realName": "KYC",
+      "namePlaceholder": "Masukkan nama",
+      "nextStep": "Lanjut",
+      "menuSettings": "Pengaturan"
     },
     "tab": {
       "home": "Beranda",
       "orders": "Pesanan",
-      "profile": "Profil"
+      "profile": "Profil",
+      "vehicles": "Kendaraan",
+      "battery": "Baterai"
     },
     "toast": {
       "loginSuccess": "Berhasil masuk",
@@ -195,7 +211,16 @@
       "trackNoDataInPeriod": "Tidak ada lintasan pada periode ini",
       "trackStartPin": "Mulai",
       "walk": "Berjalan",
-      "walkMin": "menit"
+      "walkMin": "menit",
+      "info": "Info Kendaraan",
+      "bindBattery": "Ikat Baterai",
+      "frameNo": "VIN",
+      "bindVehicle": "Ikat Kendaraan",
+      "batteryDischargeOn": "Izinkan Pelepasan",
+      "batteryDetail": "Detail Baterai",
+      "batteryInfo": "Info Baterai",
+      "batteryDischargeOff": "Nonaktifkan Pelepasan",
+      "batteryLevel": "Level Baterai"
     },
     "version": {
       "appExited": "Aplikasi telah keluar",
@@ -212,7 +237,14 @@
       "updateNow": "Perbarui Sekarang"
     },
     "wallet": {
-      "rechargeBalance": "Saldo Top Up"
+      "rechargeBalance": "Saldo Top Up",
+      "topup": "Isi Ulang",
+      "bonusBalance": "Saldo Bonus",
+      "topupAmountPlaceholder": "Masukkan jumlah top up",
+      "availableBalance": "Saldo Tersedia",
+      "topupAmount": "Jumlah Top Up",
+      "deduct": "Potong",
+      "orderRefund": "Pengembalian Pesanan"
     },
     "dateTime": {
       "weekday": {
@@ -241,9 +273,9 @@
       "type": "Tipe",
       "time": "Waktu",
       "currency": "Mata Uang",
-      "currencyCNY": "Yuan Tiongkok",
-      "currencyHKD": "Dolar Hong Kong",
-      "currencyIDR": "Rupiah Indonesia",
+      "currencyCNY": "CNY",
+      "currencyHKD": "HKD",
+      "currencyIDR": "IDR",
       "registrationTime": "Waktu Registrasi",
       "refundSource": "Sumber Pengembalian Dana",
       "preCancelStatus": "Status Sebelum Pembatalan",
@@ -267,7 +299,6 @@
       "nearestStoreDistance": "{distance} ke toko terdekat",
       "batteryModel": "Tipe Baterai",
       "frameNo": "No. Rangka",
-      "orderNo": "No. Pesanan",
       "noPhone": "Tanpa nomor telepon",
       "emptyFeeDetail": "Belum ada rincian biaya",
       "permEmptyNode": "Tidak ada node izin di halaman ini",
@@ -279,7 +310,6 @@
       "sceneParking": "Tempat Parkir",
       "yes": "Ya",
       "no": "Tidak",
-      "none": "Tidak ada",
       "selected": "Dipilih",
       "unselected": "Belum Dipilih",
       "originalRent": "Sewa Awal",
@@ -290,11 +320,13 @@
       "beforeDue": "Sebelum Jatuh Tempo",
       "paymentFailed": "Pembayaran Gagal",
       "continuousPaymentFailed": "Pembayaran Gagal Berturut-turut",
-      "deleteIrreversible": "Tidak dapat dipulihkan setelah dihapus"
+      "deleteIrreversible": "Tidak dapat dipulihkan setelah dihapus",
+      "periodWeek": "Mingguan",
+      "planMonth": "Bulanan",
+      "model": "Model"
     },
     "action": {
       "cancel": "Batal",
-      "confirm": "Konfirmasi",
       "delete": "Hapus",
       "save": "Simpan",
       "search": "Cari",
@@ -310,7 +342,10 @@
       "close": "Tutup",
       "viewFeeDetail": "Lihat Rincian Biaya",
       "deactivateAccount": "Nonaktifkan Akun",
-      "viewDetails": "Lihat Detail"
+      "viewDetails": "Lihat Detail",
+      "confirmReplace": "Konfirmasi Ganti",
+      "logout": "Keluar",
+      "switchLang": "Bahasa"
     },
     "unit": {
       "vehicle": "unit",
@@ -334,6 +369,21 @@
       "charge": "Sistem Pengisian Daya",
       "enter": "Masuk",
       "selectToast": "Silakan pilih sistem"
+    },
+    "scan": {
+      "hint": "Arahkan kode QR ke bingkai"
+    },
+    "home": {
+      "recentAlerts": "Peringatan Terkini"
+    },
+    "cabinet": {
+      "disable": "Nonaktifkan Kabinet"
+    },
+    "service": {
+      "swap": "Tukar"
+    },
+    "copy": {
+      "empty": "Tidak ada yang dapat disalin"
     }
   },
   "user": {
@@ -346,19 +396,16 @@
         "5": "Stok mengikuti ketersediaan toko secara langsung; disarankan menghubungi toko terlebih dahulu untuk konfirmasi atau konsultasi."
       },
       "renter": "Penyewa",
-      "autoRenew": "Perpanjang Otomatis",
-      "refundProcessing": "Pengembalian Dana Diproses",
       "selfPickupReturn": "Ambil & kembalikan di toko secara mandiri",
       "totalDays": "Total {n} hari",
       "payNow": "Bayar Sekarang",
       "tabOverdue": "Aturan Keterlambatan",
-      "storeInfo": "Info Toko",
+      "storeInfo": "Informasi Toko",
       "rentDurationTotal": "Durasi Sewa (total {n} {unit})",
       "confirmDeleteDoc": "Konfirmasi hapus materi ini?",
       "tabBilling": "Aturan Penagihan",
       "contactStore": "Hubungi Toko",
       "returnReminder": "Sisa 7 hari masa sewa, silakan kembalikan ke toko tepat waktu",
-      "pickupTimeLabel": "Waktu Pengambilan",
       "billHourly": "Dibebankan per Jam",
       "billingRules": {
         "1": "Waktu penagihan dimulai saat pengguna mengambil kendaraan/baterai dan berakhir saat kendaraan/baterai selesai dikembalikan.",
@@ -382,22 +429,16 @@
       "takeReturnInfo": "Info Pengambilan & Pengembalian",
       "days30": "30 Hari",
       "timeOrdered": "Dipesan",
-      "noResults": "Tidak ada pesanan",
       "subtotalRp": "Subtotal Rp {amount}",
       "subtotal": "Subtotal",
       "confirmOrder": "Konfirmasi Pesanan",
       "unitHour": "Jam",
       "confirmTitle": "Konfirmasi Pesanan",
-      "manualRenew": "Perpanjang Manual",
-      "paymentOffline": "Pembayaran Offline",
       "tabCancel": "Aturan Pembatalan",
       "mainOrder": "Pesanan Utama",
       "myOrders": "Pesanan Saya",
       "docsUnit": "dokumen",
-      "inputBattNo": "Masukkan nomor baterai",
       "breachReminder": "Terlambat 7 hari, pesanan dikunci. Hubungi toko segera",
-      "uploadDocsHint": "Anda dapat mengunggah KTP, SIM, kontrak, dll.",
-      "periodWeek": "Mingguan",
       "uploadNotSupported": "Unggahan tidak didukung pada status pesanan saat ini",
       "tabNotice": "Ketentuan Sewa",
       "overdueReminder": "Pesanan telah berakhir, segera kembalikan ke toko",
@@ -419,39 +460,31 @@
       "safeRide": "Berkendara aman",
       "distNearestStore": "{dist} ke toko terdekat",
       "noMatchRegion": "Wilayah yang cocok tidak ditemukan",
-      "relocate": "Atur Ulang Lokasi",
-      "alertFilterProcessing": "Diproses",
+      "relocate": "Lokasi Ulang",
+      "alertFilterProcessing": "Memproses...",
       "myDevices": "Perangkat saya",
       "buyNow": "Beli Sekarang",
-      "segVehicle": "Kendaraan",
-      "segBattery": "Baterai",
       "rentalIntro": "Perkenalan Sewa",
       "safetySlogan": "Keselamatan Anda adalah prioritas utama kami",
       "currentLocation": "Lokasi Saat Ini"
     },
     "profile": {
       "newPwdPlaceholder": "Masukkan kata sandi baru (6-64 karakter)",
-      "planMonth": "Bulanan",
-      "confirmReplace": "Konfirmasi Ganti",
       "confirmNewPwdPlaceholder": "Masukkan kembali kata sandi baru",
-      "settingsLogout": "Keluar",
       "noMaterial": "Tidak ada materi",
       "currentBound": "Saat ini terikat: {value}",
       "phoneVerify": "Verifikasi Nomor Ponsel",
       "confirmNewPwd": "Konfirmasi Kata Sandi Baru",
       "feedback": "Saran",
       "emailAddressPlaceholder": "Masukkan alamat email",
-      "switchLang": "Bahasa",
       "aboutUs": "Tentang Kami",
       "privacyPolicy": "Kebijakan Privasi Pengguna"
     },
     "common": {
-      "modelNo": "Model",
       "notLoggedInTap": "Anda belum masuk. Ketuk untuk masuk",
       "langZhCN": "Bahasa Mandarin",
       "materialDeleted": "Materi telah dihapus",
       "clickBlankClose": "Ketuk area kosong untuk menutup",
-      "nothingToCopy": "Tidak ada yang dapat disalin",
       "goLogin": "Masuk",
       "copiedFormat": "{label} disalin",
       "saveSuccess": "Berhasil disimpan"
@@ -460,8 +493,6 @@
       "vehicleNamePlaceholder": "Masukkan nama kendaraan",
       "motorUnlocked": "Motor terbuka",
       "findVehicle": "Cari Kendaraan",
-      "vehicleInfo": "Info Kendaraan",
-      "bindBattery": "Ikat Baterai",
       "goHomeToBind": "Silakan buat pesanan di beranda, lalu hubungkan perangkat",
       "lockOpen": "Buka kunci",
       "unbindVehicleDesc": "Setelah dilepas, kendaraan ini akan dihapus dari akun Anda dan layanan pintar terkait akan dinonaktifkan",
@@ -472,19 +503,16 @@
       "noDeviceBound": "Perangkat belum diikat",
       "unbind": "Lepas Ikat",
       "confirmBindVehicle": "Konfirmasi mengikat kendaraan ini ke akun Anda?",
-      "frameNo": "Nomor Rangka",
       "noDevice": "Tidak ada perangkat",
       "noSwitchableDevice": "Tidak ada perangkat yang dapat diubah",
       "deviceLocation": "Lokasi Perangkat",
       "companionTime": "Waktu Pendamping",
-      "bindVehicle": "Ikat Kendaraan",
-      "track": "Lintasan Kendaraan",
+      "track": "Jejak",
       "companionMileage": "Jarak Pendamping",
       "unbindVehicle": "Lepas Kendaraan",
       "lockClose": "Kunci",
       "serviceEnabled": "Telah Aktif",
       "smartServices": "Layanan Cerdas",
-      "validUntil": "Berlaku hingga {date}",
       "vehicleName": "Nama Kendaraan",
       "distanceInfo": "{m} m dari Anda",
       "goHome": "Beranda",
@@ -496,25 +524,17 @@
       "unnamedVehicle": "Kendaraan tanpa nama"
     },
     "battery": {
-      "dischargeOn": "Izinkan Pelepasan",
       "unbind": "Lepas Baterai",
-      "detail": "Detail Baterai",
       "orderProgress": "Pesanan Berlangsung",
-      "unbindDesc": "Setelah dilepas, baterai ini akan dihapus dari akun Anda",
-      "info": "Info Baterai",
-      "dischargeOff": "Nonaktifkan Pelepasan"
+      "unbindDesc": "Setelah dilepas, baterai ini akan dihapus dari akun Anda"
     },
     "login": {
-      "accountPlaceholder": "Masukkan akun",
       "emailCodePlaceholder": "Masukkan kode verifikasi email",
-      "passwordPlaceholder": "Masukkan kata sandi",
       "autoRegisterHint": "Akun yang belum terdaftar akan didaftarkan otomatis"
     },
     "idInfo": {
       "idPhoto": "Foto KTP",
-      "realName": "Info Verifikasi",
       "notUploaded": "Belum diunggah",
-      "namePlaceholder": "Masukkan nama",
       "idNoPlaceholder": "Masukkan nomor dokumen",
       "editRealName": "Edit Info Verifikasi",
       "licensePhoto": "Foto SIM",
@@ -524,7 +544,7 @@
       "materialUploaded": "Materi diunggah",
       "reupload": "Unggah Ulang",
       "deletePhoto": "Hapus Foto",
-      "addImage": "Tambah Gambar",
+      "addImage": "Unggah Gambar",
       "idPhotoRequired": "Unggah setidaknya 1 foto KTP",
       "licensePhotoRequired": "Unggah setidaknya 1 foto SIM",
       "photoHint": "Unggah foto dokumen yang jelas, hindari pantulan (maksimal 2)",
@@ -555,22 +575,15 @@
     },
     "wallet": {
       "topupCustom": "Jumlah Kustom",
-      "topup": "Isi Ulang",
       "title": "Dompet Saya",
-      "bonusBalance": "Saldo Bonus",
-      "topupAmountPlaceholder": "Masukkan jumlah isi ulang",
       "topupBonus": "Bonus {amount}",
       "balancePay": "Pembayaran Dompet",
       "topupSuccess": "Isi ulang berhasil",
-      "selectAmount": "Silakan pilih jumlah",
-      "balancePayHint": "Saldo Tersedia",
-      "topupAmount": "Jumlah Isi Ulang"
+      "selectAmount": "Silakan pilih jumlah"
     },
     "walletType": {
       "consume": "Konsumsi",
-      "deduct": "Pengurangan",
       "rechargeRefund": "Pengembalian Isi Ulang",
-      "orderRefund": "Pengembalian Pesanan",
       "gift": "Bonus",
       "orderConsume": "Pengeluaran Pesanan"
     },
@@ -588,16 +601,8 @@
     "tab": {
       "vehicles": "Kendaraan"
     },
-    "orderType": {
-      "battery": "Sewa Baterai",
-      "vehicle": "Sewa Kendaraan",
-      "package": "Paket Kendaraan & Baterai"
-    },
     "pwd": {
       "resend": "Kirim ulang"
-    },
-    "scan": {
-      "qrHint": "Arahkan kode QR ke bingkai"
     }
   },
   "merchant": {
@@ -605,7 +610,6 @@
       "allowOrderRenew": "Izinkan Perpanjangan Pesanan",
       "allowStatus": "Status pesanan yang boleh diperpanjang",
       "allowAuto": "Izinkan Perpanjangan Otomatis",
-      "manual": "Perpanjangan Manual",
       "allowOrderType": "Tipe Pesanan yang Diizinkan",
       "allowCustomAmount": "Izinkan Jumlah Kustom",
       "autoLockVehicle": "Kunci Kendaraan Otomatis",
@@ -620,7 +624,6 @@
       "failClose": "Nonaktifkan perpanjangan otomatis setelah {n} kali penagihan gagal berturut-turut",
       "allowManual": "Izinkan Perpanjangan Manual",
       "breachDays": "{n} hari pesanan terlambat, status berubah menjadi 「Pelanggaran」",
-      "auto": "Perpanjangan Otomatis",
       "needOrderStatus": "Pilih minimal satu status pesanan yang boleh diperpanjang",
       "needOrderType": "Pilih minimal satu tipe pesanan untuk perpanjangan otomatis",
       "cancelSuccess": "Perpanjangan dibatalkan",
@@ -628,18 +631,14 @@
       "realNameTip": "Saat diaktifkan, pengguna harus memilih informasi identitas terverifikasi saat checkout, atau pesanan tidak dapat dikirim"
     },
     "profile": {
-      "modelSort": "Urutan",
       "noMatchUser": "Pengguna tidak ditemukan",
-      "iKnow": "Saya Mengerti",
       "menuStore": "Ganti Toko",
       "priceNotNegative": "Masukkan 0 atau angka positif, maksimal 2 angka desimal",
       "accountCredHint": "Silakan simpan informasi akun berikut dengan baik",
       "configSaved": "Konfigurasi telah disimpan",
-      "confirmReplaceBind": "Konfirmasi penggantian",
       "configBreachSuffix": "hari, status berubah menjadi 「Pelanggaran」",
       "menuAccount": "Manajemen Akun",
       "configBreachLabel": "Pesanan terlambat",
-      "modelRent": "Bulanan",
       "confirmEnableDesc": "Yakin aktifkan kembali akun ini? Dapat masuk normal setelah diaktifkan.",
       "confirmDeletePosition": "Hapus Posisi",
       "platformPerms": "Izin Platform",
@@ -647,13 +646,11 @@
       "passwordCopied": "Kata sandi telah disalin",
       "csDeleted": "Telah dihapus",
       "confirmReplace": "Konfirmasi Ganti",
-      "docTypesHint": "KTP, SIM, kontrak, dan lainnya",
       "menuModel": "Manajemen Model",
       "csEditSuccess": "Info layanan pelanggan berhasil diedit",
       "nameLengthError": "Nama tidak boleh lebih dari 64 karakter",
       "csAddSuccess": "Info layanan pelanggan berhasil ditambahkan",
       "noPackage": "Tidak ada paket",
-      "nameError": "Masukkan nama",
       "userManage": "Manajemen Pengguna",
       "idInfoUnselected": "Verifikasi Identitas belum dipilih",
       "emailBound": "Email Terhubung",
@@ -714,7 +711,6 @@
       "merchantPerms": "Izin Mitra",
       "packageAdded": "Paket telah ditambahkan",
       "menuPosition": "Manajemen Posisi",
-      "planWeek": "Mingguan",
       "packageAdd": "Tambah Paket",
       "phoneBound": "Ponsel Terhubung",
       "positionError": "Pilih posisi",
@@ -739,7 +735,6 @@
       "positionEdit": "Edit Posisi",
       "noMatchingAccounts": "Akun tidak ditemukan",
       "priceRequired": "Masukkan harga",
-      "confirmLogout": "Keluar",
       "positionNamePlaceholder": "Masukkan nama posisi",
       "remark": "Catatan",
       "accountFormatError": "Akun harus diawali huruf, panjang 4-20 karakter",
@@ -748,7 +743,6 @@
       "accountDetail": "Detail Akun",
       "noMatchingPositions": "Posisi tidak ditemukan",
       "idInfoRequired": "Verifikasi Identitas wajib diunggah",
-      "accountError": "Masukkan akun",
       "positionSaved": "Posisi disimpan",
       "csTimeError": "Waktu mulai tidak boleh lebih lambat atau sama dengan waktu selesai",
       "storeList": "Daftar Toko",
@@ -766,7 +760,6 @@
       "notLoggedIn": "Belum Masuk",
       "modelSaved": "Model disimpan",
       "accountEdit": "Edit Akun",
-      "idInfo": "KYC",
       "position": "Posisi",
       "searchPosition": "Cari nama posisi",
       "parentPosition": "Posisi Atasan",
@@ -775,11 +768,12 @@
       "unbindVehicleDesc": "Lepas ikatan kendaraan ini dari pengguna saat ini? Kendaraan akan menjadi idle dan dapat diikat kembali.",
       "unbindBatteryDesc": "Lepas ikatan baterai ini dari pengguna saat ini? Baterai akan menjadi idle dan dapat diikat kembali.",
       "vehicleUnbound": "Kendaraan telah dilepas ikatannya",
-      "batteryUnbound": "Baterai telah dilepas ikatannya"
+      "batteryUnbound": "Baterai telah dilepas ikatannya",
+      "iKnow": "Saya Mengerti",
+      "modelSort": "Urutan"
     },
     "home": {
       "view": "Ikhtisar",
-      "recentAlerts": "Peringatan Terkini",
       "noMatchingAlertsSub": "Tidak ada peringatan yang cocok dengan filter saat ini",
       "noAlerts": "Tidak ada peringatan",
       "stats": {
@@ -793,9 +787,6 @@
       },
       "noMatchingAlerts": "Tidak ada peringatan yang cocok",
       "bizStatsTitle": "Data Bisnis",
-      "alert": {
-        "recent": "Peringatan terbaru"
-      },
       "vehStats": {
         "online": "Kendaraan Online",
         "offline": "Kendaraan Offline"
@@ -814,7 +805,6 @@
       "confirmArmDesc": "Yakin aktifkan keamanan kendaraan?",
       "findVehicle": "Cari Kendaraan",
       "batteryUnlockMotor": "Buka Kunci Motor",
-      "battInputPlaceholder": "Masukkan nomor baterai",
       "noLocationTap": "Belum ada lokasi · Ketuk untuk lihat",
       "motorUnlockedToast": "Motor berhasil dibuka kuncinya",
       "add": "Tambah Kendaraan",
@@ -834,7 +824,6 @@
       "batteryModelManage": "Manajemen Model Baterai",
       "batteryLockMotor": "Kunci Motor",
       "filterOnlineStatus": "Status Online",
-      "batteryInfo": "Info Baterai",
       "searchBattModel": "Cari model baterai",
       "batteryAllOff": "Semua Mati",
       "motorUnlockHint": "Kendaraan dapat dikendarai kembali setelah motor dibuka kuncinya",
@@ -847,17 +836,14 @@
       "pressToUnlock": "Tekan lama untuk buka kunci",
       "noLocationCount": "{n} tanpa lokasi",
       "lockToastOpen": "Kunci Terbuka",
-      "batteryAllowDischarge": "Izinkan Pelepasan",
       "filterLost": "Dilaporkan Hilang",
       "statusIdle": "Menganggur",
       "pressToLock": "Tekan lama untuk mengunci",
       "confirmDisarmDesc": "Yakin nonaktifkan keamanan kendaraan?",
       "functionControl": "Kontrol Fungsi",
       "batteryModelName": "Nama Model Baterai",
-      "searchPlaceholder": "Masukkan nomor rangka",
       "selectModelType": "Pilih Model",
       "searchModel": "Cari Model",
-      "scanVinHint": "Arahkan kode QR ke bingkai",
       "batteryDischargeStatus": "Status Pelepasan",
       "infoSaved": "Info kendaraan telah disimpan",
       "selectModel": "Pilih Model",
@@ -868,15 +854,11 @@
       "battPlateHint": "Masukkan nomor baterai pada papan nama baterai",
       "batteryMotorStatus": "Status Motor",
       "batterySubShort": "Cadangan",
-      "batteryDisableDischarge": "Nonaktifkan Pelepasan",
-      "batteryDetail": "Detail Baterai",
       "actionArm": "Aktifkan Keamanan",
       "vinPlateHint": "Masukkan nomor rangka pada papan nama kendaraan",
       "battNoPosSub": "Lokasi tersinkron setelah mengikat kendaraan",
       "batteryNoMatchModel": "Model baterai tidak ditemukan",
       "enterControllerId": "Masukkan ID Pengendali",
-      "clearFilter": "Atur Ulang",
-      "batteryPower": "Level Daya",
       "track": "Lintasan Kendaraan",
       "actionLost": "Laporkan Hilang",
       "lastLocationUnknown": "Lokasi terakhir tidak diketahui",
@@ -884,7 +866,6 @@
       "batteryModelEdit": "Edit Model Baterai",
       "lockToastClose": "Terkunci",
       "statusOccupied": "Terpakai",
-      "batteryLevel": "Level Baterai",
       "batteryRelate": "Baterai Terkait",
       "batteryAdd": "Tambah Baterai",
       "batterySelectModel": "Pilih Model Baterai",
@@ -900,7 +881,6 @@
       "findFromAlertSub": "Kirim perintah kedip dan bunyi",
       "closeSourceManual": "Manual",
       "ignoreTitle": "Abaikan",
-      "vin": "Nomor rangka",
       "noHistory": "Belum ada catatan",
       "ignoreHandled": "Ditangani di Lokasi",
       "orderId": "Pesanan Terkait",
@@ -930,36 +910,28 @@
       "closeSourceAuto": "Pemulihan Otomatis",
       "ignoreReason": "Alasan Pengabaian",
       "actionGoVehicle": "Lihat Kendaraan",
-      "timelineCollapse": "Lipat",
       "startedProcess": "Mulai diproses",
       "actionFindFromAlert": "Cari Kendaraan Sekali Ketuk",
       "lastTrigger": "Pemicu Terakhir",
-      "historyCount": "Total {n} catatan"
+      "historyCount": "Total {n}",
+      "timelineCollapse": "Lipat"
     },
     "wallet": {
-      "deduct": "Potong",
       "rechargeFrozen": "Top Up Dibekukan",
       "noTransaction": "Belum ada transaksi",
       "rechargeUserInfo": "Info Pengguna",
-      "availableBalance": "Saldo Tersedia",
       "giftEdit": "Ubah Saldo Bonus",
-      "rechargeBalanceFlow": "Saldo Top Up",
-      "rechargeAmountPlaceholder": "Masukkan jumlah top up",
       "giftAmountPlaceholder": "Masukkan jumlah bonus",
-      "giftBalance": "Saldo Bonus",
       "rechargeConfigEditSuccess": "Konfigurasi top up berhasil diperbarui",
       "balance": "Saldo",
       "giftFrozen": "Bonus Dibekukan",
       "rechargeConfigAdd": "Tambah Konfigurasi Top Up",
       "deductExceedGift": "Jumlah potongan tidak boleh melebihi saldo bonus",
-      "recharge": "Isi Ulang",
       "noRechargeConfig": "Belum ada konfigurasi top up",
       "rechargeFunc": "Fitur Top Up",
       "rechargeExceedRefund": "Jumlah top up melebihi jumlah yang dapat dikembalikan",
-      "rechargeAmount": "Jumlah Top Up",
       "rechargeConfigDeleteConfirm": "Hapus konfigurasi top up ini? Tindakan ini tidak dapat dibatalkan",
       "rechargeConfigEdit": "Ubah Konfigurasi Top Up",
-      "giftBalanceFlow": "Saldo Bonus",
       "rechargeConfig": "Konfigurasi Top Up",
       "rechargeConfigAddSuccess": "Konfigurasi top up berhasil ditambahkan",
       "giftExceedRefund": "Jumlah bonus melebihi jumlah yang dapat dikembalikan",
@@ -967,7 +939,6 @@
       "giftAdjustSuccess": "Penyesuaian saldo bonus berhasil",
       "totalBalance": "Total Saldo",
       "giftAmount": "Jumlah Bonus",
-      "noRechargeOrder": "Belum ada pesanan",
       "rechargeDetail": "Detail Top Up",
       "moreOps": "Aksi dompet lainnya",
       "selectType": "Silakan pilih jenis",
@@ -988,21 +959,15 @@
       "docAddEditMode": "Ketuk tombol di bawah untuk menambah dokumen pelanggan",
       "bindVehicleHint": "Ikatkan kendaraan ke pesanan ini",
       "datePickerEnd": "Pilih tanggal selesai",
-      "planMonthlyMonths": "Sewa Bulanan × {n} Bulan",
       "refundOperator": "Akun Operasi",
-      "battModel": "Model",
-      "confirmPay": "Pembayaran Offline",
-      "battModelLabel": "Model",
       "refundModalReasonPlaceholder": "Masukkan alasan pengembalian dana...",
       "confirmPayDesc": "Yakin pengguna telah menyelesaikan pembayaran offline?",
       "imagePreviewClose": "Ketuk di mana saja untuk menutup",
-      "typePackage": "Paket Kendaraan & Baterai",
       "confirmRefundDesc": "Akhiri pesanan ini? Total pengembalian Rp{total}",
       "docDeleteDesc": "Yakin hapus dokumen ini? Tidak dapat dibatalkan setelah dihapus.",
       "payProcessing": "Pembayaran Diproses",
       "paymentOnline": "Pembayaran Online",
       "refundReasonUserDeposit": "Pengguna mengajukan pengembalian deposit",
-      "opAssignVehicle": "Ikat kendaraan",
       "refundModalTotalLabel": "Total Pengembalian",
       "confirmLostDesc": "Setelah lapor hilang, motor kendaraan akan terkunci dan tidak dapat dikendarai secara normal",
       "listBattery": "Daftar Pesanan Baterai",
@@ -1011,7 +976,6 @@
       "battBound": "Baterai terikat",
       "docViewOnlyMode": "Status saat ini hanya mendukung melihat",
       "opChangeVehicle": "Ganti kendaraan",
-      "typeVehicle": "Sewa Kendaraan",
       "refundCompleted": "Pengembalian dana selesai",
       "docLicense": "SIM",
       "refundReason": "Alasan Pengembalian Dana",
@@ -1019,7 +983,7 @@
       "refundSourcePlatform": "Platform Operasi",
       "endOrder": "Akhiri Pesanan",
       "payPartialRefund": "Pengembalian Sebagian",
-      "refundSourceMerchant": "Aplikasi Mitra",
+      "refundSourceMerchant": "Aplikasi Merchant",
       "filterPaymentChannel": "Saluran Pembayaran",
       "replaceVehicleHint": "Pilih kendaraan pengganti untuk pesanan ini",
       "replaceBatteryHint": "Pilih baterai pengganti untuk pesanan ini",
@@ -1034,25 +998,20 @@
       "noIdleBattery": "Tidak ada baterai kosong tersedia",
       "refundable": "Dapat Dikembalikan",
       "datePickerStart": "Pilih tanggal mulai",
-      "opRefund": "Pengembalian dana pesanan",
       "actionRefund": "Lakukan Pengembalian Dana",
-      "pickupTime": "Waktu Pengambilan",
       "opReturnVehicle": "Kembalikan kendaraan",
-      "payRefunding": "Pengembalian Dana Diproses",
-      "idCopied": "Tersalin",
       "docCount": "{n} dokumen",
       "orderEnded": "Pesanan telah berakhir",
-      "typeBattery": "Sewa Baterai",
       "vehicleChanged": "Kendaraan diganti",
       "payment2c2p": "2C2P",
       "payStatus": "Status Pembayaran",
-      "vehicleInfo": "Info Kendaraan",
       "listPackage": "Daftar Pesanan Paket",
       "reportUnlost": "Batalkan Laporan Hilang",
       "refundSource": "Sumber",
       "optional": "Opsional",
       "battNoLabel": "Nomor Baterai:",
-      "bindBatteryHint": "Ikatkan baterai ke pesanan ini"
+      "bindBatteryHint": "Ikatkan baterai ke pesanan ini",
+      "idCopied": "Disalin"
     },
     "perm": {
       "permViewOrderDetail": "Lihat Detail Pesanan",
@@ -1072,13 +1031,7 @@
       "csList": "Daftar Layanan Pelanggan"
     },
     "login": {
-      "welcome": "Selamat datang",
-      "switchLang": "Bahasa",
-      "passwordRequired": "Masukkan kata sandi"
-    },
-    "tab": {
-      "battery": "Baterai",
-      "vehicles": "Kendaraan"
+      "welcome": "Selamat datang"
     },
     "model": {
       "list": "Daftar model kendaraan"
@@ -1089,7 +1042,6 @@
       "uploadSpec": "Ukuran",
       "pleaseSelect": "Pilih terlebih dahulu",
       "searchUserPlaceholder": "Cari berdasarkan akun / telepon / email",
-      "copyEmpty": "Tidak ada yang dapat disalin",
       "emptyNoAccess": "Belum ada konten yang dapat diakses",
       "pleaseSelectUser": "Pilih pengguna terlebih dahulu",
       "thumbnail": "Gambar Mini",
@@ -1103,7 +1055,6 @@
       "list": "Daftar Baterai",
       "noLocationListOnly": "{n} baterai tanpa lokasi, hanya terlihat di daftar",
       "lostUnlockHint": "Baterai akan dibuka kuncinya setelah laporan kehilangan dibatalkan",
-      "bind": "Ikat baterai",
       "lostLockHint": "Setelah dilaporkan hilang, baterai dikunci dan tidak dapat dikosongkan",
       "dischargeForbid": "Setelah dilarang, perangkat tidak dapat melepas muatan",
       "discharge": "Pelepasan Baterai",
@@ -1174,20 +1125,20 @@
     },
     "status": {
       "completed": "Selesai",
-      "disabled": "Nonaktif",
-      "enabled": "Aktif",
       "online": "Online",
       "locked": "Kunci Tertutup",
       "offline": "Offline",
       "unlocked": "Kunci Terbuka",
       "pending": "Menunggu",
       "ignored": "Diabaikan",
-      "processing": "Diproses",
       "closed": "Ditutup",
       "onShelf": "Dipublikasikan",
       "offShelf": "Ditarik",
       "current": "Saat Ini",
-      "available": "Tersedia"
+      "available": "Tersedia",
+      "disabled": "Nonaktif",
+      "enabled": "Aktif",
+      "processing": "Diproses"
     }
   },
   "demo": {

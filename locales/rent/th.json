@@ -42,7 +42,9 @@
       "passwordSub": "รหัสผ่าน",
       "phoneMode": "โทรศัพท์",
       "phonePlaceholder": "กรุณากรอกหมายเลขโทรศัพท์",
-      "privacyPolicy": "นโยบายความเป็นส่วนตัว"
+      "privacyPolicy": "นโยบายความเป็นส่วนตัว",
+      "accountPlaceholder": "กรุณากรอกบัญชี",
+      "passwordPlaceholder": "กรุณากรอกรหัสผ่าน"
     },
     "orderStatus": {
       "breach": "ละเมิดสัญญา",
@@ -57,19 +59,15 @@
       "cancelOrder": "ยกเลิกคำสั่งซื้อ",
       "cancelTime": "เวลายกเลิก",
       "confirmCancelDesc": "คุณแน่ใจหรือไม่ที่จะยกเลิกคำสั่งซื้อนี้? การกระทำนี้ไม่สามารถย้อนกลับได้",
-      "createdTime": "เวลาสร้าง",
       "deposit": "เงินมัดจำ",
       "detail": "รายละเอียดคำสั่งซื้อ",
       "docAddButton": "เพิ่มเอกสาร",
       "docContract": "สัญญา",
       "docDeleteTitle": "ลบเอกสาร",
       "docIdCard": "บัตรประจำตัวประชาชน",
-      "docOther": "อื่นๆ",
       "docSheetPhoto": "ถ่ายรูป",
       "docSheetText": "ข้อมูลข้อความ",
       "docTextPlaceholder": "กรุณากรอกข้อมูลข้อความ",
-      "filterConfirm": "ยืนยัน",
-      "filterDateTo": "ถึง",
       "finishTime": "เวลาเสร็จสิ้น",
       "listTitle": "รายการคำสั่งซื้อ",
       "orderCancelled": "ยกเลิกคำสั่งซื้อแล้ว",
@@ -94,7 +92,20 @@
       "refundReasonUserCancel": "ผู้ใช้ยกเลิกคำสั่งซื้อ",
       "refundReasonPriceAdjust": "ลูกค้าขอปรับค่าเช่าสูงขึ้นและเปลี่ยนช่องทาง",
       "refundReasonCustomerRequest": "ลูกค้าขอคืนเงิน",
-      "refundReasonMerchantDiscount": "ค่าชดเชยส่วนลดร้านค้า"
+      "refundReasonMerchantDiscount": "ค่าชดเชยส่วนลดร้านค้า",
+      "autoRenew": "ต่ออายุอัตโนมัติ",
+      "refundProcessing": "กำลังคืนเงิน",
+      "pickupTime": "เวลารับ",
+      "noOrders": "ไม่มีคำสั่งซื้อ",
+      "manualRenew": "ต่ออายุด้วยตนเอง",
+      "offlinePayment": "ชำระเงินออฟไลน์",
+      "batteryNoPlaceholder": "กรุณากรอกหมายเลขแบตเตอรี่",
+      "typeBattery": "เช่าแบตเตอรี่",
+      "typeVehicle": "เช่ายานพาหนะ",
+      "typePackage": "แพ็กเกจยานพาหนะและแบตเตอรี่",
+      "filterConfirm": "ยืนยัน",
+      "filterDateTo": "ถึง",
+      "docOther": "อื่นๆ"
     },
     "profile": {
       "avatar": "รูปโปรไฟล์",
@@ -109,10 +120,8 @@
       "feeDetail": "รายละเอียดค่าธรรมเนียม",
       "inputNewEmail": "กรุณากรอกอีเมลใหม่",
       "inputNewPhone": "กรุณากรอกหมายเลขโทรศัพท์ใหม่",
-      "menuSettings": "การตั้งค่า",
       "needBindFirst": "กรุณาผูกหมายเลขโทรศัพท์หรืออีเมลก่อน",
       "newPassword": "รหัสผ่านใหม่",
-      "nextStep": "ถัดไป",
       "nickname": "ชื่อเล่น",
       "notBound": "ยังไม่ได้ผูก",
       "passwordManage": "การจัดการรหัสผ่าน",
@@ -139,12 +148,19 @@
       "nicknameHint": "ความยาว 2–20 ตัวอักษร ภาษา ตัวเลข และสัญลักษณ์ใช้ได้",
       "nicknameSaved": "บันทึกชื่อเล่นแล้ว",
       "accountFormatHint": "ต้องขึ้นต้นด้วยตัวอักษร ใช้ได้เฉพาะตัวอักษร ตัวเลข และขีดล่าง ความยาว 4–20 ตัว",
-      "confirmDeactivateDesc": "ต้องการลบบัญชีนี้ใช่ไหม ข้อมูลทั้งหมดจะถูกลบและไม่สามารถกู้คืนได้"
+      "confirmDeactivateDesc": "ต้องการลบบัญชีนี้ใช่ไหม ข้อมูลทั้งหมดจะถูกลบและไม่สามารถกู้คืนได้",
+      "docTypesHint": "คุณสามารถอัปโหลดบัตรประชาชน ใบอนุญาตขับขี่ สัญญา ฯลฯ",
+      "realName": "KYC",
+      "namePlaceholder": "กรุณากรอกชื่อของคุณ",
+      "nextStep": "ถัดไป",
+      "menuSettings": "การตั้งค่า"
     },
     "tab": {
       "home": "หน้าแรก",
       "orders": "คำสั่งซื้อ",
-      "profile": "โปรไฟล์"
+      "profile": "โปรไฟล์",
+      "vehicles": "ยานพาหนะ",
+      "battery": "แบตเตอรี่"
     },
     "toast": {
       "loginSuccess": "เข้าสู่ระบบสำเร็จ",
@@ -195,7 +211,16 @@
       "trackNoDataInPeriod": "ไม่มีข้อมูลเส้นทางในช่วงเวลานี้",
       "trackStartPin": "เริ่มต้น",
       "walk": "เดิน",
-      "walkMin": "นาที"
+      "walkMin": "นาที",
+      "info": "ข้อมูลยานพาหนะ",
+      "bindBattery": "ผูกแบตเตอรี่",
+      "frameNo": "VIN",
+      "bindVehicle": "ผูกยานพาหนะ",
+      "batteryDischargeOn": "อนุญาตการปล่อยประจุ",
+      "batteryDetail": "รายละเอียดแบตเตอรี่",
+      "batteryInfo": "ข้อมูลแบตเตอรี่",
+      "batteryDischargeOff": "ปิดการปล่อยประจุ",
+      "batteryLevel": "ระดับแบตเตอรี่"
     },
     "version": {
       "appExited": "ออกจากแอปพลิเคชันแล้ว",
@@ -212,7 +237,14 @@
       "updateNow": "อัปเดตเลย"
     },
     "wallet": {
-      "rechargeBalance": "ยอดเงินเติม"
+      "rechargeBalance": "ยอดเงินเติม",
+      "topup": "เติมเงิน",
+      "bonusBalance": "ยอดเงินโบนัส",
+      "topupAmountPlaceholder": "กรุณากรอกจำนวนเงินเติม",
+      "availableBalance": "ยอดเงินที่ใช้ได้",
+      "topupAmount": "จำนวนเงินเติม",
+      "deduct": "หัก",
+      "orderRefund": "คืนเงินคำสั่งซื้อ"
     },
     "dateTime": {
       "weekday": {
@@ -241,9 +273,9 @@
       "type": "ประเภท",
       "time": "เวลา",
       "currency": "สกุลเงิน",
-      "currencyCNY": "หยวนจีน",
-      "currencyHKD": "ดอลลาร์ฮ่องกง",
-      "currencyIDR": "รูเปียห์อินโดนีเซีย",
+      "currencyCNY": "CNY",
+      "currencyHKD": "HKD",
+      "currencyIDR": "IDR",
       "registrationTime": "เวลาลงทะเบียน",
       "refundSource": "แหล่งเงินคืน",
       "preCancelStatus": "สถานะก่อนยกเลิก",
@@ -267,7 +299,6 @@
       "nearestStoreDistance": "ห่างจากร้านที่ใกล้ที่สุด {distance}",
       "batteryModel": "รุ่นแบตเตอรี่",
       "frameNo": "หมายเลขตัวถัง",
-      "orderNo": "หมายเลขคำสั่งซื้อ",
       "noPhone": "ไม่มีหมายเลขโทรศัพท์",
       "emptyFeeDetail": "ยังไม่มีรายละเอียดค่าใช้จ่าย",
       "permEmptyNode": "หน้านี้ไม่มีโหนดสิทธิ์การใช้งาน",
@@ -279,7 +310,6 @@
       "sceneParking": "ที่จอดรถ",
       "yes": "ใช่",
       "no": "ไม่",
-      "none": "ไม่มี",
       "selected": "เลือกแล้ว",
       "unselected": "ยังไม่เลือก",
       "originalRent": "ค่าเช่าเดิม",
@@ -290,11 +320,13 @@
       "beforeDue": "ก่อนครบกำหนด",
       "paymentFailed": "การชำระเงินล้มเหลว",
       "continuousPaymentFailed": "การชำระเงินล้มเหลวต่อเนื่อง",
-      "deleteIrreversible": "ไม่สามารถกู้คืนได้หลังลบ"
+      "deleteIrreversible": "ไม่สามารถกู้คืนได้หลังลบ",
+      "periodWeek": "รายสัปดาห์",
+      "planMonth": "รายเดือน",
+      "model": "รุ่น"
     },
     "action": {
       "cancel": "ยกเลิก",
-      "confirm": "ยืนยัน",
       "delete": "ลบ",
       "save": "บันทึก",
       "search": "ค้นหา",
@@ -310,7 +342,10 @@
       "close": "ปิด",
       "viewFeeDetail": "ดูรายละเอียดค่าใช้จ่าย",
       "deactivateAccount": "ปิดใช้งานบัญชี",
-      "viewDetails": "ดูรายละเอียด"
+      "viewDetails": "ดูรายละเอียด",
+      "confirmReplace": "ยืนยันการเปลี่ยน",
+      "logout": "ออกจากระบบ",
+      "switchLang": "ภาษา"
     },
     "unit": {
       "vehicle": "คัน",
@@ -334,6 +369,21 @@
       "charge": "ระบบชาร์จ",
       "enter": "เข้าสู่ระบบ",
       "selectToast": "กรุณาเลือกระบบ"
+    },
+    "scan": {
+      "hint": "จัดแนวรหัส QR กับกรอบ"
+    },
+    "home": {
+      "recentAlerts": "การแจ้งเตือนล่าสุด"
+    },
+    "cabinet": {
+      "disable": "ปิดใช้งานตู้"
+    },
+    "service": {
+      "swap": "สลับ"
+    },
+    "copy": {
+      "empty": "ไม่มีอะไรให้คัดลอก"
     }
   },
   "user": {
@@ -346,8 +396,6 @@
         "5": "สินค้าคงคลังขึ้นอยู่กับสต็อกที่ร้านหน้างาน แนะนำให้ติดต่อร้านล่วงหน้าเพื่อยืนยัน"
       },
       "renter": "ผู้เช่า",
-      "autoRenew": "ต่ออายุอัตโนมัติ",
-      "refundProcessing": "กำลังคืนเงิน",
       "selfPickupReturn": "รับและคืนที่ร้านด้วยตนเอง",
       "totalDays": "รวม {n} วัน",
       "payNow": "ชำระเลย",
@@ -358,7 +406,6 @@
       "tabBilling": "กฎการคิดค่าใช้จ่าย",
       "contactStore": "ติดต่อร้านค้า",
       "returnReminder": "เหลืออีก 7 วันในระยะเวลาเช่า กรุณาคืนที่ร้านตรงเวลา",
-      "pickupTimeLabel": "เวลารับ",
       "billHourly": "คิดค่าใช้จ่ายรายชั่วโมง",
       "billingRules": {
         "1": "การคิดค่าใช้จ่ายเริ่มเมื่อผู้ใช้รับยานพาหนะ/แบตเตอรี่ และสิ้นสุดเมื่อคืนยานพาหนะ/แบตเตอรี่ครบถ้วน",
@@ -382,22 +429,16 @@
       "takeReturnInfo": "ข้อมูลรับและคืน",
       "days30": "30 วัน",
       "timeOrdered": "สั่งแล้ว",
-      "noResults": "ไม่มีคำสั่งซื้อ",
       "subtotalRp": "ยอดรวมบางส่วน Rp {amount}",
       "subtotal": "ยอดรวมบางส่วน",
       "confirmOrder": "ยืนยันคำสั่งซื้อ",
       "unitHour": "ชั่วโมง",
       "confirmTitle": "ยืนยันคำสั่งซื้อ",
-      "manualRenew": "ต่ออายุด้วยตนเอง",
-      "paymentOffline": "ชำระเงินออฟไลน์",
       "tabCancel": "กฎการยกเลิก",
       "mainOrder": "คำสั่งซื้อหลัก",
       "myOrders": "คำสั่งซื้อของฉัน",
       "docsUnit": "เอกสาร",
-      "inputBattNo": "กรุณากรอกหมายเลขแบตเตอรี่",
       "breachReminder": "เกินกำหนด 7 วัน คำสั่งซื้อถูกล็อค กรุณาติดต่อร้านทันที",
-      "uploadDocsHint": "คุณสามารถอัปโหลดบัตรประชาชน ใบอนุญาตขับขี่ สัญญา ฯลฯ",
-      "periodWeek": "รายสัปดาห์",
       "uploadNotSupported": "ไม่รองรับการอัปโหลดในสถานะคำสั่งซื้อปัจจุบัน",
       "tabNotice": "ประกาศการเช่า",
       "overdueReminder": "คำสั่งซื้อหมดอายุแล้ว กรุณาคืนที่ร้านโดยเร็ว",
@@ -420,38 +461,30 @@
       "distNearestStore": "{dist} ถึงร้านที่ใกล้ที่สุด",
       "noMatchRegion": "ไม่พบภูมิภาคที่ตรงกัน",
       "relocate": "ระบุตำแหน่งใหม่",
-      "alertFilterProcessing": "กำลังดำเนินการ",
+      "alertFilterProcessing": "กำลังดำเนินการ...",
       "myDevices": "อุปกรณ์ของฉัน",
       "buyNow": "ช้อปเลย",
-      "segVehicle": "ยานพาหนะ",
-      "segBattery": "แบตเตอรี่",
       "rentalIntro": "บทนำการเช่า",
       "safetySlogan": "ความปลอดภัยของคุณคือสิ่งสำคัญสูงสุด",
       "currentLocation": "ตำแหน่งปัจจุบัน"
     },
     "profile": {
       "newPwdPlaceholder": "กรุณากรอกรหัสผ่านใหม่ (6-64 ตัวอักษร)",
-      "planMonth": "รายเดือน",
-      "confirmReplace": "ยืนยันการเปลี่ยน",
       "confirmNewPwdPlaceholder": "กรุณากรอกรหัสผ่านใหม่อีกครั้ง",
-      "settingsLogout": "ออกจากระบบ",
       "noMaterial": "ไม่มีวัสดุ",
       "currentBound": "ผูกอยู่ปัจจุบัน: {value}",
       "phoneVerify": "ยืนยันเบอร์โทรศัพท์",
       "confirmNewPwd": "ยืนยันรหัสผ่านใหม่",
       "feedback": "ข้อเสนอแนะ",
       "emailAddressPlaceholder": "กรุณากรอกที่อยู่อีเมลของคุณ",
-      "switchLang": "ภาษา",
       "aboutUs": "เกี่ยวกับเรา",
       "privacyPolicy": "นโยบายความเป็นส่วนตัวของผู้ใช้"
     },
     "common": {
-      "modelNo": "รุ่น",
       "notLoggedInTap": "คุณยังไม่ได้เข้าสู่ระบบ แตะเพื่อเข้าสู่ระบบ",
       "langZhCN": "จีนตัวย่อ",
       "materialDeleted": "ลบวัสดุแล้ว",
       "clickBlankClose": "แตะพื้นที่ว่างเพื่อปิด",
-      "nothingToCopy": "ไม่มีอะไรให้คัดลอก",
       "goLogin": "เข้าสู่ระบบ",
       "copiedFormat": "คัดลอก {label} แล้ว",
       "saveSuccess": "บันทึกสำเร็จ"
@@ -460,8 +493,6 @@
       "vehicleNamePlaceholder": "กรุณากรอกชื่อยานพาหนะ",
       "motorUnlocked": "ปลดล็อคมอเตอร์แล้ว",
       "findVehicle": "ค้นหายานพาหนะ",
-      "vehicleInfo": "ข้อมูลยานพาหนะ",
-      "bindBattery": "ผูกแบตเตอรี่",
       "goHomeToBind": "กรุณาสั่งคำสั่งซื้อในหน้าแรก จากนั้นผูก",
       "lockOpen": "ปลดล็อค",
       "unbindVehicleDesc": "หลังจากยกเลิกการผูก ยานพาหนะนี้จะถูกลบออกจากบัญชีของคุณและบริการอัจฉริยะที่เกี่ยวข้องจะถูกปิดใช้งาน",
@@ -472,19 +503,16 @@
       "noDeviceBound": "ไม่มีอุปกรณ์ผูก",
       "unbind": "ยกเลิกการผูก",
       "confirmBindVehicle": "ยืนยันการผูกยานพาหนะนี้กับบัญชีของคุณหรือไม่?",
-      "frameNo": "หมายเลขตัวถัง",
       "noDevice": "ไม่มีอุปกรณ์",
       "noSwitchableDevice": "ไม่มีอุปกรณ์ที่สลับได้",
       "deviceLocation": "ตำแหน่งอุปกรณ์",
       "companionTime": "เวลาเพื่อนร่วมทาง",
-      "bindVehicle": "ผูกยานพาหนะ",
-      "track": "เส้นทางยานพาหนะ",
+      "track": "เส้นทาง",
       "companionMileage": "ระยะทางเพื่อนร่วมทาง",
       "unbindVehicle": "ยกเลิกการผูกยานพาหนะ",
       "lockClose": "ล็อค",
       "serviceEnabled": "เปิดใช้งาน",
       "smartServices": "บริการอัจฉริยะ",
-      "validUntil": "ใช้งานได้ถึง {date}",
       "vehicleName": "ชื่อยานพาหนะ",
       "distanceInfo": "ห่างจากคุณ {m} ม.",
       "goHome": "หน้าแรก",
@@ -496,25 +524,17 @@
       "unnamedVehicle": "ยานพาหนะที่ยังไม่ตั้งชื่อ"
     },
     "battery": {
-      "dischargeOn": "อนุญาตการปล่อยประจุ",
       "unbind": "ยกเลิกการผูกแบตเตอรี่",
-      "detail": "รายละเอียดแบตเตอรี่",
       "orderProgress": "คำสั่งซื้อกำลังดำเนินการ",
-      "unbindDesc": "หลังจากยกเลิกการผูก แบตเตอรี่นี้จะถูกลบออกจากบัญชีของคุณ",
-      "info": "ข้อมูลแบตเตอรี่",
-      "dischargeOff": "ปิดการปล่อยประจุ"
+      "unbindDesc": "หลังจากยกเลิกการผูก แบตเตอรี่นี้จะถูกลบออกจากบัญชีของคุณ"
     },
     "login": {
-      "accountPlaceholder": "กรุณากรอกบัญชี",
       "emailCodePlaceholder": "กรุณากรอกรหัสยืนยันอีเมล",
-      "passwordPlaceholder": "กรุณากรอกรหัสผ่าน",
       "autoRegisterHint": "บัญชีที่ยังไม่ได้ลงทะเบียนจะถูกลงทะเบียนโดยอัตโนมัติ"
     },
     "idInfo": {
       "idPhoto": "รูปบัตรประชาชน",
-      "realName": "ข้อมูลยืนยันตัวตน",
       "notUploaded": "ยังไม่ได้อัปโหลด",
-      "namePlaceholder": "กรุณากรอกชื่อของคุณ",
       "idNoPlaceholder": "กรุณากรอกหมายเลขบัตรประชาชน",
       "editRealName": "แก้ไขข้อมูลยืนยันตัวตน",
       "licensePhoto": "รูปใบอนุญาต",
@@ -524,7 +544,7 @@
       "materialUploaded": "อัปโหลดวัสดุแล้ว",
       "reupload": "อัปโหลดใหม่",
       "deletePhoto": "ลบรูป",
-      "addImage": "เพิ่มรูปภาพ",
+      "addImage": "อัปโหลดรูปภาพ",
       "idPhotoRequired": "กรุณาอัปโหลดรูปบัตรประชาชนอย่างน้อย 1 รูป",
       "licensePhotoRequired": "กรุณาอัปโหลดรูปใบขับขี่อย่างน้อย 1 รูป",
       "photoHint": "กรุณาอัปโหลดรูปเอกสารให้ชัดเจน หลีกเลี่ยงแสงสะท้อน (สูงสุด 2 รูป)",
@@ -555,22 +575,15 @@
     },
     "wallet": {
       "topupCustom": "จำนวนเงินกำหนดเอง",
-      "topup": "เติมเงิน",
       "title": "กระเป๋าเงินของฉัน",
-      "bonusBalance": "ยอดเงินโบนัส",
-      "topupAmountPlaceholder": "กรุณากรอกจำนวนเงินเติม",
       "topupBonus": "โบนัส {amount}",
       "balancePay": "ชำระด้วยกระเป๋าเงิน",
       "topupSuccess": "เติมเงินสำเร็จ",
-      "selectAmount": "กรุณาเลือกจำนวนเงิน",
-      "balancePayHint": "ยอดเงินที่ใช้ได้",
-      "topupAmount": "จำนวนเงินเติม"
+      "selectAmount": "กรุณาเลือกจำนวนเงิน"
     },
     "walletType": {
       "consume": "การบริโภค",
-      "deduct": "การหัก",
       "rechargeRefund": "คืนเงินการเติม",
-      "orderRefund": "คืนเงินคำสั่งซื้อ",
       "gift": "โบนัส",
       "orderConsume": "ค่าใช้จ่ายคำสั่งซื้อ"
     },
@@ -588,16 +601,8 @@
     "tab": {
       "vehicles": "ยานพาหนะของฉัน"
     },
-    "orderType": {
-      "battery": "เช่าแบตเตอรี่",
-      "vehicle": "เช่ายานพาหนะ",
-      "package": "แพ็กเกจยานพาหนะและแบตเตอรี่"
-    },
     "pwd": {
       "resend": "ส่งใหม่"
-    },
-    "scan": {
-      "qrHint": "จัดแนวรหัส QR กับกรอบ"
     }
   },
   "merchant": {
@@ -605,7 +610,6 @@
       "allowOrderRenew": "อนุญาตต่ออายุคำสั่งซื้อ",
       "allowStatus": "สถานะคำสั่งซื้อที่อนุญาตให้ต่ออายุ",
       "allowAuto": "อนุญาตต่ออายุอัตโนมัติ",
-      "manual": "ต่ออายุด้วยตนเอง",
       "allowOrderType": "ประเภทคำสั่งซื้อที่อนุญาต",
       "allowCustomAmount": "อนุญาตจำนวนเงินกำหนดเอง",
       "autoLockVehicle": "ล็อคยานพาหนะอัตโนมัติ",
@@ -620,7 +624,6 @@
       "failClose": "ปิดต่ออายุอัตโนมัติหลังจากหักเงินไม่สำเร็จติดต่อกัน {n} ครั้ง",
       "allowManual": "อนุญาตต่ออายุด้วยตนเอง",
       "breachDays": "{n} วันคำสั่งซื้อเกินกำหนด สถานะจะเปลี่ยนเป็น 「ละเมิดสัญญา」",
-      "auto": "ต่ออายุอัตโนมัติ",
       "needOrderStatus": "เลือกอย่างน้อยหนึ่งสถานะคำสั่งซื้อที่อนุญาตให้ต่ออายุ",
       "needOrderType": "เลือกอย่างน้อยหนึ่งประเภทคำสั่งซื้อสำหรับต่ออายุอัตโนมัติ",
       "cancelSuccess": "ยกเลิกการต่ออายุแล้ว",
@@ -628,18 +631,14 @@
       "realNameTip": "เมื่อเปิดใช้งาน ผู้ใช้ต้องเลือกข้อมูลยืนยันตัวตนเมื่อสั่งซื้อ มิฉะนั้นคำสั่งซื้อจะส่งไม่ได้"
     },
     "profile": {
-      "modelSort": "เรียงลำดับ",
       "noMatchUser": "ไม่พบผู้ใช้ที่ตรงกัน",
-      "iKnow": "เข้าใจแล้ว",
       "menuStore": "เปลี่ยนร้านค้า",
       "priceNotNegative": "กรุณากรอก 0 หรือจำนวนบวก จุดทศนิยมสูงสุด 2 ตำแหน่ง",
       "accountCredHint": "กรุณาเก็บข้อมูลบัญชีต่อไปนี้ให้ปลอดภัย",
       "configSaved": "บันทึกการตั้งค่าแล้ว",
-      "confirmReplaceBind": "ยืนยันการแทนที่",
       "configBreachSuffix": "วัน สถานะจะเปลี่ยนเป็น 「ละเมิดสัญญา」",
       "menuAccount": "การจัดการบัญชี",
       "configBreachLabel": "คำสั่งซื้อเกินกำหนด",
-      "modelRent": "รายเดือน",
       "confirmEnableDesc": "คุณแน่ใจหรือไม่ที่จะเปิดใช้งานบัญชีนี้ใหม่? บัญชีจะสามารถเข้าสู่ระบบได้ตามปกติหลังจากเปิดใช้งาน",
       "confirmDeletePosition": "ลบตำแหน่ง",
       "platformPerms": "สิทธิ์แพลตฟอร์ม",
@@ -647,13 +646,11 @@
       "passwordCopied": "คัดลอกรหัสผ่านแล้ว",
       "csDeleted": "ลบแล้ว",
       "confirmReplace": "ยืนยันการเปลี่ยน",
-      "docTypesHint": "บัตรประชาชน ใบอนุญาตขับขี่ สัญญา ฯลฯ",
       "menuModel": "การจัดการรุ่น",
       "csEditSuccess": "แก้ไขข้อมูลบริการลูกค้าสำเร็จ",
       "nameLengthError": "ชื่อต้องไม่เกิน 64 ตัวอักษร",
       "csAddSuccess": "เพิ่มข้อมูลบริการลูกค้าสำเร็จ",
       "noPackage": "ไม่มีแพ็กเกจ",
-      "nameError": "กรุณากรอกชื่อ",
       "userManage": "การจัดการผู้ใช้",
       "idInfoUnselected": "ไม่ได้เลือก KYC",
       "emailBound": "ผูกอีเมลแล้ว",
@@ -685,7 +682,7 @@
       "roleFinance": "การเงิน",
       "storeLevelLabel": "ระดับร้านค้า",
       "positionDeleted": "ลบตำแหน่งแล้ว",
-      "commonFunctions": "ฟังกชันทั่วไป",
+      "commonFunctions": "ฟังก์ชันที่ใช้บ่อย",
       "packageSaved": "บันทึกแพ็กเกจแล้ว",
       "menuStaffUser": "พนักงานและผู้ใช้",
       "menuOpsConfig": "การตั้งค่าปฏิบัติการ",
@@ -714,7 +711,6 @@
       "merchantPerms": "สิทธิ์ของร้านค้า",
       "packageAdded": "เพิ่มแพ็กเกจแล้ว",
       "menuPosition": "การจัดการตำแหน่ง",
-      "planWeek": "รายสัปดาห์",
       "packageAdd": "เพิ่มแพ็กเกจ",
       "phoneBound": "ผูกเบอร์โทรศัพท์แล้ว",
       "positionError": "กรุณาเลือกตำแหน่ง",
@@ -739,7 +735,6 @@
       "positionEdit": "แก้ไขตำแหน่ง",
       "noMatchingAccounts": "ไม่พบบัญชีที่ตรงกัน",
       "priceRequired": "กรุณากรอกราคา",
-      "confirmLogout": "ออกจากระบบ",
       "positionNamePlaceholder": "กรุณากรอกชื่อตำแหน่ง",
       "remark": "หมายเหตุ",
       "accountFormatError": "บัญชีต้องขึ้นต้นด้วยตัวอักษรและมีความยาว 4-20 ตัวอักษร",
@@ -748,7 +743,6 @@
       "accountDetail": "รายละเอียดบัญชี",
       "noMatchingPositions": "ไม่พบตำแหน่งที่ตรงกัน",
       "idInfoRequired": "ต้องอัปโหลด KYC",
-      "accountError": "กรุณากรอกบัญชี",
       "positionSaved": "บันทึกตำแหน่งแล้ว",
       "csTimeError": "เวลาเริ่มต้นต้องไม่ช้ากว่าหรือเท่ากับเวลาสิ้นสุด",
       "storeList": "รายการร้านค้า",
@@ -766,7 +760,6 @@
       "notLoggedIn": "ยังไม่ได้เข้าสู่ระบบ",
       "modelSaved": "บันทึกรุ่นแล้ว",
       "accountEdit": "แก้ไขบัญชี",
-      "idInfo": "KYC",
       "position": "ตำแหน่ง",
       "searchPosition": "ค้นหาชื่อตำแหน่ง",
       "parentPosition": "ตำแหน่งหลัก",
@@ -775,11 +768,12 @@
       "unbindVehicleDesc": "ยกเลิกการผูกยานพาหนะนี้กับผู้ใช้ปัจจุบันหรือไม่ ยานพาหนะจะกลับเป็นว่างและสามารถผูกใหม่ได้",
       "unbindBatteryDesc": "ยกเลิกการผูกแบตเตอรี่นี้กับผู้ใช้ปัจจุบันหรือไม่ แบตเตอรี่จะกลับเป็นว่างและสามารถผูกใหม่ได้",
       "vehicleUnbound": "ยกเลิกการผูกยานพาหนะแล้ว",
-      "batteryUnbound": "ยกเลิกการผูกแบตเตอรี่แล้ว"
+      "batteryUnbound": "ยกเลิกการผูกแบตเตอรี่แล้ว",
+      "iKnow": "เข้าใจแล้ว",
+      "modelSort": "เรียงลำดับ"
     },
     "home": {
       "view": "ภาพรวม",
-      "recentAlerts": "การแจ้งเตือนล่าสุด",
       "noMatchingAlertsSub": "ไม่มีการแจ้งเตือนที่ตรงกับตัวกรองปัจจุบัน",
       "noAlerts": "ไม่มีการแจ้งเตือน",
       "stats": {
@@ -793,9 +787,6 @@
       },
       "noMatchingAlerts": "ไม่มีการแจ้งเตือนที่ตรงกัน",
       "bizStatsTitle": "สถิติธุรกิจ",
-      "alert": {
-        "recent": "การแจ้งเตือนล่าสุด"
-      },
       "vehStats": {
         "online": "ยานพาหนะออนไลน์",
         "offline": "ยานพาหนะออฟไลน์"
@@ -814,7 +805,6 @@
       "confirmArmDesc": "คุณแน่ใจหรือไม่ที่จะตั้งโหมดป้องกันยานพาหนะนี้?",
       "findVehicle": "ค้นหายานพาหนะ",
       "batteryUnlockMotor": "ปลดล็อคมอเตอร์",
-      "battInputPlaceholder": "กรุณากรอกหมายเลขแบตเตอรี่",
       "noLocationTap": "ไม่มีตำแหน่ง · แตะเพื่อดู",
       "motorUnlockedToast": "ปลดล็อคมอเตอร์แล้ว",
       "add": "เพิ่มยานพาหนะ",
@@ -834,7 +824,6 @@
       "batteryModelManage": "การจัดการรุ่นแบตเตอรี่",
       "batteryLockMotor": "ล็อคมอเตอร์",
       "filterOnlineStatus": "สถานะออนไลน์",
-      "batteryInfo": "ข้อมูลแบตเตอรี่",
       "searchBattModel": "ค้นหารุ่นแบตเตอรี่",
       "batteryAllOff": "ปิดทั้งหมด",
       "motorUnlockHint": "สามารถขับยานพาหนะได้อีกครั้งเมื่อปลดล็อคมอเตอร์",
@@ -847,17 +836,14 @@
       "pressToUnlock": "กดค้างเพื่อปลดล็อค",
       "noLocationCount": "{n} ไม่มีตำแหน่ง",
       "lockToastOpen": "ปลดล็อคแล้ว",
-      "batteryAllowDischarge": "อนุญาตการปล่อยประจุ",
       "filterLost": "แจ้งหายแล้ว",
       "statusIdle": "ว่าง",
       "pressToLock": "กดค้างเพื่อล็อค",
       "confirmDisarmDesc": "คุณแน่ใจหรือไม่ที่จะปิดโหมดป้องกันยานพาหนะนี้?",
       "functionControl": "การควบคุมฟังก์ชัน",
       "batteryModelName": "ชื่อรุ่นแบตเตอรี่",
-      "searchPlaceholder": "กรุณากรอกหมายเลขตัวถัง",
       "selectModelType": "เลือกรุ่น",
       "searchModel": "ค้นหารุ่น",
-      "scanVinHint": "จัดแนวรหัส QR กับกรอบ",
       "batteryDischargeStatus": "สถานะการปล่อยประจุ",
       "infoSaved": "บันทึกข้อมูลยานพาหนะแล้ว",
       "selectModel": "เลือกรุ่น",
@@ -868,15 +854,11 @@
       "battPlateHint": "กรุณากรอกหมายเลขแบตเตอรี่บนป้ายชื่อแบตเตอรี่",
       "batteryMotorStatus": "สถานะมอเตอร์",
       "batterySubShort": "รอง",
-      "batteryDisableDischarge": "ปิดการปล่อยประจุ",
-      "batteryDetail": "รายละเอียดแบตเตอรี่",
       "actionArm": "ตั้งโหมดป้องกัน",
       "vinPlateHint": "กรุณากรอกหมายเลขตัวถังบนป้ายชื่อยานพาหนะ",
       "battNoPosSub": "ตำแหน่งจะซิงค์หลังจากผูกยานพาหนะ",
       "batteryNoMatchModel": "ไม่พบรุ่นแบตเตอรี่ที่ตรงกัน",
       "enterControllerId": "กรุณากรอกรหัสตัวควบคุม",
-      "clearFilter": "รีเซ็ต",
-      "batteryPower": "ระดับพลังงาน",
       "track": "เส้นทางยานพาหนะ",
       "actionLost": "แจ้งหาย",
       "lastLocationUnknown": "ไม่ทราบตำแหน่งล่าสุด",
@@ -884,7 +866,6 @@
       "batteryModelEdit": "แก้ไขรุ่นแบตเตอรี่",
       "lockToastClose": "ล็อคแล้ว",
       "statusOccupied": "ถูกครอบครอง",
-      "batteryLevel": "ระดับแบตเตอรี่",
       "batteryRelate": "แบตเตอรี่ที่เกี่ยวข้อง",
       "batteryAdd": "เพิ่มแบตเตอรี่",
       "batterySelectModel": "เลือกรุ่นแบตเตอรี่",
@@ -900,7 +881,6 @@
       "findFromAlertSub": "ส่งคำสั่งไฟกระพริบและบีบแตร",
       "closeSourceManual": "ด้วยตนเอง",
       "ignoreTitle": "เพิกเฉย",
-      "vin": "หมายเลขตัวถัง",
       "noHistory": "ไม่มีบันทึก",
       "ignoreHandled": "จัดการที่หน้างาน",
       "orderId": "คำสั่งซื้อที่เกี่ยวข้อง",
@@ -930,36 +910,28 @@
       "closeSourceAuto": "กู้คืนอัตโนมัติ",
       "ignoreReason": "เหตุผลการเพิกเฉย",
       "actionGoVehicle": "ดูยานพาหนะ",
-      "timelineCollapse": "ยุบ",
       "startedProcess": "เริ่มดำเนินการ",
       "actionFindFromAlert": "ค้นหายานพาหนะด่วน",
       "lastTrigger": "ครั้งล่าสุดที่ถูกกระตุ้น",
-      "historyCount": "ทั้งหมด {n} รายการ"
+      "historyCount": "ทั้งหมด {n} รายการ",
+      "timelineCollapse": "ยุบ"
     },
     "wallet": {
-      "deduct": "หัก",
       "rechargeFrozen": "เงินเติมที่ถูกแช่แข็ง",
       "noTransaction": "ยังไม่มีรายการธุรกรรม",
       "rechargeUserInfo": "ข้อมูลผู้ใช้",
-      "availableBalance": "ยอดเงินที่ใช้ได้",
       "giftEdit": "แก้ไขยอดเงินโบนัส",
-      "rechargeBalanceFlow": "ยอดเงินเติม",
-      "rechargeAmountPlaceholder": "กรุณากรอกจำนวนเงินเติม",
       "giftAmountPlaceholder": "กรุณากรอกจำนวนเงินโบนัส",
-      "giftBalance": "ยอดเงินโบนัส",
       "rechargeConfigEditSuccess": "อัปเดตการตั้งค่าเงินเติมแล้ว",
       "balance": "ยอดเงินคงเหลือ",
       "giftFrozen": "โบนัสที่ถูกแช่แข็ง",
       "rechargeConfigAdd": "เพิ่มการตั้งค่าเงินเติม",
       "deductExceedGift": "การหักต้องไม่เกินยอดเงินโบนัส",
-      "recharge": "เติมเงิน",
       "noRechargeConfig": "ยังไม่มีการตั้งค่าเงินเติม",
       "rechargeFunc": "ฟังก์ชันเติมเงิน",
       "rechargeExceedRefund": "จำนวนเงินเติมเกินจำนวนที่คืนได้",
-      "rechargeAmount": "จำนวนเงินเติม",
       "rechargeConfigDeleteConfirm": "ลบการตั้งค่าเงินเติมนี้หรือไม่? ไม่สามารถย้อนกลับได้",
       "rechargeConfigEdit": "แก้ไขการตั้งค่าเงินเติม",
-      "giftBalanceFlow": "ยอดเงินโบนัส",
       "rechargeConfig": "การตั้งค่าเงินเติม",
       "rechargeConfigAddSuccess": "เพิ่มการตั้งค่าเงินเติมแล้ว",
       "giftExceedRefund": "จำนวนโบนัสเกินจำนวนที่คืนได้",
@@ -967,7 +939,6 @@
       "giftAdjustSuccess": "ปรับยอดเงินโบนัสแล้ว",
       "totalBalance": "ยอดเงินรวม",
       "giftAmount": "จำนวนโบนัส",
-      "noRechargeOrder": "ยังไม่มีคำสั่งซื้อ",
       "rechargeDetail": "รายละเอียดการเติมเงิน",
       "moreOps": "การดำเนินการกระเป๋าเงินเพิ่มเติม",
       "selectType": "กรุณาเลือกประเภท",
@@ -988,21 +959,15 @@
       "docAddEditMode": "แตะปุ่มด้านล่างเพื่อเพิ่มเอกสารลูกค้า",
       "bindVehicleHint": "ผูกยานพาหนะกับคำสั่งซื้อนี้",
       "datePickerEnd": "เลือกวันสิ้นสุด",
-      "planMonthlyMonths": "เช่า × {n} เดือน",
       "refundOperator": "ผู้ดำเนินการ",
-      "battModel": "รุ่น",
-      "confirmPay": "ชำระเงินออฟไลน์",
-      "battModelLabel": "รุ่น",
       "refundModalReasonPlaceholder": "กรุณากรอกเหตุผลการคืนเงิน...",
       "confirmPayDesc": "คุณแน่ใจหรือไม่ว่าผู้ใช้ได้ชำระเงินออฟไลน์แล้ว?",
       "imagePreviewClose": "แตะที่ใดก็ได้เพื่อปิด",
-      "typePackage": "แพ็กเกจยานพาหนะและแบตเตอรี่",
       "confirmRefundDesc": "จบคำสั่งซื้อนี้หรือไม่? รวมการคืนเงิน Rp{total}",
       "docDeleteDesc": "คุณแน่ใจหรือไม่ที่จะลบเอกสารนี้? การกระทำนี้ไม่สามารถย้อนกลับได้",
       "payProcessing": "กำลังดำเนินการ",
       "paymentOnline": "ชำระเงินออนไลน์",
       "refundReasonUserDeposit": "ผู้ใช้ร้องขอคืนเงินมัดจำ",
-      "opAssignVehicle": "ผูกยานพาหนะ",
       "refundModalTotalLabel": "รวมการคืนเงิน",
       "confirmLostDesc": "หลังจากแจ้งหาย มอเตอร์ยานพาหนะจะถูกล็อคและไม่สามารถขับได้ตามปกติ",
       "listBattery": "รายการคำสั่งซื้อแบตเตอรี่",
@@ -1011,7 +976,6 @@
       "battBound": "ผูกแบตเตอรี่แล้ว",
       "docViewOnlyMode": "ในสถานะปัจจุบันรองรับเฉพาะการดูเท่านั้น",
       "opChangeVehicle": "เปลี่ยนยานพาหนะ",
-      "typeVehicle": "เช่ายานพาหนะ",
       "refundCompleted": "คืนเงินเสร็จสิ้น",
       "docLicense": "ใบอนุญาตขับขี่",
       "refundReason": "เหตุผลการคืนเงิน",
@@ -1019,7 +983,7 @@
       "refundSourcePlatform": "แพลตฟอร์มปฏิบัติการ",
       "endOrder": "จบคำสั่งซื้อ",
       "payPartialRefund": "คืนเงินบางส่วน",
-      "refundSourceMerchant": "แอปร้านค้า",
+      "refundSourceMerchant": "แอปผู้ค้า",
       "filterPaymentChannel": "ช่องทางการชำระเงิน",
       "replaceVehicleHint": "เลือกยานพาหนะทดแทนสำหรับคำสั่งซื้อนี้",
       "replaceBatteryHint": "เลือกแบตเตอรี่ทดแทนสำหรับคำสั่งซื้อนี้",
@@ -1034,25 +998,20 @@
       "noIdleBattery": "ไม่มีแบตเตอรี่ว่าง",
       "refundable": "สามารถคืนเงินได้",
       "datePickerStart": "เลือกวันเริ่มต้น",
-      "opRefund": "คืนเงินคำสั่งซื้อ",
       "actionRefund": "ดำเนินการคืนเงิน",
-      "pickupTime": "เวลารับ",
       "opReturnVehicle": "คืนยานพาหนะ",
-      "payRefunding": "กำลังคืนเงิน",
-      "idCopied": "คัดลอกแล้ว",
       "docCount": "เอกสาร {n} รายการ",
       "orderEnded": "คำสั่งซื้อสิ้นสุดแล้ว",
-      "typeBattery": "เช่าแบตเตอรี่",
       "vehicleChanged": "เปลี่ยนยานพาหนะแล้ว",
       "payment2c2p": "2C2P",
       "payStatus": "สถานะการชำระเงิน",
-      "vehicleInfo": "ข้อมูลยานพาหนะ",
       "listPackage": "รายการคำสั่งซื้อแพ็กเกจ",
       "reportUnlost": "ล้างสถานะหาย",
       "refundSource": "แหล่งที่มา",
       "optional": "ไม่จำเป็น",
       "battNoLabel": "หมายเลขแบตเตอรี่:",
-      "bindBatteryHint": "ผูกแบตเตอรี่กับคำสั่งซื้อนี้"
+      "bindBatteryHint": "ผูกแบตเตอรี่กับคำสั่งซื้อนี้",
+      "idCopied": "คัดลอกแล้ว"
     },
     "perm": {
       "permViewOrderDetail": "ดูรายละเอียดคำสั่งซื้อ",
@@ -1072,13 +1031,7 @@
       "csList": "รายชื่อบริการลูกค้า"
     },
     "login": {
-      "welcome": "ยินดีต้อนรับ",
-      "switchLang": "ภาษา",
-      "passwordRequired": "กรุณากรอกรหัสผ่าน"
-    },
-    "tab": {
-      "battery": "แบตเตอรี่",
-      "vehicles": "ยานพาหนะ"
+      "welcome": "ยินดีต้อนรับ"
     },
     "model": {
       "list": "รายการรุ่นยานพาหนะ"
@@ -1089,7 +1042,6 @@
       "uploadSpec": "ขนาด",
       "pleaseSelect": "กรุณาเลือกก่อน",
       "searchUserPlaceholder": "ค้นหาตามบัญชี / โทรศัพท์ / อีเมล",
-      "copyEmpty": "ไม่มีอะไรให้คัดลอก",
       "emptyNoAccess": "ยังไม่มีเนื้อหาที่เข้าถึงได้",
       "pleaseSelectUser": "กรุณาเลือกผู้ใช้ก่อน",
       "thumbnail": "ภาพขนาดย่อ",
@@ -1103,7 +1055,6 @@
       "list": "รายการแบตเตอรี่",
       "noLocationListOnly": "แบตเตอรี่ {n} ก้อนที่ไม่มีตำแหน่ง แสดงในรายการเท่านั้น",
       "lostUnlockHint": "แบตเตอรี่จะถูกปลดล็อคเมื่อล้างรายงานหาย",
-      "bind": "ผูกแบตเตอรี่",
       "lostLockHint": "เมื่อแจ้งหาย แบตเตอรี่จะถูกล็อคและไม่สามารถปล่อยประจุได้",
       "dischargeForbid": "หลังจากปิดใช้งาน อุปกรณ์จะไม่สามารถปล่อยประจุได้",
       "discharge": "การปล่อยประจุแบตเตอรี่",
@@ -1174,20 +1125,20 @@
     },
     "status": {
       "completed": "เสร็จสิ้น",
-      "disabled": "ปิดใช้งาน",
-      "enabled": "เปิดใช้งาน",
       "online": "ออนไลน์",
       "locked": "ล็อคแล้ว",
       "offline": "ออฟไลน์",
       "unlocked": "ปลดล็อคแล้ว",
       "pending": "รอดำเนินการ",
       "ignored": "เพิกเฉยแล้ว",
-      "processing": "กำลังดำเนินการ",
       "closed": "ปิดแล้ว",
       "onShelf": "เปิดให้บริการ",
       "offShelf": "ปิดให้บริการ",
       "current": "ปัจจุบัน",
-      "available": "พร้อมใช้งาน"
+      "available": "พร้อมใช้งาน",
+      "disabled": "ปิดใช้งาน",
+      "enabled": "เปิดใช้งาน",
+      "processing": "กำลังดำเนินการ"
     }
   },
   "demo": {

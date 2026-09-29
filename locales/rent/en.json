@@ -42,7 +42,9 @@
       "passwordSub": "Password",
       "phoneMode": "Phone",
       "phonePlaceholder": "Please enter phone number",
-      "privacyPolicy": "Privacy Policy"
+      "privacyPolicy": "Privacy Policy",
+      "accountPlaceholder": "Please enter account",
+      "passwordPlaceholder": "Please enter password"
     },
     "orderStatus": {
       "breach": "Breached",
@@ -57,19 +59,15 @@
       "cancelOrder": "Cancel Order",
       "cancelTime": "Cancellation Time",
       "confirmCancelDesc": "Are you sure you want to cancel this order? This cannot be undone.",
-      "createdTime": "Created Time",
       "deposit": "Deposit",
       "detail": "Order Details",
       "docAddButton": "Add Document",
       "docContract": "Contract",
       "docDeleteTitle": "Delete Document",
       "docIdCard": "ID Card",
-      "docOther": "Other",
       "docSheetPhoto": "Take Photo",
       "docSheetText": "Text Material",
       "docTextPlaceholder": "Please enter text material",
-      "filterConfirm": "Confirm",
-      "filterDateTo": "to",
       "finishTime": "Finish Time",
       "listTitle": "Order List",
       "orderCancelled": "Order cancelled",
@@ -94,7 +92,20 @@
       "refundReasonUserCancel": "User cancelled the order",
       "refundReasonPriceAdjust": "Customer requested higher rent and channel adjustment",
       "refundReasonCustomerRequest": "Customer requested a refund",
-      "refundReasonMerchantDiscount": "Merchant discount compensation"
+      "refundReasonMerchantDiscount": "Merchant discount compensation",
+      "autoRenew": "Auto Renewal",
+      "refundProcessing": "Refunding",
+      "pickupTime": "Pickup Time",
+      "noOrders": "No Orders",
+      "manualRenew": "Manual renew",
+      "offlinePayment": "Offline Payment",
+      "batteryNoPlaceholder": "Please enter battery number",
+      "typeBattery": "Battery Rental",
+      "typeVehicle": "Vehicle Rental",
+      "typePackage": "Vehicle & Battery Package",
+      "filterConfirm": "Confirm",
+      "filterDateTo": "to",
+      "docOther": "Other"
     },
     "profile": {
       "avatar": "Avatar",
@@ -109,10 +120,8 @@
       "feeDetail": "Fee Details",
       "inputNewEmail": "Enter a new email",
       "inputNewPhone": "Enter a new phone number",
-      "menuSettings": "Settings",
       "needBindFirst": "Please bind a phone number or email first",
       "newPassword": "New Password",
-      "nextStep": "Next",
       "nickname": "Nickname",
       "notBound": "Not Bound",
       "passwordManage": "Password Management",
@@ -139,12 +148,19 @@
       "nicknameHint": "Length 2–20; Chinese, letters, numbers and symbols are all allowed",
       "nicknameSaved": "Nickname saved",
       "accountFormatHint": "Must start with a letter; letters, numbers and underscores only; 4–20 characters",
-      "confirmDeactivateDesc": "Are you sure you want to deactivate this account? All data will be erased and cannot be recovered."
+      "confirmDeactivateDesc": "Are you sure you want to deactivate this account? All data will be erased and cannot be recovered.",
+      "docTypesHint": "You can upload ID, driver's license, contract, etc.",
+      "realName": "KYC",
+      "namePlaceholder": "Please enter your name",
+      "nextStep": "Next",
+      "menuSettings": "Settings"
     },
     "tab": {
       "home": "Home",
       "orders": "Orders",
-      "profile": "Profile"
+      "profile": "Profile",
+      "vehicles": "Vehicles",
+      "battery": "Battery"
     },
     "toast": {
       "loginSuccess": "Login successful",
@@ -195,7 +211,16 @@
       "trackNoDataInPeriod": "No track data for this period",
       "trackStartPin": "Start",
       "walk": "Walk",
-      "walkMin": "min"
+      "walkMin": "min",
+      "info": "Vehicle Info",
+      "bindBattery": "Bind Battery",
+      "frameNo": "VIN",
+      "bindVehicle": "Bind Vehicle",
+      "batteryDischargeOn": "Allow Discharge",
+      "batteryDetail": "Battery Details",
+      "batteryInfo": "Battery Info",
+      "batteryDischargeOff": "Disable Discharge",
+      "batteryLevel": "Battery Level"
     },
     "version": {
       "appExited": "Application exited",
@@ -212,7 +237,14 @@
       "updateNow": "Update Now"
     },
     "wallet": {
-      "rechargeBalance": "Top-up Balance"
+      "rechargeBalance": "Top-up Balance",
+      "topup": "Top-up",
+      "bonusBalance": "Bonus Balance",
+      "topupAmountPlaceholder": "Please enter top-up amount",
+      "availableBalance": "Available Balance",
+      "topupAmount": "Top-up Amount",
+      "deduct": "Deduct",
+      "orderRefund": "Order Refund"
     },
     "dateTime": {
       "weekday": {
@@ -241,9 +273,9 @@
       "type": "Type",
       "time": "Time",
       "currency": "Currency",
-      "currencyCNY": "Chinese Yuan",
-      "currencyHKD": "Hong Kong Dollar",
-      "currencyIDR": "Indonesian Rupiah",
+      "currencyCNY": "CNY",
+      "currencyHKD": "HKD",
+      "currencyIDR": "IDR",
       "registrationTime": "Registration Time",
       "refundSource": "Refund Source",
       "preCancelStatus": "Status Before Cancellation",
@@ -267,7 +299,6 @@
       "nearestStoreDistance": "{distance} to the nearest store",
       "batteryModel": "Battery Model",
       "frameNo": "Frame No.",
-      "orderNo": "Order No.",
       "noPhone": "No phone number",
       "emptyFeeDetail": "No fee details",
       "permEmptyNode": "No permission nodes on this page",
@@ -279,7 +310,6 @@
       "sceneParking": "Parking Lot",
       "yes": "Yes",
       "no": "No",
-      "none": "None",
       "selected": "Selected",
       "unselected": "Not Selected",
       "originalRent": "Original Rent",
@@ -290,11 +320,13 @@
       "beforeDue": "Before Due",
       "paymentFailed": "Payment Failed",
       "continuousPaymentFailed": "Continuous Payment Failed",
-      "deleteIrreversible": "Cannot be recovered after deletion"
+      "deleteIrreversible": "Cannot be recovered after deletion",
+      "periodWeek": "Weekly",
+      "planMonth": "Monthly",
+      "model": "Model"
     },
     "action": {
       "cancel": "Cancel",
-      "confirm": "Confirm",
       "delete": "Delete",
       "save": "Save",
       "search": "Search",
@@ -310,7 +342,10 @@
       "close": "Close",
       "viewFeeDetail": "View Fee Details",
       "deactivateAccount": "Deactivate Account",
-      "viewDetails": "View Details"
+      "viewDetails": "View Details",
+      "confirmReplace": "Confirm Change",
+      "logout": "Log Out",
+      "switchLang": "Language"
     },
     "unit": {
       "vehicle": "vehicle(s)",
@@ -326,7 +361,7 @@
       "bannerSafety": "Quality Riding · Safe & Reliable",
       "bannerDeal": "DE2 Color Edition · Only Rp 3,499"
     },
-    "createTime": "Created At",
+    "createTime": "Created Time",
     "systemSwitch": {
       "title": "Switch System",
       "rent": "Rental System",
@@ -334,6 +369,21 @@
       "charge": "Charging System",
       "enter": "Enter",
       "selectToast": "Please select a system"
+    },
+    "scan": {
+      "hint": "Align the QR code with the frame"
+    },
+    "home": {
+      "recentAlerts": "Recent Alerts"
+    },
+    "cabinet": {
+      "disable": "Disable Cabinet"
+    },
+    "service": {
+      "swap": "Swap"
+    },
+    "copy": {
+      "empty": "Nothing to copy"
     }
   },
   "user": {
@@ -346,19 +396,16 @@
         "5": "Inventory is subject to on-site store stock; we recommend contacting the store in advance to confirm or consult."
       },
       "renter": "Renter",
-      "autoRenew": "Auto-renew",
-      "refundProcessing": "Refunding",
       "selfPickupReturn": "Pick up & return at the store by yourself",
       "totalDays": "{n} days in total",
       "payNow": "Pay Now",
       "tabOverdue": "Overdue Rules",
-      "storeInfo": "Store Info",
+      "storeInfo": "Store Information",
       "rentDurationTotal": "Rental Duration ({n} {unit} total)",
       "confirmDeleteDoc": "Confirm deleting this document?",
       "tabBilling": "Billing Rules",
       "contactStore": "Contact Store",
       "returnReminder": "7 days left in the rental period, please return to the store on time",
-      "pickupTimeLabel": "Pickup Time",
       "billHourly": "Billed Hourly",
       "billingRules": {
         "1": "Billing starts when the user picks up the vehicle/battery and ends when the vehicle/battery is fully returned.",
@@ -382,22 +429,16 @@
       "takeReturnInfo": "Pickup & Return Info",
       "days30": "30 Days",
       "timeOrdered": "Ordered",
-      "noResults": "No Orders",
       "subtotalRp": "Subtotal Rp {amount}",
       "subtotal": "Subtotal",
       "confirmOrder": "Confirm Order",
       "unitHour": "Hours",
       "confirmTitle": "Confirm Order",
-      "manualRenew": "Manual renew",
-      "paymentOffline": "Offline Payment",
       "tabCancel": "Cancellation Rules",
       "mainOrder": "Main Order",
       "myOrders": "My Orders",
       "docsUnit": "document(s)",
-      "inputBattNo": "Enter battery number",
       "breachReminder": "7 days breached, order locked. Please contact the store immediately",
-      "uploadDocsHint": "You can upload ID, driver's license, contract, etc.",
-      "periodWeek": "Weekly",
       "uploadNotSupported": "Upload not supported in the current order status",
       "tabNotice": "Rental Notice",
       "overdueReminder": "Order has expired, please return to the store promptly",
@@ -419,39 +460,31 @@
       "safeRide": "Safe riding",
       "distNearestStore": "{dist} to the nearest store",
       "noMatchRegion": "No matching region found",
-      "relocate": "Re-locate",
-      "alertFilterProcessing": "Processing",
+      "relocate": "Relocate",
+      "alertFilterProcessing": "Processing...",
       "myDevices": "My devices",
       "buyNow": "Shop Now",
-      "segVehicle": "Vehicles",
-      "segBattery": "Battery",
       "rentalIntro": "Rental Intro",
       "safetySlogan": "Your safety is our top priority",
       "currentLocation": "Current Location"
     },
     "profile": {
       "newPwdPlaceholder": "Please enter a new password (6-64 characters)",
-      "planMonth": "Monthly",
-      "confirmReplace": "Confirm Change",
       "confirmNewPwdPlaceholder": "Please enter the new password again",
-      "settingsLogout": "Log Out",
       "noMaterial": "No materials",
       "currentBound": "Currently bound: {value}",
       "phoneVerify": "Phone Verification",
       "confirmNewPwd": "Confirm New Password",
       "feedback": "Feedback",
       "emailAddressPlaceholder": "Please enter your email address",
-      "switchLang": "Language",
       "aboutUs": "About Us",
       "privacyPolicy": "User Privacy Policy"
     },
     "common": {
-      "modelNo": "Model",
       "notLoggedInTap": "You are not logged in. Tap to log in",
       "langZhCN": "Simplified Chinese",
       "materialDeleted": "Material deleted",
       "clickBlankClose": "Tap blank area to close",
-      "nothingToCopy": "Nothing to copy",
       "goLogin": "Log in",
       "copiedFormat": "{label} copied",
       "saveSuccess": "Saved successfully"
@@ -460,8 +493,6 @@
       "vehicleNamePlaceholder": "Please enter vehicle name",
       "motorUnlocked": "Motor unlocked",
       "findVehicle": "Find Vehicle",
-      "vehicleInfo": "Vehicle Info",
-      "bindBattery": "Bind Battery",
       "goHomeToBind": "Please place your order on the homepage, then bind",
       "lockOpen": "Unlock",
       "unbindVehicleDesc": "After unbinding, this vehicle will be removed from your account and related smart services will be disabled",
@@ -472,19 +503,16 @@
       "noDeviceBound": "No device bound",
       "unbind": "Unbind",
       "confirmBindVehicle": "Confirm binding this vehicle to your account?",
-      "frameNo": "Frame No.",
       "noDevice": "No device",
       "noSwitchableDevice": "No switchable device",
       "deviceLocation": "Device Location",
       "companionTime": "Companion Time",
-      "bindVehicle": "Bind Vehicle",
-      "track": "Vehicle Track",
+      "track": "Track",
       "companionMileage": "Companion Mileage",
       "unbindVehicle": "Unbind Vehicle",
       "lockClose": "Lock",
       "serviceEnabled": "Enabled",
       "smartServices": "Smart Services",
-      "validUntil": "Valid until {date}",
       "vehicleName": "Vehicle Name",
       "distanceInfo": "{m} m from you",
       "goHome": "Home",
@@ -496,25 +524,17 @@
       "unnamedVehicle": "Unnamed vehicle"
     },
     "battery": {
-      "dischargeOn": "Allow Discharge",
       "unbind": "Unbind Battery",
-      "detail": "Battery Details",
       "orderProgress": "Order in Progress",
-      "unbindDesc": "After unbinding, this battery will be removed from your account",
-      "info": "Battery Info",
-      "dischargeOff": "Disable Discharge"
+      "unbindDesc": "After unbinding, this battery will be removed from your account"
     },
     "login": {
-      "accountPlaceholder": "Please enter account",
       "emailCodePlaceholder": "Please enter the email verification code",
-      "passwordPlaceholder": "Please enter password",
       "autoRegisterHint": "Unregistered accounts will be registered automatically"
     },
     "idInfo": {
       "idPhoto": "ID Photo",
-      "realName": "Real-Name Info",
       "notUploaded": "Not uploaded",
-      "namePlaceholder": "Please enter your name",
       "idNoPlaceholder": "Please enter the ID number",
       "editRealName": "Edit Real-Name Info",
       "licensePhoto": "License Photo",
@@ -524,7 +544,7 @@
       "materialUploaded": "Materials uploaded",
       "reupload": "Re-upload",
       "deletePhoto": "Delete Photo",
-      "addImage": "Add Image",
+      "addImage": "Upload Image",
       "idPhotoRequired": "Please upload at least 1 ID photo",
       "licensePhotoRequired": "Please upload at least 1 driving license photo",
       "photoHint": "Please upload clear document photos, avoid glare (up to 2)",
@@ -555,22 +575,15 @@
     },
     "wallet": {
       "topupCustom": "Custom Amount",
-      "topup": "Top-up",
       "title": "My Wallet",
-      "bonusBalance": "Bonus Balance",
-      "topupAmountPlaceholder": "Please enter the top-up amount",
       "topupBonus": "Bonus {amount}",
       "balancePay": "Wallet Payment",
       "topupSuccess": "Top-up successful",
-      "selectAmount": "Please select an amount",
-      "balancePayHint": "Available Balance",
-      "topupAmount": "Top-up Amount"
+      "selectAmount": "Please select an amount"
     },
     "walletType": {
       "consume": "Consumption",
-      "deduct": "Deduction",
       "rechargeRefund": "Top-up Refund",
-      "orderRefund": "Order Refund",
       "gift": "Bonus",
       "orderConsume": "Order Expense"
     },
@@ -588,16 +601,8 @@
     "tab": {
       "vehicles": "Vehicles"
     },
-    "orderType": {
-      "battery": "Battery Rental",
-      "vehicle": "Vehicle Rental",
-      "package": "Vehicle & Battery Package"
-    },
     "pwd": {
       "resend": "Resend"
-    },
-    "scan": {
-      "qrHint": "Align the QR code with the frame"
     }
   },
   "merchant": {
@@ -605,7 +610,6 @@
       "allowOrderRenew": "Allow Order Renewal",
       "allowStatus": "Order statuses allowed to renew",
       "allowAuto": "Allow Auto Renewal",
-      "manual": "Manual Renewal",
       "allowOrderType": "Allowed Order Types",
       "allowCustomAmount": "Allow Custom Amount",
       "autoLockVehicle": "Auto Lock Vehicle",
@@ -620,7 +624,6 @@
       "failClose": "Disable auto renewal after {n} consecutive failed charges",
       "allowManual": "Allow Manual Renewal",
       "breachDays": "{n} days after order overdue, status changes to 「Breached」",
-      "auto": "Auto Renewal",
       "needOrderStatus": "Select at least one order status allowed to renew",
       "needOrderType": "Select at least one order type for auto renewal",
       "cancelSuccess": "Renewal cancelled",
@@ -628,18 +631,14 @@
       "realNameTip": "When enabled, users must select verified identity info at checkout, or the order cannot be submitted"
     },
     "profile": {
-      "modelSort": "Sort",
       "noMatchUser": "No matching user",
-      "iKnow": "Got it",
       "menuStore": "Switch Store",
       "priceNotNegative": "Please enter 0 or a positive number, with at most 2 decimal places",
       "accountCredHint": "Please keep the following account information safe",
       "configSaved": "Configuration saved",
-      "confirmReplaceBind": "Confirm replacement",
       "configBreachSuffix": "day(s), status changes to 「Breached」",
       "menuAccount": "Account Management",
       "configBreachLabel": "Order overdue",
-      "modelRent": "Monthly",
       "confirmEnableDesc": "Are you sure you want to re-enable this account? It will be able to log in normally after enabling.",
       "confirmDeletePosition": "Delete Position",
       "platformPerms": "Platform Permissions",
@@ -647,13 +646,11 @@
       "passwordCopied": "Password copied",
       "csDeleted": "Deleted",
       "confirmReplace": "Confirm Change",
-      "docTypesHint": "ID card, driver's license, contract, etc.",
       "menuModel": "Model Management",
       "csEditSuccess": "Customer service info edited successfully",
       "nameLengthError": "Name cannot exceed 64 characters",
       "csAddSuccess": "Customer service info added successfully",
       "noPackage": "No Packages",
-      "nameError": "Please enter name",
       "userManage": "User Management",
       "idInfoUnselected": "No KYC selected",
       "emailBound": "Email bound",
@@ -685,7 +682,7 @@
       "roleFinance": "Finance",
       "storeLevelLabel": "Store Level",
       "positionDeleted": "Position deleted",
-      "commonFunctions": "Common Functions",
+      "commonFunctions": "Common Features",
       "packageSaved": "Package saved",
       "menuStaffUser": "Staff & Users",
       "menuOpsConfig": "Operations Config",
@@ -714,7 +711,6 @@
       "merchantPerms": "Merchant Permissions",
       "packageAdded": "Package added",
       "menuPosition": "Position Management",
-      "planWeek": "Weekly",
       "packageAdd": "Add Package",
       "phoneBound": "Phone bound",
       "positionError": "Please select a position",
@@ -739,7 +735,6 @@
       "positionEdit": "Edit Position",
       "noMatchingAccounts": "No matching accounts found",
       "priceRequired": "Please enter a price",
-      "confirmLogout": "Log Out",
       "positionNamePlaceholder": "Please enter position name",
       "remark": "Remark",
       "accountFormatError": "Account must start with a letter and be 4-20 characters",
@@ -748,7 +743,6 @@
       "accountDetail": "Account Details",
       "noMatchingPositions": "No matching positions found",
       "idInfoRequired": "KYC must be uploaded",
-      "accountError": "Please enter account",
       "positionSaved": "Position saved",
       "csTimeError": "Start time cannot be later than or equal to end time",
       "storeList": "Store List",
@@ -766,7 +760,6 @@
       "notLoggedIn": "Not Logged In",
       "modelSaved": "Model saved",
       "accountEdit": "Edit Account",
-      "idInfo": "KYC",
       "position": "Position",
       "searchPosition": "Search position name",
       "parentPosition": "Parent Position",
@@ -775,11 +768,12 @@
       "unbindVehicleDesc": "Unbind this vehicle from the current user? The vehicle will become idle and can be bound again.",
       "unbindBatteryDesc": "Unbind this battery from the current user? The battery will become idle and can be bound again.",
       "vehicleUnbound": "Vehicle unbound",
-      "batteryUnbound": "Battery unbound"
+      "batteryUnbound": "Battery unbound",
+      "iKnow": "Got it",
+      "modelSort": "Sort"
     },
     "home": {
       "view": "Overview",
-      "recentAlerts": "Recent Alerts",
       "noMatchingAlertsSub": "No alerts match the current filters",
       "noAlerts": "No Alerts",
       "stats": {
@@ -793,9 +787,6 @@
       },
       "noMatchingAlerts": "No matching alerts",
       "bizStatsTitle": "Business Stats",
-      "alert": {
-        "recent": "Recent alerts"
-      },
       "vehStats": {
         "online": "Online Vehicles",
         "offline": "Offline Vehicles"
@@ -814,7 +805,6 @@
       "confirmArmDesc": "Are you sure you want to arm this vehicle?",
       "findVehicle": "Find Vehicle",
       "batteryUnlockMotor": "Unlock Motor",
-      "battInputPlaceholder": "Please enter battery number",
       "noLocationTap": "No location · Tap to view",
       "motorUnlockedToast": "Motor unlocked",
       "add": "Add Vehicle",
@@ -834,7 +824,6 @@
       "batteryModelManage": "Battery Model Management",
       "batteryLockMotor": "Lock Motor",
       "filterOnlineStatus": "Online Status",
-      "batteryInfo": "Battery Info",
       "searchBattModel": "Search battery model",
       "batteryAllOff": "All Off",
       "motorUnlockHint": "The vehicle can be ridden again once the motor is unlocked",
@@ -847,17 +836,14 @@
       "pressToUnlock": "Long Press to Unlock",
       "noLocationCount": "{n} without location",
       "lockToastOpen": "Unlocked",
-      "batteryAllowDischarge": "Allow Discharge",
       "filterLost": "Reported Lost",
       "statusIdle": "Idle",
       "pressToLock": "Long Press to Lock",
       "confirmDisarmDesc": "Are you sure you want to disarm this vehicle?",
       "functionControl": "Function Control",
       "batteryModelName": "Battery Model Name",
-      "searchPlaceholder": "Please enter VIN",
       "selectModelType": "Select Model",
       "searchModel": "Search Model",
-      "scanVinHint": "Align the QR code with the frame",
       "batteryDischargeStatus": "Discharge Status",
       "infoSaved": "Vehicle information saved",
       "selectModel": "Select Model",
@@ -868,15 +854,11 @@
       "battPlateHint": "Enter the battery number on the battery nameplate",
       "batteryMotorStatus": "Motor Status",
       "batterySubShort": "Sub",
-      "batteryDisableDischarge": "Disable Discharge",
-      "batteryDetail": "Battery Details",
       "actionArm": "Arm",
       "vinPlateHint": "Enter the VIN on the vehicle nameplate",
       "battNoPosSub": "Location syncs after binding the vehicle",
       "batteryNoMatchModel": "No matching battery model",
       "enterControllerId": "Enter controller ID",
-      "clearFilter": "Reset",
-      "batteryPower": "Power Level",
       "track": "Vehicle Track",
       "actionLost": "Report Lost",
       "lastLocationUnknown": "Last location unknown",
@@ -884,7 +866,6 @@
       "batteryModelEdit": "Edit Battery Model",
       "lockToastClose": "Locked",
       "statusOccupied": "Occupied",
-      "batteryLevel": "Battery Level",
       "batteryRelate": "Related Battery",
       "batteryAdd": "Add Battery",
       "batterySelectModel": "Select Battery Model",
@@ -900,7 +881,6 @@
       "findFromAlertSub": "Send flash and honk command",
       "closeSourceManual": "Manual",
       "ignoreTitle": "Ignore",
-      "vin": "VIN",
       "noHistory": "No records",
       "ignoreHandled": "Handled On-site",
       "orderId": "Related Order",
@@ -930,36 +910,28 @@
       "closeSourceAuto": "Auto Recovered",
       "ignoreReason": "Ignore Reason",
       "actionGoVehicle": "View Vehicle",
-      "timelineCollapse": "Collapse",
       "startedProcess": "Processing started",
       "actionFindFromAlert": "Quick Find Vehicle",
       "lastTrigger": "Last Triggered",
-      "historyCount": "{n} records total"
+      "historyCount": "Total {n}",
+      "timelineCollapse": "Collapse"
     },
     "wallet": {
-      "deduct": "Deduct",
       "rechargeFrozen": "Frozen Top-up",
       "noTransaction": "No transactions yet",
       "rechargeUserInfo": "User Info",
-      "availableBalance": "Available Balance",
       "giftEdit": "Edit Bonus Balance",
-      "rechargeBalanceFlow": "Top-up Balance",
-      "rechargeAmountPlaceholder": "Please enter top-up amount",
       "giftAmountPlaceholder": "Please enter bonus amount",
-      "giftBalance": "Bonus Balance",
       "rechargeConfigEditSuccess": "Top-up config updated",
       "balance": "Balance",
       "giftFrozen": "Frozen Bonus",
       "rechargeConfigAdd": "Add Top-up Config",
       "deductExceedGift": "Deduction cannot exceed bonus balance",
-      "recharge": "Top-up",
       "noRechargeConfig": "No top-up config yet",
       "rechargeFunc": "Top-up Feature",
       "rechargeExceedRefund": "Top-up amount exceeds refundable amount",
-      "rechargeAmount": "Top-up Amount",
       "rechargeConfigDeleteConfirm": "Delete this top-up config? This cannot be undone",
       "rechargeConfigEdit": "Edit Top-up Config",
-      "giftBalanceFlow": "Bonus Balance",
       "rechargeConfig": "Top-up Config",
       "rechargeConfigAddSuccess": "Top-up config added",
       "giftExceedRefund": "Bonus amount exceeds refundable amount",
@@ -967,7 +939,6 @@
       "giftAdjustSuccess": "Bonus balance adjusted",
       "totalBalance": "Total Balance",
       "giftAmount": "Bonus Amount",
-      "noRechargeOrder": "No orders yet",
       "rechargeDetail": "Top-up Details",
       "moreOps": "More wallet actions",
       "selectType": "Please select a type",
@@ -988,21 +959,15 @@
       "docAddEditMode": "Tap the button below to add customer documents",
       "bindVehicleHint": "Bind a vehicle to this order",
       "datePickerEnd": "Select end date",
-      "planMonthlyMonths": "Rental × {n} Months",
       "refundOperator": "Operator",
-      "battModel": "Model",
-      "confirmPay": "Offline Payment",
-      "battModelLabel": "Model",
       "refundModalReasonPlaceholder": "Please enter refund reason...",
       "confirmPayDesc": "Are you sure the user has completed the offline payment?",
       "imagePreviewClose": "Tap anywhere to close",
-      "typePackage": "Vehicle & Battery Package",
       "confirmRefundDesc": "End this order? Total refund Rp{total}",
       "docDeleteDesc": "Are you sure you want to delete this document? This action cannot be undone.",
       "payProcessing": "Processing",
       "paymentOnline": "Online Payment",
       "refundReasonUserDeposit": "User requested deposit refund",
-      "opAssignVehicle": "Bind vehicle",
       "refundModalTotalLabel": "Total Refund",
       "confirmLostDesc": "After reporting lost, the vehicle motor will be locked and cannot be ridden normally",
       "listBattery": "Battery Order List",
@@ -1011,7 +976,6 @@
       "battBound": "Battery bound",
       "docViewOnlyMode": "Only viewing is supported in the current status",
       "opChangeVehicle": "Change vehicle",
-      "typeVehicle": "Vehicle Rental",
       "refundCompleted": "Refund completed",
       "docLicense": "Driver's License",
       "refundReason": "Refund Reason",
@@ -1019,7 +983,7 @@
       "refundSourcePlatform": "Operations Platform",
       "endOrder": "End Order",
       "payPartialRefund": "Partial Refund",
-      "refundSourceMerchant": "Merchant APP",
+      "refundSourceMerchant": "Merchant App",
       "filterPaymentChannel": "Payment Channel",
       "replaceVehicleHint": "Select a replacement vehicle for this order",
       "replaceBatteryHint": "Select a replacement battery for this order",
@@ -1034,25 +998,20 @@
       "noIdleBattery": "No idle battery available",
       "refundable": "Refundable",
       "datePickerStart": "Select start date",
-      "opRefund": "Order refund",
       "actionRefund": "Process Refund",
-      "pickupTime": "Pickup Time",
       "opReturnVehicle": "Return vehicle",
-      "payRefunding": "Refunding",
-      "idCopied": "Copied",
       "docCount": "{n} documents",
       "orderEnded": "Order ended",
-      "typeBattery": "Battery Rental",
       "vehicleChanged": "Vehicle changed",
       "payment2c2p": "2C2P",
       "payStatus": "Payment Status",
-      "vehicleInfo": "Vehicle Info",
       "listPackage": "Package Order List",
       "reportUnlost": "Clear Lost",
       "refundSource": "Source",
       "optional": "Optional",
       "battNoLabel": "Battery No.:",
-      "bindBatteryHint": "Bind a battery to this order"
+      "bindBatteryHint": "Bind a battery to this order",
+      "idCopied": "Copied"
     },
     "perm": {
       "permViewOrderDetail": "View Order Details",
@@ -1072,13 +1031,7 @@
       "csList": "Customer Service List"
     },
     "login": {
-      "welcome": "Welcome",
-      "switchLang": "Language",
-      "passwordRequired": "Please enter password"
-    },
-    "tab": {
-      "battery": "Battery",
-      "vehicles": "Vehicles"
+      "welcome": "Welcome"
     },
     "model": {
       "list": "Vehicle model list"
@@ -1089,7 +1042,6 @@
       "uploadSpec": "Size",
       "pleaseSelect": "Please select first",
       "searchUserPlaceholder": "Search by account / phone / email",
-      "copyEmpty": "Nothing to copy",
       "emptyNoAccess": "No accessible content yet",
       "pleaseSelectUser": "Please select a user first",
       "thumbnail": "Thumbnail",
@@ -1103,7 +1055,6 @@
       "list": "Battery List",
       "noLocationListOnly": "{n} batteries without location, visible in list only",
       "lostUnlockHint": "The battery will be unlocked once the lost report is cleared",
-      "bind": "Bind battery",
       "lostLockHint": "Once reported lost, the battery is locked and cannot discharge",
       "dischargeForbid": "After disabling, the device will not be able to discharge",
       "discharge": "Battery Discharge",
@@ -1126,7 +1077,7 @@
       }
     },
     "version": {
-      "later": "Remind Later",
+      "later": "Remind Me Later",
       "latestVersionLabel": "Latest Version",
       "suggestUpdate": "Suggest Update",
       "forceUpdate": "Force Update",
@@ -1174,20 +1125,20 @@
     },
     "status": {
       "completed": "Completed",
-      "disabled": "Disabled",
-      "enabled": "Enabled",
       "online": "Online",
       "locked": "Locked",
       "offline": "Offline",
       "unlocked": "Unlocked",
       "pending": "Pending",
       "ignored": "Ignored",
-      "processing": "Processing",
       "closed": "Closed",
       "onShelf": "Listed",
       "offShelf": "Unlisted",
       "current": "Current",
-      "available": "Available"
+      "available": "Available",
+      "disabled": "Disabled",
+      "enabled": "Enabled",
+      "processing": "Processing"
     }
   },
   "demo": {

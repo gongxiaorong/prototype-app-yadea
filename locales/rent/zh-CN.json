@@ -42,7 +42,9 @@
       "passwordSub": "密码登录",
       "phoneMode": "手机号登录",
       "phonePlaceholder": "请输入手机号",
-      "privacyPolicy": "用户隐私政策"
+      "privacyPolicy": "用户隐私政策",
+      "accountPlaceholder": "请输入账号",
+      "passwordPlaceholder": "请输入密码"
     },
     "orderStatus": {
       "breach": "已违约",
@@ -57,19 +59,15 @@
       "cancelOrder": "取消订单",
       "cancelTime": "取消时间",
       "confirmCancelDesc": "确定取消该订单？取消后不可恢复",
-      "createdTime": "创建时间",
       "deposit": "押金",
       "detail": "订单详情",
       "docAddButton": "添加资料",
       "docContract": "合同",
       "docDeleteTitle": "删除资料",
       "docIdCard": "身份证",
-      "docOther": "其他",
       "docSheetPhoto": "拍照上传",
       "docSheetText": "文本资料",
       "docTextPlaceholder": "请输入文本资料",
-      "filterConfirm": "确定",
-      "filterDateTo": "至",
       "finishTime": "完成时间",
       "listTitle": "订单列表",
       "orderCancelled": "订单已取消",
@@ -94,7 +92,20 @@
       "refundReasonUserCancel": "用户取消订单",
       "refundReasonPriceAdjust": "客户要求调高租金并调整渠道",
       "refundReasonCustomerRequest": "客户要求退款",
-      "refundReasonMerchantDiscount": "商户优惠减免补偿"
+      "refundReasonMerchantDiscount": "商户优惠减免补偿",
+      "autoRenew": "自动续租",
+      "refundProcessing": "退款中",
+      "pickupTime": "取用时间",
+      "noOrders": "暂无订单",
+      "manualRenew": "手动续租",
+      "offlinePayment": "线下支付",
+      "batteryNoPlaceholder": "请输入电池编号",
+      "typeBattery": "电池租赁",
+      "typeVehicle": "车辆租赁",
+      "typePackage": "车电套餐",
+      "filterConfirm": "确定",
+      "filterDateTo": "至",
+      "docOther": "其他"
     },
     "profile": {
       "avatar": "头像",
@@ -109,10 +120,8 @@
       "feeDetail": "费用明细",
       "inputNewEmail": "请输入新的邮箱",
       "inputNewPhone": "请输入新的手机号",
-      "menuSettings": "设置",
       "needBindFirst": "请先绑定手机号或邮箱",
       "newPassword": "新密码",
-      "nextStep": "下一步",
       "nickname": "昵称",
       "notBound": "未绑定",
       "passwordManage": "密码管理",
@@ -139,12 +148,19 @@
       "nicknameHint": "支持输入2-20个字符，不限中文、数字、字母、符号",
       "nicknameSaved": "昵称已保存",
       "accountFormatHint": "必须字母开头，仅支持字母、数字、下划线，长度4～20位",
-      "confirmDeactivateDesc": "确定要注销当前账号吗？注销后所有数据将被清除，且无法恢复。"
+      "confirmDeactivateDesc": "确定要注销当前账号吗？注销后所有数据将被清除，且无法恢复。",
+      "docTypesHint": "可上传身份证、驾驶证、合同等",
+      "realName": "实名信息",
+      "namePlaceholder": "请输入姓名",
+      "nextStep": "下一步",
+      "menuSettings": "设置"
     },
     "tab": {
       "home": "首页",
       "orders": "订单",
-      "profile": "我的"
+      "profile": "我的",
+      "vehicles": "车辆",
+      "battery": "电池"
     },
     "toast": {
       "loginSuccess": "登录成功",
@@ -195,7 +211,16 @@
       "trackNoDataInPeriod": "该时段暂无轨迹",
       "trackStartPin": "起",
       "walk": "步行",
-      "walkMin": "分钟"
+      "walkMin": "分钟",
+      "info": "车辆信息",
+      "bindBattery": "绑定电池",
+      "frameNo": "车架号",
+      "bindVehicle": "绑定车辆",
+      "batteryDischargeOn": "允许放电",
+      "batteryDetail": "电池详情",
+      "batteryInfo": "电池信息",
+      "batteryDischargeOff": "禁止放电",
+      "batteryLevel": "电量"
     },
     "version": {
       "appExited": "应用已退出",
@@ -212,7 +237,14 @@
       "updateNow": "立即更新"
     },
     "wallet": {
-      "rechargeBalance": "充值余额"
+      "rechargeBalance": "充值余额",
+      "topup": "充值",
+      "bonusBalance": "赠送余额",
+      "topupAmountPlaceholder": "请输入充值金额",
+      "availableBalance": "可用余额",
+      "topupAmount": "充值金额",
+      "deduct": "扣减",
+      "orderRefund": "订单退款"
     },
     "dateTime": {
       "weekday": {
@@ -267,7 +299,6 @@
       "nearestStoreDistance": "距最近门店 {distance}",
       "batteryModel": "电池型号",
       "frameNo": "车架编号",
-      "orderNo": "订单编号",
       "noPhone": "无手机号",
       "emptyFeeDetail": "暂无费用明细",
       "permEmptyNode": "当前页无功能权限节点",
@@ -279,7 +310,6 @@
       "sceneParking": "停车场",
       "yes": "是",
       "no": "否",
-      "none": "无",
       "selected": "已选择",
       "unselected": "未选择",
       "originalRent": "原租金",
@@ -290,11 +320,13 @@
       "beforeDue": "到期前",
       "paymentFailed": "扣款失败",
       "continuousPaymentFailed": "连续扣款失败",
-      "deleteIrreversible": "删除后不可恢复"
+      "deleteIrreversible": "删除后不可恢复",
+      "periodWeek": "周租",
+      "planMonth": "月租",
+      "model": "型号"
     },
     "action": {
       "cancel": "取消",
-      "confirm": "确认",
       "delete": "删除",
       "save": "保存",
       "search": "搜索",
@@ -310,7 +342,10 @@
       "close": "关闭",
       "viewFeeDetail": "查看费用明细",
       "deactivateAccount": "注销账号",
-      "viewDetails": "查看详情"
+      "viewDetails": "查看详情",
+      "confirmReplace": "确认替换",
+      "logout": "退出登录",
+      "switchLang": "切换语言"
     },
     "unit": {
       "vehicle": "辆",
@@ -334,6 +369,21 @@
       "charge": "充电系统",
       "enter": "进入系统",
       "selectToast": "请选择系统"
+    },
+    "scan": {
+      "hint": "请将二维码对准取景框"
+    },
+    "home": {
+      "recentAlerts": "最近告警"
+    },
+    "cabinet": {
+      "disable": "禁用机柜"
+    },
+    "service": {
+      "swap": "换电"
+    },
+    "copy": {
+      "empty": "无内容可复制"
     }
   },
   "user": {
@@ -346,8 +396,6 @@
         "5": "库存以门店实际现货为准，建议提前联系门店确认咨询"
       },
       "renter": "用车人",
-      "autoRenew": "自动续租",
-      "refundProcessing": "退款中",
       "selfPickupReturn": "自行前往门店领取/归还",
       "totalDays": "共{n}天",
       "payNow": "立即支付",
@@ -358,7 +406,6 @@
       "tabBilling": "计费规则",
       "contactStore": "联系门店",
       "returnReminder": "租期剩余7天，请按时前往门店归还",
-      "pickupTimeLabel": "取用时间",
       "billHourly": "按小时计费",
       "billingRules": {
         "1": "计费起始时间以用户领取车辆/电池时间为准，计费终止时间以车辆/电池完成归还时间为准",
@@ -382,22 +429,16 @@
       "takeReturnInfo": "取还信息",
       "days30": "30天",
       "timeOrdered": "下单",
-      "noResults": "暂无订单",
       "subtotalRp": "小计 Rp {amount}",
       "subtotal": "小计",
       "confirmOrder": "确认订单",
       "unitHour": "小时",
       "confirmTitle": "订单确认",
-      "manualRenew": "手动续租",
-      "paymentOffline": "线下支付",
       "tabCancel": "取消规则",
       "mainOrder": "主订单",
       "myOrders": "我的订单",
       "docsUnit": "份",
-      "inputBattNo": "请输入电池编号",
       "breachReminder": "已违约7天，订单已被锁定，请立即联系门店处理",
-      "uploadDocsHint": "可上传身份证、驾驶证、合同等",
-      "periodWeek": "周租",
       "uploadNotSupported": "当前订单状态暂不支持上传",
       "tabNotice": "租赁须知",
       "overdueReminder": "订单已到期，请及时前往门店归还",
@@ -423,35 +464,27 @@
       "alertFilterProcessing": "处理中...",
       "myDevices": "我的设备",
       "buyNow": "立即选购",
-      "segVehicle": "车辆",
-      "segBattery": "电池",
       "rentalIntro": "租车介绍",
       "safetySlogan": "您的安全是我们最关心的事",
       "currentLocation": "当前定位"
     },
     "profile": {
       "newPwdPlaceholder": "请输入 6–64 位新密码",
-      "planMonth": "月租",
-      "confirmReplace": "确认替换",
       "confirmNewPwdPlaceholder": "请再次输入新密码",
-      "settingsLogout": "退出登录",
       "noMaterial": "暂无资料",
       "currentBound": "当前已绑定：{value}",
       "phoneVerify": "手机号验证",
       "confirmNewPwd": "确认新密码",
       "feedback": "意见反馈",
       "emailAddressPlaceholder": "请输入邮箱地址",
-      "switchLang": "切换语言",
       "aboutUs": "关于我们",
       "privacyPolicy": "《用户隐私政策》"
     },
     "common": {
-      "modelNo": "型号",
       "notLoggedInTap": "您还未登录，点我快速登录",
       "langZhCN": "简体中文",
       "materialDeleted": "资料已删除",
       "clickBlankClose": "点击空白处关闭",
-      "nothingToCopy": "无内容可复制",
       "goLogin": "去登录",
       "copiedFormat": "{label}已复制",
       "saveSuccess": "保存成功"
@@ -460,8 +493,6 @@
       "vehicleNamePlaceholder": "请输入车辆名称",
       "motorUnlocked": "未锁电机",
       "findVehicle": "鸣笛寻车",
-      "vehicleInfo": "车辆信息",
-      "bindBattery": "绑定电池",
       "goHomeToBind": "请前往首页下单后绑定",
       "lockOpen": "开锁",
       "unbindVehicleDesc": "解绑后该车辆将从你的账号下移除，相关智能服务将一并失效",
@@ -472,19 +503,16 @@
       "noDeviceBound": "未绑定设备",
       "unbind": "解除绑定",
       "confirmBindVehicle": "确认将该车辆绑定到你的账号？",
-      "frameNo": "车架号",
       "noDevice": "暂无设备",
       "noSwitchableDevice": "暂无可切换设备",
       "deviceLocation": "设备位置",
       "companionTime": "陪伴时间",
-      "bindVehicle": "绑定车辆",
       "track": "轨迹",
       "companionMileage": "陪伴里程",
       "unbindVehicle": "解绑车辆",
       "lockClose": "关锁",
       "serviceEnabled": "已开通",
       "smartServices": "智能服务",
-      "validUntil": "有效期至 {date}",
       "vehicleName": "车辆名称",
       "distanceInfo": "距您 {m} 米",
       "goHome": "前往首页",
@@ -496,25 +524,17 @@
       "unnamedVehicle": "未命名车辆"
     },
     "battery": {
-      "dischargeOn": "允许放电",
       "unbind": "解绑电池",
-      "detail": "电池详情",
       "orderProgress": "订单进行中",
-      "unbindDesc": "解绑后该电池将从你的账号下移除",
-      "info": "电池信息",
-      "dischargeOff": "禁止放电"
+      "unbindDesc": "解绑后该电池将从你的账号下移除"
     },
     "login": {
-      "accountPlaceholder": "请输入账号",
       "emailCodePlaceholder": "请输入邮箱验证码",
-      "passwordPlaceholder": "请输入密码",
       "autoRegisterHint": "未注册的账号将会自动注册"
     },
     "idInfo": {
       "idPhoto": "身份证照片",
-      "realName": "实名信息",
       "notUploaded": "未上传",
-      "namePlaceholder": "请输入姓名",
       "idNoPlaceholder": "请输入证件号码",
       "editRealName": "编辑实名信息",
       "licensePhoto": "驾驶证照片",
@@ -555,22 +575,15 @@
     },
     "wallet": {
       "topupCustom": "自定义金额",
-      "topup": "充值",
       "title": "我的钱包",
-      "bonusBalance": "赠送余额",
-      "topupAmountPlaceholder": "请输入充值金额",
       "topupBonus": "赠送 {amount}",
       "balancePay": "钱包",
       "topupSuccess": "充值成功",
-      "selectAmount": "请选择充值金额",
-      "balancePayHint": "可用余额",
-      "topupAmount": "充值金额"
+      "selectAmount": "请选择充值金额"
     },
     "walletType": {
       "consume": "消费",
-      "deduct": "扣减",
       "rechargeRefund": "充值退款",
-      "orderRefund": "订单退款",
       "gift": "赠送",
       "orderConsume": "订单消费"
     },
@@ -588,16 +601,8 @@
     "tab": {
       "vehicles": "我的爱车"
     },
-    "orderType": {
-      "battery": "电池租赁",
-      "vehicle": "车辆租赁",
-      "package": "车电套餐"
-    },
     "pwd": {
       "resend": "重新获取"
-    },
-    "scan": {
-      "qrHint": "请将二维码对准取景框"
     }
   },
   "merchant": {
@@ -605,7 +610,6 @@
       "allowOrderRenew": "允许订单续租",
       "allowStatus": "允许续租的订单状态",
       "allowAuto": "允许自动续租",
-      "manual": "手动续租",
       "allowOrderType": "允许订单类型",
       "allowCustomAmount": "允许自定义金额",
       "autoLockVehicle": "自动锁车",
@@ -620,7 +624,6 @@
       "failClose": "连续扣款失败 {n} 次后关闭订单自动续租",
       "allowManual": "允许手动续租",
       "breachDays": "订单超期 {n} 天，自动变更为「已违约」状态",
-      "auto": "自动续租",
       "needOrderStatus": "请至少选择一种允许续租的订单状态",
       "needOrderType": "请至少选择一种自动续租订单类型",
       "cancelSuccess": "续租已取消",
@@ -628,18 +631,14 @@
       "realNameTip": "开启后，用户在下单时必须选择实名信息，否则无法提交订单"
     },
     "profile": {
-      "modelSort": "排序",
       "noMatchUser": "未找到匹配用户",
-      "iKnow": "我知道了",
       "menuStore": "切换门店",
       "priceNotNegative": "请输入 0 或正数，小数最多两位",
       "accountCredHint": "请妥善保管以下账号信息",
       "configSaved": "配置已保存",
-      "confirmReplaceBind": "确认替换",
       "configBreachSuffix": "天，自动变更为「已违约」状态",
       "menuAccount": "账号管理",
       "configBreachLabel": "订单超期",
-      "modelRent": "月租",
       "confirmEnableDesc": "确定重新启用该账号？启用后可正常登录。",
       "confirmDeletePosition": "删除职位",
       "platformPerms": "平台端权限",
@@ -647,13 +646,11 @@
       "passwordCopied": "密码已复制",
       "csDeleted": "已删除",
       "confirmReplace": "确认更换",
-      "docTypesHint": "可上传身份证、驾驶证、合同等",
       "menuModel": "车型管理",
       "csEditSuccess": "客服信息已编辑成功",
       "nameLengthError": "姓名不能超过 64 位",
       "csAddSuccess": "客服信息已新增成功",
       "noPackage": "暂无套餐",
-      "nameError": "请输入姓名",
       "userManage": "用户管理",
       "idInfoUnselected": "未选择实名信息",
       "emailBound": "已绑定邮箱",
@@ -714,7 +711,6 @@
       "merchantPerms": "商户端权限",
       "packageAdded": "套餐已新增",
       "menuPosition": "职位管理",
-      "planWeek": "周租",
       "packageAdd": "新增套餐",
       "phoneBound": "已绑定手机号",
       "positionError": "请选择职位",
@@ -739,7 +735,6 @@
       "positionEdit": "编辑职位",
       "noMatchingAccounts": "未找到匹配的账号",
       "priceRequired": "请输入价格",
-      "confirmLogout": "退出登录",
       "positionNamePlaceholder": "请输入职位名称",
       "remark": "备注",
       "accountFormatError": "账号必须以字母开头，长度为 4–20 位",
@@ -748,7 +743,6 @@
       "accountDetail": "账号详情",
       "noMatchingPositions": "未找到匹配的职位",
       "idInfoRequired": "必须上传实名信息",
-      "accountError": "请输入账号",
       "positionSaved": "职位已保存",
       "csTimeError": "开始时间不能晚于或等于结束时间",
       "storeList": "门店列表",
@@ -766,7 +760,6 @@
       "notLoggedIn": "未登录",
       "modelSaved": "车型已保存",
       "accountEdit": "编辑账号",
-      "idInfo": "实名信息",
       "position": "职位",
       "searchPosition": "搜索职位名称",
       "parentPosition": "上级职位",
@@ -775,11 +768,12 @@
       "unbindVehicleDesc": "确认将该车辆与当前用户解绑？解绑后该车辆将变为空闲，可重新绑定车辆",
       "unbindBatteryDesc": "确认将该电池与当前用户解绑？解绑后该电池将变为空闲，可重新绑定电池",
       "vehicleUnbound": "车辆已解绑",
-      "batteryUnbound": "电池已解绑"
+      "batteryUnbound": "电池已解绑",
+      "iKnow": "我知道了",
+      "modelSort": "排序"
     },
     "home": {
       "view": "首页总览",
-      "recentAlerts": "最近告警",
       "noMatchingAlertsSub": "当前筛选下无匹配告警",
       "noAlerts": "暂无告警",
       "stats": {
@@ -793,9 +787,6 @@
       },
       "noMatchingAlerts": "暂无匹配告警",
       "bizStatsTitle": "经营数据",
-      "alert": {
-        "recent": "最近告警"
-      },
       "vehStats": {
         "online": "在线车辆",
         "offline": "离线车辆"
@@ -814,7 +805,6 @@
       "confirmArmDesc": "确定对车辆设防？",
       "findVehicle": "寻车",
       "batteryUnlockMotor": "解锁电机",
-      "battInputPlaceholder": "请输入电池编号",
       "noLocationTap": "暂无定位 · 点击查看",
       "motorUnlockedToast": "解锁电机成功",
       "add": "新增车辆",
@@ -834,7 +824,6 @@
       "batteryModelManage": "电池型号管理",
       "batteryLockMotor": "锁电机",
       "filterOnlineStatus": "在线状态",
-      "batteryInfo": "电池信息",
       "searchBattModel": "搜索电池型号",
       "batteryAllOff": "全关",
       "motorUnlockHint": "电机解锁后车辆将恢复骑行",
@@ -847,17 +836,14 @@
       "pressToUnlock": "长按开锁",
       "noLocationCount": "{n} 辆无定位",
       "lockToastOpen": "已开锁",
-      "batteryAllowDischarge": "允许放电",
       "filterLost": "已报失",
       "statusIdle": "空闲",
       "pressToLock": "长按关锁",
       "confirmDisarmDesc": "确定对车辆解除设防？",
       "functionControl": "功能控制",
       "batteryModelName": "电池型号名称",
-      "searchPlaceholder": "请输入车架号",
       "selectModelType": "选择型号",
       "searchModel": "搜索车型",
-      "scanVinHint": "请将二维码对准取景框",
       "batteryDischargeStatus": "放电状态",
       "infoSaved": "车辆信息已保存",
       "selectModel": "选择车型",
@@ -868,15 +854,11 @@
       "battPlateHint": "请输入电池铭牌上的电池编号",
       "batteryMotorStatus": "电机状态",
       "batterySubShort": "副",
-      "batteryDisableDischarge": "禁止放电",
-      "batteryDetail": "电池详情",
       "actionArm": "设防",
       "vinPlateHint": "请输入车辆铭牌上的车架号",
       "battNoPosSub": "绑定车辆后同步定位",
       "batteryNoMatchModel": "未找到匹配的电池型号",
       "enterControllerId": "请输入中控编号",
-      "clearFilter": "重置",
-      "batteryPower": "电量",
       "track": "车辆轨迹",
       "actionLost": "报失",
       "lastLocationUnknown": "最后位置未知",
@@ -884,7 +866,6 @@
       "batteryModelEdit": "编辑电池型号",
       "lockToastClose": "已关锁",
       "statusOccupied": "占用中",
-      "batteryLevel": "电量",
       "batteryRelate": "关联电池",
       "batteryAdd": "新增电池",
       "batterySelectModel": "选择电池型号",
@@ -900,7 +881,6 @@
       "findFromAlertSub": "发送闪烁鸣笛指令",
       "closeSourceManual": "人工处理",
       "ignoreTitle": "忽略告警",
-      "vin": "车架号",
       "noHistory": "暂无记录",
       "ignoreHandled": "已现场处理",
       "orderId": "关联订单",
@@ -930,36 +910,28 @@
       "closeSourceAuto": "自动恢复",
       "ignoreReason": "忽略原因",
       "actionGoVehicle": "查看车辆",
-      "timelineCollapse": "收起",
       "startedProcess": "已开始处理",
       "actionFindFromAlert": "一键寻车",
       "lastTrigger": "最近触发",
-      "historyCount": "共 {n} 条"
+      "historyCount": "共 {n} 条",
+      "timelineCollapse": "收起"
     },
     "wallet": {
-      "deduct": "扣减",
       "rechargeFrozen": "充值冻结",
       "noTransaction": "暂无交易记录",
       "rechargeUserInfo": "用户信息",
-      "availableBalance": "可用余额",
       "giftEdit": "编辑赠送余额",
-      "rechargeBalanceFlow": "充值余额",
-      "rechargeAmountPlaceholder": "请输入充值金额",
       "giftAmountPlaceholder": "请输入赠送金额",
-      "giftBalance": "赠送余额",
       "rechargeConfigEditSuccess": "充值配置已编辑成功",
       "balance": "余额",
       "giftFrozen": "赠送冻结",
       "rechargeConfigAdd": "新增充值配置",
       "deductExceedGift": "扣减金额不能超过赠送余额",
-      "recharge": "充值",
       "noRechargeConfig": "暂无充值配置",
       "rechargeFunc": "充值功能",
       "rechargeExceedRefund": "充值金额超出可退金额",
-      "rechargeAmount": "充值金额",
       "rechargeConfigDeleteConfirm": "确定删除该充值配置？删除后不可恢复",
       "rechargeConfigEdit": "编辑充值配置",
-      "giftBalanceFlow": "赠送余额",
       "rechargeConfig": "充值配置",
       "rechargeConfigAddSuccess": "充值配置已新增成功",
       "giftExceedRefund": "赠送金额超出可退金额",
@@ -967,7 +939,6 @@
       "giftAdjustSuccess": "赠送余额调账成功",
       "totalBalance": "总余额",
       "giftAmount": "赠送金额",
-      "noRechargeOrder": "暂无订单",
       "rechargeDetail": "充值明细",
       "moreOps": "更多钱包操作",
       "selectType": "请选择类型",
@@ -988,21 +959,15 @@
       "docAddEditMode": "点击下方按钮添加用户资料",
       "bindVehicleHint": "请为订单绑定指定车辆",
       "datePickerEnd": "选择结束日期",
-      "planMonthlyMonths": "月租×{n}月",
       "refundOperator": "操作账号",
-      "battModel": "型号",
-      "confirmPay": "线下支付",
-      "battModelLabel": "型号",
       "refundModalReasonPlaceholder": "请输入退款原因",
       "confirmPayDesc": "确认用户已完成线下支付？",
       "imagePreviewClose": "轻触任意位置关闭",
-      "typePackage": "车电套餐",
       "confirmRefundDesc": "确认结束订单？合计退款 Rp{total}",
       "docDeleteDesc": "确定删除该资料？删除后不可恢复。",
       "payProcessing": "支付中",
       "paymentOnline": "线上支付",
       "refundReasonUserDeposit": "用户主动申请押金退还",
-      "opAssignVehicle": "绑定车辆",
       "refundModalTotalLabel": "合计退款",
       "confirmLostDesc": "报失后车辆电机将被锁定，无法正常骑行",
       "listBattery": "电池订单列表",
@@ -1011,7 +976,6 @@
       "battBound": "电池已绑定",
       "docViewOnlyMode": "当前状态仅支持查看",
       "opChangeVehicle": "更换车辆",
-      "typeVehicle": "车辆租赁",
       "refundCompleted": "退款已完成",
       "docLicense": "驾驶证",
       "refundReason": "退款原因",
@@ -1034,25 +998,20 @@
       "noIdleBattery": "暂无空闲电池可选",
       "refundable": "可退",
       "datePickerStart": "选择开始日期",
-      "opRefund": "订单退款",
       "actionRefund": "执行退款",
-      "pickupTime": "取用时间",
       "opReturnVehicle": "还车",
-      "payRefunding": "退款中",
-      "idCopied": "复制成功",
       "docCount": "{n} 份资料",
       "orderEnded": "订单已结束",
-      "typeBattery": "电池租赁",
       "vehicleChanged": "车辆已更换",
       "payment2c2p": "2C2P",
       "payStatus": "支付状态",
-      "vehicleInfo": "车辆信息",
       "listPackage": "套餐订单列表",
       "reportUnlost": "解除报失",
       "refundSource": "来源",
       "optional": "可选",
       "battNoLabel": "电池编号：",
-      "bindBatteryHint": "请为订单绑定指定电池"
+      "bindBatteryHint": "请为订单绑定指定电池",
+      "idCopied": "复制成功"
     },
     "perm": {
       "permViewOrderDetail": "查看订单详情",
@@ -1072,13 +1031,7 @@
       "csList": "客服列表"
     },
     "login": {
-      "welcome": "欢迎登录",
-      "switchLang": "切换语言",
-      "passwordRequired": "请输入密码"
-    },
-    "tab": {
-      "battery": "电池",
-      "vehicles": "车辆"
+      "welcome": "欢迎登录"
     },
     "model": {
       "list": "车型列表"
@@ -1089,7 +1042,6 @@
       "uploadSpec": "尺寸",
       "pleaseSelect": "请先选择",
       "searchUserPlaceholder": "输入账号 / 手机号 / 邮箱搜索",
-      "copyEmpty": "无内容可复制",
       "emptyNoAccess": "暂无可访问内容",
       "pleaseSelectUser": "请先选择用户",
       "thumbnail": "缩略图",
@@ -1103,7 +1055,6 @@
       "list": "电池列表",
       "noLocationListOnly": "{n}块无定位，仅列表可见",
       "lostUnlockHint": "解除报失后电池将被解锁，恢复放电",
-      "bind": "绑定电池",
       "lostLockHint": "报失后电池将被锁定，无法正常放电",
       "dischargeForbid": "禁止后设备将无法放电",
       "discharge": "电池放电",
@@ -1174,20 +1125,20 @@
     },
     "status": {
       "completed": "已完成",
-      "disabled": "禁用",
-      "enabled": "启用",
       "online": "在线",
       "locked": "已锁",
       "offline": "离线",
       "unlocked": "未锁",
       "pending": "待处理",
       "ignored": "已忽略",
-      "processing": "处理中",
       "closed": "已关闭",
       "onShelf": "上架",
       "offShelf": "下架",
       "current": "当前",
-      "available": "可用"
+      "available": "可用",
+      "disabled": "禁用",
+      "enabled": "启用",
+      "processing": "处理中"
     }
   },
   "demo": {
