@@ -379,7 +379,8 @@
       "swap": "换电系统",
       "charge": "充电系统",
       "enter": "进入系统",
-      "selectToast": "请选择系统"
+      "selectToast": "请选择系统",
+      "action": "切换"
     },
     "scan": {
       "hint": "请将二维码对准取景框"

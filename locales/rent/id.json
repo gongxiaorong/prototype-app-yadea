@@ -379,7 +379,8 @@
       "swap": "Sistem Tukar Baterai",
       "charge": "Sistem Pengisian Daya",
       "enter": "Masuk",
-      "selectToast": "Silakan pilih sistem"
+      "selectToast": "Silakan pilih sistem",
+      "action": "Ganti"
     },
     "scan": {
       "hint": "Arahkan kode QR ke bingkai"

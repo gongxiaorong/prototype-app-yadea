@@ -1387,7 +1387,8 @@
       "swap": "Battery-Swap System",
       "charge": "Charging System",
       "enter": "Enter",
-      "selectToast": "Please select a system"
+      "selectToast": "Please select a system",
+      "action": "Switch"
     },
     "scan": {
       "hint": "Align the QR code with the frame"

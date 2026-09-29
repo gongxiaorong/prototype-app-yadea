@@ -1392,6 +1392,14 @@ body.host-single-m #root-user{display:none}
 
 <!-- 功能菜单卡片 -->
 <div class="flex-1 overflow-y-auto hide-scroll px-4" style="touch-action:pan-y;-webkit-overflow-scrolling:touch" data-page-node-id="CSHED7LkFBWRtzPTETrF7G">
+
+<!-- 系统切换入口（独立卡：回显当前系统 + 彩色文字动作，与菜单行区分；点击进入切换系统页） -->
+<div data-cp @click="switchSource='settings';navOpen('subSwitchSystem')" class="mb-3 bg-white rounded-2xl px-4 py-3.5 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="profile-system-switch">
+<div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#EEF4FF;color:#2F6FEB"><span v-html="luci('bike','w-6 h-6')"></span></div>
+<div class="flex-1 min-w-0"><div class="text-[15px] font-semibold" style="color:#111">租车系统</div></div>
+<div class="flex items-center gap-1 shrink-0 text-[13px] font-semibold" style="color:#2F6FEB"><span>切换</span><span class="inline-flex" v-html="luci('chevron-right','w-4 h-4')"></span></div>
+</div>
+
 <div class="bg-white rounded-2xl overflow-hidden" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="profile-menu-card" data-page-node-id="GHBhSDo9EPsbNL15AyGcTg">
 
 <div data-cp @click="openMyOrders" class="px-4 py-3 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border-bottom:1px solid #F0F0F0" data-od-id="profile-order" data-page-node-id="Jnhmsd0lcoaGXvcg4Bkm4k">
@@ -4670,6 +4678,12 @@ body.host-single-m #root-user{display:none}
 </div>
 <div data-cp @click="navOpen();profileOV='settings'" class="w-9 h-9 flex items-center justify-center cursor-pointer active:bg-[#F0F0F0] rounded-full shrink-0" data-od-id="profile-settings"><span v-html="luci('settings','w-5 h-5 text-[#666]')"></span></div>
   </div>
+<!-- 系统切换入口（独立卡：回显当前系统 + 彩色文字动作，与菜单行区分；点击进入切换系统页） -->
+<div data-cp @click="switchSource='settings';navOpen();profileSub='subSwitchSystem'" class="mb-3 bg-white rounded-2xl px-4 py-3.5 flex items-center gap-3 cursor-pointer active:bg-[#F6F7F9]" style="border:1px solid #E5E5E5;box-shadow:0 1px 3px rgba(0,0,0,.04),0 1px 2px rgba(0,0,0,.06)" data-od-id="profile-system-switch">
+<div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background:#EEF4FF;color:#2F6FEB"><span v-html="luci('bike','w-6 h-6')"></span></div>
+<div class="flex-1 min-w-0"><div class="text-[15px] font-semibold" style="color:#111">租车系统</div></div>
+<div class="flex items-center gap-1 shrink-0 text-[13px] font-semibold" style="color:#2F6FEB"><span>切换</span><span class="inline-flex" v-html="luci('chevron-right','w-4 h-4')"></span></div>
+</div>
 <div v-for="g in menuGroups" :key="g.name" class="mb-3">
 <div class="text-[13px] font-semibold text-[#999] px-1 mb-1.5">{{ g.name }}</div>
 <div class="bg-white rounded-xl overflow-hidden" style="border:1px solid #E5E5E5">

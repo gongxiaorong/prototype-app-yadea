@@ -1387,7 +1387,8 @@
       "swap": "換電系統",
       "charge": "充電系統",
       "enter": "進入系統",
-      "selectToast": "請選擇系統"
+      "selectToast": "請選擇系統",
+      "action": "切換"
     },
     "scan": {
       "hint": "請將二維碼對準取景框"
