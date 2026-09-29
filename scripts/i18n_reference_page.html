@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{DIR}} · 翻译对照表</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tdesign-vue-next@1.20.8/dist/tdesign.min.css"
+      onerror="this.onerror=null;this.href='https://unpkg.com/tdesign-vue-next@1.20.8/dist/tdesign.min.css'">
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js"
+        onerror="this.onerror=null;this.src='https://unpkg.com/vue@3.5.13/dist/vue.global.prod.js'"></script>
+<script src="https://cdn.jsdelivr.net/npm/tdesign-vue-next@1.20.8/dist/tdesign.min.js"
+        onerror="this.onerror=null;this.src='https://unpkg.com/tdesign-vue-next@1.20.8/dist/tdesign.min.js'"></script>
+<style>
+:root{--fg:#111;--sub:#6b7280;--bd:#e5e7eb;--accent:#2B3F5F;--danger:#DC2626;--warn-bg:#FFF7E0;--warn-bd:#F0D68A}
+*{box-sizing:border-box}
+body{margin:0;background:#F6F7F9;color:var(--fg);
+  font:14px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei','Noto Sans Thai',sans-serif}
+[v-cloak]{display:none}
+.hd{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--bd);padding:12px 20px}
+.hd-row{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+.hd h1{margin:0;font-size:16px;font-weight:600}
+.hd .meta{font-size:12px;color:var(--sub)}
+.hd-tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:10px}
+.hd-tools .qbox{flex:1 1 340px;max-width:600px}
+.hd-tools .hit{font-size:12px;color:var(--accent);white-space:nowrap;min-height:18px}
+main{padding:14px 20px 48px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0 2px 10px;font-size:12px;color:var(--sub)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.tip{background:#fff;border:1px solid var(--bd);border-left:3px solid var(--danger);border-radius:8px;
+  padding:12px 14px;color:var(--danger);font-size:13px}
+.tip code{background:#F6F7F9;padding:1px 5px;border-radius:4px;color:#374151}
+.cell{white-space:pre-wrap;word-break:break-word}
+.cell.miss{color:var(--danger)}
+.cell.same{background:var(--warn-bg);box-shadow:inset 0 0 0 1px var(--warn-bd);border-radius:3px}
+mark{background:#FFE58F;padding:0 1px;border-radius:2px}
+.tbl .t-table__body td,.tbl .t-table__header th{padding:7px 10px}
+.tbl .t-table__body td:first-child,.tbl .t-table__header th:first-child{color:#9ca3af}
+</style>
+</head>
+<body>
+
+<div id="app" v-cloak></div>
+
+<script type="text/x-template" id="app-tpl">
+<div class="wrap">
+  <header class="hd">
+    <div class="hd-row">
+      <h1>{{ dir }} · 翻译对照表</h1>
+      <div class="meta">{{ statsText }}</div>
+    </div>
+    <div class="hd-tools">
+      <t-input ref="qbox" class="qbox" v-model="q" clearable
+               placeholder="搜索译文：输入关键词，多个关键词用空格分隔（/ 聚焦，Esc 清空）"></t-input>
+      <span class="hit">{{ q && !loading ? '命中 ' + view.length + ' 条' : '' }}</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="legend">
+      <span><i style="background:#FFF7E0;border:1px solid #F0D68A"></i>与中文相同（疑未翻译）</span>
+      <span><i style="background:#fff;border:1px solid #DC2626"></i>缺失 / 空值</span>
+      <span>表格右上角「列配置」可切换语言列</span>
+    </div>
+
+    <div class="tip" v-if="error">
+      <div>{{ error }}</div>
+      <div style="margin-top:6px">本页通过 fetch 读取 <code>locales/{{ dir }}/*.json</code>，请用 http(s) 访问：仓库根目录执行
+        <code>python -m http.server 8000</code>，再打开 <code>http://localhost:8000/{{ dir }}-translation-reference.html</code>。</div>
+    </div>
+
+    <t-table v-show="!error" class="tbl" ref="tbl"
+             row-key="__key"
+             :data="view"
+             :columns="columns"
+             :column-controller="columnController"
+             :locale="tblLocale"
+             :loading="loading"
+             :hover="true"
+             :bordered="false"
+             size="small"
+             @display-columns-change="onDisplayColumnsChange">
+      <template #empty>
+        <div style="padding:32px 0;color:#6b7280">{{ loading ? '加载中…' : '该目录暂无词条（0 条）' }}</div>
+      </template>
+    </t-table>
+  </main>
+</div>
+</script>
+
+<script>window.__I18N_REF__ = {{CONFIG}};</script>
+<script>
+{{APP_JS}}
+</script>
+</body>
+</html>
