@@ -23,10 +23,7 @@
     "scanReturn": "扫码还电",
     "tapToClose": "点击空白处关闭",
     "thinkAgain": "我再想想",
-    "uploadImage": "上传图片",
-    "done": "完成",
-    "retry": "重试",
-    "continue": "继续"
+    "uploadImage": "上传图片"
   },
   "appName": "雅迪换电",
   "demo": {
@@ -337,8 +334,7 @@
     "unset": "未设置",
     "unverified": "未认证",
     "valid": "有效",
-    "verified": "已认证",
-    "enable": "开启"
+    "verified": "已认证"
   },
   "frame": {
     "mode": {
@@ -365,9 +361,7 @@
     "unit": {
       "cabinet": "台",
       "day": "天"
-    },
-    "copied": "复制成功",
-    "none": "暂无"
+    }
   },
   "merchant": {
     "addr": {
@@ -549,16 +543,13 @@
       "station": "当前站点",
       "switchedTo": "已切换到 {name}",
       "usageRecord": "使用记录",
-      "wholeCabinet": "整柜",
-      "disable": "禁用",
-      "enable": "启用"
+      "wholeCabinet": "整柜"
     },
     "common": {
       "copiedLabel": "{label}已复制",
       "totalItems": "共 {n} 条",
       "totalStations": "共 {n} 个",
-      "totalStores": "共 {n} 家",
-      "saveSuccess": "保存成功"
+      "totalStores": "共 {n} 家"
     },
     "dashboard": {
       "alarmStats": "告警统计",
@@ -1119,10 +1110,7 @@
       "batteryNoPlaceholder": "请输入电池编号",
       "typeBattery": "电池租赁",
       "typeVehicle": "车辆租赁",
-      "typePackage": "车电套餐",
-      "filterConfirm": "确定",
-      "filterDateTo": "至",
-      "docOther": "其他"
+      "typePackage": "车电套餐"
     },
     "profile": {
       "avatar": "头像",
@@ -1168,9 +1156,7 @@
       "confirmDeactivateDesc": "确定要注销当前账号吗？注销后所有数据将被清除，且无法恢复。",
       "docTypesHint": "可上传身份证、驾驶证、合同等",
       "realName": "实名信息",
-      "namePlaceholder": "请输入姓名",
-      "nextStep": "下一步",
-      "menuSettings": "设置"
+      "namePlaceholder": "请输入姓名"
     },
     "tab": {
       "home": "首页",
@@ -1207,7 +1193,10 @@
       "accountStatusUpdated": "账号状态已更新",
       "autoRenewedWallet": "已自动续租（钱包扣款 Rp {amount}）",
       "confirmPaySuccess": "确认支付成功",
-      "noHomePermission": "当前账号没有首页任何功能权限，请联系管理员开通"
+      "noHomePermission": "当前账号没有首页任何功能权限，请联系管理员开通",
+      "nothingToCopy": "无内容可复制",
+      "saveSuccess": "保存成功",
+      "copySuccess": "复制成功"
     },
     "vehicles": {
       "addVinPlaceholder": "请输入车架号",
@@ -1278,7 +1267,8 @@
       "datePickerYear": "年",
       "datePickerMonth": "月",
       "datePickerDay": "日",
-      "second": "秒"
+      "second": "秒",
+      "rangeTo": "至"
     },
     "label": {
       "account": "账号",
@@ -1327,6 +1317,7 @@
       "sceneParking": "停车场",
       "yes": "是",
       "no": "否",
+      "none": "暂无",
       "selected": "已选择",
       "unselected": "未选择",
       "originalRent": "原租金",
@@ -1340,10 +1331,13 @@
       "deleteIrreversible": "删除后不可恢复",
       "periodWeek": "周租",
       "planMonth": "月租",
-      "model": "型号"
+      "model": "型号",
+      "other": "其他",
+      "settings": "设置"
     },
     "action": {
       "cancel": "取消",
+      "confirm": "确定",
       "delete": "删除",
       "save": "保存",
       "search": "搜索",
@@ -1362,7 +1356,15 @@
       "viewDetails": "查看详情",
       "confirmReplace": "确认替换",
       "logout": "退出登录",
-      "switchLang": "切换语言"
+      "switchLang": "切换语言",
+      "nextStep": "下一步",
+      "iKnow": "我知道了",
+      "collapse": "收起",
+      "sort": "排序",
+      "done": "完成",
+      "retry": "重试",
+      "continue": "继续",
+      "enable": "开启"
     },
     "unit": {
       "vehicle": "辆",
@@ -1399,8 +1401,10 @@
     "service": {
       "swap": "换电"
     },
-    "copy": {
-      "empty": "无内容可复制"
+    "status": {
+      "disabled": "禁用",
+      "enabled": "启用",
+      "processing": "处理中"
     }
   }
 }

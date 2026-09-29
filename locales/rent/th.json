@@ -102,10 +102,7 @@
       "batteryNoPlaceholder": "กรุณากรอกหมายเลขแบตเตอรี่",
       "typeBattery": "เช่าแบตเตอรี่",
       "typeVehicle": "เช่ายานพาหนะ",
-      "typePackage": "แพ็กเกจยานพาหนะและแบตเตอรี่",
-      "filterConfirm": "ยืนยัน",
-      "filterDateTo": "ถึง",
-      "docOther": "อื่นๆ"
+      "typePackage": "แพ็กเกจยานพาหนะและแบตเตอรี่"
     },
     "profile": {
       "avatar": "รูปโปรไฟล์",
@@ -151,9 +148,7 @@
       "confirmDeactivateDesc": "ต้องการลบบัญชีนี้ใช่ไหม ข้อมูลทั้งหมดจะถูกลบและไม่สามารถกู้คืนได้",
       "docTypesHint": "คุณสามารถอัปโหลดบัตรประชาชน ใบอนุญาตขับขี่ สัญญา ฯลฯ",
       "realName": "KYC",
-      "namePlaceholder": "กรุณากรอกชื่อของคุณ",
-      "nextStep": "ถัดไป",
-      "menuSettings": "การตั้งค่า"
+      "namePlaceholder": "กรุณากรอกชื่อของคุณ"
     },
     "tab": {
       "home": "หน้าแรก",
@@ -190,7 +185,10 @@
       "accountStatusUpdated": "อัปเดตสถานะบัญชีแล้ว",
       "autoRenewedWallet": "ต่ออายุอัตโนมัติ (หักกระเป๋าเงิน Rp {amount})",
       "confirmPaySuccess": "ยืนยันการชำระเงินสำเร็จ",
-      "noHomePermission": "บัญชีนี้ไม่มีสิทธิ์หน้าแรก กรุณาติดต่อผู้ดูแล"
+      "noHomePermission": "บัญชีนี้ไม่มีสิทธิ์หน้าแรก กรุณาติดต่อผู้ดูแล",
+      "nothingToCopy": "ไม่มีอะไรให้คัดลอก",
+      "saveSuccess": "บันทึกสำเร็จ",
+      "copySuccess": "คัดลอกแล้ว"
     },
     "vehicles": {
       "addVinPlaceholder": "กรุณากรอกหมายเลขตัวถัง",
@@ -261,7 +259,8 @@
       "datePickerYear": "ปี",
       "datePickerMonth": "เดือน",
       "datePickerDay": "วัน",
-      "second": "วินาที"
+      "second": "วินาที",
+      "rangeTo": "ถึง"
     },
     "label": {
       "account": "บัญชี",
@@ -310,6 +309,7 @@
       "sceneParking": "ที่จอดรถ",
       "yes": "ใช่",
       "no": "ไม่",
+      "none": "ไม่มี",
       "selected": "เลือกแล้ว",
       "unselected": "ยังไม่เลือก",
       "originalRent": "ค่าเช่าเดิม",
@@ -323,10 +323,13 @@
       "deleteIrreversible": "ไม่สามารถกู้คืนได้หลังลบ",
       "periodWeek": "รายสัปดาห์",
       "planMonth": "รายเดือน",
-      "model": "รุ่น"
+      "model": "รุ่น",
+      "other": "อื่นๆ",
+      "settings": "การตั้งค่า"
     },
     "action": {
       "cancel": "ยกเลิก",
+      "confirm": "ยืนยัน",
       "delete": "ลบ",
       "save": "บันทึก",
       "search": "ค้นหา",
@@ -345,7 +348,15 @@
       "viewDetails": "ดูรายละเอียด",
       "confirmReplace": "ยืนยันการเปลี่ยน",
       "logout": "ออกจากระบบ",
-      "switchLang": "ภาษา"
+      "switchLang": "ภาษา",
+      "nextStep": "ถัดไป",
+      "iKnow": "เข้าใจแล้ว",
+      "collapse": "ยุบ",
+      "sort": "เรียงลำดับ",
+      "done": "เสร็จสิ้น",
+      "retry": "ลองใหม่",
+      "continue": "ดำเนินการต่อ",
+      "enable": "เปิด"
     },
     "unit": {
       "vehicle": "คัน",
@@ -382,8 +393,10 @@
     "service": {
       "swap": "สลับ"
     },
-    "copy": {
-      "empty": "ไม่มีอะไรให้คัดลอก"
+    "status": {
+      "disabled": "ปิดใช้งาน",
+      "enabled": "เปิดใช้งาน",
+      "processing": "กำลังดำเนินการ"
     }
   },
   "user": {
@@ -486,8 +499,7 @@
       "materialDeleted": "ลบวัสดุแล้ว",
       "clickBlankClose": "แตะพื้นที่ว่างเพื่อปิด",
       "goLogin": "เข้าสู่ระบบ",
-      "copiedFormat": "คัดลอก {label} แล้ว",
-      "saveSuccess": "บันทึกสำเร็จ"
+      "copiedFormat": "คัดลอก {label} แล้ว"
     },
     "vehicles": {
       "vehicleNamePlaceholder": "กรุณากรอกชื่อยานพาหนะ",
@@ -768,9 +780,7 @@
       "unbindVehicleDesc": "ยกเลิกการผูกยานพาหนะนี้กับผู้ใช้ปัจจุบันหรือไม่ ยานพาหนะจะกลับเป็นว่างและสามารถผูกใหม่ได้",
       "unbindBatteryDesc": "ยกเลิกการผูกแบตเตอรี่นี้กับผู้ใช้ปัจจุบันหรือไม่ แบตเตอรี่จะกลับเป็นว่างและสามารถผูกใหม่ได้",
       "vehicleUnbound": "ยกเลิกการผูกยานพาหนะแล้ว",
-      "batteryUnbound": "ยกเลิกการผูกแบตเตอรี่แล้ว",
-      "iKnow": "เข้าใจแล้ว",
-      "modelSort": "เรียงลำดับ"
+      "batteryUnbound": "ยกเลิกการผูกแบตเตอรี่แล้ว"
     },
     "home": {
       "view": "ภาพรวม",
@@ -913,8 +923,7 @@
       "startedProcess": "เริ่มดำเนินการ",
       "actionFindFromAlert": "ค้นหายานพาหนะด่วน",
       "lastTrigger": "ครั้งล่าสุดที่ถูกกระตุ้น",
-      "historyCount": "ทั้งหมด {n} รายการ",
-      "timelineCollapse": "ยุบ"
+      "historyCount": "ทั้งหมด {n} รายการ"
     },
     "wallet": {
       "rechargeFrozen": "เงินเติมที่ถูกแช่แข็ง",
@@ -1010,8 +1019,7 @@
       "refundSource": "แหล่งที่มา",
       "optional": "ไม่จำเป็น",
       "battNoLabel": "หมายเลขแบตเตอรี่:",
-      "bindBatteryHint": "ผูกแบตเตอรี่กับคำสั่งซื้อนี้",
-      "idCopied": "คัดลอกแล้ว"
+      "bindBatteryHint": "ผูกแบตเตอรี่กับคำสั่งซื้อนี้"
     },
     "perm": {
       "permViewOrderDetail": "ดูรายละเอียดคำสั่งซื้อ",
@@ -1135,10 +1143,7 @@
       "onShelf": "เปิดให้บริการ",
       "offShelf": "ปิดให้บริการ",
       "current": "ปัจจุบัน",
-      "available": "พร้อมใช้งาน",
-      "disabled": "ปิดใช้งาน",
-      "enabled": "เปิดใช้งาน",
-      "processing": "กำลังดำเนินการ"
+      "available": "พร้อมใช้งาน"
     }
   },
   "demo": {

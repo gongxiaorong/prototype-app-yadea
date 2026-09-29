@@ -7,7 +7,7 @@
 ## 1. 权威源与构建红线
 
 - `index.html` 是唯一权威源，直接手改。
-- `locales/rent/*.json`（租车）、`locales/swap/*.json`（换电）是唯一文案源；禁止在 HTML 内联硬编码新文案。
+- `locales/rent/*.json`（租车）、`locales/swap/*.json`（换电）是唯一文案源；新增/变更文案一律同步进对应目录，**但 HTML 中不写 `t()` 调用**（文案源与源码分离，见 §5）。
 - 版本控制：改完必须自检（见 §6）；`swap.html` 的独立改动与 `index.html` 分开说明。
 
 ## 2. in-DOM 模板铁律
@@ -204,7 +204,8 @@
 
 ### 目录与方向
 
-- `locales/` 按项目拆分为两个目录：`rent/`（租车 `index.html`）与 `swap/`（换电 `swap.html`）。`rent/` 内 5 个语言文件：`zh-CN.json`（**唯一权威源**）→ `zh-HK / en / id / th`；`swap/` 内 5 个语言文件当前均为内容清空的占位文件 `{}`（待填充，校验脚本自动跳过）。均为单向同步，互不派生、不回写。
+- `locales/` 按项目拆分为两个目录：`rent/`（租车 `index.html`）与 `swap/`（换电 `swap.html`）。两目录内均为 5 个语言文件：`zh-CN.json`（**唯一权威源**）→ `zh-HK / en / id / th`。`swap/` 已按 `swap.html` 源码文案填充为完整词条集（不再是空占位文件，校验脚本对其照常校验，与 `rent/` 同口径）。均为单向同步，互不派生、不回写。
+- **两端 HTML 都不写 `t('key')` 调用**：`index.html` / `swap.html` 保持中文字面量，`locales/*` 是与源码**分离**的文案源产物（供翻译/构建流程消费）。禁止为「能运行/能取到值」反向在 HTML 中改写取值方式或内联译文字符串。
 - 嵌套 JSON、点路径 key、各目录内多语言同路径同名；UTF-8 无 BOM、2 空格缩进、结尾换行。
 - 占位符用 vue-i18n `{name}`，各目录内所有语言名称与数量必须一致。
 - **禁止数字后缀 key**（`menu.home0` 类复制粘贴残留），出现即删。
@@ -217,14 +218,26 @@
 | --- | --- | --- |
 | 共享 | `common.*` | 两项目共用术语（货币/操作/状态/单位/语种），**须在 `rent/` 与 `swap/` 两目录内保持一致**（校验脚本负责） |
 | `rent/` | `user.* / merchant.* / demo.*` | `index.html` |
-| `swap/` | `user.* / merchant.*`（业务页），外框架键为顶层 key | `swap.html` |
+| `swap/` | `user.* / merchant.* / demo.*`（业务页），外框架键为顶层 key | `swap.html` |
+
+### 跨目录术语一致性（rent ↔ swap）
+
+**只要一句中文（zh-CN 值逐字相同）在两端都出现，`en / id / th / zh-HK` 的译法就必须一致**——同一概念两端各写一个译法即术语漂移，属需修复项，不允许「各自都说得通」而并存。范围不限 `common.*`，覆盖全部 key。
+
+- 裁决顺序：① `common.*` 已登记的共享术语 → ② 下方术语基线 → ③ `rent/`（权威产物）侧译法；三项都无基准时先在本节登记译法，再按登记值统一。
+- **同一目录内同样不得出现「一句中文两个译法」**（如 swap 内 `user.profile.title`=Profile 与 `common.profile.personalInfo`=Personal Information、「暂无电池」=No battery / No Batteries 混用）。
+- 允许不同（须是有意为之，且不视为违规）：`demo.*` 演示假数据；空间受限的短标签缩写（Tab 名、单位：`block` 对 `battery(ies)`）；品牌与专名（YADEA、2C2P）。
+- **货币术语基线（2026-09-29 定）**：所有货币相关 key 的 `en/id/th` 一律用简称 `CNY` / `HKD` / `IDR`（不用全称 `Chinese Yuan` / `Hong Kong Dollar` / `Indonesian Rupiah`）；`zh-CN` / `zh-HK` 保持中文（人民币/港币/印尼盾 · 人民幣/港幣/印尼盾）。两端 `common.label.currency*` 与 swap `frame.currency.*` 均适用，属核心术语基线，不再作为「允许不同」的例外。
+- **国际专名保留基线（2026-09-29 定）**：凡涉及国际通用专名/代号（`VIN`、`KYC`、`SN`、`Controller SN` 等）的 key，其 `en` / `id` / `th` 一律保留原文（`VIN`、`KYC`，不音译/意译）；**中文除外**——`zh-CN` / `zh-HK` 仍用中文表达（如「车架号」/「車架號」、「实名信息」/「實名資訊」）。
+- 检查口径：`node scripts/i18n_check.mjs` 按 **zh-CN 值分组**输出复核项 `TERM`（共有同中文条数、译法不一致条数 + 前 12 条样例，不计退出码）；逐条明细与裁决栏见 `i18n-cross-drift.md`。
+- 现状基线（2026-09-29 收敛完成，`demo.*` 已排除）：两目录共有同中文文案 **425 条**，**译法不一致 0 条**。治理四步闭环：① **内部译法统一**（同目录「一句中文一个译法」）；② **内部重复 key 清理**（同中文多键合并到 `common.*`，两目录各新建 44 个 common 键、删除全部重复特征键）；③ **跨目录对齐**（rent ↔ swap 52 条全数收敛）；④ **key 命名规范化**（通用文案归 `common.action`/`label`/`dateTime`/`toast`/`status` 等通用子命名空间，19 条，见 `i18n-key-naming.md`）。`common.*` 在两目录逐字一致。
 
 ### 变更流程
 
 ```
 检测（node scripts/i18n_check.mjs，按 rent/ swap/ 两目录分组输出 MISSING/CHANGED/ORPHAN/占位符·数字不一致，另含 common 段跨目录一致性检查）
 → 新增/变更 key 先写源语言值占位 → 显式翻译（禁止机翻直接入库、禁止中文常驻译文）
-→ 重跑校验：各目录 key 集合一致、占位符与数字集合一致、无数字后缀、common 两目录一致
+→ 重跑校验：各目录 key 集合一致、占位符与数字集合一致、无数字后缀、common 两目录一致、**TERM 跨目录同中文文案译法一致**（见上节）
 → 格式归一化后提交（幂等：已译项不覆盖）
 ```
 

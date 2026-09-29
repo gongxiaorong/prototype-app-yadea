@@ -23,10 +23,7 @@
     "scanReturn": "สแกนเพื่อคืนไฟ",
     "tapToClose": "แตะพื้นที่ว่างเพื่อปิด",
     "thinkAgain": "ขอคิดอีกครั้ง",
-    "uploadImage": "อัปโหลดรูปภาพ",
-    "done": "เสร็จสิ้น",
-    "retry": "ลองใหม่",
-    "continue": "ดำเนินการต่อ"
+    "uploadImage": "อัปโหลดรูปภาพ"
   },
   "appName": "YADEA ChargeGo",
   "demo": {
@@ -337,8 +334,7 @@
     "unset": "ยังไม่ตั้งค่า",
     "unverified": "ยังไม่ยืนยัน",
     "valid": "ใช้ได้",
-    "verified": "ยืนยันแล้ว",
-    "enable": "เปิด"
+    "verified": "ยืนยันแล้ว"
   },
   "frame": {
     "mode": {
@@ -365,9 +361,7 @@
     "unit": {
       "cabinet": " เครื่อง",
       "day": "วัน"
-    },
-    "copied": "คัดลอกแล้ว",
-    "none": "ไม่มี"
+    }
   },
   "merchant": {
     "addr": {
@@ -549,16 +543,13 @@
       "station": "สถานีปัจจุบัน",
       "switchedTo": "สลับไปที่ {name}",
       "usageRecord": "ประวัติการใช้งาน",
-      "wholeCabinet": "ทั้งตู้",
-      "disable": "ปิดใช้งาน",
-      "enable": "เปิดใช้งาน"
+      "wholeCabinet": "ทั้งตู้"
     },
     "common": {
       "copiedLabel": "คัดลอก {label} แล้ว",
       "totalItems": "ทั้งหมด {n} รายการ",
       "totalStations": "{n} สถานี",
-      "totalStores": "{n} ร้าน",
-      "saveSuccess": "บันทึกสำเร็จ"
+      "totalStores": "{n} ร้าน"
     },
     "dashboard": {
       "alarmStats": "สถิติการแจ้งเตือน",
@@ -1119,10 +1110,7 @@
       "batteryNoPlaceholder": "กรุณากรอกหมายเลขแบตเตอรี่",
       "typeBattery": "เช่าแบตเตอรี่",
       "typeVehicle": "เช่ายานพาหนะ",
-      "typePackage": "แพ็กเกจยานพาหนะและแบตเตอรี่",
-      "filterConfirm": "ยืนยัน",
-      "filterDateTo": "ถึง",
-      "docOther": "อื่นๆ"
+      "typePackage": "แพ็กเกจยานพาหนะและแบตเตอรี่"
     },
     "profile": {
       "avatar": "รูปโปรไฟล์",
@@ -1168,9 +1156,7 @@
       "confirmDeactivateDesc": "ต้องการลบบัญชีนี้ใช่ไหม ข้อมูลทั้งหมดจะถูกลบและไม่สามารถกู้คืนได้",
       "docTypesHint": "คุณสามารถอัปโหลดบัตรประชาชน ใบอนุญาตขับขี่ สัญญา ฯลฯ",
       "realName": "KYC",
-      "namePlaceholder": "กรุณากรอกชื่อของคุณ",
-      "nextStep": "ถัดไป",
-      "menuSettings": "การตั้งค่า"
+      "namePlaceholder": "กรุณากรอกชื่อของคุณ"
     },
     "tab": {
       "home": "หน้าแรก",
@@ -1207,7 +1193,10 @@
       "accountStatusUpdated": "อัปเดตสถานะบัญชีแล้ว",
       "autoRenewedWallet": "ต่ออายุอัตโนมัติ (หักกระเป๋าเงิน Rp {amount})",
       "confirmPaySuccess": "ยืนยันการชำระเงินสำเร็จ",
-      "noHomePermission": "บัญชีนี้ไม่มีสิทธิ์หน้าแรก กรุณาติดต่อผู้ดูแล"
+      "noHomePermission": "บัญชีนี้ไม่มีสิทธิ์หน้าแรก กรุณาติดต่อผู้ดูแล",
+      "nothingToCopy": "ไม่มีอะไรให้คัดลอก",
+      "saveSuccess": "บันทึกสำเร็จ",
+      "copySuccess": "คัดลอกแล้ว"
     },
     "vehicles": {
       "addVinPlaceholder": "กรุณากรอกหมายเลขตัวถัง",
@@ -1278,7 +1267,8 @@
       "datePickerYear": "ปี",
       "datePickerMonth": "เดือน",
       "datePickerDay": "วัน",
-      "second": "วินาที"
+      "second": "วินาที",
+      "rangeTo": "ถึง"
     },
     "label": {
       "account": "บัญชี",
@@ -1327,6 +1317,7 @@
       "sceneParking": "ที่จอดรถ",
       "yes": "ใช่",
       "no": "ไม่",
+      "none": "ไม่มี",
       "selected": "เลือกแล้ว",
       "unselected": "ยังไม่เลือก",
       "originalRent": "ค่าเช่าเดิม",
@@ -1340,10 +1331,13 @@
       "deleteIrreversible": "ไม่สามารถกู้คืนได้หลังลบ",
       "periodWeek": "รายสัปดาห์",
       "planMonth": "รายเดือน",
-      "model": "รุ่น"
+      "model": "รุ่น",
+      "other": "อื่นๆ",
+      "settings": "การตั้งค่า"
     },
     "action": {
       "cancel": "ยกเลิก",
+      "confirm": "ยืนยัน",
       "delete": "ลบ",
       "save": "บันทึก",
       "search": "ค้นหา",
@@ -1362,7 +1356,15 @@
       "viewDetails": "ดูรายละเอียด",
       "confirmReplace": "ยืนยันการเปลี่ยน",
       "logout": "ออกจากระบบ",
-      "switchLang": "ภาษา"
+      "switchLang": "ภาษา",
+      "nextStep": "ถัดไป",
+      "iKnow": "เข้าใจแล้ว",
+      "collapse": "ยุบ",
+      "sort": "เรียงลำดับ",
+      "done": "เสร็จสิ้น",
+      "retry": "ลองใหม่",
+      "continue": "ดำเนินการต่อ",
+      "enable": "เปิด"
     },
     "unit": {
       "vehicle": "คัน",
@@ -1399,8 +1401,10 @@
     "service": {
       "swap": "สลับ"
     },
-    "copy": {
-      "empty": "ไม่มีอะไรให้คัดลอก"
+    "status": {
+      "disabled": "ปิดใช้งาน",
+      "enabled": "เปิดใช้งาน",
+      "processing": "กำลังดำเนินการ"
     }
   }
 }

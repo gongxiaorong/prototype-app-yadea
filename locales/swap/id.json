@@ -23,10 +23,7 @@
     "scanReturn": "Pindai untuk Kembalikan",
     "tapToClose": "Ketuk area kosong untuk menutup",
     "thinkAgain": "Pikir Dulu",
-    "uploadImage": "Unggah Gambar",
-    "done": "Selesai",
-    "retry": "Coba Lagi",
-    "continue": "Lanjutkan"
+    "uploadImage": "Unggah Gambar"
   },
   "appName": "YADEA ChargeGo",
   "demo": {
@@ -337,8 +334,7 @@
     "unset": "Belum diatur",
     "unverified": "Belum verifikasi",
     "valid": "Valid",
-    "verified": "Sudah verifikasi",
-    "enable": "Aktifkan"
+    "verified": "Sudah verifikasi"
   },
   "frame": {
     "mode": {
@@ -365,9 +361,7 @@
     "unit": {
       "cabinet": " unit",
       "day": "Hari"
-    },
-    "copied": "Disalin",
-    "none": "Tidak ada"
+    }
   },
   "merchant": {
     "addr": {
@@ -549,16 +543,13 @@
       "station": "Stasiun Saat Ini",
       "switchedTo": "Beralih ke {name}",
       "usageRecord": "Riwayat Penggunaan",
-      "wholeCabinet": "Seluruh Kabinet",
-      "disable": "Nonaktif",
-      "enable": "Aktif"
+      "wholeCabinet": "Seluruh Kabinet"
     },
     "common": {
       "copiedLabel": "{label} disalin",
       "totalItems": "Total {n}",
       "totalStations": "{n} stasiun",
-      "totalStores": "{n} toko",
-      "saveSuccess": "Berhasil disimpan"
+      "totalStores": "{n} toko"
     },
     "dashboard": {
       "alarmStats": "Statistik Alarm",
@@ -1119,10 +1110,7 @@
       "batteryNoPlaceholder": "Masukkan nomor baterai",
       "typeBattery": "Sewa Baterai",
       "typeVehicle": "Sewa Kendaraan",
-      "typePackage": "Paket Kendaraan & Baterai",
-      "filterConfirm": "Konfirmasi",
-      "filterDateTo": "sampai",
-      "docOther": "Lainnya"
+      "typePackage": "Paket Kendaraan & Baterai"
     },
     "profile": {
       "avatar": "Foto Profil",
@@ -1168,9 +1156,7 @@
       "confirmDeactivateDesc": "Yakin ingin menonaktifkan akun ini? Semua data akan dihapus dan tidak dapat dipulihkan.",
       "docTypesHint": "Anda dapat mengunggah KTP, SIM, kontrak, dll.",
       "realName": "KYC",
-      "namePlaceholder": "Masukkan nama",
-      "nextStep": "Lanjut",
-      "menuSettings": "Pengaturan"
+      "namePlaceholder": "Masukkan nama"
     },
     "tab": {
       "home": "Beranda",
@@ -1207,7 +1193,10 @@
       "accountStatusUpdated": "Status akun diperbarui",
       "autoRenewedWallet": "Diperpanjang otomatis (potong dompet Rp {amount})",
       "confirmPaySuccess": "Pembayaran dikonfirmasi",
-      "noHomePermission": "Akun ini tidak memiliki izin beranda, hubungi admin"
+      "noHomePermission": "Akun ini tidak memiliki izin beranda, hubungi admin",
+      "nothingToCopy": "Tidak ada yang dapat disalin",
+      "saveSuccess": "Berhasil disimpan",
+      "copySuccess": "Disalin"
     },
     "vehicles": {
       "addVinPlaceholder": "Masukkan nomor rangka",
@@ -1278,7 +1267,8 @@
       "datePickerYear": "Tahun",
       "datePickerMonth": "Bulan",
       "datePickerDay": "Hari",
-      "second": "Detik"
+      "second": "Detik",
+      "rangeTo": "sampai"
     },
     "label": {
       "account": "Akun",
@@ -1327,6 +1317,7 @@
       "sceneParking": "Tempat Parkir",
       "yes": "Ya",
       "no": "Tidak",
+      "none": "Tidak ada",
       "selected": "Dipilih",
       "unselected": "Belum Dipilih",
       "originalRent": "Sewa Awal",
@@ -1340,10 +1331,13 @@
       "deleteIrreversible": "Tidak dapat dipulihkan setelah dihapus",
       "periodWeek": "Mingguan",
       "planMonth": "Bulanan",
-      "model": "Model"
+      "model": "Model",
+      "other": "Lainnya",
+      "settings": "Pengaturan"
     },
     "action": {
       "cancel": "Batal",
+      "confirm": "Konfirmasi",
       "delete": "Hapus",
       "save": "Simpan",
       "search": "Cari",
@@ -1362,7 +1356,15 @@
       "viewDetails": "Lihat Detail",
       "confirmReplace": "Konfirmasi Ganti",
       "logout": "Keluar",
-      "switchLang": "Bahasa"
+      "switchLang": "Bahasa",
+      "nextStep": "Lanjut",
+      "iKnow": "Saya Mengerti",
+      "collapse": "Lipat",
+      "sort": "Urutan",
+      "done": "Selesai",
+      "retry": "Coba Lagi",
+      "continue": "Lanjutkan",
+      "enable": "Aktifkan"
     },
     "unit": {
       "vehicle": "unit",
@@ -1399,8 +1401,10 @@
     "service": {
       "swap": "Tukar"
     },
-    "copy": {
-      "empty": "Tidak ada yang dapat disalin"
+    "status": {
+      "disabled": "Nonaktif",
+      "enabled": "Aktif",
+      "processing": "Diproses"
     }
   }
 }

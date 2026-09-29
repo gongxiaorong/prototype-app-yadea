@@ -23,10 +23,7 @@
     "scanReturn": "Scan to Return",
     "tapToClose": "Tap blank area to close",
     "thinkAgain": "Let Me Think",
-    "uploadImage": "Upload Image",
-    "done": "Done",
-    "retry": "Retry",
-    "continue": "Continue"
+    "uploadImage": "Upload Image"
   },
   "appName": "YADEA ChargeGo",
   "demo": {
@@ -337,8 +334,7 @@
     "unset": "Not set",
     "unverified": "Not verified",
     "valid": "Valid",
-    "verified": "Verified",
-    "enable": "On"
+    "verified": "Verified"
   },
   "frame": {
     "mode": {
@@ -365,9 +361,7 @@
     "unit": {
       "cabinet": " units",
       "day": "Days"
-    },
-    "copied": "Copied",
-    "none": "None"
+    }
   },
   "merchant": {
     "addr": {
@@ -549,16 +543,13 @@
       "station": "Current Station",
       "switchedTo": "Switched to {name}",
       "usageRecord": "Usage Records",
-      "wholeCabinet": "Whole Cabinet",
-      "disable": "Disabled",
-      "enable": "Enabled"
+      "wholeCabinet": "Whole Cabinet"
     },
     "common": {
       "copiedLabel": "{label} copied",
       "totalItems": "Total {n}",
       "totalStations": "{n} stations",
-      "totalStores": "{n} stores",
-      "saveSuccess": "Saved successfully"
+      "totalStores": "{n} stores"
     },
     "dashboard": {
       "alarmStats": "Alarm Statistics",
@@ -1119,10 +1110,7 @@
       "batteryNoPlaceholder": "Please enter battery number",
       "typeBattery": "Battery Rental",
       "typeVehicle": "Vehicle Rental",
-      "typePackage": "Vehicle & Battery Package",
-      "filterConfirm": "Confirm",
-      "filterDateTo": "to",
-      "docOther": "Other"
+      "typePackage": "Vehicle & Battery Package"
     },
     "profile": {
       "avatar": "Avatar",
@@ -1168,9 +1156,7 @@
       "confirmDeactivateDesc": "Are you sure you want to deactivate this account? All data will be erased and cannot be recovered.",
       "docTypesHint": "You can upload ID, driver's license, contract, etc.",
       "realName": "KYC",
-      "namePlaceholder": "Please enter your name",
-      "nextStep": "Next",
-      "menuSettings": "Settings"
+      "namePlaceholder": "Please enter your name"
     },
     "tab": {
       "home": "Home",
@@ -1207,7 +1193,10 @@
       "accountStatusUpdated": "Account status updated",
       "autoRenewedWallet": "Auto-renewed (wallet deduction Rp {amount})",
       "confirmPaySuccess": "Payment confirmed",
-      "noHomePermission": "This account has no home permissions, please contact the admin"
+      "noHomePermission": "This account has no home permissions, please contact the admin",
+      "nothingToCopy": "Nothing to copy",
+      "saveSuccess": "Saved successfully",
+      "copySuccess": "Copied"
     },
     "vehicles": {
       "addVinPlaceholder": "Please enter VIN",
@@ -1278,7 +1267,8 @@
       "datePickerYear": "Year",
       "datePickerMonth": "Month",
       "datePickerDay": "Day",
-      "second": "Second"
+      "second": "Second",
+      "rangeTo": "to"
     },
     "label": {
       "account": "Account",
@@ -1327,6 +1317,7 @@
       "sceneParking": "Parking Lot",
       "yes": "Yes",
       "no": "No",
+      "none": "None",
       "selected": "Selected",
       "unselected": "Not Selected",
       "originalRent": "Original Rent",
@@ -1340,10 +1331,13 @@
       "deleteIrreversible": "Cannot be recovered after deletion",
       "periodWeek": "Weekly",
       "planMonth": "Monthly",
-      "model": "Model"
+      "model": "Model",
+      "other": "Other",
+      "settings": "Settings"
     },
     "action": {
       "cancel": "Cancel",
+      "confirm": "Confirm",
       "delete": "Delete",
       "save": "Save",
       "search": "Search",
@@ -1362,7 +1356,15 @@
       "viewDetails": "View Details",
       "confirmReplace": "Confirm Change",
       "logout": "Log Out",
-      "switchLang": "Language"
+      "switchLang": "Language",
+      "nextStep": "Next",
+      "iKnow": "Got it",
+      "collapse": "Collapse",
+      "sort": "Sort",
+      "done": "Done",
+      "retry": "Retry",
+      "continue": "Continue",
+      "enable": "On"
     },
     "unit": {
       "vehicle": "vehicle(s)",
@@ -1399,8 +1401,10 @@
     "service": {
       "swap": "Swap"
     },
-    "copy": {
-      "empty": "Nothing to copy"
+    "status": {
+      "disabled": "Disabled",
+      "enabled": "Enabled",
+      "processing": "Processing"
     }
   }
 }

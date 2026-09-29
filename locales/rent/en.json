@@ -102,10 +102,7 @@
       "batteryNoPlaceholder": "Please enter battery number",
       "typeBattery": "Battery Rental",
       "typeVehicle": "Vehicle Rental",
-      "typePackage": "Vehicle & Battery Package",
-      "filterConfirm": "Confirm",
-      "filterDateTo": "to",
-      "docOther": "Other"
+      "typePackage": "Vehicle & Battery Package"
     },
     "profile": {
       "avatar": "Avatar",
@@ -151,9 +148,7 @@
       "confirmDeactivateDesc": "Are you sure you want to deactivate this account? All data will be erased and cannot be recovered.",
       "docTypesHint": "You can upload ID, driver's license, contract, etc.",
       "realName": "KYC",
-      "namePlaceholder": "Please enter your name",
-      "nextStep": "Next",
-      "menuSettings": "Settings"
+      "namePlaceholder": "Please enter your name"
     },
     "tab": {
       "home": "Home",
@@ -190,7 +185,10 @@
       "accountStatusUpdated": "Account status updated",
       "autoRenewedWallet": "Auto-renewed (wallet deduction Rp {amount})",
       "confirmPaySuccess": "Payment confirmed",
-      "noHomePermission": "This account has no home permissions, please contact the admin"
+      "noHomePermission": "This account has no home permissions, please contact the admin",
+      "nothingToCopy": "Nothing to copy",
+      "saveSuccess": "Saved successfully",
+      "copySuccess": "Copied"
     },
     "vehicles": {
       "addVinPlaceholder": "Please enter VIN",
@@ -261,7 +259,8 @@
       "datePickerYear": "Year",
       "datePickerMonth": "Month",
       "datePickerDay": "Day",
-      "second": "Second"
+      "second": "Second",
+      "rangeTo": "to"
     },
     "label": {
       "account": "Account",
@@ -310,6 +309,7 @@
       "sceneParking": "Parking Lot",
       "yes": "Yes",
       "no": "No",
+      "none": "None",
       "selected": "Selected",
       "unselected": "Not Selected",
       "originalRent": "Original Rent",
@@ -323,10 +323,13 @@
       "deleteIrreversible": "Cannot be recovered after deletion",
       "periodWeek": "Weekly",
       "planMonth": "Monthly",
-      "model": "Model"
+      "model": "Model",
+      "other": "Other",
+      "settings": "Settings"
     },
     "action": {
       "cancel": "Cancel",
+      "confirm": "Confirm",
       "delete": "Delete",
       "save": "Save",
       "search": "Search",
@@ -345,7 +348,15 @@
       "viewDetails": "View Details",
       "confirmReplace": "Confirm Change",
       "logout": "Log Out",
-      "switchLang": "Language"
+      "switchLang": "Language",
+      "nextStep": "Next",
+      "iKnow": "Got it",
+      "collapse": "Collapse",
+      "sort": "Sort",
+      "done": "Done",
+      "retry": "Retry",
+      "continue": "Continue",
+      "enable": "On"
     },
     "unit": {
       "vehicle": "vehicle(s)",
@@ -382,8 +393,10 @@
     "service": {
       "swap": "Swap"
     },
-    "copy": {
-      "empty": "Nothing to copy"
+    "status": {
+      "disabled": "Disabled",
+      "enabled": "Enabled",
+      "processing": "Processing"
     }
   },
   "user": {
@@ -486,8 +499,7 @@
       "materialDeleted": "Material deleted",
       "clickBlankClose": "Tap blank area to close",
       "goLogin": "Log in",
-      "copiedFormat": "{label} copied",
-      "saveSuccess": "Saved successfully"
+      "copiedFormat": "{label} copied"
     },
     "vehicles": {
       "vehicleNamePlaceholder": "Please enter vehicle name",
@@ -768,9 +780,7 @@
       "unbindVehicleDesc": "Unbind this vehicle from the current user? The vehicle will become idle and can be bound again.",
       "unbindBatteryDesc": "Unbind this battery from the current user? The battery will become idle and can be bound again.",
       "vehicleUnbound": "Vehicle unbound",
-      "batteryUnbound": "Battery unbound",
-      "iKnow": "Got it",
-      "modelSort": "Sort"
+      "batteryUnbound": "Battery unbound"
     },
     "home": {
       "view": "Overview",
@@ -913,8 +923,7 @@
       "startedProcess": "Processing started",
       "actionFindFromAlert": "Quick Find Vehicle",
       "lastTrigger": "Last Triggered",
-      "historyCount": "Total {n}",
-      "timelineCollapse": "Collapse"
+      "historyCount": "Total {n}"
     },
     "wallet": {
       "rechargeFrozen": "Frozen Top-up",
@@ -1010,8 +1019,7 @@
       "refundSource": "Source",
       "optional": "Optional",
       "battNoLabel": "Battery No.:",
-      "bindBatteryHint": "Bind a battery to this order",
-      "idCopied": "Copied"
+      "bindBatteryHint": "Bind a battery to this order"
     },
     "perm": {
       "permViewOrderDetail": "View Order Details",
@@ -1135,10 +1143,7 @@
       "onShelf": "Listed",
       "offShelf": "Unlisted",
       "current": "Current",
-      "available": "Available",
-      "disabled": "Disabled",
-      "enabled": "Enabled",
-      "processing": "Processing"
+      "available": "Available"
     }
   },
   "demo": {
